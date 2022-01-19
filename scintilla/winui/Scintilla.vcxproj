@@ -90,7 +90,7 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>SCI_EMPTYCATALOGUE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <UndefinePreprocessorDefinitions>WINAPI_FAMILY</UndefinePreprocessorDefinitions>
+      <!-- <UndefinePreprocessorDefinitions>WINAPI_FAMILY</UndefinePreprocessorDefinitions> -->
       <AdditionalIncludeDirectories>..\include;..\src;</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
