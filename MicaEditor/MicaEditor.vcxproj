@@ -137,6 +137,11 @@
   <ItemGroup>
     <Page Include="Themes\Generic.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\scintilla\winui\Scintilla.vcxproj">
+      <Project>{19cca8b8-46b9-4609-b7ce-198da19f07bd}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />

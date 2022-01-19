@@ -30,11 +30,14 @@
     <ProjectGuid>{19CCA8B8-46B9-4609-B7CE-198DA19F07BD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Scintilla</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <DesktopCompatible>true</DesktopCompatible>
+    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.22000.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.17763.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup>
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
@@ -83,8 +86,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
       <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>SCI_EMPTYCATALOGUE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>WINAPI_FAMILY</UndefinePreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\include;..\src;</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
