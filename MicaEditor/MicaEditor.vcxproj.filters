@@ -18,9 +18,6 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="Class.idl" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="MicaEditor.def" />
     <None Include="packages.config" />
   </ItemGroup>
