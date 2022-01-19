@@ -1,0 +1,9 @@
+namespace MicaEditor
+{
+    [default_interface]
+    runtimeclass MicaEditorControl : Microsoft.UI.Xaml.Controls.Control
+    {
+        MicaEditorControl();
+        Int32 MyProperty;
+    }
+}
