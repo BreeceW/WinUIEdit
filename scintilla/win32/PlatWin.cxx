@@ -255,50 +255,8 @@ constexpr D2D1_TEXT_ANTIALIAS_MODE DWriteMapFontQuality(FontQuality extraFontFla
 }
 #endif
 
-// Both GDI and DirectWrite can produce a HFONT for use in list boxes
-struct FontWin : public Font {
-	virtual HFONT HFont() const noexcept = 0;
-};
-
-void SetLogFont(LOGFONTW &lf, const char *faceName, CharacterSet characterSet, XYPOSITION size, FontWeight weight, bool italic, FontQuality extraFontFlag) {
-	lf = LOGFONTW();
-	// The negative is to allow for leading
-	lf.lfHeight = -(std::abs(std::lround(size)));
-	lf.lfWeight = static_cast<LONG>(weight);
-	lf.lfItalic = italic ? 1 : 0;
-	lf.lfCharSet = static_cast<BYTE>(characterSet);
-	lf.lfQuality = Win32MapFontQuality(extraFontFlag);
-	UTF16FromUTF8(faceName, lf.lfFaceName, LF_FACESIZE);
-}
-
-struct FontGDI : public FontWin {
-	HFONT hfont = {};
-	FontGDI(const FontParameters &fp) {
-		LOGFONTW lf;
-		SetLogFont(lf, fp.faceName, fp.characterSet, fp.size, fp.weight, fp.italic, fp.extraFontFlag);
-		hfont = ::CreateFontIndirectW(&lf);
-	}
-	// Deleted so FontGDI objects can not be copied.
-	FontGDI(const FontGDI &) = delete;
-	FontGDI(FontGDI &&) = delete;
-	FontGDI &operator=(const FontGDI &) = delete;
-	FontGDI &operator=(FontGDI &&) = delete;
-	~FontGDI() noexcept override {
-		if (hfont)
-			::DeleteObject(hfont);
-	}
-	HFONT HFont() const noexcept override {
-		// Duplicating hfont
-		LOGFONTW lf = {};
-		if (0 == ::GetObjectW(hfont, sizeof(lf), &lf)) {
-			return {};
-		}
-		return ::CreateFontIndirectW(&lf);
-	}
-};
-
 #if defined(USE_D2D)
-struct FontDirectWrite : public FontWin {
+struct FontDirectWrite : public Font {
 	IDWriteTextFormat *pTextFormat = nullptr;
 	FontQuality extraFontFlag = FontQuality::QualityDefault;
 	CharacterSet characterSet = CharacterSet::Ansi;
@@ -357,17 +315,6 @@ struct FontDirectWrite : public FontWin {
 	FontDirectWrite &operator=(FontDirectWrite &&) = delete;
 	~FontDirectWrite() noexcept override {
 		ReleaseUnknown(pTextFormat);
-	}
-	HFONT HFont() const noexcept override {
-		LOGFONTW lf = {};
-		const HRESULT hr = pTextFormat->GetFontFamilyName(lf.lfFaceName, LF_FACESIZE);
-		if (!SUCCEEDED(hr)) {
-			return {};
-		}
-		lf.lfWeight = pTextFormat->GetFontWeight();
-		lf.lfItalic = pTextFormat->GetFontStyle() == DWRITE_FONT_STYLE_ITALIC;
-		lf.lfHeight = -static_cast<int>(pTextFormat->GetFontSize());
-		return ::CreateFontIndirectW(&lf);
 	}
 };
 #endif
