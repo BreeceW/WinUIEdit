@@ -36,7 +36,6 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{19CCA8B8-46B9-4609-B7CE-198DA19F07BD}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
     <RootNamespace>Scintilla</RootNamespace>
     <AppContainerApplication>true</AppContainerApplication>
     <DesktopCompatible>true</DesktopCompatible>
@@ -204,18 +203,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\*.cxx" />
-    <ClCompile Include="..\win32\HanjaDic.cxx" />
-    <ClCompile Include="..\win32\PlatWin.cxx" />
-    <ClCompile Include="..\win32\ScintillaWin.cxx" />
-    <ClCompile Include="..\win32\ScintillaDLL.cxx" />
+    <ClCompile Include="..\winui\HanjaDic.cxx" />
+    <ClCompile Include="..\winui\PlatWin.cxx" />
+    <ClCompile Include="..\winui\ScintillaWin.cxx" />
+    <ClCompile Include="..\winui\ScintillaDLL.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\*.h" />
     <ClInclude Include="..\src\*.h" />
-    <ClInclude Include="..\win32\*.h" />
+    <ClInclude Include="..\winui\*.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\win32\ScintRes.rc" />
+    <ResourceCompile Include="..\winui\ScintRes.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
