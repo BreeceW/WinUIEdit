@@ -1,7 +1,9 @@
+#include "Defines.idl"
+
 namespace MicaEditor
 {
     [default_interface]
-    runtimeclass MicaEditorControl : Microsoft.UI.Xaml.Controls.Control
+    runtimeclass MicaEditorControl : DUXC.Control
     {
         MicaEditorControl();
         Int32 MyProperty;

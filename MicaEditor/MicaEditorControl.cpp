@@ -7,8 +7,8 @@
 #include <Scintilla.h>
 
 using namespace winrt;
-using namespace Microsoft::UI::Xaml;
-using namespace Microsoft::UI::Xaml::Controls;
+using namespace DUX;
+using namespace DUXC;
 
 namespace winrt::MicaEditor::implementation
 {
@@ -16,7 +16,7 @@ namespace winrt::MicaEditor::implementation
 	{
 		DefaultStyleKey(winrt::box_value(L"MicaEditor.MicaEditorControl"));
 
-		Scintilla_RegisterClasses(GetModuleHandleW(nullptr));
+		//Scintilla_RegisterClasses(GetModuleHandleW(nullptr));
 	}
 
 	int32_t MicaEditorControl::MyProperty()

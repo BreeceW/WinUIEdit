@@ -26,6 +26,8 @@ namespace DemoWinUI3
         public MainWindow()
         {
             InitializeComponent();
+
+            Title = "Demo WinUI3 (C#)";
         }
     }
 }

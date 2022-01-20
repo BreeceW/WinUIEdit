@@ -1,0 +1,10 @@
+﻿<Application
+    x:Class="CppDemoUWP.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CppDemoUWP"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls">
+    <Application.Resources>
+        <muxc:XamlControlsResources />
+    </Application.Resources>
+</Application>

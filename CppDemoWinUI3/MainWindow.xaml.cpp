@@ -15,5 +15,7 @@ namespace winrt::CppDemoWinUI3::implementation
     MainWindow::MainWindow()
     {
         InitializeComponent();
+
+        Title(L"Demo WinUI 3 (C++)");
     }
 }
