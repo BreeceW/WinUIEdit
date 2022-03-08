@@ -12,7 +12,7 @@ namespace Tool
     {
         private readonly HttpClient _client = new();
 
-        public async Task RunAsync(string[] args)
+        public async Task RunAsync(string path, string[] args)
         {
             var a = args[0];
             var b = args[1];
@@ -31,7 +31,7 @@ namespace Tool
                 "WinTypes.h",
             };
 
-            var folder = await StorageFolder.GetFolderFromPathAsync(Directory.GetCurrentDirectory());
+            var folder = await StorageFolder.GetFolderFromPathAsync(path);
 
             if (await folder.TryGetItemAsync("Diff\\monaco") is null)
             {

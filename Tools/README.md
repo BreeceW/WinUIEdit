@@ -25,4 +25,4 @@ Run the Compare tool like this:
 where a.b.c is the previous version (see scintilla\version.txt), and x.y.z is the new version (see https://www.scintilla.org/ScintillaDownload.html).
 
 ----
-**Note:** At this time, the tools do not have any error checking. If something goes wrong, you might have to run the tools in Visual Studio to debug them. Change launchSettings.json to use the appropriate directory if you do this.
+**Note:** At this time, the tools do not have any error checking. If something goes wrong, you might have to run the tools in Visual Studio to debug them.

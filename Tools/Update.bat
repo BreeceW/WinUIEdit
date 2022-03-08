@@ -1,3 +1,3 @@
 @echo off
 
-dotnet run --project Tool\Tool.csproj -c Release Update %*
+dotnet run --project "%~dp0Tool\Tool.csproj" -c Release Update %*

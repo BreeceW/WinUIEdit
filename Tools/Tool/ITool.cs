@@ -4,6 +4,6 @@ namespace Tool
 {
     public interface ITool
     {
-        Task RunAsync(string[] args);
+        Task RunAsync(string path, string[] args);
     }
 }

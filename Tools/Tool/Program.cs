@@ -10,4 +10,7 @@ ITool tool = toolName switch
     _ => throw new InvalidOperationException("Not a valid tool"),
 };
 
-await tool.RunAsync(args[1..]);
+var dllPath = System.Reflection.Assembly.GetEntryAssembly().Location;
+var path = dllPath[..(dllPath.LastIndexOf("\\Tools") + 6)];
+
+await tool.RunAsync(path, args[1..]);

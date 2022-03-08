@@ -11,12 +11,12 @@ namespace Tool
     {
         private readonly HttpClient _client = new();
 
-        public async Task RunAsync(string[] args)
+        public async Task RunAsync(string path, string[] args)
         {
             var update = args[0];
             var updateVersion = update.Replace(".", string.Empty);
 
-            var folder = await StorageFolder.GetFolderFromPathAsync(Directory.GetCurrentDirectory());
+            var folder = await StorageFolder.GetFolderFromPathAsync(path);
             var root = await folder.GetParentAsync();
             var sourceFolder = await root.GetFolderAsync("scintilla");
 
