@@ -1,0 +1,14 @@
+{
+    "profiles": {
+        "Update Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "Update 5.2.1",
+            "workingDirectory": "%USERPROFILE%\\Documents\\UWP Editor\\Tools"
+        },
+        "Compare Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "Compare 5.1.5 5.2.1",
+            "workingDirectory": "%USERPROFILE%\\Documents\\UWP Editor\\Tools"
+        }
+    }
+}

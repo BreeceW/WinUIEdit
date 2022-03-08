@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <script src="../Diff/monaco/min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { vs: '../Diff/monaco/min/vs', } });
+
+        require(['vs/editor/editor.main'], function () {
+            const diffEditor = monaco.editor.createDiffEditor(document.getElementById('container'), {
+                readOnly: true,
+            });
+
+            diffEditor.setModel({
+                original: monaco.editor.createModel('{original}', 'javascript'),
+                modified: monaco.editor.createModel('{modified}', 'javascript'),
+            });
+        });
+    </script>
+</body>
+
+</html>

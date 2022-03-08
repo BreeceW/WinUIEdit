@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Custom tool generated files
+Tools/Diff/monaco/
+Tools/Diff *
+
 # User-specific files
 *.rsuser
 *.suo
@@ -301,7 +305,7 @@ node_modules/
 *.dsw
 *.dsp
 
-# Visual Studio 6 technical files 
+# Visual Studio 6 technical files
 *.ncb
 *.aps
 
