@@ -22,9 +22,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Themes\Generic.xaml" />
   </ItemGroup>
 </Project>
