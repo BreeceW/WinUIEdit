@@ -59,7 +59,7 @@ constexpr Keys Key(char ch) {
 }
 
 static const KeyToCommand macMapDefault[] = {
-	// OS X specific
+	// macOS specific
 	{Keys::Down,      SCI_CTRL,   Message::DocumentEnd},
 	{Keys::Down,      SCI_CSHIFT, Message::DocumentEndExtend},
 	{Keys::Up,        SCI_CTRL,   Message::DocumentStart},
@@ -70,7 +70,7 @@ static const KeyToCommand macMapDefault[] = {
 	{Keys::Right,     SCI_CSHIFT, Message::LineEndExtend},
 
 	// Similar to Windows and GTK+
-	// Where equivalent clashes with OS X standard, use Meta instead
+	// Where equivalent clashes with macOS standard, use Meta instead
 	{Keys::Down,      SCI_NORM,   Message::LineDown},
 	{Keys::Down,      SCI_SHIFT,  Message::LineDownExtend},
 	{Keys::Down,      SCI_META,   Message::LineScrollDown},
@@ -157,10 +157,10 @@ static const KeyToCommand macMapDefault[] = {
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_5
 
-// Only implement FindHighlightLayer on OS X 10.6+
+// Only implement FindHighlightLayer on macOS 10.6+
 
 /**
- * Class to display the animated gold roundrect used on OS X for matches.
+ * Class to display the animated gold roundrect used on macOS for matches.
  */
 @interface FindHighlightLayer : CAGradientLayer {
 @private
@@ -1145,7 +1145,7 @@ void ScintillaCocoa::CTPaint(void *gc, NSRect rc) {
 	}
 }
 
-// On OS X, only the key view should modify the cursor so the calltip can't.
+// On macOS, only the key view should modify the cursor so the calltip can't.
 // This view does not become key so resetCursorRects never called.
 - (void) resetCursorRects {
 	//[super resetCursorRects];
@@ -1214,7 +1214,7 @@ void ScintillaCocoa::AddToPopUp(const char *label, int cmd, bool enabled) {
 // -------------------------------------------------------------------------------------------------
 
 void ScintillaCocoa::ClaimSelection() {
-	// Mac OS X does not have a primary selection.
+	// macOS does not have a primary selection.
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -2141,7 +2141,7 @@ bool ScintillaCocoa::Draw(NSRect rect, CGContextRef gc) {
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Helper function to translate OS X key codes to Scintilla key codes.
+ * Helper function to translate macOS key codes to Scintilla key codes.
  */
 static inline Keys KeyTranslate(UniChar unicodeChar, NSEventModifierFlags modifierFlags) {
 	switch (unicodeChar) {

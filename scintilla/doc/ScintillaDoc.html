@@ -50,6 +50,7 @@
 	table.standard tr:nth-child(even) {background: #F0F0F0}
 	table.standard td {
 		padding: 1px 5px 1px 5px;
+		vertical-align:top;
 	}
 	tr.section {
 		border-top:1px solid #808080;
@@ -128,7 +129,7 @@
 
     <h1>Scintilla Documentation</h1>
 
-    <p>Last edited 12 November 2021 NH</p>
+    <p>Last edited 2 February 2021 NH</p>
 
     <p style="background:#90F0C0">Scintilla 5 has moved the lexers from Scintilla into a new
     <a href="Lexilla.html">Lexilla</a> project.<br />
@@ -168,7 +169,7 @@
     <p>The GTK version also uses messages in a similar way to the Windows version. This is
     different to normal GTK practice but made it easier to implement rapidly.</p>
 
-    <p>Scintilla also builds with Cocoa on OS X and with Qt, and follows the conventions of
+    <p>Scintilla also builds with Cocoa on macOS and with Qt, and follows the conventions of
     those platforms.</p>
 
     <p>Scintilla provides only limited experimental support on Windows for right-to-left languages
@@ -4691,13 +4692,15 @@ struct Sci_TextToFind {
         <tr>
           <td><code>SC_SUPPORTS_LINE_DRAWS_FINAL</code></td>
           <td>0</td>
-          <td>Whether drawing a line draws its final position. Only false on Win32 GDI.</td>
+          <td>Whether drawing a line draws its final position.<br />
+          Only false on Win32 GDI.</div></td>
         </tr>
 
         <tr>
           <td><code>SC_SUPPORTS_PIXEL_DIVISIONS</code></td>
           <td>1</td>
-          <td>Are logical pixels larger than physical pixels? Currently only true for macOS Cocoa with 'retina' displays.
+          <td>Are logical pixels larger than physical pixels?<br />
+          Currently only true for macOS Cocoa with 'retina' displays.<br />
           When true, creating pixmaps at twice the resolution can produce clearer output with less blur.</td>
         </tr>
 
@@ -4717,6 +4720,14 @@ struct Sci_TextToFind {
           <td><code>SC_SUPPORTS_PIXEL_MODIFICATION</code></td>
           <td>4</td>
           <td>Can individual pixels be modified? This is false for character cell platforms like curses.</td>
+        </tr>
+
+        <tr>
+          <td><code>SC_SUPPORTS_THREAD_SAFE_MEASURE_WIDTHS</code></td>
+          <td>5</td>
+          <td>Can text measurement be safely performed concurrently on multiple threads?<br />
+          Currently only true for macOS Cocoa, DirectWrite on Win32, and GTK on X or Wayland.
+          </td>
         </tr>
 
       </tbody>
@@ -5166,7 +5177,7 @@ struct Sci_TextToFind {
      <a class="jump" href="#RGBA">RGBA format</a> is used for the pixmap.
      The width and height must previously been set with the <code>SCI_RGBAIMAGESETWIDTH</code> and
      <code>SCI_RGBAIMAGESETHEIGHT</code> messages.</p>
-     <p>A scale factor in percent may be set with <code>SCI_RGBAIMAGESETSCALE</code>. This is useful on OS X with
+     <p>A scale factor in percent may be set with <code>SCI_RGBAIMAGESETSCALE</code>. This is useful on macOS with
      a retina display where each display unit is 2 pixels: use a factor of 200 so that each image pixel is displayed using a screen pixel.
      The default scale, 100, will stretch each image pixel to cover 4 screen pixels on a retina display.</p>
     <p>Pixmaps use the <code>SC_MARK_RGBAIMAGE</code> marker symbol. </p>
@@ -5551,7 +5562,7 @@ struct Sci_TextToFind {
           <td>A version of <code>INDIC_SQUIGGLE</code> that draws using a pixmap instead of
 	  as a series of line segments for performance.
 	  Measured to be between 3 and 6 times faster than <code>INDIC_SQUIGGLE</code> on GTK.
-	  Appearance will not be as good as <code>INDIC_SQUIGGLE</code> on OS X in HiDPI mode.</td>
+	  Appearance will not be as good as <code>INDIC_SQUIGGLE</code> on macOS in HiDPI mode.</td>
         </tr>
 
         <tr>
@@ -5717,11 +5728,11 @@ struct Sci_TextToFind {
     Can be used to iterate through the document to discover all the indicator positions.
     </p>
 
-    <h3 id="FindIndicators">OS X Find Indicator</h3>
+    <h3 id="FindIndicators">macOS Find Indicator</h3>
 
-    <p>On OS X search matches are highlighted with an animated gold rounded rectangle.
+    <p>On macOS search matches are highlighted with an animated gold rounded rectangle.
     The indicator shows, then briefly grows 25% and shrinks to the original size to draw the user's attention.
-    While this feature is currently only implemented on OS X, it may be implemented on other platforms
+    While this feature is currently only implemented on macOS, it may be implemented on other platforms
     in the future.</p>
 
     <p><b id="SCI_FINDINDICATORSHOW">SCI_FINDINDICATORSHOW(position start, position end)</b><br />
@@ -5729,7 +5740,7 @@ struct Sci_TextToFind {
      These two messages show and animate the find indicator. The indicator remains visible with
      <code>SCI_FINDINDICATORSHOW</code> and fades out after showing for half a second with
      <code>SCI_FINDINDICATORFLASH</code>.
-     <code>SCI_FINDINDICATORSHOW</code> behaves similarly to the OS X TextEdit and Safari applications
+     <code>SCI_FINDINDICATORSHOW</code> behaves similarly to the macOS TextEdit and Safari applications
      and is best suited to editing documentation where the search target is often a word.
      <code>SCI_FINDINDICATORFLASH</code> is similar to Xcode and is suited to editing source code
      where the match will often be located next to operators which would otherwise be hidden under the indicator's
@@ -6460,8 +6471,8 @@ struct Sci_TextToFind {
      </p>
 
     <p>The <code>SCI_SCROLLTO[START|END]</code> commands scroll the document to the start
-    or end without changing the selection. These commands match OS X platform conventions for the behaviour of the
-    <code>home</code> and <code>end</code> keys. Scintilla can be made to match OS X applications
+    or end without changing the selection. These commands match macOS platform conventions for the behaviour of the
+    <code>home</code> and <code>end</code> keys. Scintilla can be made to match macOS applications
     by binding the <code>home</code> and <code>end</code> keys to these commands.
      </p>
 
@@ -6503,7 +6514,7 @@ struct Sci_TextToFind {
     <p>The modifiers are a combination of zero or more of <code>SCMOD_ALT</code>,
     <code>SCMOD_CTRL</code>, <code>SCMOD_SHIFT</code>,
     <code>SCMOD_META</code>, and <code>SCMOD_SUPER</code>.
-    On OS X, the Command key is mapped to <code>SCMOD_CTRL</code> and the Control key to
+    On macOS, the Command key is mapped to <code>SCMOD_CTRL</code> and the Control key to
     <code>SCMOD_META</code>.
     <code>SCMOD_SUPER</code> is only available on GTK which is commonly the Windows key.
     If you are building a table, you might
@@ -7438,6 +7449,8 @@ sptr_t CallScintilla(unsigned int iMessage, uptr_t wParam, sptr_t lParam){
      <a class="message" href="#SCI_GETLAYOUTCACHE">SCI_GETLAYOUTCACHE &rarr; int</a><br />
      <a class="message" href="#SCI_SETPOSITIONCACHE">SCI_SETPOSITIONCACHE(int size)</a><br />
      <a class="message" href="#SCI_GETPOSITIONCACHE">SCI_GETPOSITIONCACHE &rarr; int</a><br />
+     <a class="message" href="#SCI_SETLAYOUTTHREADS">SCI_SETLAYOUTTHREADS(int threads)</a><br />
+     <a class="message" href="#SCI_GETLAYOUTTHREADS">SCI_GETLAYOUTTHREADS &rarr; int</a><br />
      <a class="message" href="#SCI_LINESSPLIT">SCI_LINESSPLIT(int pixelWidth)</a><br />
      <a class="message" href="#SCI_LINESJOIN">SCI_LINESJOIN</a><br />
      <a class="message" href="#SCI_WRAPCOUNT">SCI_WRAPCOUNT(line docLine) &rarr; line</a><br />
@@ -7675,6 +7688,21 @@ sptr_t CallScintilla(unsigned int iMessage, uptr_t wParam, sptr_t lParam){
      The position cache stores position information for short runs of text
      so that their layout can be determined more quickly if the run recurs.
      The size in entries of this cache can be set with <code>SCI_SETPOSITIONCACHE</code>.</p>
+
+    <p><b id="SCI_SETLAYOUTTHREADS">SCI_SETLAYOUTTHREADS(int threads)</b><br />
+     <b id="SCI_GETLAYOUTTHREADS">SCI_GETLAYOUTTHREADS &rarr; int</b><br />
+     The time taken to measure text runs on wide lines can be improved by performing the task
+     concurrently on multiple threads when
+     <a class="seealso" href="#SCI_SUPPORTSFEATURE">SC_SUPPORTS_THREAD_SAFE_MEASURE_WIDTHS</a>
+     is available.
+     This can be a dramatic improvement - a 4 core processor is often able to reduce text layout time to just over one
+     quarter of the single-threaded time.</p>
+     <p>The default is to use just the main thread but applications may call <code>SCI_SETLAYOUTTHREADS</code>
+     to specify the maximum number of threads to use.
+     The number of threads is limited to the hardware concurrency of the system -
+     for a 4 core processor with hyper-threading that would be 8.
+     If an application just wants maximum concurrency then call with a large number
+     <code>SCI_SETLAYOUTTHREADS(1000)</code> and that will be reduced to a reasonable value.</p>
 
     <p><b id="SCI_LINESSPLIT">SCI_LINESSPLIT(int pixelWidth)</b><br />
      Split a range of lines indicated by the target into lines that are at most pixelWidth wide.
@@ -9387,7 +9415,7 @@ for line = lineStart to lineEnd do SCI_ENSUREVISIBLE(line) next
     If there is no suitable platform support, the <a href="http://lodev.org/lodepng/">LodePNG and picoPNG</a> libraries are small libraries
     for loading and decoding PNG files available under a BSD-style license.</p>
 
-    <p>RGBA format is supported on Windows, GTK and OS X Cocoa.</p>
+    <p>RGBA format is supported on Windows, GTK and macOS Cocoa.</p>
 
     <h3 id="XPM">XPM</h3>
 
