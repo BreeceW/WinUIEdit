@@ -70,7 +70,8 @@ class HanjaDic {
 	std::unique_ptr<IHanjaDic, UnknownReleaser> HJinterface;
 
 	bool OpenHanjaDic(LPCOLESTR lpszProgID) noexcept {
-		CLSID CLSID_HanjaDic;
+		return false; // WinUI Todo
+		/*CLSID CLSID_HanjaDic;
 		HRESULT hr = CLSIDFromProgID(lpszProgID, &CLSID_HanjaDic);
 		if (SUCCEEDED(hr)) {
 			IHanjaDic *instance = nullptr;
@@ -83,7 +84,7 @@ class HanjaDic {
 				return SUCCEEDED(hr);
 			}
 		}
-		return false;
+		return false;*/
 	}
 
 public:

@@ -40,7 +40,8 @@
 #include <commctrl.h>
 #include <richedit.h>
 #include <windowsx.h>
-#include <zmouse.h>
+//#include <zmouse.h>
+// WinUI Todo
 #include <ole2.h>
 
 #if !defined(DISABLE_D2D)
@@ -152,8 +153,9 @@ constexpr int IndicatorUnknown = IndicatorInput + 3;
 #define SCS_SETRECONVERTSTRING 0x00010000
 #endif
 
-typedef UINT_PTR (WINAPI *SetCoalescableTimerSig)(HWND hwnd, UINT_PTR nIDEvent,
-	UINT uElapse, TIMERPROC lpTimerFunc, ULONG uToleranceDelay);
+/*typedef UINT_PTR(WINAPI *SetCoalescableTimerSig)(HWND hwnd, UINT_PTR nIDEvent,
+	UINT uElapse, TIMERPROC lpTimerFunc, ULONG uToleranceDelay);*/
+// WinUI Todo
 
 }
 
@@ -167,15 +169,20 @@ namespace {
 const TCHAR callClassName[] = TEXT("CallTip");
 
 void SetWindowID(HWND hWnd, int identifier) noexcept {
-	::SetWindowLongPtr(hWnd, GWLP_ID, identifier);
+	//::SetWindowLongPtr(hWnd, GWLP_ID, identifier);
+	// WinUI Todo
 }
 
 Point PointFromLParam(sptr_t lpoint) noexcept {
-	return Point::FromInts(GET_X_LPARAM(lpoint), GET_Y_LPARAM(lpoint));
+	//return Point::FromInts(GET_X_LPARAM(lpoint), GET_Y_LPARAM(lpoint));
+	// WinUI Todo
+	return Point::FromInts(0, 0);
 }
 
 bool KeyboardIsKeyDown(int key) noexcept {
-	return (::GetKeyState(key) & 0x80000000) != 0;
+	//return (::GetKeyState(key) & 0x80000000) != 0;
+	// WinUI Todo
+	return false;
 }
 
 constexpr bool KeyboardIsNumericKeypadFunction(uptr_t wParam, sptr_t lParam) {
@@ -242,7 +249,8 @@ public:
 	DropTarget() noexcept;
 };
 
-class IMContext {
+// WinUI Todo
+/*class IMContext {
 	HWND hwnd;
 public:
 	HIMC hIMC;
@@ -276,7 +284,7 @@ public:
 		::ImmGetCompositionStringW(hIMC, dwIndex, &wcs[0], byteLen);
 		return wcs;
 	}
-};
+};*/
 
 class GlobalMemory;
 
@@ -293,7 +301,8 @@ public:
 	ReverseArrowCursor &operator=(ReverseArrowCursor &&) = delete;
 	~ReverseArrowCursor() {
 		if (cursor) {
-			::DestroyCursor(cursor);
+			// WinUI Todo
+			//::DestroyCursor(cursor);
 		}
 	}
 
@@ -302,12 +311,15 @@ public:
 			if (dpi == dpi_) {
 				return cursor;
 			}
-			::DestroyCursor(cursor);
+			//::DestroyCursor(cursor);
+			// WinUI Todo
 		}
 
 		dpi = dpi_;
 		cursor = LoadReverseArrowCursor(dpi_);
-		return cursor ? cursor : ::LoadCursor({}, IDC_ARROW);
+		//return cursor ? cursor : ::LoadCursor({}, IDC_ARROW);
+		// WinUI Todo
+		return nullptr;
 	}
 };
 
@@ -325,7 +337,8 @@ class ScintillaWin :
 
 	bool capturedMouse;
 	bool trackedMouseLeave;
-	SetCoalescableTimerSig SetCoalescableTimerFn;
+	//SetCoalescableTimerSig SetCoalescableTimerFn;
+	// WinUI Todo
 
 	unsigned int linesPerScroll;	///< Intellimouse support
 	int wheelDelta; ///< Wheel delta from roll
@@ -460,8 +473,9 @@ class ScintillaWin :
 	DWORD EffectFromState(DWORD grfKeyState) const noexcept;
 
 	bool IsVisible() const noexcept;
-	int SetScrollInfo(int nBar, LPCSCROLLINFO lpsi, BOOL bRedraw) noexcept;
-	bool GetScrollInfo(int nBar, LPSCROLLINFO lpsi) noexcept;
+	//int SetScrollInfo(int nBar, LPCSCROLLINFO lpsi, BOOL bRedraw) noexcept;
+	//bool GetScrollInfo(int nBar, LPSCROLLINFO lpsi) noexcept;
+	// WinUI Todo
 	bool ChangeScrollRange(int nBar, int nMin, int nMax, UINT nPage) noexcept;
 	void ChangeScrollPos(int barType, Sci::Position pos);
 	sptr_t GetTextLength();
@@ -530,7 +544,8 @@ ScintillaWin::ScintillaWin(HWND hwnd) {
 
 	capturedMouse = false;
 	trackedMouseLeave = false;
-	SetCoalescableTimerFn = nullptr;
+	//SetCoalescableTimerFn = nullptr;
+	// WinUI Todo
 
 	linesPerScroll = 0;
 	wheelDelta = 0;   // Wheel delta from roll
@@ -543,7 +558,7 @@ ScintillaWin::ScintillaWin(HWND hwnd) {
 
 	// There does not seem to be a real standard for indicating that the clipboard
 	// contains a rectangular selection, so copy Developer Studio and Borland Delphi.
-	cfColumnSelect = static_cast<CLIPFORMAT>(
+	/*cfColumnSelect = static_cast<CLIPFORMAT>(
 		::RegisterClipboardFormat(TEXT("MSDEVColumnSelect")));
 	cfBorlandIDEBlockType = static_cast<CLIPFORMAT>(
 		::RegisterClipboardFormat(TEXT("Borland IDE Block Type")));
@@ -552,7 +567,8 @@ ScintillaWin::ScintillaWin(HWND hwnd) {
 	cfLineSelect = static_cast<CLIPFORMAT>(
 		::RegisterClipboardFormat(TEXT("MSDEVLineSelect")));
 	cfVSLineTag = static_cast<CLIPFORMAT>(
-		::RegisterClipboardFormat(TEXT("VisualStudioEditorOperationsLineCutCopyClipboardTag")));
+		::RegisterClipboardFormat(TEXT("VisualStudioEditorOperationsLineCutCopyClipboardTag")));*/
+	// WinUI Todo
 	hrOle = E_FAIL;
 
 	wMain = hwnd;
@@ -572,18 +588,21 @@ ScintillaWin::ScintillaWin(HWND hwnd) {
 	renderTargetValid = true;
 #endif
 
-	caret.period = ::GetCaretBlinkTime();
+	caret.period = 3; //::GetCaretBlinkTime();
+	// WinUI Todo
 	if (caret.period < 0)
 		caret.period = 0;
 
 	// Initialize COM.  If the app has already done this it will have
 	// no effect.  If the app hasn't, we really shouldn't ask them to call
 	// it just so this internal feature works.
-	hrOle = ::OleInitialize(nullptr);
+	//hrOle = ::OleInitialize(nullptr);
+	// WinUI Todo
 
 	// Find SetCoalescableTimer which is only available from Windows 8+
-	HMODULE user32 = ::GetModuleHandleW(L"user32.dll");
-	SetCoalescableTimerFn = DLLFunction<SetCoalescableTimerSig>(user32, "SetCoalescableTimer");
+	//HMODULE user32 = ::GetModuleHandleW(L"user32.dll");
+	//SetCoalescableTimerFn = DLLFunction<SetCoalescableTimerSig>(user32, "SetCoalescableTimer");
+	// WinUI Todo
 
 	vs.indicators[IndicatorUnknown] = Indicator(IndicatorStyle::Hidden, ColourRGBA(0, 0, 0xff));
 	vs.indicators[IndicatorInput] = Indicator(IndicatorStyle::Dots, ColourRGBA(0, 0, 0xff));
@@ -592,10 +611,11 @@ ScintillaWin::ScintillaWin(HWND hwnd) {
 }
 
 ScintillaWin::~ScintillaWin() {
-	if (sysCaretBitmap) {
+	/*if (sysCaretBitmap) {
 		::DeleteObject(sysCaretBitmap);
 		sysCaretBitmap = {};
-	}
+	}*/
+	// WinUI Todo
 }
 
 void ScintillaWin::Finalise() {
@@ -606,10 +626,11 @@ void ScintillaWin::Finalise() {
 	}
 	SetIdle(false);
 	DropRenderTarget();
-	::RevokeDragDrop(MainHWND());
+	/*::RevokeDragDrop(MainHWND());
 	if (SUCCEEDED(hrOle)) {
 		::OleUninitialize();
-	}
+	}*/
+	// WinUI Todo
 }
 
 #if defined(USE_D2D)
@@ -622,7 +643,9 @@ void ScintillaWin::EnsureRenderTarget(HDC hdc) {
 	if (!pRenderTarget) {
 		HWND hw = MainHWND();
 		RECT rc;
-		::GetClientRect(hw, &rc);
+		//::GetClientRect(hw, &rc);
+		ZeroMemory(&rc, sizeof RECT); // Fake value for // WinUI Todo
+		// WinUI Todo
 
 		const D2D1_SIZE_U size = D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top);
 
@@ -673,7 +696,8 @@ void ScintillaWin::EnsureRenderTarget(HDC hdc) {
 
 	if ((technology == Technology::DirectWriteDC) && pRenderTarget) {
 		RECT rcWindow;
-		::GetClientRect(MainHWND(), &rcWindow);
+		//::GetClientRect(MainHWND(), &rcWindow);
+		// WinUI Todo
 		const HRESULT hr = static_cast<ID2D1DCRenderTarget*>(pRenderTarget)->BindDC(hdc, &rcWindow);
 		if (FAILED(hr)) {
 			Platform::DebugPrintf("BindDC failed 0x%lx\n", hr);
@@ -699,7 +723,8 @@ void ScintillaWin::DisplayCursor(Window::Cursor c) {
 		c = static_cast<Window::Cursor>(cursorMode);
 	}
 	if (c == Window::Cursor::reverseArrow) {
-		::SetCursor(reverseArrowCursor.Load(dpi));
+		//::SetCursor(reverseArrowCursor.Load(dpi));
+		// WinUI Todo
 	} else {
 		wMain.SetCursor(c);
 	}
@@ -720,7 +745,7 @@ void ScintillaWin::StartDrag() {
 	IDataObject *pDataObject = reinterpret_cast<IDataObject *>(&dob);
 	IDropSource *pDropSource = reinterpret_cast<IDropSource *>(&ds);
 	//Platform::DebugPrintf("About to DoDragDrop %x %x\n", pDataObject, pDropSource);
-	const HRESULT hr = ::DoDragDrop(
+	/*const HRESULT hr = ::DoDragDrop(
 	                 pDataObject,
 	                 pDropSource,
 	                 DROPEFFECT_COPY | DROPEFFECT_MOVE, &dwEffect);
@@ -730,7 +755,8 @@ void ScintillaWin::StartDrag() {
 			// Remove dragged out text
 			ClearSelection();
 		}
-	}
+	}*/
+	// WinUI Todo
 	inDragDrop = DragDrop::none;
 	SetDragPosition(SelectionPosition(Sci::invalidPosition));
 }
@@ -747,14 +773,16 @@ KeyMod ScintillaWin::MouseModifiers(uptr_t wParam) noexcept {
 namespace {
 
 int InputCodePage() noexcept {
-	HKL inputLocale = ::GetKeyboardLayout(0);
+	/*HKL inputLocale = ::GetKeyboardLayout(0);
 	const LANGID inputLang = LOWORD(inputLocale);
 	char sCodePage[10];
 	const int res = ::GetLocaleInfoA(MAKELCID(inputLang, SORT_DEFAULT),
 	  LOCALE_IDEFAULTANSICODEPAGE, sCodePage, sizeof(sCodePage));
 	if (!res)
 		return 0;
-	return atoi(sCodePage);
+	return atoi(sCodePage);*/
+	return 0;
+	// WinUI Todo
 }
 
 /** Map the key codes to their equivalent Keys:: form. */
@@ -790,7 +818,7 @@ Keys KeyTranslate(uptr_t keyIn) noexcept {
 }
 
 bool BoundsContains(PRectangle rcBounds, HRGN hRgnBounds, PRectangle rcCheck) noexcept {
-	bool contains = true;
+	/*bool contains = true;
 	if (!rcCheck.Empty()) {
 		if (!rcBounds.Contains(rcCheck)) {
 			contains = false;
@@ -811,7 +839,9 @@ bool BoundsContains(PRectangle rcBounds, HRGN hRgnBounds, PRectangle rcCheck) no
 			}
 		}
 	}
-	return contains;
+	return contains;*/
+	return false;
+	// WinUI Todo
 }
 
 // Simplify calling WideCharToMultiByte and MultiByteToWideChar by providing default parameters and using string view.
@@ -851,14 +881,15 @@ std::wstring StringDecode(std::string_view sv, int codePage) {
 }
 
 std::wstring StringMapCase(std::wstring_view wsv, DWORD mapFlags) {
-	const int charsConverted = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
+	/*const int charsConverted = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
 		wsv.data(), static_cast<int>(wsv.length()), nullptr, 0);
 	std::wstring wsConverted(charsConverted, 0);
 	if (charsConverted) {
 		::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
 			wsv.data(), static_cast<int>(wsv.length()), wsConverted.data(), charsConverted);
 	}
-	return wsConverted;
+	return wsConverted;*/
+	return std::wstring{ wsv }; // WinUI Todo
 }
 
 }
@@ -940,7 +971,7 @@ bool ScintillaWin::PaintDC(HDC hdc) {
 }
 
 sptr_t ScintillaWin::WndPaint() {
-	//ElapsedPeriod ep;
+	/*//ElapsedPeriod ep;
 
 	// Redirect assertions to debug output and save current state
 	const bool assertsPopup = Platform::ShowAssertionPopUps(false);
@@ -974,12 +1005,13 @@ sptr_t ScintillaWin::WndPaint() {
 	// Restore debug output state
 	Platform::ShowAssertionPopUps(assertsPopup);
 
-	//Platform::DebugPrintf("Paint took %g\n", ep.Duration());
+	//Platform::DebugPrintf("Paint took %g\n", ep.Duration());*/
+	// WinUI Todo
 	return 0;
 }
 
 sptr_t ScintillaWin::HandleCompositionWindowed(uptr_t wParam, sptr_t lParam) {
-	if (lParam & GCS_RESULTSTR) {
+	/*if (lParam & GCS_RESULTSTR) {
 		IMContext imc(MainHWND());
 		if (imc.hIMC) {
 			AddWString(imc.GetCompositionString(GCS_RESULTSTR), CharacterSource::ImeResult);
@@ -993,7 +1025,8 @@ sptr_t ScintillaWin::HandleCompositionWindowed(uptr_t wParam, sptr_t lParam) {
 		}
 		return 0;
 	}
-	return ::DefWindowProc(MainHWND(), WM_IME_COMPOSITION, wParam, lParam);
+	return ::DefWindowProc(MainHWND(), WM_IME_COMPOSITION, wParam, lParam);*/
+	return 0; // WinUI Todo
 }
 
 bool ScintillaWin::KoreanIME() noexcept {
@@ -1026,7 +1059,7 @@ void ScintillaWin::DrawImeIndicator(int indicator, Sci::Position len) {
 }
 
 void ScintillaWin::SetCandidateWindowPos() {
-	IMContext imc(MainHWND());
+	/*IMContext imc(MainHWND());
 	if (imc.hIMC) {
 		const Point pos = PointMainCaret();
 		const PRectangle rcClient = GetTextRectangle();
@@ -1041,7 +1074,8 @@ void ScintillaWin::SetCandidateWindowPos() {
 		CandForm.rcArea.left = static_cast<int>(rcClient.left);
 		CandForm.rcArea.right = static_cast<int>(rcClient.right);
 		::ImmSetCandidateWindow(imc.hIMC, &CandForm);
-	}
+	}*/
+	// WinUI Todo
 }
 
 void ScintillaWin::SelectionToHangul() {
@@ -1090,7 +1124,7 @@ void ScintillaWin::EscapeHanja() {
 
 	std::wstring uniChar = StringDecode(oneChar, CodePageOfDocument());
 
-	IMContext imc(MainHWND());
+	/*IMContext imc(MainHWND());
 	if (imc.hIMC) {
 		// Set the candidate box position since IME may show it.
 		SetCandidateWindowPos();
@@ -1098,7 +1132,8 @@ void ScintillaWin::EscapeHanja() {
 		if (::ImmEscapeW(GetKeyboardLayout(0), imc.hIMC, IME_ESC_HANJA_MODE, &uniChar[0])) {
 			SetSelection(currentPos, currentPos + oneCharLen);
 		}
-	}
+	}*/
+	// WinUI Todo
 }
 
 void ScintillaWin::ToggleHanja() {
@@ -1159,7 +1194,7 @@ sptr_t ScintillaWin::HandleCompositionInline(uptr_t, sptr_t lParam) {
 	// Copy & paste by johnsonj with a lot of helps of Neil.
 	// Great thanks for my foreruners, jiniya and BLUEnLIVE.
 
-	IMContext imc(MainHWND());
+	/*IMContext imc(MainHWND());
 	if (!imc.hIMC)
 		return 0;
 	if (pdoc->IsReadOnly() || SelectionContainsProtected()) {
@@ -1244,7 +1279,8 @@ sptr_t ScintillaWin::HandleCompositionInline(uptr_t, sptr_t lParam) {
 		}
 	}
 	EnsureCaretVisible();
-	ShowCaretAtCurrentPosition();
+	ShowCaretAtCurrentPosition();*/
+	// WinUI Todo
 	return 0;
 }
 
@@ -1253,16 +1289,16 @@ namespace {
 // Translate message IDs from WM_* and EM_* to Message::* so can partly emulate Windows Edit control
 Message SciMessageFromEM(unsigned int iMessage) noexcept {
 	switch (iMessage) {
-	case EM_CANPASTE: return Message::CanPaste;
+	//case EM_CANPASTE: return Message::CanPaste; // WinUI Todo
 	case EM_CANUNDO: return Message::CanUndo;
 	case EM_EMPTYUNDOBUFFER: return Message::EmptyUndoBuffer;
-	case EM_FINDTEXTEX: return Message::FindText;
-	case EM_FORMATRANGE: return Message::FormatRange;
+	//case EM_FINDTEXTEX: return Message::FindText; // WinUI Todo
+	//case EM_FORMATRANGE: return Message::FormatRange; // WinUI Todo
 	case EM_GETFIRSTVISIBLELINE: return Message::GetFirstVisibleLine;
 	case EM_GETLINECOUNT: return Message::GetLineCount;
-	case EM_GETSELTEXT: return Message::GetSelText;
-	case EM_GETTEXTRANGE: return Message::GetTextRange;
-	case EM_HIDESELECTION: return Message::HideSelection;
+	//case EM_GETSELTEXT: return Message::GetSelText; // WinUI Todo
+	//case EM_GETTEXTRANGE: return Message::GetTextRange; // WinUI Todo
+	//case EM_HIDESELECTION: return Message::HideSelection; // WinUI Todo
 	case EM_LINEINDEX: return Message::PositionFromLine;
 	case EM_LINESCROLL: return Message::LineScroll;
 	case EM_REPLACESEL: return Message::ReplaceSel;
@@ -1427,20 +1463,22 @@ Window::Cursor ScintillaWin::ContextCursor(Point pt) {
 sptr_t ScintillaWin::ShowContextMenu(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	Point pt = PointFromLParam(lParam);
 	POINT rpt = POINTFromPoint(pt);
-	::ScreenToClient(MainHWND(), &rpt);
+	//::ScreenToClient(MainHWND(), &rpt); // WinUI Todo
 	const Point ptClient = PointFromPOINT(rpt);
 	if (ShouldDisplayPopup(ptClient)) {
 		if ((pt.x == -1) && (pt.y == -1)) {
 			// Caused by keyboard so display menu near caret
 			pt = PointMainCaret();
 			POINT spt = POINTFromPoint(pt);
-			::ClientToScreen(MainHWND(), &spt);
+			//::ClientToScreen(MainHWND(), &spt); // WinUI Todo
 			pt = PointFromPOINT(spt);
 		}
 		ContextMenu(pt);
 		return 0;
 	}
-	return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
+	//return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
+	// WinUI Todo
+	return 0;
 }
 
 PRectangle ScintillaWin::GetClientRectangle() const {
@@ -1461,7 +1499,7 @@ void ScintillaWin::SizeWindow() {
 }
 
 sptr_t ScintillaWin::MouseMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
-	switch (iMessage) {
+	/*switch (iMessage) {
 	case WM_LBUTTONDOWN: {
 			// For IME, set the composition string as the result string.
 			IMContext imc(MainHWND());
@@ -1567,12 +1605,13 @@ sptr_t ScintillaWin::MouseMessage(unsigned int iMessage, uptr_t wParam, sptr_t l
 			}
 		}
 		return 0;
-	}
+	}*/
+	// WinUI Todo
 	return 0;
 }
 
 sptr_t ScintillaWin::KeyMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
-	switch (iMessage) {
+	/*switch (iMessage) {
 
 	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN: {
@@ -1634,13 +1673,14 @@ sptr_t ScintillaWin::KeyMessage(unsigned int iMessage, uptr_t wParam, sptr_t lPa
 			AddWString(std::wstring_view(wcs, wclen), CharacterSource::DirectInput);
 			return FALSE;
 		}
-	}
+	}*/
+	// WinUI Todo
 
 	return 0;
 }
 
 sptr_t ScintillaWin::FocusMessage(unsigned int iMessage, uptr_t wParam, sptr_t) {
-	switch (iMessage) {
+	/*switch (iMessage) {
 	case WM_KILLFOCUS: {
 		HWND wOther = reinterpret_cast<HWND>(wParam);
 		HWND wThis = MainHWND();
@@ -1663,12 +1703,13 @@ sptr_t ScintillaWin::FocusMessage(unsigned int iMessage, uptr_t wParam, sptr_t) 
 		DestroySystemCaret();
 		CreateSystemCaret();
 		break;
-	}
+	}*/
+	// WinUI Todo
 	return 0;
 }
 
 sptr_t ScintillaWin::IMEMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
-	switch (iMessage) {
+	/*switch (iMessage) {
 
 	case WM_INPUTLANGCHANGE:
 		return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
@@ -1722,12 +1763,13 @@ sptr_t ScintillaWin::IMEMessage(unsigned int iMessage, uptr_t wParam, sptr_t lPa
 	case WM_IME_NOTIFY:
 		return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
 
-	}
+	}*/
+	// WinUI Todo
 	return 0;
 }
 
 sptr_t ScintillaWin::EditMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
-	switch (iMessage) {
+	/*switch (iMessage) {
 
 	case EM_LINEFROMCHAR:
 		if (PositionFromUPtr(wParam) < 0) {
@@ -1785,7 +1827,8 @@ sptr_t ScintillaWin::EditMessage(unsigned int iMessage, uptr_t wParam, sptr_t lP
 			EnsureCaretVisible();
 			return pdoc->LineFromPosition(SelectionStart().Position());
 		}
-	}
+	}*/
+	// WinUI Todo
 	return 0;
 }
 
@@ -1813,8 +1856,9 @@ sptr_t ScintillaWin::IdleMessage(unsigned int iMessage, uptr_t wParam, sptr_t lP
 					const DWORD dwStart = wParam ? static_cast<DWORD>(wParam) : dwCurrent;
 					constexpr DWORD maxWorkTime = 50;
 
-					if (dwCurrent >= dwStart && dwCurrent > maxWorkTime &&dwCurrent - maxWorkTime < dwStart)
-						PostMessage(MainHWND(), SC_WIN_IDLE, dwStart, 0);
+					//if (dwCurrent >= dwStart && dwCurrent > maxWorkTime &&dwCurrent - maxWorkTime < dwStart)
+						//PostMessage(MainHWND(), SC_WIN_IDLE, dwStart, 0);
+					// WinUI Todo
 				} else {
 					SetIdle(false);
 				}
@@ -1841,7 +1885,8 @@ sptr_t ScintillaWin::SciMessage(Message iMessage, uptr_t wParam, sptr_t lParam) 
 		return reinterpret_cast<sptr_t>(this);
 
 	case Message::GrabFocus:
-		::SetFocus(MainHWND());
+		//::SetFocus(MainHWND());
+		// WinUI Todo
 		break;
 
 #ifdef INCLUDE_DEPRECATED_FEATURES
@@ -1906,7 +1951,7 @@ sptr_t ScintillaWin::SciMessage(Message iMessage, uptr_t wParam, sptr_t lParam) 
 }
 
 sptr_t ScintillaWin::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
-	try {
+	/*try {
 		//Platform::DebugPrintf("S M:%x WP:%x L:%x\n", iMessage, wParam, lParam);
 		const unsigned int msg = static_cast<unsigned int>(iMessage);
 		switch (msg) {
@@ -2103,7 +2148,8 @@ sptr_t ScintillaWin::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
 		errorStatus = Status::BadAlloc;
 	} catch (...) {
 		errorStatus = Status::Failure;
-	}
+	}*/
+	// WinUI Todo
 	return 0;
 }
 
@@ -2134,7 +2180,9 @@ std::string ScintillaWin::EncodedFromUTF8(std::string_view utf8) const {
 }
 
 sptr_t ScintillaWin::DefWndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
-	return ::DefWindowProc(MainHWND(), static_cast<unsigned int>(iMessage), wParam, lParam);
+	//return ::DefWindowProc(MainHWND(), static_cast<unsigned int>(iMessage), wParam, lParam);
+	// WinUI Todo
+	return 0;
 }
 
 bool ScintillaWin::FineTickerRunning(TickReason reason) {
@@ -2145,18 +2193,20 @@ void ScintillaWin::FineTickerStart(TickReason reason, int millis, int tolerance)
 	FineTickerCancel(reason);
 	const UINT_PTR reasonIndex = static_cast<UINT_PTR>(reason);
 	const UINT_PTR eventID = static_cast<UINT_PTR>(fineTimerStart) + reasonIndex;
-	if (SetCoalescableTimerFn && tolerance) {
+	/*if (SetCoalescableTimerFn && tolerance) {
 		timers[reasonIndex] = SetCoalescableTimerFn(MainHWND(), eventID, millis, nullptr, tolerance);
 	} else {
 		timers[reasonIndex] = ::SetTimer(MainHWND(), eventID, millis, nullptr);
-	}
+	}*/
+	// WinUI Todo
 }
 
 void ScintillaWin::FineTickerCancel(TickReason reason) {
 	const UINT_PTR reasonIndex = static_cast<UINT_PTR>(reason);
 	if (timers[reasonIndex]) {
-		::KillTimer(MainHWND(), timers[reasonIndex]);
-		timers[reasonIndex] = 0;
+		//::KillTimer(MainHWND(), timers[reasonIndex]);
+		//timers[reasonIndex] = 0;
+		// WinUI Todo
 	}
 }
 
@@ -2166,13 +2216,14 @@ bool ScintillaWin::SetIdle(bool on) {
 	// takes advantage of the fact that WM_TIMER messages are very low priority,
 	// and are only posted when the message queue is empty, i.e. during idle time.
 	if (idler.state != on) {
-		if (on) {
+		/*if (on) {
 			idler.idlerID = ::SetTimer(MainHWND(), idleTimerID, 10, nullptr)
 				? reinterpret_cast<IdlerID>(idleTimerID) : 0;
 		} else {
 			::KillTimer(MainHWND(), reinterpret_cast<uptr_t>(idler.idlerID));
 			idler.idlerID = 0;
-		}
+		}*/
+		// WinUI Todo
 		idler.state = idler.idlerID != 0;
 	}
 	return idler.state;
@@ -2186,9 +2237,10 @@ void ScintillaWin::IdleWork() {
 void ScintillaWin::QueueIdleWork(WorkItems items, Sci::Position upTo) {
 	Editor::QueueIdleWork(items, upTo);
 	if (!styleIdleInQueue) {
-		if (PostMessage(MainHWND(), SC_WORK_IDLE, 0, 0)) {
+		/*if (PostMessage(MainHWND(), SC_WORK_IDLE, 0, 0)) {
 			styleIdleInQueue = true;
-		}
+		}*/
+		// WinUI Todo
 	}
 }
 
@@ -2210,14 +2262,15 @@ bool ScintillaWin::HaveMouseCapture() {
 }
 
 void ScintillaWin::SetTrackMouseLeaveEvent(bool on) noexcept {
-	if (on && !trackedMouseLeave) {
+	/*if (on && !trackedMouseLeave) {
 		TRACKMOUSEEVENT tme {};
 		tme.cbSize = sizeof(tme);
 		tme.dwFlags = TME_LEAVE;
 		tme.hwndTrack = MainHWND();
 		tme.dwHoverTime = HOVER_DEFAULT;	// Unused but triggers Dr. Memory if not initialized
 		TrackMouseEvent(&tme);
-	}
+	}*/
+	// WinUI Todo
 	trackedMouseLeave = on;
 }
 
@@ -2231,7 +2284,8 @@ void ScintillaWin::UpdateBaseElements() {
 	};
 	bool changed = false;
 	for (const ElementToIndex &ei : eti) {
-		changed = vs.SetElementBase(ei.element, ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(ei.nIndex)))) || changed;
+		//changed = vs.SetElementBase(ei.element, ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(ei.nIndex)))) || changed;
+		// WinUI Todo
 	}
 	if (changed) {
 		Redraw();
@@ -2255,7 +2309,8 @@ void ScintillaWin::ScrollText(Sci::Line /* linesToMove */) {
 }
 
 void ScintillaWin::NotifyCaretMove() {
-	NotifyWinEvent(EVENT_OBJECT_LOCATIONCHANGE, MainHWND(), OBJID_CARET, CHILDID_SELF);
+	//NotifyWinEvent(EVENT_OBJECT_LOCATIONCHANGE, MainHWND(), OBJID_CARET, CHILDID_SELF);
+	// WinUI Todo
 }
 
 void ScintillaWin::UpdateSystemCaret() {
@@ -2270,21 +2325,25 @@ void ScintillaWin::UpdateSystemCaret() {
 			CreateSystemCaret();
 		}
 		const Point pos = PointMainCaret();
-		::SetCaretPos(static_cast<int>(pos.x), static_cast<int>(pos.y));
+		//::SetCaretPos(static_cast<int>(pos.x), static_cast<int>(pos.y));
+		// WinUI Todo
 	}
 }
 
 bool ScintillaWin::IsVisible() const noexcept {
-	return GetWindowStyle(MainHWND()) & WS_VISIBLE;
+	//return GetWindowStyle(MainHWND()) & WS_VISIBLE;
+	return true;
+	// WinUI Todo
 }
 
-int ScintillaWin::SetScrollInfo(int nBar, LPCSCROLLINFO lpsi, BOOL bRedraw) noexcept {
+/*int ScintillaWin::SetScrollInfo(int nBar, LPCSCROLLINFO lpsi, BOOL bRedraw) noexcept {
 	return ::SetScrollInfo(MainHWND(), nBar, lpsi, bRedraw);
 }
 
 bool ScintillaWin::GetScrollInfo(int nBar, LPSCROLLINFO lpsi) noexcept {
 	return ::GetScrollInfo(MainHWND(), nBar, lpsi) ? true : false;
-}
+}*/
+// WinUI Todo
 
 // Change the scroll position but avoid repaint if changing to same value
 void ScintillaWin::ChangeScrollPos(int barType, Sci::Position pos) {
@@ -2292,7 +2351,7 @@ void ScintillaWin::ChangeScrollPos(int barType, Sci::Position pos) {
 		return;
 	}
 
-	SCROLLINFO sci = {
+	/*SCROLLINFO sci = {
 		sizeof(sci), 0, 0, 0, 0, 0, 0
 	};
 	sci.fMask = SIF_POS;
@@ -2301,7 +2360,8 @@ void ScintillaWin::ChangeScrollPos(int barType, Sci::Position pos) {
 		DwellEnd(true);
 		sci.nPos = static_cast<int>(pos);
 		SetScrollInfo(barType, &sci, TRUE);
-	}
+	}*/
+	// WinUI Todo
 }
 
 void ScintillaWin::SetVerticalScrollPos() {
@@ -2313,7 +2373,7 @@ void ScintillaWin::SetHorizontalScrollPos() {
 }
 
 bool ScintillaWin::ChangeScrollRange(int nBar, int nMin, int nMax, UINT nPage) noexcept {
-	SCROLLINFO sci = { sizeof(sci), SIF_PAGE | SIF_RANGE, 0, 0, 0, 0, 0 };
+	/*SCROLLINFO sci = {sizeof(sci), SIF_PAGE | SIF_RANGE, 0, 0, 0, 0, 0};
 	GetScrollInfo(nBar, &sci);
 	if ((sci.nMin != nMin) || (sci.nMax != nMax) ||	(sci.nPage != nPage)) {
 		sci.nMin = nMin;
@@ -2321,7 +2381,8 @@ bool ScintillaWin::ChangeScrollRange(int nBar, int nMin, int nMax, UINT nPage) n
 		sci.nPage = nPage;
 		SetScrollInfo(nBar, &sci, TRUE);
 		return true;
-	}
+	}*/
+	// WinUI Todo
 	return false;
 }
 
@@ -2354,16 +2415,18 @@ bool ScintillaWin::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
 }
 
 void ScintillaWin::NotifyChange() {
-	::SendMessage(::GetParent(MainHWND()), WM_COMMAND,
+	/*::SendMessage(::GetParent(MainHWND()), WM_COMMAND,
 	        MAKEWPARAM(GetCtrlID(), FocusChange::Change),
-		reinterpret_cast<LPARAM>(MainHWND()));
+		reinterpret_cast<LPARAM>(MainHWND()));*/
+	// WinUI Todo
 }
 
 void ScintillaWin::NotifyFocus(bool focus) {
 	if (commandEvents) {
-		::SendMessage(::GetParent(MainHWND()), WM_COMMAND,
+		/*::SendMessage(::GetParent(MainHWND()), WM_COMMAND,
 			MAKEWPARAM(GetCtrlID(), focus ? FocusChange::Setfocus : FocusChange::Killfocus),
-			reinterpret_cast<LPARAM>(MainHWND()));
+			reinterpret_cast<LPARAM>(MainHWND()));*/
+		// WinUI Todo
 	}
 	Editor::NotifyFocus(focus);
 }
@@ -2373,24 +2436,28 @@ void ScintillaWin::SetCtrlID(int identifier) {
 }
 
 int ScintillaWin::GetCtrlID() {
-	return ::GetDlgCtrlID(HwndFromWindow(wMain));
+	//return ::GetDlgCtrlID(HwndFromWindow(wMain));
+	// WinUI Todo
+	return 0;
 }
 
 void ScintillaWin::NotifyParent(NotificationData scn) {
 	scn.nmhdr.hwndFrom = MainHWND();
 	scn.nmhdr.idFrom = GetCtrlID();
-	::SendMessage(::GetParent(MainHWND()), WM_NOTIFY,
-	              GetCtrlID(), reinterpret_cast<LPARAM>(&scn));
+	/*::SendMessage(::GetParent(MainHWND()), WM_NOTIFY,
+	              GetCtrlID(), reinterpret_cast<LPARAM>(&scn));*/
+	// WinUI Todo
 }
 
 void ScintillaWin::NotifyDoubleClick(Point pt, KeyMod modifiers) {
 	//Platform::DebugPrintf("ScintillaWin Double click 0\n");
 	ScintillaBase::NotifyDoubleClick(pt, modifiers);
 	// Send myself a WM_LBUTTONDBLCLK, so the container can handle it too.
-	::SendMessage(MainHWND(),
+	/*::SendMessage(MainHWND(),
 			  WM_LBUTTONDBLCLK,
 			  FlagSet(modifiers, KeyMod::Shift) ? MK_SHIFT : 0,
-			  MAKELPARAM(pt.x, pt.y));
+			  MAKELPARAM(pt.x, pt.y));*/
+	// WinUI Todo
 }
 
 namespace {
@@ -2532,7 +2599,9 @@ void ScintillaWin::Copy() {
 bool ScintillaWin::CanPaste() {
 	if (!Editor::CanPaste())
 		return false;
-	return ::IsClipboardFormatAvailable(CF_UNICODETEXT) != FALSE;
+	//return ::IsClipboardFormatAvailable(CF_UNICODETEXT) != FALSE;
+	// WinUI Todo
+	return true;
 }
 
 namespace {
@@ -2573,7 +2642,8 @@ public:
 		return handCopy;
 	}
 	void SetClip(UINT uFormat) noexcept {
-		::SetClipboardData(uFormat, Unlock());
+		//::SetClipboardData(uFormat, Unlock());
+		// WinUI Todo
 	}
 	operator bool() const noexcept {
 		return ptr != nullptr;
@@ -2591,9 +2661,10 @@ bool OpenClipboardRetry(HWND hwnd) noexcept {
 		if (attempt > 0) {
 			::Sleep(1 << (attempt-1));
 		}
-		if (::OpenClipboard(hwnd)) {
+		/*if (::OpenClipboard(hwnd)) {
 			return true;
-		}
+		}*/
+		// WinUI Todo
 	}
 	return false;
 }
@@ -2613,7 +2684,7 @@ bool SupportedFormat(const FORMATETC *pFE) noexcept {
 }
 
 void ScintillaWin::Paste() {
-	if (!::OpenClipboardRetry(MainHWND())) {
+	/*if (!::OpenClipboardRetry(MainHWND())) {
 		return;
 	}
 	UndoGroup ug(pdoc);
@@ -2640,11 +2711,12 @@ void ScintillaWin::Paste() {
 		memUSelection.Unlock();
 	}
 	::CloseClipboard();
-	Redraw();
+	Redraw();*/
+	// WinUI Todo
 }
 
 void ScintillaWin::CreateCallTipWindow(PRectangle) {
-	if (!ct.wCallTip.Created()) {
+	/*if (!ct.wCallTip.Created()) {
 		HWND wnd = ::CreateWindow(callClassName, TEXT("ACallTip"),
 					     WS_POPUP, 100, 100, 150, 20,
 					     MainHWND(), 0,
@@ -2652,17 +2724,19 @@ void ScintillaWin::CreateCallTipWindow(PRectangle) {
 					     this);
 		ct.wCallTip = wnd;
 		ct.wDraw = wnd;
-	}
+	}*/
+	// WinUI Todo
 }
 
 void ScintillaWin::AddToPopUp(const char *label, int cmd, bool enabled) {
-	HMENU hmenuPopup = static_cast<HMENU>(popup.GetID());
+	/*HMENU hmenuPopup = static_cast<HMENU>(popup.GetID());
 	if (!label[0])
 		::AppendMenuA(hmenuPopup, MF_SEPARATOR, 0, "");
 	else if (enabled)
 		::AppendMenuA(hmenuPopup, MF_STRING, cmd, label);
 	else
-		::AppendMenuA(hmenuPopup, MF_STRING | MF_DISABLED | MF_GRAYED, cmd, label);
+		::AppendMenuA(hmenuPopup, MF_STRING | MF_DISABLED | MF_GRAYED, cmd, label);*/
+	// WinUI Todo
 }
 
 void ScintillaWin::ClaimSelection() {
@@ -2957,7 +3031,7 @@ DropTarget::DropTarget() noexcept {
  * Called when IME Window opened.
  */
 void ScintillaWin::ImeStartComposition() {
-	if (caret.active) {
+	/*if (caret.active) {
 		// Move IME Window to current caret position
 		IMContext imc(MainHWND());
 		const Point pos = PointMainCaret();
@@ -2991,7 +3065,8 @@ void ScintillaWin::ImeStartComposition() {
 		}
 		// Caret is displayed in IME window. So, caret in Scintilla is useless.
 		DropCaret();
-	}
+	}*/
+	// WinUI Todo
 }
 
 /** Called when IME Window closed. */
@@ -3003,7 +3078,7 @@ void ScintillaWin::ImeEndComposition() {
 }
 
 LRESULT ScintillaWin::ImeOnReconvert(LPARAM lParam) {
-	// Reconversion on windows limits within one line without eol.
+	/*// Reconversion on windows limits within one line without eol.
 	// Look around:   baseStart  <--  (|mainStart|  -- mainEnd)  --> baseEnd.
 	const Sci::Position mainStart = sel.RangeMain().Start().Position();
 	const Sci::Position mainEnd = sel.RangeMain().End().Position();
@@ -3081,12 +3156,16 @@ LRESULT ScintillaWin::ImeOnReconvert(LPARAM lParam) {
 		}
 	}
 	// Immediately Target Input or candidate box choice with GCS_COMPSTR.
-	return rcSize;
+	return rcSize;*/
+	// WinUI Todo
+	return S_OK;
 }
 
 void ScintillaWin::GetIntelliMouseParameters() noexcept {
 	// This retrieves the number of lines per scroll as configured in the Mouse Properties sheet in Control Panel
-	::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &linesPerScroll, 0);
+	//::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &linesPerScroll, 0);
+	// WinUI Todo
+	linesPerScroll = 3;
 }
 
 void ScintillaWin::CopyToGlobal(GlobalMemory &gmUnicode, const SelectionText &selectedText) {
@@ -3113,7 +3192,7 @@ void ScintillaWin::CopyToGlobal(GlobalMemory &gmUnicode, const SelectionText &se
 }
 
 void ScintillaWin::CopyToClipboard(const SelectionText &selectedText) {
-	if (!::OpenClipboardRetry(MainHWND())) {
+	/*if (!::OpenClipboardRetry(MainHWND())) {
 		return;
 	}
 	::EmptyClipboard();
@@ -3140,11 +3219,12 @@ void ScintillaWin::CopyToClipboard(const SelectionText &selectedText) {
 		::SetClipboardData(cfVSLineTag, 0);
 	}
 
-	::CloseClipboard();
+	::CloseClipboard();*/
+	// WinUI Todo
 }
 
 void ScintillaWin::ScrollMessage(WPARAM wParam) {
-	//DWORD dwStart = timeGetTime();
+	/*//DWORD dwStart = timeGetTime();
 	//Platform::DebugPrintf("Scroll %x %d\n", wParam, lParam);
 
 	SCROLLINFO sci = {};
@@ -3171,11 +3251,12 @@ void ScintillaWin::ScrollMessage(WPARAM wParam) {
 	case SB_THUMBPOSITION: topLineNew = sci.nTrackPos; break;
 	case SB_THUMBTRACK: topLineNew = sci.nTrackPos; break;
 	}
-	ScrollTo(topLineNew);
+	ScrollTo(topLineNew);*/
+	// WinUI Todo
 }
 
 void ScintillaWin::HorizontalScrollMessage(WPARAM wParam) {
-	int xPos = xOffset;
+	/*int xPos = xOffset;
 	const PRectangle rcText = GetTextRectangle();
 	const int pageWidth = static_cast<int>(rcText.Width() * 2 / 3);
 	switch (LOWORD(wParam)) {
@@ -3212,7 +3293,8 @@ void ScintillaWin::HorizontalScrollMessage(WPARAM wParam) {
 		}
 		break;
 	}
-	HorizontalScrollTo(xPos);
+	HorizontalScrollTo(xPos);*/
+	// WinUI Todo
 }
 
 /**
@@ -3220,13 +3302,14 @@ void ScintillaWin::HorizontalScrollMessage(WPARAM wParam) {
  * This paint will not be abandoned.
  */
 void ScintillaWin::FullPaint() {
-	if ((technology == Technology::Default) || (technology == Technology::DirectWriteDC)) {
+	/*if ((technology == Technology::Default) || (technology == Technology::DirectWriteDC)) {
 		HDC hdc = ::GetDC(MainHWND());
 		FullPaintDC(hdc);
 		::ReleaseDC(MainHWND(), hdc);
 	} else {
 		FullPaintDC({});
-	}
+	}*/
+	// WinUI Todo
 }
 
 /**
@@ -3244,13 +3327,15 @@ void ScintillaWin::FullPaintDC(HDC hdc) {
 namespace {
 
 bool CompareDevCap(HDC hdc, HDC hOtherDC, int nIndex) noexcept {
-	return ::GetDeviceCaps(hdc, nIndex) == ::GetDeviceCaps(hOtherDC, nIndex);
+	//return ::GetDeviceCaps(hdc, nIndex) == ::GetDeviceCaps(hOtherDC, nIndex);
+	return false;
+	// WinUI Todo
 }
 
 }
 
 bool ScintillaWin::IsCompatibleDC(HDC hOtherDC) noexcept {
-	HDC hdc = ::GetDC(MainHWND());
+	/*HDC hdc = ::GetDC(MainHWND());
 	const bool isCompatible =
 		CompareDevCap(hdc, hOtherDC, TECHNOLOGY) &&
 		CompareDevCap(hdc, hOtherDC, LOGPIXELSY) &&
@@ -3258,11 +3343,13 @@ bool ScintillaWin::IsCompatibleDC(HDC hOtherDC) noexcept {
 		CompareDevCap(hdc, hOtherDC, BITSPIXEL) &&
 		CompareDevCap(hdc, hOtherDC, PLANES);
 	::ReleaseDC(MainHWND(), hdc);
-	return isCompatible;
+	return isCompatible;*/
+	// WinUI Todo
+	return true;
 }
 
 DWORD ScintillaWin::EffectFromState(DWORD grfKeyState) const noexcept {
-	// These are the Wordpad semantics.
+	/*// These are the Wordpad semantics.
 	DWORD dwEffect;
 	if (inDragDrop == DragDrop::dragging)	// Internal defaults to move
 		dwEffect = DROPEFFECT_MOVE;
@@ -3272,7 +3359,9 @@ DWORD ScintillaWin::EffectFromState(DWORD grfKeyState) const noexcept {
 		dwEffect = DROPEFFECT_MOVE;
 	if (grfKeyState & MK_CONTROL)
 		dwEffect = DROPEFFECT_COPY;
-	return dwEffect;
+	return dwEffect;*/
+	// WinUI Todo
+	return 0;
 }
 
 /// Implement IUnknown
@@ -3280,10 +3369,11 @@ STDMETHODIMP ScintillaWin::QueryInterface(REFIID riid, PVOID *ppv) {
 	*ppv = nullptr;
 	if (riid == IID_IUnknown)
 		*ppv = reinterpret_cast<IDropTarget *>(&dt);
-	if (riid == IID_IDropSource)
+	/*if (riid == IID_IDropSource)
 		*ppv = reinterpret_cast<IDropSource *>(&ds);
 	if (riid == IID_IDropTarget)
-		*ppv = reinterpret_cast<IDropTarget *>(&dt);
+		*ppv = reinterpret_cast<IDropTarget *>(&dt);*/
+		// WinUI Todo
 	if (riid == IID_IDataObject)
 		*ppv = reinterpret_cast<IDataObject *>(&dob);
 	if (!*ppv)
@@ -3302,7 +3392,7 @@ STDMETHODIMP_(ULONG) ScintillaWin::Release() {
 /// Implement IDropTarget
 STDMETHODIMP ScintillaWin::DragEnter(LPDATAOBJECT pIDataSource, DWORD grfKeyState,
                                      POINTL, PDWORD pdwEffect) {
-	if (!pIDataSource )
+	/*if (!pIDataSource)
 		return E_POINTER;
 	FORMATETC fmtu = {CF_UNICODETEXT, nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 	const HRESULT hrHasUText = pIDataSource->QueryGetData(&fmtu);
@@ -3311,13 +3401,14 @@ STDMETHODIMP ScintillaWin::DragEnter(LPDATAOBJECT pIDataSource, DWORD grfKeyStat
 		*pdwEffect = EffectFromState(grfKeyState);
 	} else {
 		*pdwEffect = DROPEFFECT_NONE;
-	}
+	}*/
+	// WinUI Todo
 
 	return S_OK;
 }
 
 STDMETHODIMP ScintillaWin::DragOver(DWORD grfKeyState, POINTL pt, PDWORD pdwEffect) {
-	try {
+	/*try {
 		if (!hasOKText || pdoc->IsReadOnly()) {
 			*pdwEffect = DROPEFFECT_NONE;
 			return S_OK;
@@ -3334,22 +3425,26 @@ STDMETHODIMP ScintillaWin::DragOver(DWORD grfKeyState, POINTL pt, PDWORD pdwEffe
 	} catch (...) {
 		errorStatus = Status::Failure;
 	}
-	return E_FAIL;
+	return E_FAIL;*/
+	// WinUI Todo
+	return S_OK;
 }
 
 STDMETHODIMP ScintillaWin::DragLeave() {
-	try {
+	/*try {
 		SetDragPosition(SelectionPosition(Sci::invalidPosition));
 		return S_OK;
 	} catch (...) {
 		errorStatus = Status::Failure;
 	}
-	return E_FAIL;
+	return E_FAIL;*/
+	// WinUI Todo
+	return S_OK;
 }
 
 STDMETHODIMP ScintillaWin::Drop(LPDATAOBJECT pIDataSource, DWORD grfKeyState,
                                 POINTL pt, PDWORD pdwEffect) {
-	try {
+	/*try {
 		*pdwEffect = EffectFromState(grfKeyState);
 
 		if (!pIDataSource)
@@ -3392,7 +3487,9 @@ STDMETHODIMP ScintillaWin::Drop(LPDATAOBJECT pIDataSource, DWORD grfKeyState,
 	} catch (...) {
 		errorStatus = Status::Failure;
 	}
-	return E_FAIL;
+	return E_FAIL;*/
+	// WinUI Todo
+	return S_OK;
 }
 
 /// Implement important part of IDataObject
@@ -3416,7 +3513,7 @@ void ScintillaWin::Prepare() noexcept {
 	Platform_Initialise(hInstance);
 
 	// Register the CallTip class
-	WNDCLASSEX wndclassc{};
+	/*WNDCLASSEX wndclassc{};
 	wndclassc.cbSize = sizeof(wndclassc);
 	wndclassc.style = CS_GLOBALCLASS | CS_HREDRAW | CS_VREDRAW;
 	wndclassc.cbWndExtra = sizeof(ScintillaWin *);
@@ -3425,7 +3522,8 @@ void ScintillaWin::Prepare() noexcept {
 	wndclassc.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 	wndclassc.lpszClassName = callClassName;
 
-	callClassAtom = ::RegisterClassEx(&wndclassc);
+	callClassAtom = ::RegisterClassEx(&wndclassc);*/
+	// WinUI Todo
 }
 
 bool ScintillaWin::Register(HINSTANCE hInstance_) noexcept {
@@ -3434,7 +3532,7 @@ bool ScintillaWin::Register(HINSTANCE hInstance_) noexcept {
 
 	// Register the Scintilla class
 	// Register Scintilla as a wide character window
-	WNDCLASSEXW wndclass {};
+	/*WNDCLASSEXW wndclass{};
 	wndclass.cbSize = sizeof(wndclass);
 	wndclass.style = CS_GLOBALCLASS | CS_HREDRAW | CS_VREDRAW;
 	wndclass.lpfnWndProc = ScintillaWin::SWndProc;
@@ -3442,14 +3540,16 @@ bool ScintillaWin::Register(HINSTANCE hInstance_) noexcept {
 	wndclass.hInstance = hInstance;
 	wndclass.lpszClassName = L"Scintilla";
 	scintillaClassAtom = ::RegisterClassExW(&wndclass);
-	const bool result = 0 != scintillaClassAtom;
+	const bool result = 0 != scintillaClassAtom;*/
 
-	return result;
+	//return result;
+	// WinUI Todo
+	return true;
 }
 
 bool ScintillaWin::Unregister() noexcept {
 	bool result = true;
-	if (0 != scintillaClassAtom) {
+	/*if (0 != scintillaClassAtom) {
 		if (::UnregisterClass(MAKEINTATOM(scintillaClassAtom), hInstance) == 0) {
 			result = false;
 		}
@@ -3460,7 +3560,8 @@ bool ScintillaWin::Unregister() noexcept {
 			result = false;
 		}
 		callClassAtom = 0;
-	}
+	}*/
+	// WinUI Todo
 	return result;
 }
 
@@ -3475,7 +3576,7 @@ bool ScintillaWin::HasCaretSizeChanged() const noexcept {
 }
 
 BOOL ScintillaWin::CreateSystemCaret() {
-	sysCaretWidth = vs.caret.width;
+	/*sysCaretWidth = vs.caret.width;
 	if (0 == sysCaretWidth) {
 		sysCaretWidth = 1;
 	}
@@ -3492,22 +3593,26 @@ BOOL ScintillaWin::CreateSystemCaret() {
 		// System caret interferes with Direct2D drawing so only show it for GDI.
 		::ShowCaret(MainHWND());
 	}
-	return retval;
+	return retval;*/
+	// WinUI Todo
+	return false;
 }
 
 BOOL ScintillaWin::DestroySystemCaret() noexcept {
-	::HideCaret(MainHWND());
+	/*::HideCaret(MainHWND());
 	const BOOL retval = ::DestroyCaret();
 	if (sysCaretBitmap) {
 		::DeleteObject(sysCaretBitmap);
 		sysCaretBitmap = {};
 	}
-	return retval;
+	return retval;*/
+	// WinUI Todo
+	return false;
 }
 
 LRESULT PASCAL ScintillaWin::CTWndProc(
 	HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
-	// Find C++ object associated with window.
+	/*// Find C++ object associated with window.
 	ScintillaWin *sciThis = static_cast<ScintillaWin *>(PointerFromWindow(hWnd));
 	try {
 		// ctp will be zero if WM_CREATE not seen yet
@@ -3601,20 +3706,24 @@ LRESULT PASCAL ScintillaWin::CTWndProc(
 	} catch (...) {
 		sciThis->errorStatus = Status::Failure;
 	}
-	return ::DefWindowProc(hWnd, iMessage, wParam, lParam);
+	return ::DefWindowProc(hWnd, iMessage, wParam, lParam);*/
+	// WinUI Todo
+	return 0;
 }
 
 sptr_t ScintillaWin::DirectFunction(
     sptr_t ptr, UINT iMessage, uptr_t wParam, sptr_t lParam) {
 	ScintillaWin *sci = reinterpret_cast<ScintillaWin *>(ptr);
-	PLATFORM_ASSERT(::GetCurrentThreadId() == ::GetWindowThreadProcessId(sci->MainHWND(), nullptr));
+	//PLATFORM_ASSERT(::GetCurrentThreadId() == ::GetWindowThreadProcessId(sci->MainHWND(), nullptr));
+	// WinUI Todo
 	return sci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
 }
 
 sptr_t ScintillaWin::DirectStatusFunction(
     sptr_t ptr, UINT iMessage, uptr_t wParam, sptr_t lParam, int *pStatus) {
 	ScintillaWin *sci = reinterpret_cast<ScintillaWin *>(ptr);
-	PLATFORM_ASSERT(::GetCurrentThreadId() == ::GetWindowThreadProcessId(sci->MainHWND(), nullptr));
+	//PLATFORM_ASSERT(::GetCurrentThreadId() == ::GetWindowThreadProcessId(sci->MainHWND(), nullptr));
+	// WinUI Todo
 	const sptr_t returnValue = sci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
 	*pStatus = static_cast<int>(sci->errorStatus);
 	return returnValue;
@@ -3648,7 +3757,9 @@ LRESULT PASCAL ScintillaWin::SWndProc(
 			}
 		} catch (...) {
 		}
-		return ::DefWindowProc(hWnd, iMessage, wParam, lParam);
+		//return ::DefWindowProc(hWnd, iMessage, wParam, lParam);
+		// WinUI Todo
+		return 0;
 	} else {
 		if (iMessage == WM_NCDESTROY) {
 			try {
@@ -3657,7 +3768,9 @@ LRESULT PASCAL ScintillaWin::SWndProc(
 			} catch (...) {
 			}
 			SetWindowPointer(hWnd, nullptr);
-			return ::DefWindowProc(hWnd, iMessage, wParam, lParam);
+			//return ::DefWindowProc(hWnd, iMessage, wParam, lParam);
+			// WinUI Todo
+			return 0;
 		} else {
 			return sci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
 		}

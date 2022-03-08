@@ -136,7 +136,7 @@ void LoadD2DOnce() noexcept {
 		const HRESULT hr = pIDWriteFactory->CreateRenderingParams(&defaultRenderingParams);
 		if (SUCCEEDED(hr)) {
 			unsigned int clearTypeContrast = 0;
-			if (::SystemParametersInfo(SPI_GETFONTSMOOTHINGCONTRAST, 0, &clearTypeContrast, 0)) {
+			/*if (::SystemParametersInfo(SPI_GETFONTSMOOTHINGCONTRAST, 0, &clearTypeContrast, 0)) {
 
 				FLOAT gamma;
 				if (clearTypeContrast >= 1000 && clearTypeContrast <= 2200)
@@ -146,7 +146,7 @@ void LoadD2DOnce() noexcept {
 
 				pIDWriteFactory->CreateCustomRenderingParams(gamma, defaultRenderingParams->GetEnhancedContrast(), defaultRenderingParams->GetClearTypeLevel(),
 					defaultRenderingParams->GetPixelGeometry(), defaultRenderingParams->GetRenderingMode(), &customClearTypeRenderingParams);
-			}
+			}*/ // WinUI Todo
 		}
 	}
 }
@@ -164,11 +164,14 @@ bool LoadD2D() {
 #endif
 
 void *PointerFromWindow(HWND hWnd) noexcept {
-	return reinterpret_cast<void *>(::GetWindowLongPtr(hWnd, 0));
+	//return reinterpret_cast<void *>(::GetWindowLongPtr(hWnd, 0));
+	// WinUI Todo
+	return nullptr;
 }
 
 void SetWindowPointer(HWND hWnd, void *ptr) noexcept {
-	::SetWindowLongPtr(hWnd, 0, reinterpret_cast<LONG_PTR>(ptr));
+	//::SetWindowLongPtr(hWnd, 0, reinterpret_cast<LONG_PTR>(ptr));
+	// WinUI Todo
 }
 
 namespace {
@@ -190,7 +193,7 @@ using AdjustWindowRectExForDpiSig = BOOL(WINAPI *)(LPRECT lpRect, DWORD dwStyle,
 AdjustWindowRectExForDpiSig fnAdjustWindowRectExForDpi = nullptr;
 
 void LoadDpiForWindow() noexcept {
-	HMODULE user32 = ::GetModuleHandleW(L"user32.dll");
+	/*HMODULE user32 = ::GetModuleHandleW(L"user32.dll");
 	fnGetDpiForWindow = DLLFunction<GetDpiForWindowSig>(user32, "GetDpiForWindow");
 	fnGetSystemMetricsForDpi = DLLFunction<GetSystemMetricsForDpiSig>(user32, "GetSystemMetricsForDpi");
 	fnAdjustWindowRectExForDpi = DLLFunction<AdjustWindowRectExForDpiSig>(user32, "AdjustWindowRectExForDpi");
@@ -210,7 +213,8 @@ void LoadDpiForWindow() noexcept {
 		if (hDLLShcore) {
 			fnGetDpiForMonitor = DLLFunction<GetDpiForMonitorSig>(hDLLShcore, "GetDpiForMonitor");
 		}
-	}
+	}*/
+	// WinUI Todo
 }
 
 HINSTANCE hinstPlatformRes {};
@@ -386,28 +390,31 @@ public:
 typedef VarBuffer<XYPOSITION, stackBufferLength> TextPositions;
 
 UINT DpiForWindow(WindowID wid) noexcept {
-	if (fnGetDpiForWindow) {
+	/*if (fnGetDpiForWindow) {
 		return fnGetDpiForWindow(HwndFromWindowID(wid));
 	}
 	if (fnGetDpiForMonitor) {
 		HMONITOR hMonitor = ::MonitorFromWindow(HwndFromWindowID(wid), MONITOR_DEFAULTTONEAREST);
 		UINT dpiX = 0;
 		UINT dpiY = 0;
-		if (fnGetDpiForMonitor(hMonitor, 0 /*MDT_EFFECTIVE_DPI*/, &dpiX, &dpiY) == S_OK) {
+		if (fnGetDpiForMonitor(hMonitor, 0 /|*MDT_EFFECTIVE_DPI*|/, &dpiX, &dpiY) == S_OK) {
 			return dpiY;
 		}
 	}
-	return uSystemDPI;
+	return uSystemDPI;*/
+	// WinUI Todo
+	return 120; //1.25?
 }
 
 int SystemMetricsForDpi(int nIndex, UINT dpi) noexcept {
-	if (fnGetSystemMetricsForDpi) {
+	/*if (fnGetSystemMetricsForDpi) {
 		return fnGetSystemMetricsForDpi(nIndex, dpi);
 	}
 
 	int value = ::GetSystemMetrics(nIndex);
 	value = (dpi == uSystemDPI) ? value : ::MulDiv(value, dpi, uSystemDPI);
-	return value;
+	return value;*/
+	return 0; // WinUI Todo
 }
 
 #if defined(USE_D2D)
@@ -1803,27 +1810,31 @@ Window::~Window() noexcept {
 }
 
 void Window::Destroy() noexcept {
-	if (wid)
-		::DestroyWindow(HwndFromWindowID(wid));
+	//if (wid)
+		//::DestroyWindow(HwndFromWindowID(wid));
+	// WinUI Todo
 	wid = nullptr;
 }
 
 PRectangle Window::GetPosition() const {
 	RECT rc;
-	::GetWindowRect(HwndFromWindowID(wid), &rc);
-	return PRectangle::FromInts(rc.left, rc.top, rc.right, rc.bottom);
+	// WinUI Todo
+	return PRectangle::FromInts(0, 0, 400, 400);
+	/*::GetWindowRect(HwndFromWindowID(wid), &rc);
+	return PRectangle::FromInts(rc.left, rc.top, rc.right, rc.bottom);*/
 }
 
 void Window::SetPosition(PRectangle rc) {
-	::SetWindowPos(HwndFromWindowID(wid),
+	/*::SetWindowPos(HwndFromWindowID(wid),
 		0, static_cast<int>(rc.left), static_cast<int>(rc.top),
-		static_cast<int>(rc.Width()), static_cast<int>(rc.Height()), SWP_NOZORDER | SWP_NOACTIVATE);
+		static_cast<int>(rc.Width()), static_cast<int>(rc.Height()), SWP_NOZORDER | SWP_NOACTIVATE);*/
+	// WinUI Todo
 }
 
 namespace {
 
 RECT RectFromMonitor(HMONITOR hMonitor) noexcept {
-	MONITORINFO mi = {};
+	/*MONITORINFO mi = {};
 	mi.cbSize = sizeof(mi);
 	if (GetMonitorInfo(hMonitor, &mi)) {
 		return mi.rcWork;
@@ -1835,13 +1846,15 @@ RECT RectFromMonitor(HMONITOR hMonitor) noexcept {
 		rc.right = 0;
 		rc.bottom = 0;
 	}
-	return rc;
+	return rc;*/
+	// WinUI Todo
+	return { 0, 0, 100, 100 };
 }
 
 }
 
 void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo) {
-	const DWORD style = GetWindowStyle(HwndFromWindowID(wid));
+	/*const DWORD style = GetWindowStyle(HwndFromWindowID(wid));
 	if (style & WS_POPUP) {
 		POINT ptOther = {0, 0};
 		::ClientToScreen(HwndFromWindow(*relativeTo), &ptOther);
@@ -1868,48 +1881,54 @@ void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo) {
 				rc.Move(0, rcWork.top - rc.top);
 		}
 	}
-	SetPosition(rc);
+	SetPosition(rc);*/
+	// WinUI Todo
 }
 
 PRectangle Window::GetClientPosition() const {
-	RECT rc={0,0,0,0};
+	/*RECT rc = {0,0,0,0};
 	if (wid)
 		::GetClientRect(HwndFromWindowID(wid), &rc);
-	return PRectangle::FromInts(rc.left, rc.top, rc.right, rc.bottom);
+	return PRectangle::FromInts(rc.left, rc.top, rc.right, rc.bottom);*/
+	return PRectangle::FromInts(0, 0, 400, 400); // WinUI Todo
 }
 
 void Window::Show(bool show) {
-	if (show)
+	/*if (show)
 		::ShowWindow(HwndFromWindowID(wid), SW_SHOWNOACTIVATE);
 	else
-		::ShowWindow(HwndFromWindowID(wid), SW_HIDE);
+		::ShowWindow(HwndFromWindowID(wid), SW_HIDE);*/
+	// WinUI Todo
 }
 
 void Window::InvalidateAll() {
-	::InvalidateRect(HwndFromWindowID(wid), nullptr, FALSE);
+	/*::InvalidateRect(HwndFromWindowID(wid), nullptr, FALSE);*/
+	// WinUI Todo
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
-	const RECT rcw = RectFromPRectangle(rc);
-	::InvalidateRect(HwndFromWindowID(wid), &rcw, FALSE);
+	/*const RECT rcw = RectFromPRectangle(rc);
+	::InvalidateRect(HwndFromWindowID(wid), &rcw, FALSE);*/
+	// WinUI Todo
 }
 
 namespace {
 
 void FlipBitmap(HBITMAP bitmap, int width, int height) noexcept {
-	HDC hdc = ::CreateCompatibleDC({});
+	/*HDC hdc = ::CreateCompatibleDC({});
 	if (hdc) {
 		HBITMAP prevBmp = SelectBitmap(hdc, bitmap);
 		::StretchBlt(hdc, width - 1, 0, -width, height, hdc, 0, 0, width, height, SRCCOPY);
 		SelectBitmap(hdc, prevBmp);
 		::DeleteDC(hdc);
-	}
+	}*/
+	// WinUI Todo
 }
 
 }
 
 HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept {
-	HCURSOR reverseArrowCursor {};
+	/*HCURSOR reverseArrowCursor{};
 
 	bool created = false;
 	HCURSOR cursor = ::LoadCursor({}, IDC_ARROW);
@@ -1944,11 +1963,13 @@ HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept {
 	if (created) {
 		::DestroyCursor(cursor);
 	}
-	return reverseArrowCursor;
+	return reverseArrowCursor;*/
+	// WinUI Todo
+	return nullptr;
 }
 
 void Window::SetCursor(Cursor curs) {
-	switch (curs) {
+	/*switch (curs) {
 	case Cursor::text:
 		::SetCursor(::LoadCursor(NULL,IDC_IBEAM));
 		break;
@@ -1972,13 +1993,14 @@ void Window::SetCursor(Cursor curs) {
 	case Cursor::invalid:	// Should not occur, but just in case.
 		::SetCursor(::LoadCursor(NULL,IDC_ARROW));
 		break;
-	}
+	}*/
+	// WinUI Todo
 }
 
 /* Returns rectangle of monitor pt is on, both rect and pt are in Window's
    coordinates */
 PRectangle Window::GetMonitorRect(Point pt) {
-	const PRectangle rcPosition = GetPosition();
+	/*const PRectangle rcPosition = GetPosition();
 	POINT ptDesktop = {static_cast<LONG>(pt.x + rcPosition.left),
 		static_cast<LONG>(pt.y + rcPosition.top)};
 	HMONITOR hMonitor = MonitorFromPoint(ptDesktop, MONITOR_DEFAULTTONEAREST);
@@ -1991,9 +2013,10 @@ PRectangle Window::GetMonitorRect(Point pt) {
 			rcWork.right - rcPosition.left,
 			rcWork.bottom - rcPosition.top);
 		return rcMonitor;
-	} else {
+	} else {*/
 		return PRectangle();
-	}
+	/*}*/
+	// WinUI Todo
 }
 
 struct ListItemData {
@@ -2048,28 +2071,35 @@ Menu::Menu() noexcept : mid{} {
 
 void Menu::CreatePopUp() {
 	Destroy();
-	mid = ::CreatePopupMenu();
+	//mid = ::CreatePopupMenu();
+	// WinUI Todo
 }
 
 void Menu::Destroy() noexcept {
-	if (mid)
-		::DestroyMenu(static_cast<HMENU>(mid));
+	// WinUI Todo
+	//if (mid)
+		//::DestroyMenu(static_cast<HMENU>(mid));
 	mid = 0;
 }
 
 void Menu::Show(Point pt, const Window &w) {
-	::TrackPopupMenu(static_cast<HMENU>(mid),
-		TPM_RIGHTBUTTON, static_cast<int>(pt.x - 4), static_cast<int>(pt.y), 0,
-		HwndFromWindow(w), nullptr);
+	// WinUI Todo
+	//::TrackPopupMenu(static_cast<HMENU>(mid),
+		//TPM_RIGHTBUTTON, static_cast<int>(pt.x - 4), static_cast<int>(pt.y), 0,
+		//HwndFromWindow(w), nullptr);
 	Destroy();
 }
 
 ColourRGBA Platform::Chrome() {
-	return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DFACE)));
+	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DFACE)));
+	return ColourRGBA::FromRGB(0xFF0000);
+	// WinUI Todo
 }
 
 ColourRGBA Platform::ChromeHighlight() {
-	return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DHIGHLIGHT)));
+	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DHIGHLIGHT)));
+	return ColourRGBA::FromRGB(0xFF3300);
+	// WinUI Todo
 }
 
 const char *Platform::DefaultFont() {
@@ -2081,7 +2111,9 @@ int Platform::DefaultFontSize() {
 }
 
 unsigned int Platform::DoubleClickTime() {
-	return ::GetDoubleClickTime();
+	//return ::GetDoubleClickTime();
+	return 3;
+	// WinUI Todo
 }
 
 void Platform::DebugDisplay(const char *s) noexcept {
@@ -2115,7 +2147,8 @@ bool Platform::ShowAssertionPopUps(bool assertionPopUps_) noexcept {
 void Platform::Assert(const char *c, const char *file, int line) noexcept {
 	char buffer[2000] {};
 	sprintf(buffer, "Assertion [%s] failed at %s %d%s", c, file, line, assertionPopUps ? "" : "\r\n");
-	if (assertionPopUps) {
+	// WinUI Todo
+	/*if (assertionPopUps) {
 		const int idButton = ::MessageBoxA(0, buffer, "Assertion failure",
 			MB_ABORTRETRYIGNORE|MB_ICONHAND|MB_SETFOREGROUND|MB_TASKMODAL);
 		if (idButton == IDRETRY) {
@@ -2125,17 +2158,18 @@ void Platform::Assert(const char *c, const char *file, int line) noexcept {
 		} else {
 			abort();
 		}
-	} else {
+	} else {*/
 		Platform::DebugDisplay(buffer);
 		::DebugBreak();
 		abort();
-	}
+	/*}*/
 }
 
 void Platform_Initialise(void *hInstance) noexcept {
 	hinstPlatformRes = static_cast<HINSTANCE>(hInstance);
 	LoadDpiForWindow();
-	ListBoxX_Register();
+	//ListBoxX_Register();
+	// WinUI Todo
 }
 
 void Platform_Finalise(bool fromDllMain) noexcept {
@@ -2159,7 +2193,8 @@ void Platform_Finalise(bool fromDllMain) noexcept {
 		FreeLibrary(hDLLShcore);
 		hDLLShcore = {};
 	}
-	ListBoxX_Unregister();
+	//ListBoxX_Unregister();
+	// WinUI Todo
 }
 
 }
