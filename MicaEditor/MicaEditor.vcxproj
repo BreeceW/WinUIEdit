@@ -87,12 +87,14 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>..\scintilla\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <!-- <PrecompiledHeader>Use</PrecompiledHeader> -->
+      <!-- <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile> -->
+      <!-- <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile> -->
+      <AdditionalIncludeDirectories>..\scintilla\include;..\scintilla\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level4</WarningLevel>
       <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
+      <PreprocessorDefinitions>SCI_EMPTYCATALOGUE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="$(MicaEditorUseWinUI3)">WINUI3;_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="!$(MicaEditorUseWinUI3)">_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalUsingDirectories>$(WindowsSDK_WindowsMetadata);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
@@ -126,15 +128,22 @@
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="..\scintilla\include\*.h" />
+    <ClInclude Include="..\scintilla\src\*.h" />
+    <ClInclude Include="..\scintilla\winui\*.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MicaEditorControl.cpp">
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <!-- <PrecompiledHeader>Create</PrecompiledHeader> -->
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="..\scintilla\src\*.cxx" />
+    <ClCompile Include="..\scintilla\winui\HanjaDic.cxx" />
+    <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
+    <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MicaEditor.def" />
@@ -154,11 +163,6 @@
   <ItemGroup>
     <Page Include="Themes\Generic.xaml" />
   </ItemGroup>
-  <!-- <ItemGroup>
-    <ProjectReference Include="..\scintilla\winui\Scintilla.vcxproj">
-      <Project>{19cca8b8-46b9-4609-b7ce-198da19f07bd}</Project>
-    </ProjectReference>
-  </ItemGroup> -->
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />

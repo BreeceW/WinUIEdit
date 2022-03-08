@@ -1833,7 +1833,7 @@ sptr_t ScintillaWin::EditMessage(unsigned int iMessage, uptr_t wParam, sptr_t lP
 }
 
 sptr_t ScintillaWin::IdleMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
-	switch (iMessage) {
+	/*switch (iMessage) {
 	case SC_WIN_IDLE:
 		// wParam=dwTickCountInitial, or 0 to initialize.  lParam=bSkipUserInputTest
 		if (idler.state) {
@@ -1869,7 +1869,8 @@ sptr_t ScintillaWin::IdleMessage(unsigned int iMessage, uptr_t wParam, sptr_t lP
 	case SC_WORK_IDLE:
 		IdleWork();
 		break;
-	}
+	*/
+	// WinUI Todo
 	return 0;
 }
 
@@ -2246,11 +2247,12 @@ void ScintillaWin::QueueIdleWork(WorkItems items, Sci::Position upTo) {
 
 void ScintillaWin::SetMouseCapture(bool on) {
 	if (mouseDownCaptures) {
-		if (on) {
+		/*if (on) {
 			::SetCapture(MainHWND());
 		} else {
 			::ReleaseCapture();
-		}
+		}*/
+		// WinUI Todo
 	}
 	capturedMouse = on;
 }

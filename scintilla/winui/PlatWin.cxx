@@ -2066,6 +2066,11 @@ ListBox::ListBox() noexcept {
 ListBox::~ListBox() noexcept {
 }
 
+std::unique_ptr<ListBox> ListBox::Allocate() {
+	return nullptr;
+	// WinUI Todo
+}
+
 Menu::Menu() noexcept : mid{} {
 }
 
