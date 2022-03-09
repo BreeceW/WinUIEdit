@@ -87,16 +87,15 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <!-- <PrecompiledHeader>Use</PrecompiledHeader> -->
-      <!-- <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile> -->
-      <!-- <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile> -->
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>..\scintilla\winui;..\scintilla\include;..\scintilla\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level4</WarningLevel>
       <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
       <PreprocessorDefinitions>SCI_EMPTYCATALOGUE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="$(MicaEditorUseWinUI3)">WINUI3;_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="!$(MicaEditorUseWinUI3)">_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="$(MicaEditorUseWinUI3)">WINUI3;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalUsingDirectories>$(WindowsSDK_WindowsMetadata);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Midl>
@@ -137,10 +136,12 @@
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <!-- <PrecompiledHeader>Create</PrecompiledHeader> -->
+      <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="..\scintilla\src\*.cxx" />
+    <ClCompile Include="..\scintilla\src\*.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\scintilla\winui\HanjaDic.cxx" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
