@@ -91,7 +91,7 @@
       <!-- <PrecompiledHeader>Use</PrecompiledHeader> -->
       <!-- <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile> -->
       <!-- <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile> -->
-      <AdditionalIncludeDirectories>..\scintilla\include;..\scintilla\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\scintilla\winui;..\scintilla\include;..\scintilla\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level4</WarningLevel>
       <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
       <PreprocessorDefinitions>SCI_EMPTYCATALOGUE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>

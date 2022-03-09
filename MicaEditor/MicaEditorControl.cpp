@@ -4,8 +4,6 @@
 #include "MicaEditorControl.g.cpp"
 #endif
 
-#include <Scintilla.h>
-
 using namespace winrt;
 using namespace DUX;
 using namespace DUXC;
@@ -32,6 +30,14 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::OnApplyTemplate()
 	{
+		_scintilla.WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>("Test set text"));
+		char buf[400];
+		_scintilla.WndProc(Scintilla::Message::GetText, 400, reinterpret_cast<Scintilla::uptr_t>(buf));
+		if (auto box = GetTemplateChild(L"DemoBox").try_as<TextBox>())
+		{
+			box.Text(to_hstring(buf));
+		}
+
 		UpdateBox();
 	}
 

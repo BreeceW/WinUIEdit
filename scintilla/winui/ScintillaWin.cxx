@@ -515,8 +515,6 @@ public:
 	STDMETHODIMP GetData(FORMATETC *pFEIn, STGMEDIUM *pSTM);
 
 	static void Prepare() noexcept;
-	static bool Register(HINSTANCE hInstance_) noexcept;
-	static bool Unregister() noexcept;
 
 	bool DragIsRectangularOK(CLIPFORMAT fmt) const noexcept {
 		return drag.rectangular && (fmt == cfColumnSelect);
@@ -3528,45 +3526,6 @@ void ScintillaWin::Prepare() noexcept {
 	// WinUI Todo
 }
 
-bool ScintillaWin::Register(HINSTANCE hInstance_) noexcept {
-
-	hInstance = hInstance_;
-
-	// Register the Scintilla class
-	// Register Scintilla as a wide character window
-	/*WNDCLASSEXW wndclass{};
-	wndclass.cbSize = sizeof(wndclass);
-	wndclass.style = CS_GLOBALCLASS | CS_HREDRAW | CS_VREDRAW;
-	wndclass.lpfnWndProc = ScintillaWin::SWndProc;
-	wndclass.cbWndExtra = sizeof(ScintillaWin *);
-	wndclass.hInstance = hInstance;
-	wndclass.lpszClassName = L"Scintilla";
-	scintillaClassAtom = ::RegisterClassExW(&wndclass);
-	const bool result = 0 != scintillaClassAtom;*/
-
-	//return result;
-	// WinUI Todo
-	return true;
-}
-
-bool ScintillaWin::Unregister() noexcept {
-	bool result = true;
-	/*if (0 != scintillaClassAtom) {
-		if (::UnregisterClass(MAKEINTATOM(scintillaClassAtom), hInstance) == 0) {
-			result = false;
-		}
-		scintillaClassAtom = 0;
-	}
-	if (0 != callClassAtom) {
-		if (::UnregisterClass(MAKEINTATOM(callClassAtom), hInstance) == 0) {
-			result = false;
-		}
-		callClassAtom = 0;
-	}*/
-	// WinUI Todo
-	return result;
-}
-
 bool ScintillaWin::HasCaretSizeChanged() const noexcept {
 	if (
 		( (0 != vs.caret.width) && (sysCaretWidth != vs.caret.width) )
@@ -3731,16 +3690,7 @@ sptr_t ScintillaWin::DirectStatusFunction(
 	return returnValue;
 }
 
-namespace Scintilla::Internal {
-
-sptr_t DirectFunction(
-    ScintillaWin *sci, UINT iMessage, uptr_t wParam, sptr_t lParam) {
-	return sci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
-}
-
-}
-
-LRESULT PASCAL ScintillaWin::SWndProc(
+/*LRESULT PASCAL ScintillaWin::SWndProc(
 	HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	//Platform::DebugPrintf("S W:%x M:%x WP:%x L:%x\n", hWnd, iMessage, wParam, lParam);
 
@@ -3777,26 +3727,19 @@ LRESULT PASCAL ScintillaWin::SWndProc(
 			return sci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
 		}
 	}
-}
+}*/
 
 // This function is externally visible so it can be called from container when building statically.
 // Must be called once only.
 extern "C" int Scintilla_RegisterClasses(void *hInstance) {
-	const bool result = ScintillaWin::Register(static_cast<HINSTANCE>(hInstance));
-	return result;
+	return 1;
 }
 
 namespace Scintilla::Internal {
 
 int ResourcesRelease(bool fromDllMain) noexcept {
-	const bool result = ScintillaWin::Unregister();
 	Platform_Finalise(fromDllMain);
-	return result;
-}
-
-int RegisterClasses(void *hInstance) noexcept {
-	const bool result = ScintillaWin::Register(static_cast<HINSTANCE>(hInstance));
-	return result;
+	return 0;
 }
 
 }
@@ -3804,4 +3747,78 @@ int RegisterClasses(void *hInstance) noexcept {
 // This function is externally visible so it can be called from container when building statically.
 extern "C" int Scintilla_ReleaseResources() {
 	return Scintilla::Internal::ResourcesRelease(false);
+}
+
+namespace Scintilla::Internal
+{
+
+void ScintillaWinUI::SetVerticalScrollPos()
+{
+}
+
+void ScintillaWinUI::SetHorizontalScrollPos()
+{
+}
+
+bool ScintillaWinUI::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage)
+{
+	return false;
+}
+
+void ScintillaWinUI::Copy()
+{
+}
+
+void ScintillaWinUI::Paste()
+{
+}
+
+void ScintillaWinUI::ClaimSelection()
+{
+}
+
+void ScintillaWinUI::NotifyChange()
+{
+}
+
+void ScintillaWinUI::NotifyParent(Scintilla::NotificationData scn)
+{
+}
+
+void ScintillaWinUI::CopyToClipboard(const SelectionText &selectedText)
+{
+}
+
+void ScintillaWinUI::SetMouseCapture(bool on)
+{
+}
+
+bool ScintillaWinUI::HaveMouseCapture()
+{
+	return false;
+}
+
+std::string ScintillaWinUI::UTF8FromEncoded(std::string_view encoded) const
+{
+	return std::string();
+}
+
+std::string ScintillaWinUI::EncodedFromUTF8(std::string_view utf8) const
+{
+	return std::string();
+}
+
+Scintilla::sptr_t ScintillaWinUI::DefWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
+{
+	return Scintilla::sptr_t();
+}
+
+void ScintillaWinUI::CreateCallTipWindow(PRectangle rc)
+{
+}
+
+void ScintillaWinUI::AddToPopUp(const char *label, int cmd, bool enabled)
+{
+}
+
 }

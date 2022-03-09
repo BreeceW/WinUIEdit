@@ -163,17 +163,6 @@ bool LoadD2D() {
 #define CLEARTYPE_QUALITY 5
 #endif
 
-void *PointerFromWindow(HWND hWnd) noexcept {
-	//return reinterpret_cast<void *>(::GetWindowLongPtr(hWnd, 0));
-	// WinUI Todo
-	return nullptr;
-}
-
-void SetWindowPointer(HWND hWnd, void *ptr) noexcept {
-	//::SetWindowLongPtr(hWnd, 0, reinterpret_cast<LONG_PTR>(ptr));
-	// WinUI Todo
-}
-
 namespace {
 
 // system DPI, same for all monitor.

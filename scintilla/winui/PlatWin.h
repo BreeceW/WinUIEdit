@@ -40,9 +40,6 @@ inline HWND HwndFromWindow(const Window &w) noexcept {
 	return HwndFromWindowID(w.GetID());
 }
 
-void *PointerFromWindow(HWND hWnd) noexcept;
-void SetWindowPointer(HWND hWnd, void *ptr) noexcept;
-
 UINT DpiForWindow(WindowID wid) noexcept;
 
 int SystemMetricsForDpi(int nIndex, UINT dpi) noexcept;

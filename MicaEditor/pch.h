@@ -29,5 +29,71 @@
 #define DUXC Windows::UI::Xaml::Controls
 #endif
 
+#include <cstddef>
+#include <cstdlib>
+#include <cstdint>
+#include <cassert>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
+#include <climits>
+
+#include <stdexcept>
+#include <new>
+#include <string>
+#include <string_view>
+#include <vector>
+#include <map>
+#include <set>
+#include <optional>
+#include <algorithm>
+#include <memory>
+#include <chrono>
+#include <mutex>
+
+#include "ScintillaTypes.h"
+#include "ScintillaMessages.h"
+#include "ScintillaStructures.h"
+#include "ILoader.h"
+#include "ILexer.h"
+
+#include "Debugging.h"
+#include "Geometry.h"
+#include "Platform.h"
+
+#include "CharacterCategoryMap.h"
+#include "Position.h"
+#include "UniqueString.h"
+#include "SplitVector.h"
+#include "Partitioning.h"
+#include "RunStyles.h"
+#include "ContractionState.h"
+#include "CellBuffer.h"
+#include "CallTip.h"
+#include "KeyMap.h"
+#include "Indicator.h"
+#include "LineMarker.h"
+#include "Style.h"
+#include "ViewStyle.h"
+#include "CharClassify.h"
+#include "Decoration.h"
+#include "CaseFolder.h"
+#include "Document.h"
+#include "CaseConvert.h"
+#include "UniConversion.h"
+#include "Selection.h"
+#include "PositionCache.h"
+#include "EditModel.h"
+#include "MarginView.h"
+#include "EditView.h"
+#include "Editor.h"
+#include "ElapsedPeriod.h"
+
+#include "AutoComplete.h"
+#include "ScintillaBase.h"
+
+#include "ScintillaWin.h"
+
+#include "Scintilla.h"
 
 #include "MicaEditorControl.h"

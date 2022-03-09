@@ -15,6 +15,7 @@ namespace winrt::MicaEditor::implementation
 
 	private:
 		int32_t _myProperty = 0;
+		::Scintilla::Internal::ScintillaWinUI _scintilla{};
 		void UpdateBox();
 	};
 }
