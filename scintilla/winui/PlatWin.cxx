@@ -316,7 +316,7 @@ struct FontDirectWrite : public Font {
 	}
 
 	static const FontDirectWrite *Cast(const Font *font_) {
-		return new FontDirectWrite(FontParameters{ "Calibri" }); // Todo: Remove this. It is here to prevent a crash. I assume this leaks memory, also
+		return new FontDirectWrite(FontParameters{ "Segoe UI Variable Text" }); // Todo: Remove this. It is here to prevent a crash. I assume this leaks memory, also
 		const FontDirectWrite *pfm = dynamic_cast<const FontDirectWrite *>(font_);
 		PLATFORM_ASSERT(pfm);
 		if (!pfm) {

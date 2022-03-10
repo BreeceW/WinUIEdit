@@ -110,6 +110,6 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::Image_Tapped(Windows::Foundation::IInspectable const &sender, DUX::Input::TappedRoutedEventArgs const &args)
 	{
-		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>("Insert text "));
+		_scintilla->WndProc(Scintilla::Message::AppendText, 13, reinterpret_cast<Scintilla::uptr_t>("\r\nInsert text"));
 	}
 }
