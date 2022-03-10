@@ -72,6 +72,11 @@ namespace winrt::MicaEditor::implementation
 		_myProperty = value;
 	}
 
+	uint64_t MicaEditorControl::Scintilla(int32_t message, uint64_t wParam, uint64_t lParam)
+	{
+		return _scintilla->WndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
+	}
+
 	void MicaEditorControl::OnApplyTemplate()
 	{
 #ifdef WINUI3

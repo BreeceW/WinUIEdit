@@ -13,6 +13,8 @@ namespace winrt::MicaEditor::implementation
 
 		void OnApplyTemplate();
 
+		uint64_t Scintilla(int32_t message, uint64_t wParam, uint64_t lParam);
+
 	private:
 		int32_t _myProperty = 0;
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };

@@ -7,5 +7,6 @@ namespace MicaEditor
     {
         MicaEditorControl();
         Int32 MyProperty;
+        UInt64 Scintilla(Int32 message, UInt64 wParam, UInt64 lParam);
     }
 }
