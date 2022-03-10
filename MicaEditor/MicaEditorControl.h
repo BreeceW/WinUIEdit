@@ -15,8 +15,8 @@ namespace winrt::MicaEditor::implementation
 
 	private:
 		int32_t _myProperty = 0;
-		::Scintilla::Internal::ScintillaWinUI _scintilla{};
-		void UpdateBox();
+		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
+		void Image_Tapped(Windows::Foundation::IInspectable const &sender, DUX::Input::TappedRoutedEventArgs const &args);
 	};
 }
 

@@ -9,6 +9,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <mica:MicaEditorControl MyProperty="20" />
+        <mica:MicaEditorControl
+            Width="300"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            MyProperty="20" />
     </Grid>
 </Window>

@@ -3751,76 +3751,187 @@ extern "C" int Scintilla_ReleaseResources() {
 	return Scintilla::Internal::ResourcesRelease(false);
 }
 
+
 namespace Scintilla::Internal
 {
+	ScintillaWinUI::ScintillaWinUI()
+	{
+		technology = Scintilla::Technology::DirectWrite; // Todo: This should be the default anyway
+		if (!LoadD2D())
+		{
+			winrt::throw_hresult(E_UNEXPECTED); // Todo: Better exception
+		}
+	}
 
-void ScintillaWinUI::SetVerticalScrollPos()
-{
-}
+	void ScintillaWinUI::SetVerticalScrollPos()
+	{
+	}
 
-void ScintillaWinUI::SetHorizontalScrollPos()
-{
-}
+	void ScintillaWinUI::SetHorizontalScrollPos()
+	{
+	}
 
-bool ScintillaWinUI::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage)
-{
-	return false;
-}
+	bool ScintillaWinUI::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage)
+	{
+		return false;
+	}
 
-void ScintillaWinUI::Copy()
-{
-}
+	void ScintillaWinUI::Copy()
+	{
+	}
 
-void ScintillaWinUI::Paste()
-{
-}
+	void ScintillaWinUI::Paste()
+	{
+	}
 
-void ScintillaWinUI::ClaimSelection()
-{
-}
+	void ScintillaWinUI::ClaimSelection()
+	{
+	}
 
-void ScintillaWinUI::NotifyChange()
-{
-}
+	void ScintillaWinUI::NotifyChange()
+	{
+	}
 
-void ScintillaWinUI::NotifyParent(Scintilla::NotificationData scn)
-{
-}
+	void ScintillaWinUI::NotifyParent(Scintilla::NotificationData scn)
+	{
+	}
 
-void ScintillaWinUI::CopyToClipboard(const SelectionText &selectedText)
-{
-}
+	void ScintillaWinUI::CopyToClipboard(const SelectionText &selectedText)
+	{
+	}
 
-void ScintillaWinUI::SetMouseCapture(bool on)
-{
-}
+	void ScintillaWinUI::SetMouseCapture(bool on)
+	{
+	}
 
-bool ScintillaWinUI::HaveMouseCapture()
-{
-	return false;
-}
+	bool ScintillaWinUI::HaveMouseCapture()
+	{
+		return false;
+	}
 
-std::string ScintillaWinUI::UTF8FromEncoded(std::string_view encoded) const
-{
-	return std::string();
-}
+	std::string ScintillaWinUI::UTF8FromEncoded(std::string_view encoded) const
+	{
+		return std::string();
+	}
 
-std::string ScintillaWinUI::EncodedFromUTF8(std::string_view utf8) const
-{
-	return std::string();
-}
+	std::string ScintillaWinUI::EncodedFromUTF8(std::string_view utf8) const
+	{
+		return std::string();
+	}
 
-Scintilla::sptr_t ScintillaWinUI::DefWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
-{
-	return Scintilla::sptr_t();
-}
+	Scintilla::sptr_t ScintillaWinUI::DefWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
+	{
+		return 0;
+	}
 
-void ScintillaWinUI::CreateCallTipWindow(PRectangle rc)
-{
-}
+	void ScintillaWinUI::CreateCallTipWindow(PRectangle rc)
+	{
+	}
 
-void ScintillaWinUI::AddToPopUp(const char *label, int cmd, bool enabled)
-{
-}
+	void ScintillaWinUI::AddToPopUp(const char *label, int cmd, bool enabled)
+	{
+	}
+
+	void ScintillaWinUI::RegisterGraphics(winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D,
+		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative,
+		winrt::com_ptr<::ID2D1DeviceContext> const &d2dDeviceContext)
+	{
+		_sisNativeWithD2D = sisNativeWithD2D;
+		_vsisNative = vsisNative;
+		_d2dDeviceContext = d2dDeviceContext;
+
+		wMain = _vsisNative.get();
+	}
+
+	IFACEMETHODIMP ScintillaWinUI::UpdatesNeeded()
+	{
+		ULONG drawingBoundsCount = 0;
+		HRESULT hr = _vsisNative->GetUpdateRectCount(&drawingBoundsCount);
+		if (FAILED(hr))
+			return hr;
+
+		std::unique_ptr<RECT[]> drawingBounds{ std::make_unique<RECT[]>(drawingBoundsCount) };
+		hr = _vsisNative->GetUpdateRects(drawingBounds.get(), drawingBoundsCount);
+		if (FAILED(hr))
+			return hr;
+
+		// This code doesn't try to coalesce multiple drawing bounds into one. Although that
+		// extra process will reduce the number of draw calls, it requires the virtual surface
+		// image source to manage non-uniform tile size, which requires it to make extra copy
+		// operations to the compositor. By using the drawing bounds it directly returns, which are
+		// of non-overlapping uniform tile size, the compositor is able to use these tiles directly,
+		// which can greatly reduce the amount of memory needed by the virtual surface image source.
+		// It will result in more draw calls though, but Direct2D will be able to accommodate that
+		// without significant impact on presentation frame rate.
+		for (ULONG i = 0; i < drawingBoundsCount; ++i) {
+			DrawBit(drawingBounds[i]);
+		}
+
+		return hr;
+	}
+
+	void ScintillaWinUI::DrawBit(RECT const &drawingBounds)
+	{
+		winrt::com_ptr<IDXGISurface> surface;
+		POINT surfaceOffset = { 0 };
+
+		//Provide a pointer to IDXGISurface object to ISurfaceImageSourceNative::BeginDraw, and
+		//draw into that surface using DirectX. Only the area specified for update in the
+		//updateRect parameter is drawn.
+		//
+		//This method returns the point (x,y) offset of the updated target rectangle in the offset
+		//parameter. You use this offset to determine where to draw into inside the IDXGISurface.
+		HRESULT beginDrawHR = _sisNativeWithD2D->BeginDraw(drawingBounds, __uuidof(::IDXGISurface), surface.put_void(), &surfaceOffset);
+		if (beginDrawHR == DXGI_ERROR_DEVICE_REMOVED || beginDrawHR == DXGI_ERROR_DEVICE_RESET) {
+			// device changed
+		}
+		else {
+			winrt::com_ptr<ID2D1Bitmap1> bitmap;
+			HRESULT hrBitMap = _d2dDeviceContext->CreateBitmapFromDxgiSurface(
+				surface.get(), nullptr, bitmap.put());
+			if (FAILED(hrBitMap)) {
+				winrt::throw_hresult(hrBitMap);
+			}
+			_d2dDeviceContext->BeginDraw();
+			_d2dDeviceContext->SetTarget(bitmap.get());
+			_d2dDeviceContext->SetTransform(D2D1::IdentityMatrix());
+
+			// Translate the drawing to the designated place on the surface.
+			D2D1::Matrix3x2F transform =
+				D2D1::Matrix3x2F::Scale(1.0f, 1.0f) *
+				D2D1::Matrix3x2F::Translation(
+					static_cast<float>(surfaceOffset.x - drawingBounds.left),
+					static_cast<float>(surfaceOffset.y - drawingBounds.top)
+				);
+
+			// Constrain the drawing only to the designated portion of the surface
+			_d2dDeviceContext->PushAxisAlignedClip(
+				D2D1::RectF(
+					static_cast<float>(surfaceOffset.x),
+					static_cast<float>(surfaceOffset.y),
+					static_cast<float>(surfaceOffset.x + (drawingBounds.right - drawingBounds.left)),
+					static_cast<float>(surfaceOffset.y + (drawingBounds.bottom - drawingBounds.top))
+				),
+				D2D1_ANTIALIAS_MODE_ALIASED
+			);
+
+			_d2dDeviceContext->SetTransform(transform);
+
+			auto surf{ Scintilla::Internal::Surface::Allocate(technology) };
+			surf->Init(_d2dDeviceContext.get(), nullptr);
+			//surf->SetUnicodeMode(true); // Todo: Figure out what to make this
+			//surf->SetDBCSMode(0);  // Todo: Figure out what to make this
+			surf->SetMode(SurfaceMode{ 65001, false }); // Todo: Ensure these values are good
+			rcPaint = Scintilla::Internal::PRectangle(drawingBounds.left, drawingBounds.top, drawingBounds.right, drawingBounds.bottom);
+			paintingAllText = true;
+			Paint(surf.get(), rcPaint);
+
+			surf->Release();
+
+			_d2dDeviceContext->EndDraw();
+		}
+
+		_sisNativeWithD2D->EndDraw();
+	}
 
 }

@@ -3,7 +3,7 @@
 namespace MicaEditor
 {
     [default_interface]
-    runtimeclass MicaEditorControl : DUXC.Control
+    runtimeclass MicaEditorControl : DUX.Controls.Control
     {
         MicaEditorControl();
         Int32 MyProperty;

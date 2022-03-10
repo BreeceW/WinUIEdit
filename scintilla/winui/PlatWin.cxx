@@ -316,6 +316,7 @@ struct FontDirectWrite : public Font {
 	}
 
 	static const FontDirectWrite *Cast(const Font *font_) {
+		return new FontDirectWrite(FontParameters{ "Calibri" }); // Todo: Remove this. It is here to prevent a crash. I assume this leaks memory, also
 		const FontDirectWrite *pfm = dynamic_cast<const FontDirectWrite *>(font_);
 		PLATFORM_ASSERT(pfm);
 		if (!pfm) {
@@ -1801,25 +1802,14 @@ Window::~Window() noexcept {
 }
 
 void Window::Destroy() noexcept {
-	//if (wid)
-		//::DestroyWindow(HwndFromWindowID(wid));
-	// WinUI Todo
 	wid = nullptr;
 }
 
 PRectangle Window::GetPosition() const {
-	RECT rc;
-	// WinUI Todo
-	return PRectangle::FromInts(0, 0, 400, 400);
-	/*::GetWindowRect(HwndFromWindowID(wid), &rc);
-	return PRectangle::FromInts(rc.left, rc.top, rc.right, rc.bottom);*/
+	return PRectangle::FromInts(0, 0, 0, 0);
 }
 
 void Window::SetPosition(PRectangle rc) {
-	/*::SetWindowPos(HwndFromWindowID(wid),
-		0, static_cast<int>(rc.left), static_cast<int>(rc.top),
-		static_cast<int>(rc.Width()), static_cast<int>(rc.Height()), SWP_NOZORDER | SWP_NOACTIVATE);*/
-	// WinUI Todo
 }
 
 namespace {
@@ -1839,41 +1829,12 @@ RECT RectFromMonitor(HMONITOR hMonitor) noexcept {
 	}
 	return rc;*/
 	// WinUI Todo
-	return { 0, 0, 100, 100 };
+	return { 0, 0, 0, 0 };
 }
 
 }
 
 void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo) {
-	/*const DWORD style = GetWindowStyle(HwndFromWindowID(wid));
-	if (style & WS_POPUP) {
-		POINT ptOther = {0, 0};
-		::ClientToScreen(HwndFromWindow(*relativeTo), &ptOther);
-		rc.Move(static_cast<XYPOSITION>(ptOther.x), static_cast<XYPOSITION>(ptOther.y));
-
-		const RECT rcMonitor = RectFromPRectangle(rc);
-
-		HMONITOR hMonitor = MonitorFromRect(&rcMonitor, MONITOR_DEFAULTTONEAREST);
-		// If hMonitor is NULL, that's just the main screen anyways.
-		const RECT rcWork = RectFromMonitor(hMonitor);
-
-		if (rcWork.left < rcWork.right) {
-			// Now clamp our desired rectangle to fit inside the work area
-			// This way, the menu will fit wholly on one screen. An improvement even
-			// if you don't have a second monitor on the left... Menu's appears half on
-			// one screen and half on the other are just U.G.L.Y.!
-			if (rc.right > rcWork.right)
-				rc.Move(rcWork.right - rc.right, 0);
-			if (rc.bottom > rcWork.bottom)
-				rc.Move(0, rcWork.bottom - rc.bottom);
-			if (rc.left < rcWork.left)
-				rc.Move(rcWork.left - rc.left, 0);
-			if (rc.top < rcWork.top)
-				rc.Move(0, rcWork.top - rc.top);
-		}
-	}
-	SetPosition(rc);*/
-	// WinUI Todo
 }
 
 PRectangle Window::GetClientPosition() const {
@@ -1881,26 +1842,26 @@ PRectangle Window::GetClientPosition() const {
 	if (wid)
 		::GetClientRect(HwndFromWindowID(wid), &rc);
 	return PRectangle::FromInts(rc.left, rc.top, rc.right, rc.bottom);*/
-	return PRectangle::FromInts(0, 0, 400, 400); // WinUI Todo
+	return PRectangle::FromInts(0, 0, 375, 375); // WinUI Todo
 }
 
 void Window::Show(bool show) {
-	/*if (show)
-		::ShowWindow(HwndFromWindowID(wid), SW_SHOWNOACTIVATE);
-	else
-		::ShowWindow(HwndFromWindowID(wid), SW_HIDE);*/
-	// WinUI Todo
 }
 
 void Window::InvalidateAll() {
-	/*::InvalidateRect(HwndFromWindowID(wid), nullptr, FALSE);*/
-	// WinUI Todo
+	auto vsisNative{ reinterpret_cast<IVirtualSurfaceImageSourceNative *>(GetID()) };
+	if (vsisNative)
+	{
+		vsisNative->Invalidate(RECT{0, 0, 375, 375 }); // Todo: Update with real width
+	}
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
-	/*const RECT rcw = RectFromPRectangle(rc);
-	::InvalidateRect(HwndFromWindowID(wid), &rcw, FALSE);*/
-	// WinUI Todo
+	auto vsisNative{ reinterpret_cast<IVirtualSurfaceImageSourceNative *>(GetID()) };
+	if (vsisNative)
+	{
+		vsisNative->Invalidate(RectFromPRectangle(rc));
+	}
 }
 
 namespace {
@@ -2005,7 +1966,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 			rcWork.bottom - rcPosition.top);
 		return rcMonitor;
 	} else {*/
-		return PRectangle();
+		return PRectangle(0,0,400,400);
 	/*}*/
 	// WinUI Todo
 }
@@ -2088,22 +2049,22 @@ void Menu::Show(Point pt, const Window &w) {
 
 ColourRGBA Platform::Chrome() {
 	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DFACE)));
-	return ColourRGBA::FromRGB(0xFF0000);
+	return ColourRGBA::FromRGB(0xffaec8);
 	// WinUI Todo
 }
 
 ColourRGBA Platform::ChromeHighlight() {
 	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DHIGHLIGHT)));
-	return ColourRGBA::FromRGB(0xFF3300);
+	return ColourRGBA::FromRGB(0x0ed145);
 	// WinUI Todo
 }
 
 const char *Platform::DefaultFont() {
-	return "Verdana";
+	return "Segoe UI Variable Text";
 }
 
 int Platform::DefaultFontSize() {
-	return 8;
+	return 14;
 }
 
 unsigned int Platform::DoubleClickTime() {

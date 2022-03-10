@@ -11,7 +11,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <TextBox x:Name="DemoBox" Text="This is not the editor" />
+                        <Image x:Name="ImageTarget" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
