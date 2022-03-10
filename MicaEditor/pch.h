@@ -105,4 +105,6 @@
 
 #include "Scintilla.h"
 
+#include "Helpers.h"
+
 #include "MicaEditorControl.h"

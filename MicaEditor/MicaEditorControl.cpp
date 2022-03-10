@@ -4,6 +4,7 @@
 #include "MicaEditorControl.g.cpp"
 #endif
 
+using namespace ::MicaEditor;
 using namespace winrt;
 using namespace DUX;
 using namespace DUX::Controls;
@@ -79,7 +80,7 @@ namespace winrt::MicaEditor::implementation
 			)
 		);
 
-		VirtualSurfaceImageSource virtualSurfaceImageSource(375, 375);
+		VirtualSurfaceImageSource virtualSurfaceImageSource{ Helpers::ConvertFromDipToPixelUnit(300, 1.25), Helpers::ConvertFromDipToPixelUnit(300, 1.25) };
 
 		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{
 			virtualSurfaceImageSource.as<::ISurfaceImageSourceNativeWithD2D>() };

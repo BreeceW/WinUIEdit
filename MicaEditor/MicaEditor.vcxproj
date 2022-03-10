@@ -122,6 +122,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Helpers.h" />
     <ClInclude Include="MicaEditorControl.h">
       <DependentUpon>MicaEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
@@ -132,6 +133,7 @@
     <ClInclude Include="..\scintilla\winui\*.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="MicaEditorControl.cpp">
       <SubType>Code</SubType>
     </ClCompile>
