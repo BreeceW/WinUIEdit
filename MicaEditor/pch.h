@@ -2,6 +2,7 @@
 #include <unknwn.h>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.Graphics.Display.h>
 #ifdef WINUI3
 #include <winrt/Microsoft.UI.Composition.h>
 #include <winrt/Microsoft.UI.Xaml.h>
@@ -60,6 +61,9 @@
 #include <chrono>
 #include <mutex>
 
+#include "Helpers.h"
+#include "Wrapper.h"
+
 #include "ScintillaTypes.h"
 #include "ScintillaMessages.h"
 #include "ScintillaStructures.h"
@@ -104,7 +108,5 @@
 #include "ScintillaWin.h"
 
 #include "Scintilla.h"
-
-#include "Helpers.h"
 
 #include "MicaEditorControl.h"

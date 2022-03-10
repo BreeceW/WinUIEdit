@@ -3832,15 +3832,27 @@ namespace Scintilla::Internal
 	{
 	}
 
-	void ScintillaWinUI::RegisterGraphics(winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D,
+	void ScintillaWinUI::RegisterGraphics(winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> const &sisNativeWithD2D,
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative,
-		winrt::com_ptr<::ID2D1DeviceContext> const &d2dDeviceContext)
+		winrt::com_ptr<::ID2D1DeviceContext> const &d2dDeviceContext,
+		std::shared_ptr<MicaEditor::Wrapper> const &wrapper)
 	{
 		_sisNativeWithD2D = sisNativeWithD2D;
 		_vsisNative = vsisNative;
 		_d2dDeviceContext = d2dDeviceContext;
 
-		wMain = _vsisNative.get();
+		_wrapper = wrapper;
+		wMain = _wrapper.get();
+	}
+
+	void ScintillaWinUI::DpiChanged()
+	{
+		InvalidateStyleRedraw();
+	}
+
+	void ScintillaWinUI::SizeChanged()
+	{
+		ChangeSize();
 	}
 
 	IFACEMETHODIMP ScintillaWinUI::UpdatesNeeded()
@@ -3863,7 +3875,8 @@ namespace Scintilla::Internal
 		// which can greatly reduce the amount of memory needed by the virtual surface image source.
 		// It will result in more draw calls though, but Direct2D will be able to accommodate that
 		// without significant impact on presentation frame rate.
-		for (ULONG i = 0; i < drawingBoundsCount; ++i) {
+		for (ULONG i = 0; i < drawingBoundsCount; i++)
+		{
 			DrawBit(drawingBounds[i]);
 		}
 

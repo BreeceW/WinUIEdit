@@ -6,15 +6,12 @@
     xmlns:local="using:CppDemoUWP"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mica="using:MicaEditor"
+    xmlns:micaWindows10version1809="using:MicaEditor?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
 
-    <Grid>
-        <mica:MicaEditorControl
-            Width="300"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            MyProperty="20" />
+    <Grid Padding="24">
+        <mica:MicaEditorControl micaWindows10version1809:CornerRadius="{ThemeResource ControlCornerRadius}" MyProperty="20" />
     </Grid>
 </Page>

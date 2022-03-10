@@ -9,6 +9,8 @@ using namespace winrt;
 using namespace DUX;
 using namespace DUX::Controls;
 using namespace DUX::Media::Imaging;
+using namespace Windows::Foundation;
+using namespace Windows::Graphics::Display;
 
 namespace winrt::MicaEditor::implementation
 {
@@ -16,7 +18,46 @@ namespace winrt::MicaEditor::implementation
 	{
 		DefaultStyleKey(winrt::box_value(L"MicaEditor.MicaEditorControl"));
 
+		_wrapper = std::make_shared<Wrapper>();
+
+		SizeChanged({ this, &MicaEditorControl::OnSizeChanged });
+
+		auto displayInformation{ DisplayInformation::GetForCurrentView() };
+		_dpiChangedRevoker = displayInformation.DpiChanged(winrt::auto_revoke, { this, &MicaEditorControl::OnDpiChanged });
+		UpdateDisplayInformation(displayInformation);
+
 		_scintilla = make_self<::Scintilla::Internal::ScintillaWinUI>();
+	}
+
+	void MicaEditorControl::OnSizeChanged(const IInspectable &sender, const SizeChangedEventArgs &args)
+	{
+		if (_vsisNative)
+		{
+			auto width{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Width, _dpiScale) };
+			auto height{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Height, _dpiScale) };
+			_wrapper->Width(width);
+			_wrapper->Height(height);
+			_vsisNative->Resize(width, height);
+			_scintilla->SizeChanged();
+		}
+	}
+
+	void MicaEditorControl::OnDpiChanged(DisplayInformation const &sender, IInspectable const &args)
+	{
+		UpdateDisplayInformation(sender);
+		_scintilla->DpiChanged();
+	}
+
+	void MicaEditorControl::UpdateDisplayInformation(DisplayInformation const &displayInformation)
+	{
+		_dpiScale = displayInformation.RawPixelsPerViewPixel();
+		_wrapper->DpiScale(_dpiScale); // Todo: May remain unused
+		_wrapper->LogicalDpi(displayInformation.LogicalDpi());
+		if (_scintilla)
+		{
+			_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, Helpers::ConvertFromDipToPixelUnit(24, _dpiScale));
+			_scintilla->WndProc(Scintilla::Message::SetMarginLeft, 0, Helpers::ConvertFromDipToPixelUnit(8, _dpiScale));
+		}
 	}
 
 	int32_t MicaEditorControl::MyProperty()
@@ -34,6 +75,8 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>("Insert text"));
 		_scintilla->WndProc(Scintilla::Message::SetWrapMode, SC_WRAP_WHITESPACE, 0);
 		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
+		_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, Helpers::ConvertFromDipToPixelUnit(24, _dpiScale));
+		_scintilla->WndProc(Scintilla::Message::SetMarginLeft, 0, Helpers::ConvertFromDipToPixelUnit(8, _dpiScale));
 
 		uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
@@ -80,7 +123,11 @@ namespace winrt::MicaEditor::implementation
 			)
 		);
 
-		VirtualSurfaceImageSource virtualSurfaceImageSource{ Helpers::ConvertFromDipToPixelUnit(300, 1.25), Helpers::ConvertFromDipToPixelUnit(300, 1.25) };
+		auto width{ Helpers::ConvertFromDipToPixelUnit(ActualWidth(), _dpiScale) };
+		auto height{ Helpers::ConvertFromDipToPixelUnit(ActualHeight(), _dpiScale) };
+		_wrapper->Width(width);
+		_wrapper->Height(height);
+		VirtualSurfaceImageSource virtualSurfaceImageSource{ width, height };
 
 		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{
 			virtualSurfaceImageSource.as<::ISurfaceImageSourceNativeWithD2D>() };
@@ -93,11 +140,11 @@ namespace winrt::MicaEditor::implementation
 			d3dDevice.as<::ID3D11Multithread>() };
 		d3dMultiThread->SetMultithreadProtected(true);
 
-		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> vsisNative{
-			virtualSurfaceImageSource.as<::IVirtualSurfaceImageSourceNative>() };
+		_vsisNative = virtualSurfaceImageSource.as<::IVirtualSurfaceImageSourceNative>();
 
-		_scintilla->RegisterGraphics(sisNativeWithD2D, vsisNative, d2dDeviceContext);
-		vsisNative->RegisterForUpdatesNeeded(_scintilla.as<::IVirtualSurfaceUpdatesCallbackNative>().get());
+		_wrapper->VsisNative(_vsisNative);
+		_scintilla->RegisterGraphics(sisNativeWithD2D, _vsisNative, d2dDeviceContext, _wrapper);
+		_vsisNative->RegisterForUpdatesNeeded(_scintilla.as<::IVirtualSurfaceUpdatesCallbackNative>().get());
 
 		// The SurfaceImageSource object's underlying 
 		// ISurfaceImageSourceNativeWithD2D object will contain the completed bitmap.

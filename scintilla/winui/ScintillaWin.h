@@ -17,9 +17,12 @@ namespace Scintilla::Internal {
 	{
 	public:
 		ScintillaWinUI();
-		void RegisterGraphics(winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D,
+		void RegisterGraphics(winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> const &sisNativeWithD2D,
 			winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative,
-			winrt::com_ptr<::ID2D1DeviceContext> const &d2dDeviceContext);
+			winrt::com_ptr<::ID2D1DeviceContext> const &d2dDeviceContext,
+			std::shared_ptr<MicaEditor::Wrapper> const &wrapper);
+		void DpiChanged();
+		void SizeChanged();
 
 	private:
 		// Deleted so ScintillaWinUI objects can not be copied.
@@ -31,6 +34,7 @@ namespace Scintilla::Internal {
 		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> _sisNativeWithD2D{ nullptr };
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
 		winrt::com_ptr<::ID2D1DeviceContext> _d2dDeviceContext{ nullptr };
+		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 
 		virtual void SetVerticalScrollPos() override;
 		virtual void SetHorizontalScrollPos() override;

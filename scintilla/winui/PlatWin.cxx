@@ -316,7 +316,6 @@ struct FontDirectWrite : public Font {
 	}
 
 	static const FontDirectWrite *Cast(const Font *font_) {
-		return new FontDirectWrite(FontParameters{ "Segoe UI Variable Text" }); // Todo: Remove this. It is here to prevent a crash. I assume this leaks memory, also
 		const FontDirectWrite *pfm = dynamic_cast<const FontDirectWrite *>(font_);
 		PLATFORM_ASSERT(pfm);
 		if (!pfm) {
@@ -382,20 +381,10 @@ public:
 typedef VarBuffer<XYPOSITION, stackBufferLength> TextPositions;
 
 UINT DpiForWindow(WindowID wid) noexcept {
-	/*if (fnGetDpiForWindow) {
-		return fnGetDpiForWindow(HwndFromWindowID(wid));
-	}
-	if (fnGetDpiForMonitor) {
-		HMONITOR hMonitor = ::MonitorFromWindow(HwndFromWindowID(wid), MONITOR_DEFAULTTONEAREST);
-		UINT dpiX = 0;
-		UINT dpiY = 0;
-		if (fnGetDpiForMonitor(hMonitor, 0 /|*MDT_EFFECTIVE_DPI*|/, &dpiX, &dpiY) == S_OK) {
-			return dpiY;
-		}
-	}
-	return uSystemDPI;*/
-	// WinUI Todo
-	return 120; //1.25?
+	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(wid) };
+	return wrapper && wrapper->LogicalDpi()
+		? wrapper->LogicalDpi()
+		: USER_DEFAULT_SCREEN_DPI;
 }
 
 int SystemMetricsForDpi(int nIndex, UINT dpi) noexcept {
@@ -1838,29 +1827,29 @@ void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo) {
 }
 
 PRectangle Window::GetClientPosition() const {
-	/*RECT rc = {0,0,0,0};
-	if (wid)
-		::GetClientRect(HwndFromWindowID(wid), &rc);
-	return PRectangle::FromInts(rc.left, rc.top, rc.right, rc.bottom);*/
-	return PRectangle::FromInts(0, 0, 375, 375); // WinUI Todo
+	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) };
+	if (wrapper)
+	{
+		return PRectangle::FromInts(0, 0, wrapper->Width(), wrapper->Height()); // WinUI Todo
+	}
 }
 
 void Window::Show(bool show) {
 }
 
 void Window::InvalidateAll() {
-	auto vsisNative{ reinterpret_cast<IVirtualSurfaceImageSourceNative *>(GetID()) };
-	if (vsisNative)
+	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) };
+	if (wrapper && wrapper->VsisNative())
 	{
-		vsisNative->Invalidate(RECT{0, 0, 375, 375 }); // Todo: Update with real width
+		wrapper->VsisNative()->Invalidate(RECT{0, 0, wrapper->Width(), wrapper->Height()}); // Todo: Update with real width
 	}
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
-	auto vsisNative{ reinterpret_cast<IVirtualSurfaceImageSourceNative *>(GetID()) };
-	if (vsisNative)
+	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) };
+	if (wrapper && wrapper->VsisNative())
 	{
-		vsisNative->Invalidate(RectFromPRectangle(rc));
+		wrapper->VsisNative()->Invalidate(RectFromPRectangle(rc));
 	}
 }
 
@@ -2049,22 +2038,22 @@ void Menu::Show(Point pt, const Window &w) {
 
 ColourRGBA Platform::Chrome() {
 	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DFACE)));
-	return ColourRGBA::FromRGB(0xffaec8);
+	return ColourRGBA(243, 243, 243);
 	// WinUI Todo
 }
 
 ColourRGBA Platform::ChromeHighlight() {
 	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DHIGHLIGHT)));
-	return ColourRGBA::FromRGB(0x0ed145);
+	return ColourRGBA(255, 242, 0);
 	// WinUI Todo
 }
 
 const char *Platform::DefaultFont() {
-	return "Segoe UI Variable Text";
+	return "Consolas";
 }
 
 int Platform::DefaultFontSize() {
-	return 14;
+	return 11;
 }
 
 unsigned int Platform::DoubleClickTime() {
