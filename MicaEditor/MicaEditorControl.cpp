@@ -22,9 +22,11 @@ namespace winrt::MicaEditor::implementation
 
 		SizeChanged({ this, &MicaEditorControl::OnSizeChanged });
 
+#ifndef WINUI3
 		auto displayInformation{ DisplayInformation::GetForCurrentView() };
 		_dpiChangedRevoker = displayInformation.DpiChanged(winrt::auto_revoke, { this, &MicaEditorControl::OnDpiChanged });
 		UpdateDisplayInformation(displayInformation);
+#endif
 
 		_scintilla = make_self<::Scintilla::Internal::ScintillaWinUI>();
 	}
@@ -72,6 +74,13 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::OnApplyTemplate()
 	{
+#ifdef WINUI3
+		// Temporary until it is known how to respond to DPI changes with WASDK
+		_dpiScale = XamlRoot().RasterizationScale();
+		_wrapper->DpiScale(_dpiScale);
+		_wrapper->LogicalDpi(96 * _dpiScale);
+#endif
+
 		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>("Insert text"));
 		_scintilla->WndProc(Scintilla::Message::SetWrapMode, SC_WRAP_WHITESPACE, 0);
 		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);

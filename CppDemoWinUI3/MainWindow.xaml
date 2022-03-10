@@ -8,11 +8,7 @@
     xmlns:mica="using:MicaEditor"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <mica:MicaEditorControl
-            Width="300"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            MyProperty="20" />
+    <Grid Padding="24" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <mica:MicaEditorControl CornerRadius="{ThemeResource ControlCornerRadius}" MyProperty="20" />
     </Grid>
 </Window>
