@@ -23,6 +23,7 @@ namespace Scintilla::Internal {
 			std::shared_ptr<MicaEditor::Wrapper> const &wrapper);
 		void DpiChanged();
 		void SizeChanged();
+		void FocusChanged(bool focused);
 
 	private:
 		// Deleted so ScintillaWinUI objects can not be copied.

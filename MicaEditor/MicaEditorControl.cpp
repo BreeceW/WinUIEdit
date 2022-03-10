@@ -8,6 +8,7 @@ using namespace ::MicaEditor;
 using namespace winrt;
 using namespace DUX;
 using namespace DUX::Controls;
+using namespace DUX::Input;
 using namespace DUX::Media::Imaging;
 using namespace Windows::Foundation;
 using namespace Windows::Graphics::Display;
@@ -170,7 +171,21 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::Image_Tapped(Windows::Foundation::IInspectable const &sender, DUX::Input::TappedRoutedEventArgs const &args)
+	void MicaEditorControl::OnGotFocus(RoutedEventArgs const &args)
+	{
+		__super::OnGotFocus(args);
+
+		//_scintilla->FocusChanged(true);
+	}
+
+	void MicaEditorControl::OnLostFocus(RoutedEventArgs const &args)
+	{
+		__super::OnLostFocus(args);
+
+		//_scintilla->FocusChanged(false);
+	}
+
+	void MicaEditorControl::Image_Tapped(Windows::Foundation::IInspectable const &sender, TappedRoutedEventArgs const &args)
 	{
 		_scintilla->WndProc(Scintilla::Message::AppendText, 13, reinterpret_cast<Scintilla::uptr_t>("\r\nInsert text"));
 	}

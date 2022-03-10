@@ -3855,6 +3855,11 @@ namespace Scintilla::Internal
 		ChangeSize();
 	}
 
+	void ScintillaWinUI::FocusChanged(bool focused)
+	{
+		SetFocusState(focused);
+	}
+
 	IFACEMETHODIMP ScintillaWinUI::UpdatesNeeded()
 	{
 		ULONG drawingBoundsCount = 0;

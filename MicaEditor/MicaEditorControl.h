@@ -12,6 +12,8 @@ namespace winrt::MicaEditor::implementation
 		void MyProperty(int32_t value);
 
 		void OnApplyTemplate();
+		void OnGotFocus(DUX::RoutedEventArgs const &args);
+		void OnLostFocus(DUX::RoutedEventArgs const &args);
 
 		uint64_t Scintilla(int32_t message, uint64_t wParam, uint64_t lParam);
 
