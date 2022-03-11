@@ -90,7 +90,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>..\scintilla\winui;..\scintilla\include;..\scintilla\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\scintilla\winui;..\scintilla\include;..\scintilla\src;..\lexilla\include\;..\lexilla\lexlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level4</WarningLevel>
       <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
       <PreprocessorDefinitions>SCI_EMPTYCATALOGUE;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -131,6 +131,8 @@
     <ClInclude Include="..\scintilla\include\*.h" />
     <ClInclude Include="..\scintilla\src\*.h" />
     <ClInclude Include="..\scintilla\winui\*.h" />
+    <ClInclude Include="..\lexilla\include\SciLexer.h" />
+    <ClInclude Include="..\lexilla\lexlib\*.h" />
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +147,15 @@
     <ClCompile Include="..\scintilla\src\*.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+	<ClCompile Include="..\lexilla\lexers\*.cxx">
+	  <PrecompiledHeader>NotUsing</PrecompiledHeader>
+	</ClCompile>
+	<ClCompile Include="..\lexilla\lexlib\*.cxx">
+	  <PrecompiledHeader>NotUsing</PrecompiledHeader>
+	</ClCompile>
+	<ClCompile Include="..\lexilla\src\Lexilla.cxx">
+	  <PrecompiledHeader>NotUsing</PrecompiledHeader>
+	</ClCompile>
     <ClCompile Include="..\scintilla\winui\HanjaDic.cxx" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />

@@ -109,4 +109,7 @@
 
 #include "Scintilla.h"
 
+#include "Lexilla.h"
+#include "SciLexer.h"
+
 #include "MicaEditorControl.h"

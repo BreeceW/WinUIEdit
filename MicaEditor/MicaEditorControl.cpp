@@ -30,6 +30,33 @@ namespace winrt::MicaEditor::implementation
 #endif
 
 		_scintilla = make_self<::Scintilla::Internal::ScintillaWinUI>();
+
+		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>("Text"));
+		_scintilla->WndProc(Scintilla::Message::SetWrapMode, SC_WRAP_WHITESPACE, 0);
+		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x23, 0x78, 0x93));
+		_scintilla->WndProc(Scintilla::Message::SetILexer, 0, reinterpret_cast<Scintilla::uptr_t>(CreateLexer("vbscript")));
+		// This list of keywords from SciTe (vb.properties)
+		_scintilla->WndProc(Scintilla::Message::SetKeyWords, 0, reinterpret_cast<Scintilla::uptr_t>(
+			"addressof alias and as attribute base begin binary boolean byref byte byval call case cdbl "
+			"cint clng compare const csng cstr currency date decimal declare defbool defbyte defcur "
+			"defdate defdbl defdec defint deflng defobj defsng defstr defvar dim do double each else "
+			"elseif empty end enum eqv erase error event exit explicit false for friend function get "
+			"global gosub goto if imp implements in input integer is len let lib like load lock long "
+			"loop lset me mid midb mod new next not nothing null object on option optional or paramarray "
+			"preserve print private property public raiseevent randomize redim rem resume return rset "
+			"seek select set single static step stop string sub text then time to true type typeof "
+			"unload until variant wend while with withevents xor"));
+		// These colors mostly adapted from https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_plus.json
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_NUMBER, RGB(0x09, 0x86, 0x58));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD, RGB(0x00, 0x00, 0xFF));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD2, RGB(0xaf, 0x00, 0xdb));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_STRING, RGB(0xa3, 0x15, 0x15));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_STRING, RGB(0xa3, 0x15, 0x15));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_OPERATOR, RGB(0x00, 0x00, 0x00));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_PREPROCESSOR, RGB(0x80, 0x80, 0x80));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_ERROR, RGB(0xcd, 0x31, 0x31));
+		_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_COMMENT, RGB(0x00, 0x80, 0x00));
 	}
 
 	void MicaEditorControl::OnSizeChanged(const IInspectable &sender, const SizeChangedEventArgs &args)
@@ -87,9 +114,6 @@ namespace winrt::MicaEditor::implementation
 		_wrapper->LogicalDpi(96 * _dpiScale);
 #endif
 
-		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>("Insert text"));
-		_scintilla->WndProc(Scintilla::Message::SetWrapMode, SC_WRAP_WHITESPACE, 0);
-		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
 		_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, Helpers::ConvertFromDipToPixelUnit(24, _dpiScale));
 		_scintilla->WndProc(Scintilla::Message::SetMarginLeft, 0, Helpers::ConvertFromDipToPixelUnit(8, _dpiScale));
 
@@ -169,7 +193,7 @@ namespace winrt::MicaEditor::implementation
 			imageTarget.Source(virtualSurfaceImageSource);
 			imageTarget.Tapped({ this, &MicaEditorControl::Image_Tapped });
 		}
-	}
+}
 
 	void MicaEditorControl::OnGotFocus(RoutedEventArgs const &args)
 	{
