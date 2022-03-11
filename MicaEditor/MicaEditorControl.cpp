@@ -31,7 +31,15 @@ namespace winrt::MicaEditor::implementation
 
 		_scintilla = make_self<::Scintilla::Internal::ScintillaWinUI>();
 
-		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>("Text"));
+		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>(
+			"' n! where n is greater than or equal to 0\r\n"
+			"Function Factorial(n As Integer) As Integer\r\n"
+			"    If n <= 1 Then\r\n"
+			"        Factorial = 1\r\n"
+			"    Else\r\n"
+			"        Factorial = n * Factorial(n - 1)\r\n"
+			"    End If\r\n"
+			"End Function"));
 		_scintilla->WndProc(Scintilla::Message::SetWrapMode, SC_WRAP_WHITESPACE, 0);
 		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
 		_scintilla->WndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x23, 0x78, 0x93));
@@ -211,6 +219,6 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::Image_Tapped(Windows::Foundation::IInspectable const &sender, TappedRoutedEventArgs const &args)
 	{
-		_scintilla->WndProc(Scintilla::Message::AppendText, 13, reinterpret_cast<Scintilla::uptr_t>("\r\nInsert text"));
+		_scintilla->WndProc(Scintilla::Message::AppendText, 15, reinterpret_cast<Scintilla::uptr_t>("\r\n' Insert text"));
 	}
 }
