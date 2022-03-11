@@ -4,13 +4,16 @@ This directory contains a couple of tools to help keep this editor up-to-date wi
 These tools only run on Windows and require the .NET 6 SDK to be installed.
 
 ## Update
-This tool updates the version of Scintilla in the scintilla directory to the version specified.
-It will delete all the subfolders of the scintilla folder except the winui folder, which must
-be updated manually, using the following Compare tool.
+This tool updates the version of Scintilla and Lexilla to the version specified.
+For Scintilla, it will delete all the subfolders of the scintilla folder except the winui folder, which must
+be updated manually, using the following Compare tool. For Lexilla, all subfolders of the lexilla folder
+will be deleted. Lexilla should be updatable with limited hassle.
 
 Run the Update tool like this:
 
-`Update x.y.z`
+`Update scintilla x.y.z`
+
+`Update lexilla x.y.z`
 
 where x.y.z is the version number. Find the latest version number here: https://www.scintilla.org/ScintillaDownload.html
 
