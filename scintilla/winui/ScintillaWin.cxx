@@ -3756,11 +3756,70 @@ namespace Scintilla::Internal
 {
 	ScintillaWinUI::ScintillaWinUI()
 	{
+		_caretTickRevoker = _caretTimer.Tick(winrt::auto_revoke, { this, &ScintillaWinUI::OnCaretTimerTick });
+		_scrollTickRevoker = _scrollTimer.Tick(winrt::auto_revoke, { this, &ScintillaWinUI::OnScrollTimerTick });
+		_widenTickRevoker = _widenTimer.Tick(winrt::auto_revoke, { this, &ScintillaWinUI::OnWidenTimerTick });
+		_dwellTickRevoker = _dwellTimer.Tick(winrt::auto_revoke, { this, &ScintillaWinUI::OnDwellTimerTick });
+
 		technology = Scintilla::Technology::DirectWrite; // Todo: This should be the default anyway
 		if (!LoadD2D())
 		{
 			winrt::throw_hresult(E_UNEXPECTED); // Todo: Better exception
 		}
+	}
+
+	void ScintillaWinUI::OnCaretTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args)
+	{
+		TickFor(TickReason::caret);
+	}
+
+	void ScintillaWinUI::OnScrollTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args)
+	{
+		TickFor(TickReason::scroll);
+	}
+
+	void ScintillaWinUI::OnWidenTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args)
+	{
+		TickFor(TickReason::widen);
+	}
+
+	void ScintillaWinUI::OnDwellTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args)
+	{
+		TickFor(TickReason::dwell);
+	}
+
+	winrt::DUX::DispatcherTimer ScintillaWinUI::GetTimerForReason(TickReason reason)
+	{
+		switch (reason)
+		{
+		case TickReason::caret:
+			return _caretTimer;
+		case TickReason::scroll:
+			return _scrollTimer;
+		case TickReason::widen:
+			return _widenTimer;
+		case TickReason::dwell:
+			return _dwellTimer;
+		default:
+			return nullptr; // Todo: throw exception
+		}
+	}
+
+	bool ScintillaWinUI::FineTickerRunning(TickReason reason)
+	{
+		return GetTimerForReason(reason).IsEnabled();
+	}
+
+	void ScintillaWinUI::FineTickerStart(TickReason reason, int millis, int tolerance)
+	{
+		auto timer{ GetTimerForReason(reason) };
+		timer.Interval(winrt::Windows::Foundation::TimeSpan{ std::chrono::milliseconds{ millis } });
+		timer.Start();
+	}
+
+	void ScintillaWinUI::FineTickerCancel(TickReason reason)
+	{
+		GetTimerForReason(reason).Stop();
 	}
 
 	void ScintillaWinUI::SetVerticalScrollPos()

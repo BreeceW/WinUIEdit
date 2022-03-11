@@ -37,6 +37,25 @@ namespace Scintilla::Internal {
 		winrt::com_ptr<::ID2D1DeviceContext> _d2dDeviceContext{ nullptr };
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 
+		// Timer implementation
+		// TickReason: caret, scroll, widen, dwell, platform (unused?)
+		winrt::DUX::DispatcherTimer _caretTimer{};
+		winrt::DUX::DispatcherTimer _scrollTimer{};
+		winrt::DUX::DispatcherTimer _widenTimer{};
+		winrt::DUX::DispatcherTimer _dwellTimer{};
+		void OnCaretTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args);
+		void OnScrollTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args);
+		void OnWidenTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args);
+		void OnDwellTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args);
+		winrt::DUX::DispatcherTimer::Tick_revoker _caretTickRevoker{};
+		winrt::DUX::DispatcherTimer::Tick_revoker _scrollTickRevoker{};
+		winrt::DUX::DispatcherTimer::Tick_revoker _widenTickRevoker{};
+		winrt::DUX::DispatcherTimer::Tick_revoker _dwellTickRevoker{};
+		winrt::DUX::DispatcherTimer GetTimerForReason(TickReason reason);
+
+		virtual bool FineTickerRunning(TickReason reason) override;
+		virtual void FineTickerStart(TickReason reason, int millis, int tolerance) override;
+		virtual void FineTickerCancel(TickReason reason) override;
 		virtual void SetVerticalScrollPos() override;
 		virtual void SetHorizontalScrollPos() override;
 		virtual bool ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) override;

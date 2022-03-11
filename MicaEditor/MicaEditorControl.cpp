@@ -207,14 +207,14 @@ namespace winrt::MicaEditor::implementation
 	{
 		__super::OnGotFocus(args);
 
-		//_scintilla->FocusChanged(true);
+		_scintilla->FocusChanged(true);
 	}
 
 	void MicaEditorControl::OnLostFocus(RoutedEventArgs const &args)
 	{
 		__super::OnLostFocus(args);
 
-		//_scintilla->FocusChanged(false);
+		_scintilla->FocusChanged(false);
 	}
 
 	void MicaEditorControl::Image_Tapped(Windows::Foundation::IInspectable const &sender, TappedRoutedEventArgs const &args)

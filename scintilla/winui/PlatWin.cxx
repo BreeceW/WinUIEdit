@@ -1841,7 +1841,7 @@ void Window::InvalidateAll() {
 	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) };
 	if (wrapper && wrapper->VsisNative())
 	{
-		wrapper->VsisNative()->Invalidate(RECT{0, 0, wrapper->Width(), wrapper->Height()}); // Todo: Update with real width
+		wrapper->VsisNative()->Invalidate(RECT{0, 0, wrapper->Width(), wrapper->Height()});
 	}
 }
 
@@ -2007,9 +2007,143 @@ ListBox::ListBox() noexcept {
 ListBox::~ListBox() noexcept {
 }
 
-std::unique_ptr<ListBox> ListBox::Allocate() {
+class ListBoxWinUI : public ListBox {
+	public:
+	ListBoxWinUI() noexcept;
+	virtual ~ListBoxWinUI() noexcept override;
+
+	virtual void SetFont(const Font *font);
+	virtual void Create(Window &parent, int ctrlID, Point location, int lineHeight_, bool unicodeMode_, Scintilla::Technology technology_);
+	virtual void SetAverageCharWidth(int width);
+	virtual void SetVisibleRows(int rows);
+	virtual int GetVisibleRows() const;
+	virtual PRectangle GetDesiredRect();
+	virtual int CaretFromEdge();
+	virtual void Clear() noexcept;
+	virtual void Append(char *s, int type = -1);
+	virtual int Length();
+	virtual void Select(int n);
+	virtual int GetSelection();
+	virtual int Find(const char *prefix);
+	virtual std::string GetValue(int n);
+	virtual void RegisterImage(int type, const char *xpm_data);
+	virtual void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage);
+	virtual void ClearRegisteredImages();
+	virtual void SetDelegate(IListBoxDelegate *lbDelegate);
+	virtual void SetList(const char* list, char separator, char typesep);
+	virtual void SetOptions(ListOptions options_);
+};
+
+ListBoxWinUI::ListBoxWinUI() noexcept
+{
+}
+
+ListBoxWinUI::~ListBoxWinUI() noexcept
+{
+}
+
+void ListBoxWinUI::SetFont(const Font *font)
+{
+
+}
+
+void ListBoxWinUI::Create(Window &parent, int ctrlID, Point location, int lineHeight_, bool unicodeMode_, Scintilla::Technology technology_)
+{
+
+}
+
+void ListBoxWinUI::SetAverageCharWidth(int width)
+{
+
+}
+
+void ListBoxWinUI::SetVisibleRows(int rows)
+{
+
+}
+
+int ListBoxWinUI::GetVisibleRows() const
+{
+	return 0;
+}
+
+PRectangle ListBoxWinUI::GetDesiredRect()
+{
+	return PRectangle{ 0, 0, 10, 10 };
+}
+
+int ListBoxWinUI::CaretFromEdge()
+{
+	return 0;
+}
+
+void ListBoxWinUI::Clear() noexcept
+{
+
+}
+
+void ListBoxWinUI::Append(char *s, int type)
+{
+
+}
+
+int ListBoxWinUI::Length()
+{
+	return 0;
+}
+
+void ListBoxWinUI::Select(int n)
+{
+
+}
+
+int ListBoxWinUI::GetSelection()
+{
+	return 0;
+}
+
+int ListBoxWinUI::Find(const char *prefix)
+{
+	return -1;
+}
+
+std::string ListBoxWinUI::GetValue(int n)
+{
 	return nullptr;
-	// WinUI Todo
+}
+
+void ListBoxWinUI::RegisterImage(int type, const char *xpm_data)
+{
+
+}
+
+void ListBoxWinUI::RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage)
+{
+
+}
+
+void ListBoxWinUI::ClearRegisteredImages()
+{
+
+}
+
+void ListBoxWinUI::SetDelegate(IListBoxDelegate *lbDelegate)
+{
+
+}
+
+void ListBoxWinUI::SetList(const char *list, char separator, char typesep)
+{
+
+}
+
+void ListBoxWinUI::SetOptions(ListOptions options_)
+{
+
+}
+
+std::unique_ptr<ListBox> ListBox::Allocate() {
+	return std::make_unique<ListBoxWinUI>();
 }
 
 Menu::Menu() noexcept : mid{} {
