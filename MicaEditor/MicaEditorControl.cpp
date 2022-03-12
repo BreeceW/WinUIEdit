@@ -199,25 +199,38 @@ namespace winrt::MicaEditor::implementation
 		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Image>() })
 		{
 			imageTarget.Source(virtualSurfaceImageSource);
-			imageTarget.Tapped({ this, &MicaEditorControl::Image_Tapped });
+			//imageTarget.Tapped({ this, &MicaEditorControl::Image_Tapped });
 		}
-}
+	}
 
-	void MicaEditorControl::OnGotFocus(RoutedEventArgs const &args)
+	void MicaEditorControl::OnGotFocus(RoutedEventArgs const &e)
 	{
-		__super::OnGotFocus(args);
+		__super::OnGotFocus(e);
 
 		_scintilla->FocusChanged(true);
 	}
 
-	void MicaEditorControl::OnLostFocus(RoutedEventArgs const &args)
+	void MicaEditorControl::OnLostFocus(RoutedEventArgs const &e)
 	{
-		__super::OnLostFocus(args);
+		__super::OnLostFocus(e);
 
-		_scintilla->FocusChanged(false);
+		//_scintilla->FocusChanged(false);
+		// Todo: Focus does not seem to be gained when clicking on the editor
 	}
 
-	void MicaEditorControl::Image_Tapped(Windows::Foundation::IInspectable const &sender, TappedRoutedEventArgs const &args)
+	void MicaEditorControl::OnPointerPressed(PointerRoutedEventArgs const &e)
+	{
+		__super::OnPointerPressed(e);
+
+		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
+		{
+			auto point{ e.GetCurrentPoint(imageTarget) };
+			auto scaled{ point.Position() };
+			_scintilla->PointerPressed(Point{ scaled.X * _dpiScale, scaled.Y * _dpiScale }, point.Timestamp(), e.KeyModifiers());
+		}
+	}
+
+	void MicaEditorControl::Image_Tapped(IInspectable const &sender, TappedRoutedEventArgs const &args)
 	{
 		_scintilla->WndProc(Scintilla::Message::AppendText, 15, reinterpret_cast<Scintilla::uptr_t>("\r\n' Insert text"));
 	}

@@ -2192,7 +2192,7 @@ int Platform::DefaultFontSize() {
 
 unsigned int Platform::DoubleClickTime() {
 	//return ::GetDoubleClickTime();
-	return 3;
+	return 760;
 	// WinUI Todo
 }
 

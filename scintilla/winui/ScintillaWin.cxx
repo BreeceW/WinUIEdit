@@ -3919,6 +3919,17 @@ namespace Scintilla::Internal
 		SetFocusState(focused);
 	}
 
+	void ScintillaWinUI::PointerPressed(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers const &modifiers)
+	{
+		KeyMod sci = ModifierFlags(
+			static_cast<int>(modifiers) & static_cast<int>(winrt::Windows::System::VirtualKeyModifiers::Shift),
+			static_cast<int>(modifiers) & static_cast<int>(winrt::Windows::System::VirtualKeyModifiers::Control),
+			static_cast<int>(modifiers) & static_cast<int>(winrt::Windows::System::VirtualKeyModifiers::Menu), // Menu is alt key
+			false, // No meta key
+			static_cast<int>(modifiers) & static_cast<int>(winrt::Windows::System::VirtualKeyModifiers::Windows)); // Super key is actually Windows logo key
+		ButtonDownWithModifiers(Point{ point.X, point.Y }, timestamp / 1000ul, sci); // Todo: make sure the loss of precision is not going to realistically cause a problem
+	}
+
 	IFACEMETHODIMP ScintillaWinUI::UpdatesNeeded()
 	{
 		ULONG drawingBoundsCount = 0;

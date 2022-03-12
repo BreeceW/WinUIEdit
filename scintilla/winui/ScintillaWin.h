@@ -24,6 +24,7 @@ namespace Scintilla::Internal {
 		void DpiChanged();
 		void SizeChanged();
 		void FocusChanged(bool focused);
+		void PointerPressed(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers const &modifiers);
 
 	private:
 		// Deleted so ScintillaWinUI objects can not be copied.
@@ -38,6 +39,8 @@ namespace Scintilla::Internal {
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 
 		// Timer implementation
+		// Todo: Planning to not use XAML APIs on the Scintilla side, so replace DispatcherTimer with something that works outside of XAML
+		// Candidates include DispatcherQueueTimer (not available on 1703) or ThreadPoolTimer, which should work in UWP and WinUI 3
 		// TickReason: caret, scroll, widen, dwell, platform (unused?)
 		winrt::DUX::DispatcherTimer _caretTimer{};
 		winrt::DUX::DispatcherTimer _scrollTimer{};
