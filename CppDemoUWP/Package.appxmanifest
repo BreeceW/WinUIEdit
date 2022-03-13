@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" IgnorableNamespaces="uap5 uap mp">
   <Identity
-    Name="c4dbad8d-ac98-4862-aa40-6c498b532fa5"
-    Publisher="CN=breec"
-    Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="c4dbad8d-ac98-4862-aa40-6c498b532fa5" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+    Name="3735BreeceWalker.MicaEditor"
+    Publisher="CN=90C29CE0-B07C-4318-A20E-CCD992FA5F1B"
+    Version="0.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="c0e1c7ff-08c7-4035-bc77-2dc970e754b9" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
   <Properties>
-    <DisplayName>CppDemoUWP</DisplayName>
-    <PublisherDisplayName>breec</PublisherDisplayName>
+    <DisplayName>Mica Editor</DisplayName>
+    <PublisherDisplayName>Breece Walker</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -18,7 +18,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CppDemoUWP.App">
-      <uap:VisualElements DisplayName="CppDemoUWP" Description="Project for a single page C++/WinRT Universal Windows Platform (UWP) app with no predefined layout"
+      <uap:VisualElements DisplayName="Mica Editor" Description="Demo for Mica Editor Control"
         Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
@@ -26,7 +26,4 @@
       </uap:VisualElements>
     </Application>
   </Applications>
-  <Capabilities>
-    <Capability Name="internetClient" />
-  </Capabilities>
 </Package>
