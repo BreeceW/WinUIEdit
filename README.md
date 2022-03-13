@@ -1,6 +1,8 @@
 # WinUIEdit
 This is a very early work-in-progress code editing control for both UWP and WinUI 3. It is a port of the [Scintilla editor](https://www.scintilla.org/). The goal is to be a performant code editor that feels like it belongs on Windows and has a familiar API for XAML developers. It is written in C++, but is just as easily used from .NET in addition to C++ (it should work with any WinRT language).
 
+You can download a demo from Microsoft Store [here](https://www.microsoft.com/store/apps/9PGZBDP9PSPF). This demo is not necessarily current with this repo and most features do not work at all. It will likely also experience crashes.
+
 ![Control showing line numbers and short text on a white background but is otherwise empty](https://user-images.githubusercontent.com/18747724/157655089-aab93167-1ee4-4809-8bb1-2b9911e93116.png)
 
 ## How to build
