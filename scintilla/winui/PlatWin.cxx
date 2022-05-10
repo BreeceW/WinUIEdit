@@ -492,6 +492,7 @@ public:
 	void Polygon(const Point *pts, size_t npts, FillStroke fillStroke) override;
 	void RectangleDraw(PRectangle rc, FillStroke fillStroke) override;
 	void RectangleFrame(PRectangle rc, Stroke stroke) override;
+	void ClearRectangle(PRectangle rc); // Mica: Empty the area in the rectangle
 	void FillRectangle(PRectangle rc, Fill fill) override;
 	void FillRectangleAligned(PRectangle rc, Fill fill) override;
 	void FillRectangle(PRectangle rc, Surface &surfacePattern) override;
@@ -542,7 +543,7 @@ SurfaceD2D::SurfaceD2D(ID2D1RenderTarget *pRenderTargetCompatible, int width, in
 #else
 	desiredFormat = pRenderTargetCompatible->GetPixelFormat();
 #endif
-	desiredFormat.alphaMode = D2D1_ALPHA_MODE_IGNORE;
+	desiredFormat.alphaMode = D2D1_ALPHA_MODE_PREMULTIPLIED; // Mica: Was D2D1_ALPHA_MODE_IGNORE
 	const HRESULT hr = pRenderTargetCompatible->CreateCompatibleRenderTarget(
 		&desiredSize, nullptr, &desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE, &pBitmapRenderTarget);
 	if (SUCCEEDED(hr)) {
@@ -777,11 +778,28 @@ void SurfaceD2D::RectangleFrame(PRectangle rc, Stroke stroke) {
 	}
 }
 
+void SurfaceD2D::ClearRectangle(PRectangle rc) // Mica: We still need to empty the space
+{
+	if (pRenderTarget)
+	{
+		SetClip(rc);
+		pRenderTarget->Clear();
+		PopClip();
+	}
+}
+
 void SurfaceD2D::FillRectangle(PRectangle rc, Fill fill) {
 	if (pRenderTarget) {
-		D2DPenColourAlpha(fill.colour);
-		const D2D1_RECT_F rectangle = RectangleFromPRectangle(rc);
-		pRenderTarget->FillRectangle(&rectangle, pBrush);
+		if (fill.colour.AsInteger() == -7791875) // Mica: Arbitrary color to treat as transparent to avoid forking Scintilla
+		{
+			ClearRectangle(rc);
+		}
+		else
+		{
+			D2DPenColourAlpha(fill.colour);
+			const D2D1_RECT_F rectangle = RectangleFromPRectangle(rc);
+			pRenderTarget->FillRectangle(&rectangle, pBrush);
+		}
 	}
 }
 
@@ -1041,6 +1059,7 @@ void SurfaceD2D::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
 	ID2D1Bitmap *pBitmap = nullptr;
 	const HRESULT hr = surfOther.GetBitmap(&pBitmap);
 	if (SUCCEEDED(hr) && pBitmap) {
+		ClearRectangle(rc); // Mica: We need to clear since we only want the background beneath the control
 		const D2D1_RECT_F rcDestination = RectangleFromPRectangle(rc);
 		const D2D1_RECT_F rcSource = RectangleFromPRectangle(PRectangle(
 			from.x, from.y, from.x + rc.Width(), from.y + rc.Height()));
@@ -1910,32 +1929,31 @@ HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept {
 }
 
 void Window::SetCursor(Cursor curs) {
-	/*switch (curs) {
+#ifndef WINUI3
+	winrt::Windows::UI::Core::CoreCursorType type{ winrt::Windows::UI::Core::CoreCursorType::Arrow };
+	switch (curs) {
 	case Cursor::text:
-		::SetCursor(::LoadCursor(NULL,IDC_IBEAM));
+		type = winrt::Windows::UI::Core::CoreCursorType::IBeam;
 		break;
 	case Cursor::up:
-		::SetCursor(::LoadCursor(NULL,IDC_UPARROW));
+		type = winrt::Windows::UI::Core::CoreCursorType::UpArrow;
 		break;
 	case Cursor::wait:
-		::SetCursor(::LoadCursor(NULL,IDC_WAIT));
+		type = winrt::Windows::UI::Core::CoreCursorType::Wait;
 		break;
 	case Cursor::horizontal:
-		::SetCursor(::LoadCursor(NULL,IDC_SIZEWE));
+		type = winrt::Windows::UI::Core::CoreCursorType::SizeWestEast;
 		break;
 	case Cursor::vertical:
-		::SetCursor(::LoadCursor(NULL,IDC_SIZENS));
+		type = winrt::Windows::UI::Core::CoreCursorType::SizeNorthSouth;
 		break;
 	case Cursor::hand:
-		::SetCursor(::LoadCursor(NULL,IDC_HAND));
+		type = winrt::Windows::UI::Core::CoreCursorType::Hand;
 		break;
-	case Cursor::reverseArrow:
-	case Cursor::arrow:
-	case Cursor::invalid:	// Should not occur, but just in case.
-		::SetCursor(::LoadCursor(NULL,IDC_ARROW));
-		break;
-	}*/
-	// WinUI Todo
+	}
+	// Todo: Needs to support windows right
+	winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(winrt::Windows::UI::Core::CoreCursor{ type, 0 });
+#endif
 }
 
 /* Returns rectangle of monitor pt is on, both rect and pt are in Window's
@@ -2172,18 +2190,18 @@ void Menu::Show(Point pt, const Window &w) {
 
 ColourRGBA Platform::Chrome() {
 	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DFACE)));
-	return ColourRGBA(243, 243, 243);
+	return ColourRGBA{ 255, 255, 255 };
 	// WinUI Todo
 }
 
 ColourRGBA Platform::ChromeHighlight() {
 	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DHIGHLIGHT)));
-	return ColourRGBA(255, 242, 0);
+	return ColourRGBA{ 255, 242, 0 };
 	// WinUI Todo
 }
 
 const char *Platform::DefaultFont() {
-	return "Consolas";
+	return "Cascadia Code";
 }
 
 int Platform::DefaultFontSize() {

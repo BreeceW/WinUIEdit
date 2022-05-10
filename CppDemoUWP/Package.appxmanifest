@@ -2,8 +2,8 @@
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" IgnorableNamespaces="uap5 uap mp">
   <Identity
     Name="3735BreeceWalker.MicaEditor"
-    Publisher="CN=90C29CE0-B07C-4318-A20E-CCD992FA5F1B"
-    Version="0.1.1.0" />
+    Publisher="CN=breec"
+    Version="0.1.3.0" />
   <mp:PhoneIdentity PhoneProductId="c0e1c7ff-08c7-4035-bc77-2dc970e754b9" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
   <Properties>
     <DisplayName>Mica Editor</DisplayName>

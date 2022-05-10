@@ -2,11 +2,15 @@
 
 namespace MicaEditor
 {
-    [default_interface]
-    runtimeclass MicaEditorControl : DUX.Controls.Control
-    {
-        MicaEditorControl();
-        Int32 MyProperty;
-        UInt64 Scintilla(Int32 message, UInt64 wParam, UInt64 lParam);
-    }
+	[default_interface]
+	runtimeclass MicaEditorControl : DUX.Controls.Control
+	{
+		MicaEditorControl();
+		static DUX.DependencyProperty TextProperty { get; };
+		String Text;
+#ifdef WINUI3
+		DUX.Window Window;
+#endif
+		UInt64 Scintilla(Int32 message, UInt64 wParam, UInt64 lParam);
+	}
 }

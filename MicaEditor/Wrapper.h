@@ -16,7 +16,17 @@ namespace MicaEditor
 		int Height();
 		void Height(int value);
 
+		// Todo: Make abstract
+		void SetMouseCapture(bool on);
+		bool HaveMouseCapture();
+
+		// Todo: Move to separate XAML class
+		void SetMouseCaptureElement(winrt::DUX::UIElement const &element);
+
 	private:
+		winrt::DUX::Input::Pointer _lastPointer{ nullptr };
+		winrt::DUX::UIElement _mouseCaptureElement{ nullptr };
+		bool _captured;
 		winrt::com_ptr<IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
 		float _dpiScale;
 		float _logicalDpi;

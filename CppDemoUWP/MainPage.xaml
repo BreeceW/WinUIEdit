@@ -2,6 +2,9 @@
     x:Class="CppDemoUWP.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Windows10FallCreatorsUpdate="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 5)"
+    xmlns:Windows10version1803="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 6)"
+    xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:CppDemoUWP"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,7 +14,372 @@
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
 
-    <Grid Padding="24">
-        <mica:MicaEditorControl micaWindows10version1809:CornerRadius="{ThemeResource ControlCornerRadius}" MyProperty="20" />
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush
+                        x:Key="DividerLineBrush"
+                        Opacity="0.1"
+                        Color="Black" />
+                    <SolidColorBrush
+                        x:Key="SeparatorLineBrush"
+                        Opacity="0.0837"
+                        Color="White" />
+                    <SolidColorBrush
+                        x:Key="StatusBarBrush"
+                        Opacity="0.8"
+                        Color="#FF202020" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush
+                        x:Key="DividerLineBrush"
+                        Opacity="0.0578"
+                        Color="Black" />
+                    <SolidColorBrush
+                        x:Key="SeparatorLineBrush"
+                        Opacity="0.08"
+                        Color="Black" />
+                    <SolidColorBrush
+                        x:Key="StatusBarBrush"
+                        Opacity="0.65"
+                        Color="#FFF3F3F3" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="HighContrast">
+                    <SolidColorBrush x:Key="DividerLineBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="SeparatorLineBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="StatusBarBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--  Ours is slightly taller than the win32 titlebar, which would be 29  -->
+            <RowDefinition Height="32" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="32" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2">
+            <TextBlock
+                x:Name="TitleText"
+                Margin="12,0,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="Mica Editor" />
+        </Grid>
+        <muxc:MenuBar Grid.Row="1" Grid.Column="0">
+            <muxc:MenuBarItem Title="File" AccessKey="F">
+                <MenuFlyoutItem
+                    MinWidth="230"
+                    AccessKey="N"
+                    Text="New">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="N" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="W" Text="New window">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="N" Modifiers="Control,Shift" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="O" Text="Open">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="O" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="S" Text="Save">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="S" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="A" Text="Save as">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="S" Modifiers="Control,Shift" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem AccessKey="U" Text="Page setup" />
+                <MenuFlyoutItem AccessKey="P" Text="Print">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="P" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="X" Text="Exit" />
+            </muxc:MenuBarItem>
+
+            <muxc:MenuBarItem Title="Edit" AccessKey="E">
+                <MenuFlyoutItem
+                    MinWidth="230"
+                    AccessKey="U"
+                    Text="Undo">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Z" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem AccessKey="T" Text="Cut">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="X" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="C" Text="Copy">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="C" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="P" Text="Paste">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="V" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem
+                    Windows10version1803:KeyboardAcceleratorTextOverride="Del"
+                    AccessKey="L"
+                    Text="Delete" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem AccessKey="F" Text="Find">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="N" Text="Find next">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F3" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="V" Text="Find previous">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F3" Modifiers="Shift" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="R" Text="Replace">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="H" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="G" Text="Go to">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="G" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem AccessKey="A" Text="Select all">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="A" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem AccessKey="D" Text="Time/Date">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F5" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem AccessKey="O" Text="Font" />
+            </muxc:MenuBarItem>
+
+            <muxc:MenuBarItem Title="View" AccessKey="V">
+                <MenuFlyoutSubItem
+                    MinWidth="230"
+                    AccessKey="Z"
+                    Text="Zoom">
+                    <MenuFlyoutItem
+                        Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Plus"
+                        AccessKey="I"
+                        Text="Zoom in">
+                        <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                            <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Add" Modifiers="Control" />
+                        </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem
+                        Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Minus"
+                        AccessKey="O"
+                        Text="Zoom out">
+                        <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                            <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Subtract" Modifiers="Control" />
+                        </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem AccessKey="R" Text="Restore default zoom">
+                        <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                            <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Number0" Modifiers="Control" />
+                        </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                </MenuFlyoutSubItem>
+                <ToggleMenuFlyoutItem AccessKey="S" Text="Status bar" />
+                <ToggleMenuFlyoutItem AccessKey="W" Text="Word wrap" />
+            </muxc:MenuBarItem>
+        </muxc:MenuBar>
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="30"
+            Height="30"
+            Margin="0,0,8,0"
+            Padding="0"
+            AccessKey="S"
+            BorderThickness="0">
+            <Button.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.ThemeDictionaries>
+                        <ResourceDictionary x:Key="Dark">
+                            <StaticResource x:Key="ButtonBackground" ResourceKey="SubtleFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SubtleFillColorSecondaryBrush" />
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SubtleFillColorTertiaryBrush" />
+                            <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="SubtleFillColorDisabledBrush" />
+                            <StaticResource x:Key="ButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
+                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                            <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
+                            <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlFillColorTransparentBrush" />
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="Light">
+                            <StaticResource x:Key="ButtonBackground" ResourceKey="SubtleFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SubtleFillColorSecondaryBrush" />
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SubtleFillColorTertiaryBrush" />
+                            <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="SubtleFillColorDisabledBrush" />
+                            <StaticResource x:Key="ButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
+                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                            <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
+                            <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlFillColorTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlFillColorTransparentBrush" />
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="HighContrast">
+                            <StaticResource x:Key="ButtonBackground" ResourceKey="SystemControlTransparentBrush" />
+                            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SystemControlHighlightListLowBrush" />
+                            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SystemControlHighlightListMediumBrush" />
+                            <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="SystemControlTransparentBrush" />
+                            <StaticResource x:Key="ButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
+                            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+                            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+                            <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+                            <StaticResource x:Key="ButtonBorderBrush" ResourceKey="SystemControlForegroundTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="SystemControlHighlightTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="SystemControlHighlightTransparentBrush" />
+                            <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="SystemControlDisabledTransparentBrush" />
+                        </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
+                </ResourceDictionary>
+            </Button.Resources>
+            <muxc:AnimatedIcon Width="16" Height="16">
+                <muxc:AnimatedIcon.Source>
+                    <animatedvisuals:AnimatedSettingsVisualSource />
+                </muxc:AnimatedIcon.Source>
+                <muxc:AnimatedIcon.FallbackIconSource>
+                    <muxc:SymbolIconSource Symbol="Setting" />
+                </muxc:AnimatedIcon.FallbackIconSource>
+            </muxc:AnimatedIcon>
+        </Button>
+        <Rectangle
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Height="1"
+            Fill="{ThemeResource DividerLineBrush}" />
+        <mica:MicaEditorControl
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Background="{ThemeResource ControlFillColorTertiaryBrush}" />
+
+        <Grid
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="-2,0"
+            Background="{ThemeResource StatusBarBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="88" />
+                <ColumnDefinition MinWidth="64" MaxWidth="88" />
+                <ColumnDefinition MinWidth="104" MaxWidth="160" />
+                <ColumnDefinition MinWidth="64" MaxWidth="128" />
+            </Grid.ColumnDefinitions>
+            <Rectangle
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Height="1"
+                Fill="{ThemeResource DividerLineBrush}" />
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Rectangle
+                    Width="1"
+                    Height="16"
+                    Fill="{ThemeResource SeparatorLineBrush}" />
+                <TextBlock
+                    Margin="22,0,0,0"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="Ln 1, Col 1" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Rectangle
+                    Width="1"
+                    Height="16"
+                    Fill="{ThemeResource SeparatorLineBrush}" />
+                <TextBlock
+                    Margin="12,0,0,0"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="100%" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Rectangle
+                    Width="1"
+                    Height="16"
+                    Fill="{ThemeResource SeparatorLineBrush}" />
+                <TextBlock
+                    Margin="12,0,0,0"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="Windows (CRLF)" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="3"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Rectangle
+                    Width="1"
+                    Height="16"
+                    Fill="{ThemeResource SeparatorLineBrush}" />
+                <TextBlock
+                    Margin="12,0,0,0"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="UTF-8" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

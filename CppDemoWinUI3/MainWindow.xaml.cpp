@@ -12,10 +12,17 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::CppDemoWinUI3::implementation
 {
-    MainWindow::MainWindow()
-    {
-        InitializeComponent();
+	MainWindow::MainWindow()
+	{
+		InitializeComponent();
 
-        Title(L"Demo WinUI 3 (C++)");
-    }
+		Title(L"Demo WinUI 3 (C++)");
+
+		Editor().Window(*this);
+
+		/*SizeChanged([&](auto &&, auto const &args)
+			{
+				Title(winrt::to_hstring(args.Size().Width) + L"x" + winrt::to_hstring(args.Size().Height));
+			});*/
+	}
 }

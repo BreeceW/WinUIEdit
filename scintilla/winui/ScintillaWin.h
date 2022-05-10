@@ -11,9 +11,18 @@
 namespace Scintilla::Internal {
 	class ScintillaWin;
 
+	// TSF message queue
+	class IMessage
+	{
+	public:
+		IMessage() {}
+		virtual ~IMessage() {}
+		virtual uint8_t Type() const = 0;
+	};
+
 	class ScintillaWinUI :
 		public ScintillaBase,
-		public ::winrt::implements<ScintillaWinUI, ::IVirtualSurfaceUpdatesCallbackNative>
+		public ::winrt::implements<ScintillaWinUI, ::IVirtualSurfaceUpdatesCallbackNative, ITextStoreACP2, ITfContextOwnerCompositionSink>
 	{
 	public:
 		ScintillaWinUI();
@@ -24,14 +33,120 @@ namespace Scintilla::Internal {
 		void DpiChanged();
 		void SizeChanged();
 		void FocusChanged(bool focused);
-		void PointerPressed(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers const &modifiers);
+		void PointerPressed(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void RightPointerPressed(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void PointerMoved(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void PointerReleased(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		std::pair<bool, LRESULT> Subclass(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+		void Finalize();
+		void CharacterReceived(char16_t character);
+
+		sptr_t GetTextLength();
+		sptr_t GetText(uptr_t bufferSize, sptr_t buffer);
+		bool SetText(std::wstring_view const &text);
+
+		void SetWndProc(std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> wndProc);
+		void SetWndProcTag(winrt::Windows::Foundation::IInspectable const &tag);
 
 	private:
+		bool _tsfCore;
+
+		std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> _wndProc;
+		winrt::Windows::Foundation::IInspectable _wndProcTag;
+		LRESULT SendMessage(UINT msg, WPARAM wParam, LPARAM lParam);
+
+		Sci::Position AcpToDocPosition(Sci::Position acp);
+		Sci::Position DocPositionToAcp(Sci::Position docPosition);
+
+		void ProcessMessage(std::unique_ptr<IMessage> const &message);
+		void ProcessKeyDownMessage(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void ProcessPointerPressedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void ProcessRightPointerPressedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void ProcessPointerMovedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void ProcessPointerReleasedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData);
+		void ProcessCharacterRecievedMessage(char16_t character);
+
+		Scintilla::KeyMod WindowsModifiers(winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void AddWString(std::wstring_view wsv, CharacterSource charSource); // win32
+		std::string EncodeWString(std::wstring_view wsv);
+		wchar_t lastHighSurrogateChar; // win32
+		bool lastKeyDownConsumed; // win32?
+		void ImeEndComposition();
+		bool ShouldQueueMessage(unsigned int iMessage);
+		std::queue<std::unique_ptr<IMessage>> msgq{}; //31
+		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
+
 		// Deleted so ScintillaWinUI objects can not be copied.
 		ScintillaWinUI(const ScintillaWinUI &) = delete;
 		ScintillaWinUI(ScintillaWinUI &&) = delete;
 		ScintillaWinUI &operator=(const ScintillaWinUI &) = delete;
 		ScintillaWinUI &operator=(ScintillaWinUI &&) = delete;
+
+		winrt::Windows::UI::Text::Core::CoreTextEditContext _editContext{ nullptr };
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::TextRequested_revoker _textRequestedRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::SelectionRequested_revoker _selectionRequestedRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::FocusRemoved_revoker _focusRemovedRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::TextUpdating_revoker _textUpdatingRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::SelectionUpdating_revoker _selectionUpdatingRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::FormatUpdating_revoker _formatUpdatingRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::LayoutRequested_revoker _layoutRequestedRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::CompositionStarted_revoker _compositionStartedRevoker{};
+		winrt::Windows::UI::Text::Core::CoreTextEditContext::CompositionCompleted_revoker _compositionCompletedRevoker{};
+		void OnTextRequested(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextTextRequestedEventArgs const &args);
+		void OnSelectionRequested(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextSelectionRequestedEventArgs const &args);
+		void OnFocusRemoved(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::Foundation::IInspectable const &args);
+		void OnTextUpdating(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextTextUpdatingEventArgs const &args);
+		void OnSelectionUpdating(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextSelectionUpdatingEventArgs const &args);
+		void OnFormatUpdating(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextFormatUpdatingEventArgs const &args);
+		void OnLayoutRequested(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextLayoutRequestedEventArgs const &args);
+		void OnCompositionStarted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionStartedEventArgs const &args);
+		void OnCompositionCompleted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionCompletedEventArgs const &args);
+
+		winrt::com_ptr<ITfThreadMgr2> _tfThreadManager{ nullptr };
+		winrt::com_ptr<ITfDocumentMgr> _tfDocumentManager{ nullptr };
+		winrt::com_ptr<ITfContext> _tfContext{ nullptr };
+		winrt::com_ptr<IUnknown> _sinkUnk{ nullptr };
+		winrt::com_ptr<ITextStoreACPSink> _tfTextStoreACPSink{ nullptr };
+		DWORD  _textStoreSinkMask;
+		TfEditCookie _tfEditCookie;
+		TfClientId _tfClientId;
+		enum LockTypes
+		{
+			NONE = 0,
+			READONLY = TS_LF_READ,
+			READWRITE = TS_LF_READWRITE
+		} _lock, _lockAsync;
+		IFACEMETHOD(AdviseSink)(const IID &, IUnknown *, DWORD) override;
+		IFACEMETHOD(UnadviseSink)(IUnknown *) override;
+		IFACEMETHOD(RequestLock)(DWORD, HRESULT *) override;
+		IFACEMETHOD(GetStatus)(TS_STATUS *) override;
+		IFACEMETHOD(QueryInsert)(LONG, LONG, ULONG, LONG *, LONG *) override;
+		IFACEMETHOD(GetSelection)(ULONG, ULONG, TS_SELECTION_ACP *, ULONG *) override;
+		IFACEMETHOD(SetSelection)(ULONG, const TS_SELECTION_ACP *) override;
+		IFACEMETHOD(GetText)(LONG, LONG, WCHAR *, ULONG, ULONG *, TS_RUNINFO *, ULONG, ULONG *, LONG *) override;
+		IFACEMETHOD(SetText)(DWORD, LONG, LONG, const WCHAR *, ULONG, TS_TEXTCHANGE *) override;
+		IFACEMETHOD(GetFormattedText)(LONG, LONG, IDataObject **) override;
+		IFACEMETHOD(GetEmbedded)(LONG, const GUID &, const IID &, IUnknown **) override;
+		IFACEMETHOD(QueryInsertEmbedded)(const GUID *, const FORMATETC *, BOOL *) override;
+		IFACEMETHOD(InsertEmbedded)(DWORD, LONG, LONG, IDataObject *, TS_TEXTCHANGE *) override;
+		IFACEMETHOD(InsertTextAtSelection)(DWORD, const WCHAR *, ULONG, LONG *, LONG *, TS_TEXTCHANGE *) override;
+		IFACEMETHOD(InsertEmbeddedAtSelection)(DWORD, IDataObject *, LONG *, LONG *, TS_TEXTCHANGE *) override;
+		IFACEMETHOD(RequestSupportedAttrs)(DWORD, ULONG, const TS_ATTRID *) override;
+		IFACEMETHOD(RequestAttrsAtPosition)(LONG, ULONG, const TS_ATTRID *, DWORD) override;
+		IFACEMETHOD(RequestAttrsTransitioningAtPosition)(LONG, ULONG, const TS_ATTRID *, DWORD) override;
+		IFACEMETHOD(FindNextAttrTransition)(LONG, LONG, ULONG, const TS_ATTRID *, DWORD, LONG *, BOOL *, LONG *) override;
+		IFACEMETHOD(RetrieveRequestedAttrs)(ULONG, TS_ATTRVAL *, ULONG *) override;
+		IFACEMETHOD(GetEndACP)(LONG *) override;
+		IFACEMETHOD(GetActiveView)(TsViewCookie *) override;
+		IFACEMETHOD(GetACPFromPoint)(TsViewCookie, const POINT *, DWORD, LONG *) override;
+		IFACEMETHOD(GetTextExt)(TsViewCookie, LONG, LONG, RECT *, BOOL *) override;
+		IFACEMETHOD(GetScreenExt)(TsViewCookie, RECT *) override;
+
+		IFACEMETHOD(OnEndComposition)(ITfCompositionView *pComposition);
+		IFACEMETHOD(OnStartComposition)(ITfCompositionView *pComposition, BOOL *pfOk);
+		IFACEMETHOD(OnUpdateComposition)(ITfCompositionView *pComposition, ITfRange *pRangeNew);
 
 		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> _sisNativeWithD2D{ nullptr };
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
@@ -64,8 +179,10 @@ namespace Scintilla::Internal {
 		virtual bool ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) override;
 		virtual void Copy() override;
 		virtual void Paste() override;
+		winrt::fire_and_forget PasteAsync();
 		virtual void ClaimSelection() override;
 		virtual void NotifyChange() override;
+		virtual void NotifyFocus(bool focus) override;
 		virtual void NotifyParent(Scintilla::NotificationData scn) override;
 		virtual void CopyToClipboard(const SelectionText &selectedText) override;
 		virtual void SetMouseCapture(bool on) override;
@@ -75,8 +192,9 @@ namespace Scintilla::Internal {
 		virtual Scintilla::sptr_t DefWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam) override;
 		virtual void CreateCallTipWindow(PRectangle rc) override;
 		virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true) override;
-		IFACEMETHOD(UpdatesNeeded)();
+		IFACEMETHOD(UpdatesNeeded)() override;
 		void DrawBit(RECT const &drawingBounds);
+		UINT CodePageOfDocument() const noexcept;
 	};
 }
 

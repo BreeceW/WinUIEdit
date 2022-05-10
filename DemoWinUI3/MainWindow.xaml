@@ -9,6 +9,6 @@
     mc:Ignorable="d">
 
     <Grid Padding="24" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <mica:MicaEditorControl CornerRadius="{ThemeResource ControlCornerRadius}" MyProperty="20" />
+        <mica:MicaEditorControl x:Name="Editor" CornerRadius="{ThemeResource ControlCornerRadius}" />
     </Grid>
 </Window>

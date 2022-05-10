@@ -12,6 +12,23 @@
     mc:Ignorable="d">
 
     <Grid Padding="24">
-        <mica:MicaEditorControl micaWindows10version1809:CornerRadius="{ThemeResource ControlCornerRadius}" MyProperty="20" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="6*" />
+        </Grid.ColumnDefinitions>
+        <TextBox
+            x:Name="XamlTextBox"
+            Grid.Column="0"
+            Margin="0,0,24,0"
+            AcceptsReturn="True"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            TextWrapping="Wrap" />
+        <mica:MicaEditorControl
+            x:Name="Mica"
+            Grid.Column="1"
+            micaWindows10version1809:CornerRadius="{ThemeResource ControlCornerRadius}"
+            BorderBrush="{ThemeResource TextControlBorderBrush}"
+            BorderThickness="{ThemeResource TextControlBorderThemeThickness}"
+            Text="{x:Bind XamlTextBox.Text, Mode=TwoWay}" />
     </Grid>
 </Page>

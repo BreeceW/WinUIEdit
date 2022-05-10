@@ -8,27 +8,65 @@ namespace winrt::MicaEditor::implementation
 	{
 		MicaEditorControl();
 
-		int32_t MyProperty();
-		void MyProperty(int32_t value);
+		static DUX::DependencyProperty TextProperty() { return s_textProperty; }
+		hstring Text();
+		void Text(hstring const &value);
 
-		void OnApplyTemplate();
+#ifdef WINUI3
+		DUX::Window Window();
+		void Window(DUX::Window const &value);
+		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+#endif
+
+		void OnApplyTemplate(); // Should these have override?
 		void OnGotFocus(DUX::RoutedEventArgs const &e);
 		void OnLostFocus(DUX::RoutedEventArgs const &e);
 		void OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e);
+		void OnPointerMoved(DUX::Input::PointerRoutedEventArgs const &e);
+		void OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e);
+		void OnPointerEntered(DUX::Input::PointerRoutedEventArgs const &e);
+		void OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e);
+		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
+		void OnCharacterReceived(DUX::Input::CharacterReceivedRoutedEventArgs const &e);
+		void OnTapped(DUX::Input::TappedRoutedEventArgs const &e);
 
 		uint64_t Scintilla(int32_t message, uint64_t wParam, uint64_t lParam);
 
 	private:
-		int32_t _myProperty = 0;
+		static void OnTextPropertyChanged(IInspectable const &sender, DUX::DependencyPropertyChangedEventArgs const &args);
+		inline static DUX::DependencyProperty s_textProperty{ DUX::DependencyProperty::Register(L"Text", xaml_typename<hstring>(), xaml_typename<MicaEditor::MicaEditorControl>(), DUX::PropertyMetadata{box_value(L""), &OnTextPropertyChanged}) };
+
+#ifdef WINUI3
+		DUX::Window _window;
+		HWND _hWnd;
+		WNDPROC _oldWndProc;
+#else
+		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
+#endif
+		bool _isPointerOver{ false };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
-		void Image_Tapped(Windows::Foundation::IInspectable const &sender, DUX::Input::TappedRoutedEventArgs const &args);
 		float _dpiScale = 1;
+		float _logicalDpi = 96;
 		Windows::Graphics::Display::DisplayInformation::DpiChanged_revoker _dpiChangedRevoker{};
 		void OnDpiChanged(Windows::Graphics::Display::DisplayInformation const &sender, Windows::Foundation::IInspectable const &args);
-		void MicaEditorControl::OnSizeChanged(const Windows::Foundation::IInspectable &sender, const DUX::SizeChangedEventArgs &args);
-		void UpdateDisplayInformation(Windows::Graphics::Display::DisplayInformation const &displayInformation);
+		void OnActualThemeChanged(DUX::FrameworkElement const &sender, Windows::Foundation::IInspectable const &args);
+#ifndef WINUI3
+		Windows::UI::ViewManagement::UISettings::ColorValuesChanged_revoker _colorValuesChangedRevoker{};
+		void OnColorValuesChanged(Windows::UI::ViewManagement::UISettings const &uiSettings, Windows::Foundation::IInspectable const &args);
+#endif
+		void OnLosingFocus(Windows::Foundation::IInspectable const &sender, DUX::Input::LosingFocusEventArgs const &args);
+		void OnSizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
+		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
+		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
+		void UpdateSizes();
+		void UpdateColors(bool useDarkTheme);
+#ifndef WINUI3
+		bool UseDarkColors();
+#endif
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative;
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
+		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);
+		Windows::UI::ViewManagement::UISettings _uiSettings{};
 	};
 }
 

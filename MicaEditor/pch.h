@@ -5,6 +5,10 @@
 #include <winrt/Windows.Foundation.Metadata.h>
 #include <winrt/Windows.Graphics.Display.h>
 #include <winrt/Windows.System.h>
+#include <winrt/Windows.UI.Text.Core.h>
+#include <winrt/Windows.UI.Core.h>
+#include <winrt/Windows.ApplicationModel.DataTransfer.h>
+#include <winrt/Windows.UI.Xaml.Interop.h>
 #ifdef WINUI3
 #include <winrt/Microsoft.UI.Input.h>
 #include <winrt/Microsoft.UI.Composition.h>
@@ -17,13 +21,18 @@
 #include <winrt/Microsoft.UI.Xaml.Navigation.h>
 #include <winrt/Microsoft.UI.Dispatching.h>
 #include <winrt/Microsoft.UI.Xaml.Media.Imaging.h>
+
 #include <microsoft.ui.xaml.media.dxinterop.h>
+#include <microsoft.ui.xaml.window.h>
 
 #include <wil/cppwinrt_helpers.h>
 
 #define DUX Microsoft::UI::Xaml
 #define DUXC Microsoft::UI::Xaml::Controls
+#define DUI Microsoft::UI::Input
 #else
+#include <winrt/Windows.UI.Popups.h>
+#include <winrt/Windows.UI.ViewManagement.h>
 #include <winrt/Windows.UI.Input.h>
 #include <winrt/Windows.UI.Composition.h>
 #include <winrt/Windows.UI.Xaml.h>
@@ -38,6 +47,7 @@
 
 #define DUX Windows::UI::Xaml
 #define DUXC Windows::UI::Xaml::Controls
+#define DUI Windows::UI::Input
 #endif
 
 #include <d3d11_4.h>
@@ -59,11 +69,16 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <queue>
 #include <optional>
 #include <algorithm>
 #include <memory>
 #include <chrono>
 #include <mutex>
+#include <functional>
+
+#include <olectl.h>
+#include <msctf.h>
 
 #include "Helpers.h"
 #include "Wrapper.h"
