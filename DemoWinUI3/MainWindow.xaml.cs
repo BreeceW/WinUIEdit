@@ -8,7 +8,7 @@ namespace DemoWinUI3
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow
     {
         public MainWindow()
         {
@@ -16,7 +16,7 @@ namespace DemoWinUI3
 
             Title = "Demo WinUI3 (C#)";
 
-            Editor.Window = this;
+            TrySetMicaBackdrop();
         }
     }
 }

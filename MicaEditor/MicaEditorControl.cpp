@@ -51,9 +51,6 @@ namespace winrt::MicaEditor::implementation
 		auto displayInformation{ DisplayInformation::GetForCurrentView() };
 		_dpiChangedRevoker = displayInformation.DpiChanged(winrt::auto_revoke, { this, &MicaEditorControl::OnDpiChanged });
 		UpdateDisplayInformation(displayInformation.RawPixelsPerViewPixel(), displayInformation.LogicalDpi());
-#else
-		// Temporary until it is known how to respond to DPI changes with WASDK
-		UpdateDisplayInformation(XamlRoot().RasterizationScale(), _dpiScale * 96);
 #endif
 
 		_scintilla = make_self<::Scintilla::Internal::ScintillaWinUI>();
@@ -255,51 +252,6 @@ namespace winrt::MicaEditor::implementation
 	}
 #endif
 
-#ifdef WINUI3
-	Window MicaEditorControl::Window()
-	{
-		return _window;
-	}
-
-	void MicaEditorControl::Window(DUX::Window const &value)
-	{
-		return;
-
-		if (_hWnd && _oldWndProc)
-		{
-			SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(_oldWndProc));
-			RemovePropW(_hWnd, L"meditctrl");
-		}
-
-		if (value)
-		{
-			auto windowNative{ value.try_as<IWindowNative>() };
-			winrt::check_bool(windowNative);
-			HWND hWndParent;
-			windowNative->get_WindowHandle(&hWndParent);
-			_hWnd = FindWindowExW(hWndParent, nullptr, L"Microsoft.UI.Content.ContentWindowSiteBridge", L"DesktopChildSiteBridge");
-			winrt::check_pointer(_hWnd);
-
-			SetPropW(_hWnd, L"meditctrl", reinterpret_cast<HANDLE>(this));
-			_oldWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&MicaEditorControl::WndProc)));
-		}
-		else
-		{
-			_hWnd = nullptr;
-			_oldWndProc = nullptr;
-		}
-	}
-
-	LRESULT CALLBACK MicaEditorControl::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-	{
-		auto t{ reinterpret_cast<MicaEditorControl *>(GetPropW(hWnd, L"meditctrl")) };
-
-		auto ret{ t->_scintilla->Subclass(hWnd, message, wParam, lParam) };
-
-		return ret.first ? ret.second : CallWindowProcW(t->_oldWndProc, hWnd, message, wParam, lParam);
-}
-#endif
-
 	uint64_t MicaEditorControl::Scintilla(int32_t message, uint64_t wParam, uint64_t lParam)
 	{
 		return _scintilla->WndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
@@ -317,6 +269,12 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::OnApplyTemplate()
 	{
+#ifdef WINUI3
+		// Temporary until it is known how to respond to DPI changes with WASDK
+		// Todo: Can the UWP version of this code go down here also?
+		auto scale{ XamlRoot().RasterizationScale() };
+		UpdateDisplayInformation(scale, scale * 96);
+#endif
 		UpdateSizes();
 
 		uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;

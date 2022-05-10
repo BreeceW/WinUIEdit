@@ -12,12 +12,6 @@ namespace winrt::MicaEditor::implementation
 		hstring Text();
 		void Text(hstring const &value);
 
-#ifdef WINUI3
-		DUX::Window Window();
-		void Window(DUX::Window const &value);
-		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-#endif
-
 		void OnApplyTemplate(); // Should these have override?
 		void OnGotFocus(DUX::RoutedEventArgs const &e);
 		void OnLostFocus(DUX::RoutedEventArgs const &e);
@@ -36,11 +30,7 @@ namespace winrt::MicaEditor::implementation
 		static void OnTextPropertyChanged(IInspectable const &sender, DUX::DependencyPropertyChangedEventArgs const &args);
 		inline static DUX::DependencyProperty s_textProperty{ DUX::DependencyProperty::Register(L"Text", xaml_typename<hstring>(), xaml_typename<MicaEditor::MicaEditorControl>(), DUX::PropertyMetadata{box_value(L""), &OnTextPropertyChanged}) };
 
-#ifdef WINUI3
-		DUX::Window _window;
-		HWND _hWnd;
-		WNDPROC _oldWndProc;
-#else
+#ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 #endif
 		bool _isPointerOver{ false };
