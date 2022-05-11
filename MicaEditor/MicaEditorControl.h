@@ -22,7 +22,6 @@ namespace winrt::MicaEditor::implementation
 		void OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e);
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnCharacterReceived(DUX::Input::CharacterReceivedRoutedEventArgs const &e);
-		void OnTapped(DUX::Input::TappedRoutedEventArgs const &e);
 
 		uint64_t Scintilla(int32_t message, uint64_t wParam, uint64_t lParam);
 
@@ -43,16 +42,13 @@ namespace winrt::MicaEditor::implementation
 #ifndef WINUI3
 		Windows::UI::ViewManagement::UISettings::ColorValuesChanged_revoker _colorValuesChangedRevoker{};
 		void OnColorValuesChanged(Windows::UI::ViewManagement::UISettings const &uiSettings, Windows::Foundation::IInspectable const &args);
+		bool UseDarkColors();
 #endif
-		void OnLosingFocus(Windows::Foundation::IInspectable const &sender, DUX::Input::LosingFocusEventArgs const &args);
 		void OnSizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
 		void UpdateSizes();
 		void UpdateColors(bool useDarkTheme);
-#ifndef WINUI3
-		bool UseDarkColors();
-#endif
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative;
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);

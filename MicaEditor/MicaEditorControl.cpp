@@ -22,28 +22,8 @@ namespace winrt::MicaEditor::implementation
 	{
 		DefaultStyleKey(winrt::box_value(L"MicaEditor.MicaEditorControl"));
 
-		/*FocusManager::GotFocus([](IInspectable const &sender, FocusManagerGotFocusEventArgs const &args)
-			{
-				if (args.NewFocusedElement())
-				{
-					OutputDebugStringW(winrt::get_class_name(args.NewFocusedElement()).c_str());
-					auto fe{ args.NewFocusedElement().try_as<FrameworkElement>() };
-					if (fe)
-					{
-						OutputDebugStringW(L"-");
-						OutputDebugStringW(fe.Name().c_str());
-					}
-					OutputDebugStringW(L"\n");
-				}
-				else
-				{
-					OutputDebugStringW(L"null focus\n");
-				}
-			});*/
-
 		_wrapper = std::make_shared<Wrapper>();
 
-		LosingFocus({ this, &MicaEditorControl::OnLosingFocus });
 		SizeChanged({ this, &MicaEditorControl::OnSizeChanged });
 		Unloaded({ this, &MicaEditorControl::OnUnloaded });
 
@@ -112,15 +92,6 @@ namespace winrt::MicaEditor::implementation
 		SetValue(s_textProperty, box_value(value));
 	}
 
-	void MicaEditorControl::OnLosingFocus(IInspectable const &sender, LosingFocusEventArgs const &args)
-	{
-		/*if (_scintilla && _scintilla->hasFocus && args.InputDevice() == FocusInputDeviceKind::Keyboard)
-		{
-			args.Cancel(true); // TryCancel? 1803, but why?
-		}*/
-		// This causes a bug where it inserts two tabs and puts the ACP in the wrong spot
-	}
-
 	void MicaEditorControl::OnSizeChanged(IInspectable const &sender, SizeChangedEventArgs const &args)
 	{
 		// Todo: This is the outer size, but it needs to be the inner size!
@@ -161,15 +132,13 @@ namespace winrt::MicaEditor::implementation
 				UpdateColors(UseDarkColors());
 			});
 	}
-#endif
-
-	void MicaEditorControl::OnTapped(TappedRoutedEventArgs const &e)
+	
+	bool MicaEditorControl::UseDarkColors()
 	{
-		// This is apparently the right approach: https://stackoverflow.com/a/41532417/16152265
-		// Changing to use OnPointerPressed instead
-
-		//Focus(FocusState::Programmatic);
+		auto theme{ RequestedTheme() };
+		return theme == ElementTheme::Default ? Application::Current().RequestedTheme() == ApplicationTheme::Dark : theme == ElementTheme::Dark;
 	}
+#endif
 
 	void MicaEditorControl::UpdateDisplayInformation(float dpiScale, float logicalDpi)
 	{
@@ -243,14 +212,6 @@ namespace winrt::MicaEditor::implementation
 			_scintilla->WndProc(Scintilla::Message::SetCaretWidth, Helpers::ConvertFromDipToPixelUnit(_uiSettings.CaretWidth(), _dpiScale), 0); // Todo: Needs to stop blinking after timeout and respect blink rate
 		}
 	}
-
-#ifndef WINUI3
-	bool MicaEditorControl::UseDarkColors()
-	{
-		auto theme{ RequestedTheme() };
-		return theme == ElementTheme::Default ? Application::Current().RequestedTheme() == ApplicationTheme::Dark : theme == ElementTheme::Dark;
-	}
-#endif
 
 	uint64_t MicaEditorControl::Scintilla(int32_t message, uint64_t wParam, uint64_t lParam)
 	{
@@ -522,7 +483,8 @@ namespace winrt::MicaEditor::implementation
 		if ((e.Key() == VirtualKey::Tab || e.Key() == VirtualKey::Enter) && (modifiers == winrt::Windows::System::VirtualKeyModifiers::None || modifiers == winrt::Windows::System::VirtualKeyModifiers::Shift))
 		{
 			e.Handled(true);
-			// Handle tab to prevent tab navigation (do we want to do this if document is read-only?)
+			// Handle tab to prevent tab navigation
+			// Todo: do we want to do this if document is read-only?
 			// Handle enter due to system XAML bug in older Windows versions that fired enter key specifically twice
 		}
 
