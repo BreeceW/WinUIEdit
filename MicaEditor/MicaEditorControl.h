@@ -18,8 +18,11 @@ namespace winrt::MicaEditor::implementation
 		void OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e);
 		void OnPointerMoved(DUX::Input::PointerRoutedEventArgs const &e);
 		void OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e);
+#ifndef WINUI3
+		void OnPointerCaptureLost(DUX::Input::PointerRoutedEventArgs const &e);
 		void OnPointerEntered(DUX::Input::PointerRoutedEventArgs const &e);
 		void OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e);
+#endif
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnCharacterReceived(DUX::Input::CharacterReceivedRoutedEventArgs const &e);
 
@@ -31,8 +34,8 @@ namespace winrt::MicaEditor::implementation
 
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
-#endif
 		bool _isPointerOver{ false };
+#endif
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale = 1;
 		float _logicalDpi = 96;

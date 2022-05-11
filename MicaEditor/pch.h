@@ -32,6 +32,7 @@
 #define DUX Microsoft::UI::Xaml
 #define DUXC Microsoft::UI::Xaml::Controls
 #define DUI Microsoft::UI::Input
+#define DCUR Microsoft::UI::Input::InputSystemCursorShape
 #else
 #include <winrt/Windows.UI.Input.h>
 #include <winrt/Windows.UI.Composition.h>
@@ -48,6 +49,7 @@
 #define DUX Windows::UI::Xaml
 #define DUXC Windows::UI::Xaml::Controls
 #define DUI Windows::UI::Input
+#define DCUR Windows::UI::Core::CoreCursorType
 #endif
 
 #include <d3d11_4.h>

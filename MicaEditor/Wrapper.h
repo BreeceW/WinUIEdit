@@ -22,6 +22,7 @@ namespace MicaEditor
 
 		// Todo: Move to separate XAML class
 		void SetMouseCaptureElement(winrt::DUX::UIElement const &element);
+		void SetCursor(winrt::DCUR cursor);
 
 	private:
 		winrt::DUX::Input::Pointer _lastPointer{ nullptr };

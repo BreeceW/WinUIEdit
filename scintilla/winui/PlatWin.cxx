@@ -1929,31 +1929,32 @@ HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept {
 }
 
 void Window::SetCursor(Cursor curs) {
-#ifndef WINUI3
-	winrt::Windows::UI::Core::CoreCursorType type{ winrt::Windows::UI::Core::CoreCursorType::Arrow };
-	switch (curs) {
-	case Cursor::text:
-		type = winrt::Windows::UI::Core::CoreCursorType::IBeam;
-		break;
-	case Cursor::up:
-		type = winrt::Windows::UI::Core::CoreCursorType::UpArrow;
-		break;
-	case Cursor::wait:
-		type = winrt::Windows::UI::Core::CoreCursorType::Wait;
-		break;
-	case Cursor::horizontal:
-		type = winrt::Windows::UI::Core::CoreCursorType::SizeWestEast;
-		break;
-	case Cursor::vertical:
-		type = winrt::Windows::UI::Core::CoreCursorType::SizeNorthSouth;
-		break;
-	case Cursor::hand:
-		type = winrt::Windows::UI::Core::CoreCursorType::Hand;
-		break;
+	if (auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) })
+	{
+		winrt::DCUR type{ winrt::DCUR::Arrow };
+		switch (curs) {
+		case Cursor::text:
+			type = winrt::DCUR::IBeam;
+			break;
+		case Cursor::up:
+			type = winrt::DCUR::UpArrow;
+			break;
+		case Cursor::wait:
+			type = winrt::DCUR::Wait;
+			break;
+		case Cursor::horizontal:
+			type = winrt::DCUR::SizeWestEast;
+			break;
+		case Cursor::vertical:
+			type = winrt::DCUR::SizeNorthSouth;
+			break;
+		case Cursor::hand:
+			type = winrt::DCUR::Hand;
+			break;
+		}
+		
+		wrapper->SetCursor(type);
 	}
-	// Todo: Needs to support windows right
-	winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(winrt::Windows::UI::Core::CoreCursor{ type, 0 });
-#endif
 }
 
 /* Returns rectangle of monitor pt is on, both rect and pt are in Window's

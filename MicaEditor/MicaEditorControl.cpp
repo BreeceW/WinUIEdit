@@ -404,15 +404,19 @@ namespace winrt::MicaEditor::implementation
 			}
 		}
 
+		e.Handled(true); // Prevents control from losing focus on pointer released
+		// See https://stackoverflow.com/questions/59392044/uwp-control-to-keep-focus-after-mouse-click
+		// Alternate approach: call Focus in OnFocusLost
+	}
+
+#ifndef WINUI3
+	void MicaEditorControl::OnPointerCaptureLost(PointerRoutedEventArgs const &e)
+	{
 		if (!_isPointerOver)
 		{
 			// Todo: if you, e.g. hover over a HyperlinkButton when this is called, you will get an arrow instead of the hand you want
 			winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(Windows::UI::Core::CoreCursor{ Windows::UI::Core::CoreCursorType::Arrow, 0 });
 		}
-
-		e.Handled(true); // Prevents control from losing focus on pointer released
-		// See https://stackoverflow.com/questions/59392044/uwp-control-to-keep-focus-after-mouse-click
-		// Alternate approach: call Focus in OnFocusLost
 	}
 
 	void MicaEditorControl::OnPointerEntered(DUX::Input::PointerRoutedEventArgs const &e)
@@ -423,13 +427,12 @@ namespace winrt::MicaEditor::implementation
 	void MicaEditorControl::OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = false;
-#ifndef WINUI3
 		if (!e.GetCurrentPoint(nullptr).Properties().IsLeftButtonPressed())
 		{
 			winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(Windows::UI::Core::CoreCursor{ Windows::UI::Core::CoreCursorType::Arrow, 0 });
 		}
-#endif
 	}
+#endif
 
 	void MicaEditorControl::OnKeyDown(KeyRoutedEventArgs const &e)
 	{
