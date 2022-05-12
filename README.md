@@ -16,26 +16,22 @@ Open WinUIEditor.sln in Visual Studio 2022. Then, set DemoUWP or CppDemoUWP as t
 ## Project structure
 The project structure is very much not set in stone at this time.
 
-||Folder|Description|
-|-|-:|:-|
-|_Control_:||
-||**MicaEditor**|XAML control that hosts the Scintilla port (Note: The C++ project in this folder is also responsible for compiling the scintilla folder code)|
-||**scintilla\winui**|Port of Scintilla to UWP/WinUI 3|
-|_Libraries_:||
-||scintilla|Unmodified Scintilla source code with new winui subfolder|
-||lexilla|Unmodified Lexilla source code|
-|_Demos_:||
-||CsDemoUwp|Test project for C# UWP|
-||CppDemoUwp|Test project for C++/WinRT UWP|
-||CsDemoWinUI3|Test project for C# WinUI 3|
-||CppDemoWinUI3|Test project for C++/WinRT WinUI 3|
-||WinFormsIslandsDemo|Test project for C# WinForms XAML Islands|
-||WpfIslandsDemo|Test project for C# WPF XAML Islands|
-||CsIslandsUwpDemoApp|Support project for C# XAML Islands apps|
-||CppIslandsDemo|Test project for C++ XAML Islands|
-||CppIslandsUwpDemoApp|Support project for C++ XAML Islands app|
-|_Misc._:||
-||Tools|A couple tools to keep the scintilla code up-to-date (see README in folder)|
+|Folder|Description|
+|-:|:-|
+|**MicaEditor**|XAML control that hosts the Scintilla port (Note: The C++ project in this folder is also responsible for compiling the scintilla folder code)|
+|**scintilla\winui**|Port of Scintilla to UWP/WinUI 3|
+|scintilla|Unmodified Scintilla source code with new winui subfolder|
+|lexilla|Unmodified Lexilla source code|
+|CsDemoUwp|Test project for C# UWP|
+|CppDemoUwp|Test project for C++/WinRT UWP|
+|CsDemoWinUI3|Test project for C# WinUI 3|
+|CppDemoWinUI3|Test project for C++/WinRT WinUI 3|
+|WinFormsIslandsDemo|Test project for C# WinForms XAML Islands|
+|WpfIslandsDemo|Test project for C# WPF XAML Islands|
+|CsIslandsUwpDemoApp|Support project for C# XAML Islands apps|
+|CppIslandsDemo|Test project for C++ XAML Islands|
+|CppIslandsUwpDemoApp|Support project for C++ XAML Islands app|
+|Tools|A couple tools to keep the scintilla code up-to-date (see README in folder)|
 
 The most relevant code is in the MicaEditor and scintilla\winui folders. These folders may merge in the future. The control name is also not yet decided (MicaEditor is a placeholder).
 
