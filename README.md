@@ -7,7 +7,7 @@ You can download a demo from Microsoft Store [here](https://www.microsoft.com/st
 ### Current state of demos
 You should be able to mostly use the mouse and keyboard to interact with the control. IME support is somewhat present, though far from finished. Text input support will vary depending on the kind of device you are using, ranging from fairly well, somewhat glitchy, to not at all. There are no scroll bars. It will crash if you minimize the window and in some other scenarios. With large amounts of text, there will be significant slow downs. This is not a fault of the editor, but rather a complication of IME support that should be easily resolved. The demo is a clone of the Windows 11 Notepad app, though currently none of the menu items do anything.
 
-![Control showing line numbers and short text on a white background but is otherwise empty](https://user-images.githubusercontent.com/18747724/157655089-aab93167-1ee4-4809-8bb1-2b9911e93116.png)
+![Mica Editor: replica of Windows 11 Notepad with WinUIEdit control and mica, demoing VB sample code](https://user-images.githubusercontent.com/18747724/168005258-3159b1ef-693d-47d0-9143-8bee53e9b89a.png)
 
 ## How to build
 Currently, to switch the build between UWP and WinUI 3, you will need to modify [MicaEditor.vcxproj](https://github.com/BreeceW/WinUIEdit/blob/main/MicaEditor/MicaEditor.vcxproj) to change `MicaEditorUseWinUI3` to `true` or `false`, accordingly.
