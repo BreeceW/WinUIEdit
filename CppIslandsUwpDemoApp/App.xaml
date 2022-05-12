@@ -1,0 +1,5 @@
+﻿<Toolkit:XamlApplication
+    x:Class="CppIslandsUwpDemoApp.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Toolkit="using:Microsoft.Toolkit.Win32.UI.XamlHost" />

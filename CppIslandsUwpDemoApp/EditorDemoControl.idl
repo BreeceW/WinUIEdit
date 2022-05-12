@@ -1,0 +1,8 @@
+namespace CppIslandsUwpDemoApp
+{
+    [default_interface]
+    runtimeclass EditorDemoControl : Windows.UI.Xaml.Controls.UserControl
+    {
+        EditorDemoControl();
+    }
+}
