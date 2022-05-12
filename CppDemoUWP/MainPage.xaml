@@ -61,7 +61,7 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="32" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -216,7 +216,10 @@
                         </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                 </MenuFlyoutSubItem>
-                <ToggleMenuFlyoutItem AccessKey="S" Text="Status bar" />
+                <ToggleMenuFlyoutItem
+                    AccessKey="S"
+                    IsChecked="True"
+                    Text="Status bar" />
                 <ToggleMenuFlyoutItem AccessKey="W" Text="Word wrap" />
             </muxc:MenuBarItem>
         </muxc:MenuBar>
@@ -296,12 +299,14 @@
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Background="{ThemeResource ControlFillColorTertiaryBrush}" />
+            Background="{ThemeResource ControlFillColorTertiaryBrush}"
+            TabIndex="0" />
 
         <Grid
             Grid.Row="4"
             Grid.Column="0"
             Grid.ColumnSpan="2"
+            Height="32"
             Margin="-2,0"
             Background="{ThemeResource StatusBarBrush}">
             <Grid.RowDefinitions>
