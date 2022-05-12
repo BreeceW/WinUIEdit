@@ -1,6 +1,6 @@
 ﻿<xaml:XamlApplication
-    x:Class="IslandsUwpDemoApp.App"
+    x:Class="CsIslandsUwpDemoApp.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:IslandsUwpDemoApp"
+    xmlns:local="using:CsIslandsUwpDemoApp"
     xmlns:xaml="using:Microsoft.Toolkit.Win32.UI.XamlHost" />

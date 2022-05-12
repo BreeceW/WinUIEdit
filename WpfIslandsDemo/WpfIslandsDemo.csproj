@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\IslandsUwpDemoApp\IslandsUwpDemoApp.csproj" />
+		<ProjectReference Include="..\CsIslandsUwpDemoApp\CsIslandsUwpDemoApp.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

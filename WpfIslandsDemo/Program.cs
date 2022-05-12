@@ -7,7 +7,7 @@ namespace WpfIslandsDemo
         [STAThread]
         public static void Main()
         {
-            using (new IslandsUwpDemoApp.App())
+            using (new CsIslandsUwpDemoApp.App())
             {
                 var app = new App();
                 app.InitializeComponent();

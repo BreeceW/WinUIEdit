@@ -14,7 +14,7 @@
   <mp:PhoneIdentity PhoneProductId="d02d2a08-622c-4f7a-b41f-6dd02714166c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>IslandsUwpDemoApp</DisplayName>
+    <DisplayName>CsIslandsUwpDemoApp</DisplayName>
     <PublisherDisplayName>breec</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -30,12 +30,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="IslandsUwpDemoApp.App">
+      EntryPoint="CsIslandsUwpDemoApp.App">
       <uap:VisualElements
-        DisplayName="IslandsUwpDemoApp"
+        DisplayName="CsIslandsUwpDemoApp"
         Square150x150Logo="Assets\Icon.png"
         Square44x44Logo="Assets\Icon.png"
-        Description="IslandsUwpDemoApp"
+        Description="CsIslandsUwpDemoApp"
         BackgroundColor="transparent">
       </uap:VisualElements>
     </Application>

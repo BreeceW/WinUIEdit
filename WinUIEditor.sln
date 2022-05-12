@@ -15,7 +15,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppDemoUwp", "CppDemoUwp\Cp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfIslandsDemo", "WpfIslandsDemo\WpfIslandsDemo.csproj", "{1F1F413E-C279-4EA8-B745-31D2A1C1BB1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IslandsUwpDemoApp", "IslandsUwpDemoApp\IslandsUwpDemoApp.csproj", "{89A9FF45-EB64-4549-A843-25FBD4631A49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsIslandsUwpDemoApp", "CsIslandsUwpDemoApp\CsIslandsUwpDemoApp.csproj", "{89A9FF45-EB64-4549-A843-25FBD4631A49}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsIslandsDemo", "WinFormsIslandsDemo\WinFormsIslandsDemo.csproj", "{7E8AE83D-2CAE-4128-A7AF-55580A9AE3B6}"
 EndProject
