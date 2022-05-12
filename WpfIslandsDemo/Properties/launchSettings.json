@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WpfIslandsDemo": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

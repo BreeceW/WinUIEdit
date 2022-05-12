@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WinFormsIslandsDemo": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
