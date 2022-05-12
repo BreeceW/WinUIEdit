@@ -7,6 +7,14 @@
         "Compare Tool": {
             "commandName": "Project",
             "commandLineArgs": "Compare 5.1.5 5.2.1"
+        },
+        "Uwp Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "Uwp"
+        },
+        "WinUI3 Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "WinUI3"
         }
     }
 }

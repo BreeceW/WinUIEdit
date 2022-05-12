@@ -10,7 +10,7 @@ You should be able to mostly use the mouse and keyboard to interact with the con
 ![Mica Editor: replica of Windows 11 Notepad with WinUIEdit control and mica, demoing VB sample code](https://user-images.githubusercontent.com/18747724/168005735-28decaf4-0fa4-4710-a2f4-f293c5b7a488.png)
 
 ## How to build
-Currently, to switch the build between UWP and WinUI 3, you will need to modify [MicaEditor.vcxproj](https://github.com/BreeceW/WinUIEdit/blob/main/MicaEditor/MicaEditor.vcxproj) to change `MicaEditorUseWinUI3` to `true` or `false`, accordingly.
+Currently, to switch the build between UWP and WinUI 3, you will need to modify [MicaEditor.vcxproj](https://github.com/BreeceW/WinUIEdit/blob/main/MicaEditor/MicaEditor.vcxproj) to change `MicaEditorUseWinUI3` to `true` or `false`. To do this quickly, use the [WinUI3](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#winui3) and [Uwp](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#uwp) tools.
 Open WinUIEditor.sln in Visual Studio 2022. Then, set DemoUWP or CppDemoUWP as the startup project for UWP or DemoWinUI3 or CppDemoWinUI3 for WinUI 3. Now you can build and run the project.
 
 ## Project structure

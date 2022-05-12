@@ -27,5 +27,23 @@ Run the Compare tool like this:
 
 where a.b.c is the previous version (see scintilla\version.txt), and x.y.z is the new version (see https://www.scintilla.org/ScintillaDownload.html).
 
+## Uwp
+This tool switches the configuration of the editor project to build the UWP
+version of the control. If you have Visual Studio open and the configuration is
+changed, Visual Studio will ask you to reload the project, which you should.
+
+Run the Uwp tool like this:
+
+`Uwp`
+
+## WinUI3
+This tool switches the configuration of the editor project to build the WinUI 3
+version of the control. If you have Visual Studio open and the configuration is
+changed, Visual Studio will ask you to reload the project, which you should.
+
+Run the WinUI3 tool like this:
+
+`WinUI3`
+
 ----
 **Note:** At this time, the tools do not have any error checking. If something goes wrong, you might have to run the tools in Visual Studio to debug them.
