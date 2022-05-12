@@ -17,7 +17,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CppDemoUWP.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CppDemoUwp.App">
       <uap:VisualElements DisplayName="Mica Editor" Description="Demo for Mica Editor Control"
         Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">

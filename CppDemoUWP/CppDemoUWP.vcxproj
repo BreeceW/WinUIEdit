@@ -7,8 +7,8 @@
     <CppWinRTGenerateWindowsMetadata>true</CppWinRTGenerateWindowsMetadata>
     <MinimalCoreWin>true</MinimalCoreWin>
     <ProjectGuid>{308aa3cc-84ec-4931-9980-4c63ae4ea348}</ProjectGuid>
-    <ProjectName>CppDemoUWP</ProjectName>
-    <RootNamespace>CppDemoUWP</RootNamespace>
+    <ProjectName>CppDemoUwp</ProjectName>
+    <RootNamespace>CppDemoUwp</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
@@ -87,7 +87,7 @@
     <AppxBundlePlatforms>x86|x64|arm|arm64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <PackageCertificateKeyFile>CppDemoUWP_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>CppDemoUwp_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
   <ItemDefinitionGroup>
@@ -171,7 +171,7 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CppDemoUWP_TemporaryKey.pfx" />
+    <None Include="CppDemoUwp_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
     <Text Include="readme.txt">

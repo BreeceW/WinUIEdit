@@ -16,9 +16,9 @@ The project structure is very much not set in stone at this time.
 |-:|:-|
 |scintilla|The unmodified source Scintilla code, along with a winui folder containing part of the UWP/WinUI 3 port|
 |MicaEditor|The XAML control that hosts the Scintilla port (Note: The C++ project in this folder is also responsible for compiling the scintilla folder code)|
-|DemoUWP|Test project for C# UWP|
-|CppDemoUWP|Test project for C++/WinRT UWP|
-|DemoWinUI3|Test project for C# WinUI 3|
+|CsDemoUwp|Test project for C# UWP|
+|CppDemoUwp|Test project for C++/WinRT UWP|
+|CsDemoWinUI3|Test project for C# WinUI 3|
 |CppDemoWinUI3|Test project for C++/WinRT WinUI 3|
 |Tools|A couple tools to keep the scintilla code up-to-date (see README in folder)|
 

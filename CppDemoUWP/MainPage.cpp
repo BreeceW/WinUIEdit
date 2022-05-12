@@ -7,7 +7,7 @@ using namespace Windows::UI::Core;
 using namespace Windows::UI::Xaml;
 using namespace Windows::Foundation;
 
-namespace winrt::CppDemoUWP::implementation
+namespace winrt::CppDemoUwp::implementation
 {
 	MainPage::MainPage()
 	{

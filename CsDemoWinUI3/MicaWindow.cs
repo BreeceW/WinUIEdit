@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using WinRT;
 
-namespace DemoWinUI3
+namespace CsDemoWinUI3
 {
     public class MicaWindow : Window
     {

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "App.xaml.g.h"
 
-namespace winrt::CppDemoUWP::implementation
+namespace winrt::CppDemoUwp::implementation
 {
     struct App : AppT<App>
     {

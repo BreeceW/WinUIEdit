@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "DemoWinUI3 (Package)": {
+    "CsDemoWinUI3 (Package)": {
       "commandName": "MsixPackage"
     },
-    "DemoWinUI3 (Unpackaged)": {
+    "CsDemoWinUI3 (Unpackaged)": {
       "commandName": "Project"
     }
   }

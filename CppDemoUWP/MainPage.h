@@ -2,7 +2,7 @@
 
 #include "MainPage.g.h"
 
-namespace winrt::CppDemoUWP::implementation
+namespace winrt::CppDemoUwp::implementation
 {
     struct MainPage : MainPageT<MainPage>
     {
@@ -16,7 +16,7 @@ namespace winrt::CppDemoUWP::implementation
     };
 }
 
-namespace winrt::CppDemoUWP::factory_implementation
+namespace winrt::CppDemoUwp::factory_implementation
 {
     struct MainPage : MainPageT<MainPage, implementation::MainPage>
     {

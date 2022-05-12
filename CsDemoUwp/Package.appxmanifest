@@ -15,7 +15,7 @@
   <mp:PhoneIdentity PhoneProductId="b0796d42-9ab0-42bf-9b8c-8051c3ea7ffb" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>DemoUWP</DisplayName>
+    <DisplayName>CsDemoUwp</DisplayName>
     <PublisherDisplayName>breec</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -31,12 +31,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="DemoUWP.App">
+      EntryPoint="CsDemoUwp.App">
       <uap:VisualElements
-        DisplayName="DemoUWP"
+        DisplayName="CsDemoUwp"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="DemoUWP"
+        Description="CsDemoUwp"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" uap5:Optional="true" />
