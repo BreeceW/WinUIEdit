@@ -159,7 +159,6 @@
     <ClCompile Include="..\lexilla\src\Lexilla.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\scintilla\winui\HanjaDic.cxx" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
     <ClCompile Include="Wrapper.cpp" />

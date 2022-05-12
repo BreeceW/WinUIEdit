@@ -98,7 +98,6 @@
 
 #include "WinTypes.h"
 #include "PlatWin.h"
-#include "HanjaDic.h"
 #include "ScintillaWin.h"
 
 #ifndef SPI_GETWHEELSCROLLLINES
