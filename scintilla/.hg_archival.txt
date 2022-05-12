@@ -1,6 +1,6 @@
 repo: bdf8c3ef2fb01ea24578e726337888e706d10b92
-node: e81b7ce0b22faadf5f91834fea4a8a1291a75251
+node: 0cd1e1a2e699e7dbdc28d49a7f7bcf1df6f27d3c
 branch: default
-latesttag: rel-5-2-1
+latesttag: rel-5-2-2
 latesttagdistance: 1
 changessincelatesttag: 1
