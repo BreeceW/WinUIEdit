@@ -157,12 +157,13 @@ namespace winrt::MicaEditor::implementation
 		constexpr sptr_t transparencyColor{ -7791875 };
 		if (useDarkTheme)
 		{
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_DEFAULT, RGB(0xD4, 0xD4, 0xD4));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_IDENTIFIER, RGB(0x9C, 0xDC, 0xFE));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_NUMBER, RGB(0xB5, 0xCE, 0xA8));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD, RGB(0x56, 0x9C, 0xD6));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD2, RGB(0xC5, 0x86, 0xC0));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_STRING, RGB(0xCE, 0x91, 0x78));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_OPERATOR, RGB(0xFF, 0xFF, 0xFF));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_OPERATOR, RGB(0xD4, 0xD4, 0xD4));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_PREPROCESSOR, RGB(0x9B, 0x9B, 0x9B));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_ERROR, RGB(0xcd, 0x31, 0x31));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_COMMENT, RGB(0x6A, 0x99, 0x55));
@@ -179,6 +180,7 @@ namespace winrt::MicaEditor::implementation
 		}
 		else
 		{
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_DEFAULT, RGB(0x00, 0x00, 0x00));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_IDENTIFIER, RGB(0x00, 0x10, 0x80));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_NUMBER, RGB(0x09, 0x86, 0x58));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD, RGB(0x00, 0x00, 0xFF));
