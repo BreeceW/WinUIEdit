@@ -9,6 +9,7 @@ using namespace winrt;
 using namespace DUX;
 using namespace DUX::Controls;
 using namespace DUX::Input;
+using namespace DUX::Media;
 using namespace DUX::Media::Imaging;
 using namespace Windows::Foundation;
 using namespace Windows::System;
@@ -24,7 +25,6 @@ namespace winrt::MicaEditor::implementation
 
 		_wrapper = std::make_shared<Wrapper>();
 
-		SizeChanged({ this, &MicaEditorControl::OnSizeChanged });
 		Unloaded({ this, &MicaEditorControl::OnUnloaded });
 
 #ifndef WINUI3
@@ -90,20 +90,6 @@ namespace winrt::MicaEditor::implementation
 	void MicaEditorControl::Text(hstring const &value)
 	{
 		SetValue(s_textProperty, box_value(value));
-	}
-
-	void MicaEditorControl::OnSizeChanged(IInspectable const &sender, SizeChangedEventArgs const &args)
-	{
-		// Todo: This is the outer size, but it needs to be the inner size!
-		if (_vsisNative)
-		{
-			auto width{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Width, _dpiScale) };
-			auto height{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Height, _dpiScale) };
-			_wrapper->Width(width);
-			_wrapper->Height(height);
-			_vsisNative->Resize(width, height);
-			_scintilla->SizeChanged();
-		}
 	}
 
 	void MicaEditorControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
@@ -311,12 +297,17 @@ namespace winrt::MicaEditor::implementation
 		// The SurfaceImageSource object's underlying 
 		// ISurfaceImageSourceNativeWithD2D object will contain the completed bitmap.
 
-		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Image>() })
+		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Border>() })
 		{
-			_wrapper->SetMouseCaptureElement(imageTarget);
-			imageTarget.Source(virtualSurfaceImageSource);
 			// Todo: do these need auto revokers
-			//imageTarget.Tapped({ this, &MicaEditorControl::Image_Tapped });
+			// Todo: is this safe to have in OnApplyTemplate?
+			imageTarget.SizeChanged({ this, &MicaEditorControl::ImageTarget_SizeChanged });
+
+			_wrapper->SetMouseCaptureElement(imageTarget);
+
+			ImageBrush brush{};
+			brush.ImageSource(virtualSurfaceImageSource);
+			imageTarget.Background(brush);
 		}
 	}
 
@@ -505,6 +496,18 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->CharacterReceived(e.Character());
 	}
 
+	void MicaEditorControl::ImageTarget_SizeChanged(IInspectable const &sender, SizeChangedEventArgs const &args)
+	{
+		if (_vsisNative)
+		{
+			auto width{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Width, _dpiScale) };
+			auto height{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Height, _dpiScale) };
+			_wrapper->Width(width);
+			_wrapper->Height(height);
+			_vsisNative->Resize(width, height);
+			_scintilla->SizeChanged();
+		}
+	}
 
 	LRESULT MicaEditorControl::WndProc(Windows::Foundation::IInspectable const &tag, UINT msg, WPARAM wParam, LPARAM lParam)
 	{

@@ -13,7 +13,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}">
-                        <Image x:Name="ImageTarget" />
+                        <Border x:Name="ImageTarget" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
