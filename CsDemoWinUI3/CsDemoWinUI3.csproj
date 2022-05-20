@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.3.5" />
+		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="1.6.3" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.0-preview3" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
 		<Manifest Include="$(ApplicationManifest)" />
@@ -41,6 +41,6 @@
 		<ProjectCapability Include="Msix" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\MicaEditor\MicaEditor.vcxproj" />
+		<ProjectReference Include="..\MicaEditor\MicaEditor.vcxproj" />
 	</ItemGroup>
 </Project>
