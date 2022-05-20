@@ -1,6 +1,5 @@
 using Microsoft.Toolkit.Forms.UI.XamlHost;
 using System.Windows.Forms;
-using Windows.UI.Xaml;
 
 namespace WinFormsIslandsDemo
 {
