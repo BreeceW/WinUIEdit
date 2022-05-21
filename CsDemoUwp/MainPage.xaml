@@ -6,29 +6,9 @@
     xmlns:local="using:CsDemoUwp"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mica="using:MicaEditor"
-    xmlns:micaWindows10version1809="using:MicaEditor?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
 
-    <Grid Padding="24">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="6*" />
-        </Grid.ColumnDefinitions>
-        <TextBox
-            x:Name="XamlTextBox"
-            Grid.Column="0"
-            Margin="0,0,24,0"
-            AcceptsReturn="True"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
-            TextWrapping="Wrap" />
-        <mica:MicaEditorControl
-            x:Name="Mica"
-            Grid.Column="1"
-            micaWindows10version1809:CornerRadius="{ThemeResource ControlCornerRadius}"
-            BorderBrush="{ThemeResource TextControlBorderBrush}"
-            BorderThickness="{ThemeResource TextControlBorderThemeThickness}"
-            Text="{x:Bind XamlTextBox.Text, Mode=TwoWay}" />
-    </Grid>
+    <mica:MicaEditorControl x:Name="Mica" />
 </Page>
