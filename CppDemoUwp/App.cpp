@@ -8,6 +8,7 @@ using namespace Windows::ApplicationModel;
 using namespace Windows::ApplicationModel::Activation;
 using namespace Windows::Foundation;
 using namespace Windows::UI;
+using namespace Windows::UI::ViewManagement;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
@@ -44,6 +45,8 @@ App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched(LaunchActivatedEventArgs const &e)
 {
+	ApplicationView::GetForCurrentView().SetPreferredMinSize(Size{ 308, 188 });
+
 	Frame rootFrame{ nullptr };
 	auto content = Window::Current().Content();
 	if (content)
