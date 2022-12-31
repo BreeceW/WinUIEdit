@@ -52,6 +52,9 @@
     <Manifest Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
 </Project>
