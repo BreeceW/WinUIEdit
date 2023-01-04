@@ -39,31 +39,51 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->SetWndProc(&MicaEditorControl::WndProc);
 
 		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>(
-			"' n! where n is greater than or equal to 0\r\n"
-			"Function Factorial(n As Integer) As Integer\r\n"
-			"    If n <= 1 Then\r\n"
-			"        Factorial = 1\r\n"
-			"    Else\r\n"
-			"        Factorial = n * Factorial(n - 1)\r\n"
-			"    End If\r\n"
-			"End Function"));
+			"// n! where n is greater than or equal to 0\r\n"
+			"int Factorial(int n)\r\n"
+			"{\r\n"
+			"    if (n <= 1)\r\n"
+			"    {\r\n"
+			"        return 1;\r\n"
+			"    }\r\n"
+			"    else\r\n"
+			"    {\r\n"
+			"        return n * Factorial(n - 1);\r\n"
+			"    }\r\n"
+			"}\r\n"));
+		/*for (int i = 1; i <= 10000000; i++)
+		{
+			char buf[50];
+			sprintf(buf, "Test line %d\r\n", i);
+			_scintilla->WndProc(Scintilla::Message::AppendText, strlen(buf), reinterpret_cast<Scintilla::uptr_t>(buf));
+		}*/
 		_scintilla->WndProc(Scintilla::Message::SetMultipleSelection, true, 0);
+		_scintilla->WndProc(Scintilla::Message::SetScrollWidth, 2000 * _dpiScale, 0); // Todo: Update on scale (careful not to override measured)
+		_scintilla->WndProc(Scintilla::Message::SetScrollWidthTracking, true, 0);
+		_scintilla->WndProc(Scintilla::Message::SetXCaretPolicy, CARET_SLOP, 20 * _dpiScale); // Todo: Update on scale (should this be scaled?)
+		_scintilla->WndProc(Scintilla::Message::SetYCaretPolicy, CARET_SLOP | CARET_STRICT | CARET_EVEN, 1);
+		_scintilla->WndProc(Scintilla::Message::SetVisiblePolicy, VISIBLE_SLOP, 0);
+		_scintilla->WndProc(Scintilla::Message::SetHScrollBar, true, 0);
+		_scintilla->WndProc(Scintilla::Message::SetEndAtLastLine, false, 0);
+		_scintilla->WndProc(Scintilla::Message::SetTabWidth, 4, 0);
 		//_scintilla->WndProc(Scintilla::Message::SetWrapMode, SC_WRAP_WHITESPACE, 0);
 		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
 
-		_scintilla->WndProc(Scintilla::Message::SetILexer, 0, reinterpret_cast<Scintilla::uptr_t>(CreateLexer("vbscript")));
-		// This list of keywords from SciTe (vb.properties)
+		_scintilla->WndProc(Scintilla::Message::SetILexer, 0, reinterpret_cast<Scintilla::uptr_t>(CreateLexer("cpp")));
+		// This list of keywords from SciTe (cpp.properties)
 		_scintilla->WndProc(Scintilla::Message::SetKeyWords, 0, reinterpret_cast<Scintilla::uptr_t>(
-			"addressof alias and as attribute base begin binary boolean byref byte byval call case cdbl "
-			"cint clng compare const csng cstr currency date decimal declare defbool defbyte defcur "
-			"defdate defdbl defdec defint deflng defobj defsng defstr defvar dim do double each else "
-			"elseif empty end enum eqv erase error event exit explicit false for friend function get "
-			"global gosub goto if imp implements in input integer is len let lib like load lock long "
-			"loop lset me mid midb mod new next not nothing null object on option optional or paramarray "
-			"preserve print private property public raiseevent randomize redim rem resume return rset "
-			"seek select set single static step stop string sub text then time to true type typeof "
-			"unload until variant wend while with withevents xor"));
-		// These colors mostly adapted from https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_plus.json
+			"alignas alignof and and_eq asm audit auto axiom bitand bitor bool "
+			"char char8_t char16_t char32_t class compl concept "
+			"const consteval constexpr const_cast "
+			"decltype default delete double dynamic_cast enum explicit export extern false final float "
+			"friend import inline int long module mutable namespace new noexcept not not_eq nullptr "
+			"operator or or_eq override private protected public "
+			"register reinterpret_cast requires "
+			"short signed sizeof static static_assert static_cast struct "
+			"template this thread_local true typedef typeid typename union unsigned using "
+			"virtual void volatile wchar_t xor xor_eq"));
+		_scintilla->WndProc(Scintilla::Message::SetKeyWords, 1, reinterpret_cast<Scintilla::uptr_t>(
+			"break case catch co_await co_return co_yield continue do else for goto if return switch throw try while "));
 
 		// Use the new ActualTheme property on Fall Creators Update and above. On WinUI 3, this is always present, so the check is not needed
 #ifndef WINUI3
@@ -141,41 +161,56 @@ namespace winrt::MicaEditor::implementation
 		// This only affects rectangles. Text can use this color
 		// Todo: Come up with a better solution
 		constexpr sptr_t transparencyColor{ -7791875 };
+		// These colors mostly adapted from https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_plus.json
 		if (useDarkTheme)
 		{
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_DEFAULT, RGB(0xD4, 0xD4, 0xD4));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_IDENTIFIER, RGB(0x9C, 0xDC, 0xFE));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_NUMBER, RGB(0xB5, 0xCE, 0xA8));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD, RGB(0x56, 0x9C, 0xD6));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD2, RGB(0xC5, 0x86, 0xC0));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_STRING, RGB(0xCE, 0x91, 0x78));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_OPERATOR, RGB(0xD4, 0xD4, 0xD4));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_PREPROCESSOR, RGB(0x9B, 0x9B, 0x9B));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_ERROR, RGB(0xcd, 0x31, 0x31));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_COMMENT, RGB(0x6A, 0x99, 0x55));
+			for (uptr_t i{ SCE_C_DEFAULT }; i < SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
+			{
+				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i, RGB(0xD4, 0xD4, 0xD4));
+				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
+
+				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i + 64, RGB(167, 167, 167)); // Inactive states
+				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i + 64, transparencyColor);
+			}
+
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_IDENTIFIER, RGB(0x9C, 0xDC, 0xFE));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_NUMBER, RGB(0xB5, 0xCE, 0xA8));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x56, 0x9C, 0xD6));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xC5, 0x86, 0xC0));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_STRING, RGB(0xCE, 0x91, 0x78));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_OPERATOR, RGB(0xD4, 0xD4, 0xD4));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x9B, 0x9B, 0x9B));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENT, RGB(0x6A, 0x99, 0x55));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENTLINE, RGB(0x6A, 0x99, 0x55));
 
 			_scintilla->WndProc(Scintilla::Message::SetSelBack, true, RGB(0x26, 0x4F, 0x78));
 			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_DEFAULT, transparencyColor);
-			for (uptr_t i{ SCE_B_DEFAULT }; i < SCE_B_DOCKEYWORD; i++) // Todo: see if there is better way
-			{
-				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
-			}
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x85, 0x85, 0x85));
 			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_LINENUMBER, transparencyColor);
 			_scintilla->WndProc(Scintilla::Message::SetCaretFore, RGB(0xAE, 0xAF, 0xAD), 0);
 		}
 		else
 		{
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_DEFAULT, RGB(0x00, 0x00, 0x00));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_IDENTIFIER, RGB(0x00, 0x10, 0x80));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_NUMBER, RGB(0x09, 0x86, 0x58));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD, RGB(0x00, 0x00, 0xFF));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_KEYWORD2, RGB(0xaf, 0x00, 0xdb));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_STRING, RGB(0xa3, 0x15, 0x15));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_OPERATOR, RGB(0x00, 0x00, 0x00));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_PREPROCESSOR, RGB(0x80, 0x80, 0x80));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_ERROR, RGB(0xcd, 0x31, 0x31));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_B_COMMENT, RGB(0x00, 0x80, 0x00));
+			for (uptr_t i{ SCE_C_DEFAULT }; i < SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
+			{
+				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i, RGB(0x00, 0x00, 0x00));
+				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
+
+				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i + 64, RGB(185, 185, 185)); // Inactive states
+				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i + 64, transparencyColor);
+			}
+
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_IDENTIFIER, RGB(0x00, 0x10, 0x80));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_NUMBER, RGB(0x09, 0x86, 0x58));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x00, 0x00, 0xFF));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xaf, 0x00, 0xdb));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_STRING, RGB(0xa3, 0x15, 0x15));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_OPERATOR, RGB(0x00, 0x00, 0x00));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x80, 0x80, 0x80));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENT, RGB(0x00, 0x80, 0x00));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENTLINE, RGB(0x00, 0x80, 0x00));
 
 			_scintilla->WndProc(Scintilla::Message::SetSelBack, true, RGB(0xAD, 0xD6, 0xFF));
 			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_DEFAULT, transparencyColor);
@@ -412,12 +447,12 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::OnPointerEntered(DUX::Input::PointerRoutedEventArgs const &e)
+	void MicaEditorControl::OnPointerEntered(PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = true;
 	}
 
-	void MicaEditorControl::OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e)
+	void MicaEditorControl::OnPointerExited(PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = false;
 		if (!e.GetCurrentPoint(nullptr).Properties().IsLeftButtonPressed())
