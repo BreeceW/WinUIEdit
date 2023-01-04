@@ -270,12 +270,14 @@ namespace Scintilla::Internal {
 	private:
 		uptr_t _wParam;
 		NotificationData _notificationData;
+		bool _notifyTsf;
 
 	public:
-		NotifyMessage::NotifyMessage(uptr_t wParam, NotificationData notificationData)
+		NotifyMessage::NotifyMessage(uptr_t wParam, NotificationData notificationData, bool notifyTsf)
 		{
 			_wParam = wParam;
 			_notificationData = notificationData;
+			_notifyTsf = notifyTsf;
 		}
 
 		uint8_t NotifyMessage::Type() const override
@@ -286,6 +288,11 @@ namespace Scintilla::Internal {
 		uptr_t NotifyMessage::WParam() const
 		{
 			return _wParam;
+		}
+
+		bool NotifyMessage::NotifyTsf() const
+		{
+			return _notifyTsf;
 		}
 
 		NotificationData const &NotifyMessage::NotificationData() const
@@ -531,36 +538,59 @@ namespace Scintilla::Internal {
 				lastHighSurrogateChar = 0;
 				wclen = 2;
 			}
+
+			TS_TEXTCHANGE chg;
+			chg.acpStart = DocPositionToAcp(SelectionStart().Position());
+			chg.acpOldEnd = DocPositionToAcp(SelectionEnd().Position());
+			_shouldNotifyTsf = false;
 			AddWString(std::wstring_view(wcs, wclen), CharacterSource::DirectInput);
+			chg.acpNewEnd = chg.acpOldEnd + wclen;
+			_shouldNotifyTsf = true;
+			if (_tsfCore)
+			{
+				_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpNewEnd - chg.acpStart, winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpNewEnd, chg.acpNewEnd });
+				_editContext.NotifySelectionChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
+		}
+			else if (_tfTextStoreACPSink)
+			{
+				_tfTextStoreACPSink->OnTextChange(0, &chg);
+				_tfTextStoreACPSink->OnSelectionChange();
+	}
 		}
 	}
 
 	// Todo: wParam might not make sense here
-	void ScintillaWinUI::ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData)
+	void ScintillaWinUI::ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf)
 	{
 		SendMessage(WM_NOTIFY, GetCtrlID(), reinterpret_cast<LPARAM>(&notificationData));
-		if (static_cast<int>(notificationData.nmhdr.code) == SCN_MODIFIED)
+
+		if (!notifyTsf)
+		{
+			return;
+		}
+
+		if (notificationData.nmhdr.code == Scintilla::Notification::Modified)
 		{
 			bool fNotify(false);
 			static TS_TEXTCHANGE chg;
 			// Lots of notifications get routed here.  We're only interested in insert/delete
 
 			// insert operations have before/after notifications, so we save up info
-			if (static_cast<int>(notificationData.modificationType) & SC_MOD_BEFOREINSERT)
+			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::BeforeInsert))
 			{
 				chg.acpStart = notificationData.position;
 			}
-			if (static_cast<int>(notificationData.modificationType) & SC_MOD_INSERTTEXT)
+			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::InsertText))
 			{
 				fNotify = true;
 				chg.acpOldEnd = notificationData.position;
 				chg.acpNewEnd = notificationData.position + notificationData.length;
 			}
-			if (static_cast<int>(notificationData.modificationType) & SC_MOD_BEFOREDELETE)
+			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::BeforeDelete))
 			{
 				chg.acpStart = notificationData.position;
 			}
-			if (static_cast<int>(notificationData.modificationType) & SC_MOD_DELETETEXT)
+			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::DeleteText))
 			{
 				fNotify = true;
 				chg.acpOldEnd = notificationData.position + notificationData.length;
@@ -574,11 +604,12 @@ namespace Scintilla::Internal {
 				}
 				else if (_tfTextStoreACPSink)
 				{
+					DebugOut(L"OnTextChange\n");
 					_tfTextStoreACPSink->OnTextChange(0, &chg);
 				}
 			}
 		}
-		else if (static_cast<int>(notificationData.nmhdr.code) == SCN_UPDATEUI)
+		else if (FlagSet(notificationData.nmhdr.code, Scintilla::Notification::UpdateUI))
 		{
 			if (_tsfCore)
 			{
@@ -593,25 +624,22 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::ProcessMessage(std::unique_ptr<IMessage> const &message)
 	{
-		// Todo: None of this seems to actually work
-		// Todo: There is no way the casts are correct here
-
 		switch (message->Type())
 		{
 		case CharacterRecievedMessageId:
 		{
-			auto &characterRecievedMessage{ reinterpret_cast<CharacterRecievedMessage const &>(message) };
-			ProcessCharacterRecievedMessage(characterRecievedMessage.Character());
+			const auto characterRecievedMessage{ static_cast<CharacterRecievedMessage *>(message.get()) };
+			ProcessCharacterRecievedMessage(characterRecievedMessage->Character());
 		}
 		break;
 
 		case KeyMessageId:
 		{
-			auto &keyMessage{ reinterpret_cast<KeyMessage const &>(message) };
-			switch (keyMessage.KeyEvent())
+			const auto keyMessage{ static_cast<KeyMessage *>(message.get())};
+			switch (keyMessage->KeyEvent())
 			{
 			case KeyMessage::KeyEventType::KeyDown:
-				ProcessKeyDownMessage(keyMessage.Key(), keyMessage.Modifiers());
+				ProcessKeyDownMessage(keyMessage->Key(), keyMessage->Modifiers());
 				break;
 			}
 		}
@@ -619,8 +647,8 @@ namespace Scintilla::Internal {
 
 		case NotifyMessageId:
 		{
-			auto notifyMessage{ reinterpret_cast<NotifyMessage const &>(message) };
-			ProcessNotifyMessage(notifyMessage.WParam(), notifyMessage.NotificationData());
+			const auto notifyMessage{ static_cast<NotifyMessage *>(message.get()) };
+			ProcessNotifyMessage(notifyMessage->WParam(), notifyMessage->NotificationData(), notifyMessage->NotifyTsf());
 		}
 		break;
 		}
@@ -727,7 +755,7 @@ namespace Scintilla::Internal {
 		auto buff{ new wchar_t[size] };
 		GetText(size, reinterpret_cast<sptr_t>(buff));
 		args.Request().Text(buff);
-		delete buff;
+		delete[] buff;
 		// Todo: incomplete
 	}
 
@@ -782,6 +810,14 @@ namespace Scintilla::Internal {
 			}
 		}
 		pdoc->InsertString(startPos, szText, cchText);
+
+		EnsureCaretVisible();
+		ShowCaretAtCurrentPosition(); // Todo: Reevaluate how text at the current position is inserted (this is copied out of InsertCharacter)
+		if (cchText == 1)
+		{
+			NotifyChar(szText[0], Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
+		}
+
 		delete[] szText;
 		/*if (pChange)
 		{
@@ -1114,8 +1150,8 @@ namespace Scintilla::Internal {
 			__super::SetSelection(AcpToDocPosition(pSelection->acpStart), AcpToDocPosition(pSelection->acpEnd));
 			break;
 		case TsActiveSelEnd::TS_AE_NONE:
-			DropCaret();
-			[[fallthrough]];
+			//DropCaret();
+			//[[fallthrough]];
 		case TsActiveSelEnd::TS_AE_END:
 			__super::SetSelection(AcpToDocPosition(pSelection->acpEnd), AcpToDocPosition(pSelection->acpStart));
 			break;
@@ -1312,6 +1348,14 @@ namespace Scintilla::Internal {
 			}
 		}
 		pdoc->InsertString(startPos, szText, cchText);
+
+		EnsureCaretVisible();
+		ShowCaretAtCurrentPosition(); // Todo: Reevaluate how text at the current position is inserted (this is copied out of InsertCharacter)
+		if (cchText == 1)
+		{
+			NotifyChar(szText[0], Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
+		}
+
 		delete[] szText;
 		if (pChange)
 		{
@@ -1758,11 +1802,11 @@ namespace Scintilla::Internal {
 	{
 		if (_lock != NONE)
 		{
-			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn));
+			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, false));
 		}
 		else
 		{
-			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn);
+			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn, _shouldNotifyTsf);
 		}
 		// Todo: Probably do not need GetCtrlID
 	}
