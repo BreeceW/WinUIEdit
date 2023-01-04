@@ -65,7 +65,7 @@ namespace Scintilla::Internal {
 		void ProcessRightPointerPressedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
 		void ProcessPointerMovedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
 		void ProcessPointerReleasedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
-		void ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData);
+		void ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf);
 		void ProcessCharacterRecievedMessage(char16_t character);
 
 		Scintilla::KeyMod WindowsModifiers(winrt::Windows::System::VirtualKeyModifiers modifiers);
@@ -77,6 +77,7 @@ namespace Scintilla::Internal {
 		bool ShouldQueueMessage(unsigned int iMessage);
 		std::queue<std::unique_ptr<IMessage>> msgq{}; //31
 		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
+		bool _shouldNotifyTsf{ true };
 
 		// Deleted so ScintillaWinUI objects can not be copied.
 		ScintillaWinUI(const ScintillaWinUI &) = delete;
