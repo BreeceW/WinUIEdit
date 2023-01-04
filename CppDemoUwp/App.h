@@ -8,13 +8,13 @@ namespace winrt::CppDemoUwp::implementation
         App();
 
         void OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs const&);
-        void OnSuspending(IInspectable const&, Windows::ApplicationModel::SuspendingEventArgs const&);
         void OnNavigationFailed(IInspectable const&, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs const&);
+        Windows::Foundation::IAsyncAction NewWindowAsync();
 
     private:
         Windows::UI::ViewManagement::UISettings::ColorValuesChanged_revoker _colorValuesChangedRevoker{};
         void OnColorValuesChanged(Windows::UI::ViewManagement::UISettings const &uiSettings, Windows::Foundation::IInspectable const &args);
         Windows::UI::ViewManagement::UISettings _uiSettings{};
-        void UpdateTitleBar();
+        static void UpdateTitleBar(Windows::UI::Xaml::ApplicationTheme theme);
     };
 }

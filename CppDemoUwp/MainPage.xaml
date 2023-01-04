@@ -89,22 +89,34 @@
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="N" Modifiers="Control" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="W" Text="New window">
+                <MenuFlyoutItem
+                    AccessKey="W"
+                    Click="NewWindowMenuItem_Click"
+                    Text="New window">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="N" Modifiers="Control,Shift" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="O" Text="Open">
+                <MenuFlyoutItem
+                    AccessKey="O"
+                    Click="OpenMenuItem_Click"
+                    Text="Open">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="O" Modifiers="Control" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="S" Text="Save">
+                <MenuFlyoutItem
+                    AccessKey="S"
+                    Click="SaveMenuItem_Click"
+                    Text="Save">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="S" Modifiers="Control" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="A" Text="Save as">
+                <MenuFlyoutItem
+                    AccessKey="A"
+                    Click="SaveAsMenuItem_Click"
+                    Text="Save as">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="S" Modifiers="Control,Shift" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
@@ -296,6 +308,7 @@
             Height="1"
             Fill="{ThemeResource DividerLineBrush}" />
         <mica:MicaEditorControl
+            x:Name="Editor"
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
