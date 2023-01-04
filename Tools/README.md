@@ -1,7 +1,7 @@
 # Tools
 
 This directory contains a couple of tools to help keep this editor up-to-date with Scintilla.
-These tools only run on Windows and require the .NET 6 SDK to be installed.
+These tools only run on Windows and require the .NET 7 SDK to be installed.
 
 ## Update
 This tool updates the version of Scintilla and Lexilla to the version specified.
