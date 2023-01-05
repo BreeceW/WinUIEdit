@@ -61,6 +61,12 @@ def convertIFaceTypeToC(t):
 		return "Sci_TextToFind *"
 	elif t == "formatrange":
 		return "Sci_RangeToFormat *"
+	elif t == "textrangefull":
+		return "Sci_TextRangeFull *"
+	elif t == "findtextfull":
+		return "Sci_TextToFindFull *"
+	elif t == "formatrangefull":
+		return "Sci_RangeToFormatFull *"
 	elif Face.IsEnumeration(t):
 		return "int "
 	return t + " "
@@ -155,7 +161,7 @@ def checkDocumentation():
 		#~ if api not in headers:
 			#~ print("No header for ", api)
 
-	# Examine  definitions
+	# Examine definitions
 	#<b id="SCI_SETLAYOUTCACHE">SCI_SETLAYOUTCACHE(int cacheMode)</b>
 	defPattern = re.compile(r'<b id="([A-Z_0-9]+)">([A-Z][A-Za-z0-9_() *#\"=<>/&;,\n-]+?)</b>')
 	for api, sig in re.findall(defPattern, docs):
@@ -195,7 +201,7 @@ def checkDocumentation():
 	with open(outName, "wt") as docFile:
 		docFile.write(docs)
 
-	# Examine  constant definitions
+	# Examine constant definitions
 	#<code>SC_CARETSTICKY_WHITESPACE</code> (2)
 	constPattern = re.compile(r'<code>(\w+)</code> *\((\w+)\)')
 	for name, val in re.findall(constPattern, docs):
@@ -205,6 +211,13 @@ def checkDocumentation():
 				print(val, "<-", name, ";;", valOfName)
 		except KeyError:
 			print("***", val, "<-", name)
+
+	# Examine 'seealso' definitions
+	#<a class="seealso" href="#SCI_CREATEDOCUMENT">SCI_CREATEDOCUMENT</a>
+	seealsoPattern = re.compile(r'"seealso" href="#(\w+)">(\w+)[<(]')
+	for ref, text in re.findall(seealsoPattern, docs):
+		if ref != text:
+			print(f"seealso {text} -> {ref}")
 
 	for name in sccToValue.keys():
 		if name not in ["SCI_OPTIONAL_START", "SCI_LEXER_START"] and name not in docs:

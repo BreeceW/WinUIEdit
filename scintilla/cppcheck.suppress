@@ -13,6 +13,10 @@ useStlAlgorithm
 // Written with variable for consistency
 knownArgument:scintilla/src/SparseVector.h
 
+// The cast converts from 'unsigned char ' to 'char' so isn't unused.
+// Redundant code: Found unused cast of expression 'leadByte'
+constStatement:scintilla/src/Document.cxx
+
 // Some non-explicit constructors are used for conversions or are private to lexers
 noExplicitConstructor
 
@@ -20,13 +24,7 @@ noExplicitConstructor
 shiftTooManyBitsSigned:scintilla/src/MarginView.cxx
 
 // DLL entry points are unused inside Scintilla
-unusedFunction:scintilla\win32\ScintillaDLL.cxx
-
-// DLLMain is defined exactly as specified by Win32
-constParameter:scintilla\win32\ScintillaDLL.cxx
-
-// The styler parameter is not const as LexAccessor::operator[] is not const
-constParameter:scintilla/lexlib/StyleContext.cxx
+unusedFunction:scintilla/win32/ScintillaDLL.cxx
 
 // ScintillaDocument is providing an API and there are no consumers of the API inside Scintilla
 unusedFunction:scintilla/qt/ScintillaEdit/ScintillaDocument.cpp
@@ -34,6 +32,19 @@ unusedFunction:scintilla/qt/ScintillaEdit/ScintillaDocument.cpp
 // Doesn't understand changing dropWentOutside in Editor
 knownConditionTrueFalse:scintilla/qt/ScintillaEditBase/ScintillaQt.cpp
 knownConditionTrueFalse:scintilla/win32/ScintillaWin.cxx
+
+// G_DEFINE_TYPE is too complex to pass to cppcheck
+unknownMacro:scintilla/gtk/PlatGTK.cxx
+
+// maskSmooth set depending on preprocessor allowing Wayland definition
+badBitmaskCheck:scintilla/gtk/ScintillaGTK.cxx
+
+// Difficult to test accessibility so don't change
+constVariable:scintilla/gtk/ScintillaGTKAccessible.cxx
+
+// Have no way of testing ScintillaEdit so don't fix even simple warnings
+cstyleCast:scintilla/qt/ScintillaEdit/ScintillaEdit.cpp
+shadowFunction:scintilla/qt/ScintillaEdit/ScintillaEdit.cpp
 
 // moc_ files show #error as they are not built with standard context
 preprocessorErrorDirective:scintilla/qt/*.cpp

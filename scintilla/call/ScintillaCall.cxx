@@ -16,6 +16,7 @@
 #include "ScintillaTypes.h"
 #include "ScintillaMessages.h"
 #include "ScintillaCall.h"
+#include "ScintillaStructures.h"
 
 namespace Scintilla {
 
@@ -51,7 +52,7 @@ intptr_t ScintillaCall::CallString(Message msg, uintptr_t wParam, const char *s)
 }
 
 std::string ScintillaCall::CallReturnString(Message msg, uintptr_t wParam) {
-	size_t len = CallPointer(msg, wParam, nullptr);
+	const size_t len = CallPointer(msg, wParam, nullptr);
 	if (len) {
 		std::string value(len, '\0');
 		CallPointer(msg, wParam, value.data());
@@ -110,12 +111,27 @@ std::string ScintillaCall::StringOfSpan(Span span) {
 	}
 }
 
+std::string ScintillaCall::StringOfRange(Span span) {
+	if (span.Length() == 0) {
+		return std::string();
+	} else {
+		std::string text(span.Length(), '\0');
+		TextRangeFull tr{ {span.start, span.end}, text.data() };
+		GetTextRangeFull(&tr);
+		return text;
+	}
+}
+
 Position ScintillaCall::ReplaceTarget(std::string_view text) {
 	return ScintillaCall::CallString(Message::ReplaceTarget, text.length(), text.data());
 }
 
 Position ScintillaCall::ReplaceTargetRE(std::string_view text) {
 	return CallString(Message::ReplaceTargetRE, text.length(), text.data());
+}
+
+Position ScintillaCall::ReplaceTargetMinimal(std::string_view text) {
+	return CallString(Message::ReplaceTargetMinimal, text.length(), text.data());
 }
 
 Position ScintillaCall::SearchInTarget(std::string_view text) {
@@ -213,6 +229,10 @@ void ScintillaCall::SetSavePoint() {
 
 Position ScintillaCall::GetStyledText(void *tr) {
 	return CallPointer(Message::GetStyledText, 0, tr);
+}
+
+Position ScintillaCall::GetStyledTextFull(void *tr) {
+	return CallPointer(Message::GetStyledTextFull, 0, tr);
 }
 
 bool ScintillaCall::CanRedo() {
@@ -633,6 +653,18 @@ void ScintillaCall::StyleSetCheckMonospaced(int style, bool checkMonospaced) {
 
 bool ScintillaCall::StyleGetCheckMonospaced(int style) {
 	return Call(Message::StyleGetCheckMonospaced, style);
+}
+
+void ScintillaCall::StyleSetInvisibleRepresentation(int style, const char *representation) {
+	CallString(Message::StyleSetInvisibleRepresentation, style, representation);
+}
+
+int ScintillaCall::StyleGetInvisibleRepresentation(int style, char *representation) {
+	return static_cast<int>(CallPointer(Message::StyleGetInvisibleRepresentation, style, representation));
+}
+
+std::string ScintillaCall::StyleGetInvisibleRepresentation(int style) {
+	return CallReturnString(Message::StyleGetInvisibleRepresentation, style);
 }
 
 void ScintillaCall::SetElementColour(Scintilla::Element element, ColourAlpha colourElement) {
@@ -1127,8 +1159,24 @@ Position ScintillaCall::FindText(Scintilla::FindOption searchFlags, void *ft) {
 	return CallPointer(Message::FindText, static_cast<uintptr_t>(searchFlags), ft);
 }
 
+Position ScintillaCall::FindTextFull(Scintilla::FindOption searchFlags, void *ft) {
+	return CallPointer(Message::FindTextFull, static_cast<uintptr_t>(searchFlags), ft);
+}
+
 Position ScintillaCall::FormatRange(bool draw, void *fr) {
 	return CallPointer(Message::FormatRange, draw, fr);
+}
+
+Position ScintillaCall::FormatRangeFull(bool draw, void *fr) {
+	return CallPointer(Message::FormatRangeFull, draw, fr);
+}
+
+void ScintillaCall::SetChangeHistory(Scintilla::ChangeHistoryOption changeHistory) {
+	Call(Message::SetChangeHistory, static_cast<uintptr_t>(changeHistory));
+}
+
+ChangeHistoryOption ScintillaCall::ChangeHistory() {
+	return static_cast<Scintilla::ChangeHistoryOption>(Call(Message::GetChangeHistory));
 }
 
 Line ScintillaCall::FirstVisibleLine() {
@@ -1187,8 +1235,16 @@ Position ScintillaCall::GetTextRange(void *tr) {
 	return CallPointer(Message::GetTextRange, 0, tr);
 }
 
+Position ScintillaCall::GetTextRangeFull(void *tr) {
+	return CallPointer(Message::GetTextRangeFull, 0, tr);
+}
+
 void ScintillaCall::HideSelection(bool hide) {
 	Call(Message::HideSelection, hide);
+}
+
+bool ScintillaCall::SelectionHidden() {
+	return Call(Message::GetSelectionHidden);
 }
 
 int ScintillaCall::PointXFromPosition(Position pos) {
@@ -1365,6 +1421,10 @@ Position ScintillaCall::ReplaceTarget(Position length, const char *text) {
 
 Position ScintillaCall::ReplaceTargetRE(Position length, const char *text) {
 	return CallString(Message::ReplaceTargetRE, length, text);
+}
+
+Position ScintillaCall::ReplaceTargetMinimal(Position length, const char *text) {
+	return CallString(Message::ReplaceTargetMinimal, length, text);
 }
 
 Position ScintillaCall::SearchInTarget(Position length, const char *text) {

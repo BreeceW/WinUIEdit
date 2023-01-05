@@ -12,6 +12,7 @@
 
 #include "PlatQt.h"
 #include "Scintilla.h"
+#include "XPM.h"
 #include "UniConversion.h"
 #include "DBCS.h"
 
@@ -790,6 +791,9 @@ QRect ScreenRectangleForPoint(QPoint posGlobal)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 	const QScreen *screen = QGuiApplication::screenAt(posGlobal);
+	if (!screen) {
+		screen = QGuiApplication::primaryScreen();
+	}
 	return screen->availableGeometry();
 #else
 	const QDesktopWidget *desktop = QApplication::desktop();
@@ -840,6 +844,8 @@ void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo)
 		ox = rectDesk.right() - sizex;
 	if (oy + sizey > rectDesk.bottom())
 		oy = rectDesk.bottom() - sizey;
+	if (oy < rectDesk.top())
+		oy = rectDesk.top();
 
 	Q_ASSERT(wid);
 	window(wid)->move(ox, oy);
@@ -1141,7 +1147,9 @@ void ListBoxImpl::RegisterQPixmapImage(int type, const QPixmap& pm)
 
 void ListBoxImpl::RegisterImage(int type, const char *xpmData)
 {
-	RegisterQPixmapImage(type, QPixmap(reinterpret_cast<const char * const *>(xpmData)));
+	XPM xpmImage(xpmData);
+	RGBAImage rgbaImage(xpmImage);
+	RegisterRGBAImage(type, rgbaImage.GetWidth(), rgbaImage.GetHeight(), rgbaImage.Pixels());
 }
 
 void ListBoxImpl::RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage)

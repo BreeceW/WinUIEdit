@@ -567,7 +567,6 @@ class CaseFolderDBCS : public CaseFolderTable {
 	CFStringEncoding encoding;
 public:
 	explicit CaseFolderDBCS(CFStringEncoding encoding_) : encoding(encoding_) {
-		StandardASCII();
 	}
 	size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) override {
 		if ((lenMixed == 1) && (sizeFolded > 0)) {
@@ -606,7 +605,6 @@ std::unique_ptr<CaseFolder> ScintillaCocoa::CaseFolderForEncoding() {
 					    vs.styles[StyleDefault].characterSet);
 		if (pdoc->dbcsCodePage == 0) {
 			std::unique_ptr<CaseFolderTable> pcf = std::make_unique<CaseFolderTable>();
-			pcf->StandardASCII();
 			// Only for single byte encodings
 			for (int i=0x80; i<0x100; i++) {
 				char sCharacter[2] = "A";
@@ -1178,7 +1176,7 @@ void ScintillaCocoa::CreateCallTipWindow(PRectangle rc) {
 								styleMask: NSWindowStyleMaskBorderless
 								  backing: NSBackingStoreBuffered
 								    defer: NO];
-		[callTip setLevel: NSFloatingWindowLevel];
+		[callTip setLevel: NSModalPanelWindowLevel+1];
 		[callTip setHasShadow: YES];
 		NSRect ctContent = NSMakeRect(0, 0, rc.Width(), rc.Height());
 		CallTipView *caption = [[CallTipView alloc] initWithFrame: ctContent];
@@ -1459,8 +1457,8 @@ void ScintillaCocoa::StartDrag() {
 	si.SetMode(CurrentSurfaceMode());
 	std::unique_ptr<SurfaceImpl> sw = si.AllocatePixMapImplementation(static_cast<int>(client.Width()), static_cast<int>(client.Height()));
 
-	const bool lastHideSelection = view.hideSelection;
-	view.hideSelection = true;
+	const bool lastSelectionVisible = vs.selection.visible;
+	vs.selection.visible = false;
 	PRectangle imageRect = rcSel;
 	paintState = PaintState::painting;
 	paintingAllText = true;
@@ -1468,7 +1466,7 @@ void ScintillaCocoa::StartDrag() {
 	CGContextTranslateCTM(gcsw, -client.left, -client.top);
 	Paint(sw.get(), client);
 	paintState = PaintState::notPainting;
-	view.hideSelection = lastHideSelection;
+	vs.selection.visible = lastSelectionVisible;
 
 	std::unique_ptr<SurfaceImpl> pixmap = si.AllocatePixMapImplementation(static_cast<int>(imageRect.Width()),
 								  static_cast<int>(imageRect.Height()));

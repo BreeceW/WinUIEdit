@@ -53,8 +53,8 @@ ScintillaQt::~ScintillaQt()
 
 void ScintillaQt::execCommand(QAction *action)
 {
-	int command = action->data().toInt();
-	Command(command);
+	const int commandNum = action->data().toInt();
+	Command(commandNum);
 }
 
 #if defined(Q_OS_WIN)
@@ -557,7 +557,6 @@ class CaseFolderDBCS : public CaseFolderTable {
 	QTextCodec *codec;
 public:
 	explicit CaseFolderDBCS(QTextCodec *codec_) : codec(codec_) {
-		StandardASCII();
 	}
 	size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) override {
 		if ((lenMixed == 1) && (sizeFolded > 0)) {
@@ -590,7 +589,6 @@ std::unique_ptr<CaseFolder> ScintillaQt::CaseFolderForEncoding()
 		if (charSetBuffer) {
 			if (pdoc->dbcsCodePage == 0) {
 				std::unique_ptr<CaseFolderTable> pcf = std::make_unique<CaseFolderTable>();
-				pcf->StandardASCII();
 				QTextCodec *codec = QTextCodec::codecForName(charSetBuffer);
 				// Only for single byte encodings
 				for (int i=0x80; i<0x100; i++) {
@@ -756,6 +754,13 @@ sptr_t ScintillaQt::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam)
 
 		case Message::GetDirectPointer:
 			return reinterpret_cast<sptr_t>(this);
+
+		case Message::SetRectangularSelectionModifier:
+			rectangularSelectionModifier = static_cast<int>(wParam);
+			break;
+
+		case Message::GetRectangularSelectionModifier:
+			return rectangularSelectionModifier;
 
 		default:
 			return ScintillaBase::WndProc(iMessage, wParam, lParam);

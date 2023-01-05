@@ -578,9 +578,201 @@
       </tr><tr>
 	<td>Red_M</td>
 	<td>cdbdev</td>
+	<td>Andrey Smolyakov</td>
+	<td>Knut Leimbert</td>
+      </tr><tr>
+	<td>German Aizek</td>
     </tr>
     </table>
     <h2>Releases</h2>
+    <h3>
+       <a href="https://www.scintilla.org/lexilla521.zip">Release 5.2.1</a>
+    </h3>
+    <ul>
+	<li>
+	Released 6 December 2022.
+	</li>
+	<li>
+	Update to Unicode 14.
+	<a href="https://sourceforge.net/p/scintilla/feature-requests/1461/">Feature #1461</a>.
+	</li>
+	<li>
+	Change default compilation optimization option to favour speed over space.
+	-O2 for MSVC and -O3 for gcc and clang.
+	</li>
+	<li>
+	Batch: Fix comments starting inside strings.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/115">Issue #115</a>.
+	</li>
+	<li>
+	F#: Lex signed numeric literals more accurately.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/110">Issue #110</a>,
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/111">Issue #111</a>.
+	</li>
+	<li>
+	F#: Add specifiers for 64-bit integer and floating point literals.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/112">Issue #112</a>.
+	</li>
+	<li>
+	Markdown: Stop styling numbers at line start in PRECHAR style.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/117">Issue #117</a>.
+	</li>
+	<li>
+	PowerShell: Recognise numeric literals more accurately.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/118">Issue #118</a>.
+	</li>
+    </ul>
+    <h3>
+       <a href="https://www.scintilla.org/lexilla520.zip">Release 5.2.0</a>
+    </h3>
+    <ul>
+	<li>
+	Released 12 October 2022.
+	</li>
+	<li>
+	PowerShell: End comment before \r carriage return so \r and \n in same
+	SCE_POWERSHELL_DEFAULT style.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/99">Pull request #99</a>.
+	</li>
+	<li>
+	PowerShell: Fix character truncation bug that lead to 'ġ' styled as an operator since its low 8 bits
+	are equal to '!'.
+	</li>
+	<li>
+	R: Support hexadecimal, float exponent and number suffix.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/101">Issue #101</a>.
+	</li>
+	<li>
+	R: Highlight backticks.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/102">Pull request #102</a>.
+	</li>
+	<li>
+	R: Highlight raw strings.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/100">Issue #100</a>.
+	</li>
+	<li>
+	R: Optionally highlight escape sequences in strings.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/100">Issue #100</a>.
+	</li>
+	<li>
+	Fix early truncation from LexAccessor::GetRange and LexAccessor::GetRangeLowered.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/17">Issue #17</a>.
+	</li>
+    </ul>
+    <h3>
+       <a href="https://www.scintilla.org/lexilla519.zip">Release 5.1.9</a>
+    </h3>
+    <ul>
+	<li>
+	Released 27 August 2022.
+	</li>
+	<li>
+	Julia: Parse unicode forall and exists as identifiers #42314.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/98">Pull request #98</a>.
+	</li>
+	<li>
+	Julia: Parse apostrophe as char and not adjoint after exclamation.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/97">Issue #97</a>,
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/98">Pull request #98</a>.
+	</li>
+	<li>
+	Properties: Don't set header flag for empty section.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/96">Issue #96</a>.
+	</li>
+    </ul>
+    <h3>
+       <a href="https://www.scintilla.org/lexilla518.zip">Release 5.1.8</a>
+    </h3>
+    <ul>
+	<li>
+	Released 10 July 2022.
+	</li>
+	<li>
+	F#: Recognize nested comments in F#.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/93">Issue #93</a>.
+	</li>
+	<li>
+	MS SQL: Recognize nested comments in Transact-SQL.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/87">Issue #87</a>.
+	</li>
+	<li>
+	MS SQL: Preference data types more consistently to not depend on how lexing is broken
+	up into segments. This is needed because there are keywords that are both data type
+	names and function names such as 'CHAR'.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/90">Issue #90</a>.
+	</li>
+	<li>
+	PowerShell: Fix single quoted strings to not treat backtick as escape.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/92">Pull request #92</a>.
+	</li>
+	<li>
+	Visual Prolog: Treat \r\n line ends the same as \n. This makes testing easier.
+	Add test case.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/83">Issue #83</a>.
+	</li>
+	<li>
+	Visual Prolog: Allow disabling verbatim strings.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/89">Pull request #89</a>.
+	</li>
+	<li>
+	Visual Prolog: Support backquoted strings.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/89">Pull request #89</a>.
+	</li>
+    </ul>
+    <h3>
+       <a href="https://www.scintilla.org/lexilla517.zip">Release 5.1.7</a>
+    </h3>
+    <ul>
+	<li>
+	Released 22 May 2022.
+	</li>
+	<li>
+	Add LexAccessor::StyleIndexAt to retrieve style values as unsigned to handle styles > 127 better.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/61">Issue #61</a>.
+	</li>
+	<li>
+	Associate more than one file extension with a setting for testing.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/81">Issue #81</a>.
+	</li>
+	<li>
+	CMake: Fix folding of "ElseIf".
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/77">Issue #77</a>,
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/78">Pull request #78</a>,
+	<a href="https://sourceforge.net/p/scintilla/bugs/2213/">Bug #2213</a>.
+	</li>
+	<li>
+	HTML: Fix folding of JavaScript doc comments.
+	<a href="https://sourceforge.net/p/scintilla/bugs/2219/">Bug #2219</a>.
+	</li>
+	<li>
+	Matlab: add "classdef" and "spmd" to folding keywords.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/70">Pull request #70</a>.
+	</li>
+	<li>
+	Matlab: handle "arguments" contextual keyword.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/70">Pull request #70</a>.
+	</li>
+	<li>
+	Matlab: improve support of class definition syntax.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/75">Pull request #75</a>.
+	</li>
+	<li>
+	Raku: fix escape detection.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/76">Pull request #76</a>.
+	</li>
+	<li>
+	Ruby: fix character sequence "?\\#" to not include '#' in SCE_RB_NUMBER as only second '\' is quoted.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/69">Issue #69</a>.
+	</li>
+	<li>
+	Ruby: improve styling of ternary expressions as commonly used.
+	<a href="https://github.com/ScintillaOrg/lexilla/issues/69">Issue #69</a>.
+	</li>
+	<li>
+	VHDL: support folding for VHDL 08 else-generate and case-generate.
+	<a href="https://github.com/ScintillaOrg/lexilla/pull/80">Pull request #80</a>.
+	</li>
+    </ul>
     <h3>
        <a href="https://www.scintilla.org/lexilla516.zip">Release 5.1.6</a>
     </h3>
@@ -1649,7 +1841,7 @@
 	</li>
  	<li>
 	SciTE supports changing caret style via caret.style property.
-	<a href="https://sourceforge.net/p/scintilla/feature-requests/1264/">Feature #1624</a>.
+	<a href="https://sourceforge.net/p/scintilla/feature-requests/1264/">Feature #1264</a>.
 	</li>
  	<li>
 	Lexer added for .NET's Common Intermediate Language CIL.
@@ -2148,15 +2340,15 @@
 	</li>
 	<li>
 	Minor undefined behaviour fixed.
-	<a href="https://sourceforge.net/p/scintilla/bugs/1978">Bug #1978</a>.
+	<a href="https://sourceforge.net/p/scintilla/bugs/1978/">Bug #1978</a>.
 	</li>
 	<li>
 	On Cocoa, improve scrolling on macOS 10.12.
-	<a href="https://sourceforge.net/p/scintilla/bugs/1885">Bug #1885</a>.
+	<a href="https://sourceforge.net/p/scintilla/bugs/1885/">Bug #1885</a>.
 	</li>
 	<li>
 	On Cocoa, fix line selection by clicking in the margin when scrolled.
-	<a href="https://sourceforge.net/p/scintilla/bugs/1971">Bug #1971</a>.
+	<a href="https://sourceforge.net/p/scintilla/bugs/1971/">Bug #1971</a>.
 	</li>
     </ul>
     <h3>
@@ -2241,7 +2433,7 @@
 	</li>
 	<li>
 	On GTK+ fix drawing problems including incorrect scrollbar redrawing and flickering of text.
-	<a href="https://sourceforge.net/p/scintilla/bugs/1876">Bug #1876</a>.
+	<a href="https://sourceforge.net/p/scintilla/bugs/1876/">Bug #1876</a>.
 	</li>
 	<li>
 	On Linux, both for GTK+ and Qt, the default modifier key for rectangular selection is now Alt.
@@ -2252,7 +2444,7 @@
 	<li>
 	On Cocoa, fix doCommandBySelector but avoid double effect of 'delete'
 	key.
-	<a href="https://sourceforge.net/p/scintilla/bugs/1958">Bug #1958</a>.
+	<a href="https://sourceforge.net/p/scintilla/bugs/1958/">Bug #1958</a>.
 	</li>
 	<li>
 	On Qt, the updateUi signal includes the 'updated' flags.
@@ -5305,7 +5497,7 @@
 	</li>
 	<li>
 	Added ncurses platform definitions. Implementation is maintained separately as
-	<a href="https://foicica.com/scinterm/">Scinterm</a>.
+	<a href="https://orbitalquark.github.io/scinterm">Scinterm</a>.
 	</li>
     </ul>
     <h3>

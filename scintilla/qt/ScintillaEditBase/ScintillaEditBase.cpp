@@ -257,7 +257,7 @@ void ScintillaEditBase::keyPressEvent(QKeyEvent *event)
 
 	bool consumed = false;
 	bool added = sqt->KeyDownWithModifiers(static_cast<Keys>(key),
-					       ScintillaQt::ModifierFlags(shift, ctrl, alt),
+					       ModifierFlags(shift, ctrl, alt),
 					       &consumed) != 0;
 	if (!consumed)
 		consumed = added;
@@ -286,7 +286,6 @@ void ScintillaEditBase::keyPressEvent(QKeyEvent *event)
 	emit keyPressed(event);
 }
 
-#ifdef Q_WS_X11
 static int modifierTranslated(int sciModifier)
 {
 	switch (sciModifier) {
@@ -302,7 +301,6 @@ static int modifierTranslated(int sciModifier)
 			return 0;
 	}
 }
-#endif
 
 void ScintillaEditBase::mousePressEvent(QMouseEvent *event)
 {
@@ -323,15 +321,9 @@ void ScintillaEditBase::mousePressEvent(QMouseEvent *event)
 	if (event->button() == Qt::LeftButton) {
 		bool shift = QApplication::keyboardModifiers() & Qt::ShiftModifier;
 		bool ctrl  = QApplication::keyboardModifiers() & Qt::ControlModifier;
-#ifdef Q_WS_X11
-		// On X allow choice of rectangular modifier since most window
-		// managers grab alt + click for moving windows.
 		bool alt   = QApplication::keyboardModifiers() & modifierTranslated(sqt->rectangularSelectionModifier);
-#else
-		bool alt   = QApplication::keyboardModifiers() & Qt::AltModifier;
-#endif
 
-		sqt->ButtonDownWithModifiers(pos, time.elapsed(), ScintillaQt::ModifierFlags(shift, ctrl, alt));
+		sqt->ButtonDownWithModifiers(pos, time.elapsed(), ModifierFlags(shift, ctrl, alt));
 	}
 
 	if (event->button() == Qt::RightButton) {
@@ -365,15 +357,9 @@ void ScintillaEditBase::mouseMoveEvent(QMouseEvent *event)
 
 	bool shift = QApplication::keyboardModifiers() & Qt::ShiftModifier;
 	bool ctrl  = QApplication::keyboardModifiers() & Qt::ControlModifier;
-#ifdef Q_WS_X11
-	// On X allow choice of rectangular modifier since most window
-	// managers grab alt + click for moving windows.
 	bool alt   = QApplication::keyboardModifiers() & modifierTranslated(sqt->rectangularSelectionModifier);
-#else
-	bool alt   = QApplication::keyboardModifiers() & Qt::AltModifier;
-#endif
 
-	const KeyMod modifiers = ScintillaQt::ModifierFlags(shift, ctrl, alt);
+	const KeyMod modifiers = ModifierFlags(shift, ctrl, alt);
 
 	sqt->ButtonMoveWithModifiers(pos, time.elapsed(), modifiers);
 }
@@ -739,7 +725,7 @@ void ScintillaEditBase::notifyParent(NotificationData scn)
 				emit linesAdded(added ? 1 : -1);
 			}
 
-			const QByteArray bytes = QByteArray::fromRawData(scn.text, scn.length);
+			const QByteArray bytes = QByteArray::fromRawData(scn.text, scn.text ? scn.length : 0);
 			emit modified(scn.modificationType, scn.position, scn.length,
 			              scn.linesAdded, bytes, scn.line,
 			              scn.foldLevelNow, scn.foldLevelPrev);
@@ -826,5 +812,5 @@ KeyMod ScintillaEditBase::ModifiersOfKeyboard()
 	const bool ctrl  = QApplication::keyboardModifiers() & Qt::ControlModifier;
 	const bool alt   = QApplication::keyboardModifiers() & Qt::AltModifier;
 
-	return ScintillaQt::ModifierFlags(shift, ctrl, alt);
+	return ModifierFlags(shift, ctrl, alt);
 }

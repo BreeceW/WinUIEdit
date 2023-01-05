@@ -84,7 +84,7 @@ DEFINES += -DNO_CXX11_REGEX
 endif
 
 DEFINES += -D$(if $(DEBUG),DEBUG,NDEBUG)
-BASE_FLAGS += $(if $(DEBUG),-g,-Os)
+BASE_FLAGS += $(if $(DEBUG),-g,-O3)
 
 CXX_BASE_FLAGS =--std=c++17 $(BASE_FLAGS)
 CXX_ALL_FLAGS =$(DEFINES) $(INCLUDES) $(CXX_BASE_FLAGS) $(CONFIG_FLAGS)
@@ -128,6 +128,7 @@ SRC_OBJS = \
 	CaseConvert.o \
 	CaseFolder.o \
 	CellBuffer.o \
+	ChangeHistory.o \
 	CharacterCategoryMap.o \
 	CharacterType.o \
 	CharClassify.o \

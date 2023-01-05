@@ -141,9 +141,11 @@ bool KeyboardIsKeyDown(int key) noexcept {
 	return (::GetKeyState(key) & 0x80000000) != 0;
 }
 
+// Bit 24 is the extended keyboard flag and the numeric keypad is non-extended
+constexpr sptr_t extendedKeyboard = 1 << 24;
+
 constexpr bool KeyboardIsNumericKeypadFunction(uptr_t wParam, sptr_t lParam) {
-	// Bit 24 is the extended keyboard flag and the numeric keypad is non-extended
-	if ((lParam & (1 << 24)) != 0) {
+	if ((lParam & extendedKeyboard) != 0) {
 		// Not from the numeric keypad
 		return false;
 	}
@@ -274,6 +276,11 @@ public:
 	}
 };
 
+struct HorizontalScrollRange {
+	int pageWidth;
+	int documentWidth;
+};
+
 }
 
 namespace Scintilla::Internal {
@@ -291,7 +298,9 @@ class ScintillaWin :
 	SetCoalescableTimerSig SetCoalescableTimerFn;
 
 	unsigned int linesPerScroll;	///< Intellimouse support
-	int wheelDelta; ///< Wheel delta from roll
+	unsigned int charsPerScroll;	///< Intellimouse support
+	MouseWheelDelta verticalWheelDelta;
+	MouseWheelDelta horizontalWheelDelta;
 
 	UINT dpi = USER_DEFAULT_SCREEN_DPI;
 	ReverseArrowCursor reverseArrowCursor;
@@ -314,6 +323,8 @@ class ScintillaWin :
 	static HINSTANCE hInstance;
 	static ATOM scintillaClassAtom;
 	static ATOM callClassAtom;
+
+	int deviceScaleFactor = 1;
 
 #if defined(USE_D2D)
 	ID2D1RenderTarget *pRenderTarget;
@@ -402,6 +413,8 @@ class ScintillaWin :
 	void UpdateSystemCaret() override;
 	void SetVerticalScrollPos() override;
 	void SetHorizontalScrollPos() override;
+	void HorizontalScrollToClamped(int xPos);
+	HorizontalScrollRange GetHorizontalScrollRange() const;
 	bool ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) override;
 	void NotifyChange() override;
 	void NotifyFocus(bool focus) override;
@@ -502,7 +515,7 @@ ScintillaWin::ScintillaWin(HWND hwnd) {
 	SetCoalescableTimerFn = nullptr;
 
 	linesPerScroll = 0;
-	wheelDelta = 0;   // Wheel delta from roll
+	charsPerScroll = 0;
 
 	dpi = DpiForWindow(hwnd);
 
@@ -586,9 +599,14 @@ void ScintillaWin::Finalise() {
 
 bool ScintillaWin::UpdateRenderingParams(bool force) noexcept {
 	if (!renderingParams) {
-		renderingParams = std::make_shared<RenderingParams>();
+		try {
+			renderingParams = std::make_shared<RenderingParams>();
+		} catch (const std::bad_alloc &) {
+			return false;
+		}
 	}
-	HMONITOR monitor = ::MonitorFromWindow(MainHWND(), MONITOR_DEFAULTTONEAREST);
+	const HWND hRootWnd = ::GetAncestor(MainHWND(), GA_ROOT);
+	const HMONITOR monitor = Internal::MonitorFromWindowHandleScaling(hRootWnd);
 	if (!force && monitor == hCurrentMonitor && renderingParams->defaultRenderingParams) {
 		return false;
 	}
@@ -610,11 +628,23 @@ bool ScintillaWin::UpdateRenderingParams(bool force) noexcept {
 	}
 
 	hCurrentMonitor = monitor;
+	deviceScaleFactor = Internal::GetDeviceScaleFactorWhenGdiScalingActive(hRootWnd);
 	renderingParams->defaultRenderingParams.reset(monitorRenderingParams);
 	renderingParams->customRenderingParams.reset(customClearTypeRenderingParams);
 	return true;
 }
 
+namespace {
+
+D2D1_SIZE_U GetSizeUFromRect(const RECT &rc, const int scaleFactor) noexcept {
+	const long width = rc.right - rc.left;
+	const long height = rc.bottom - rc.top;
+	const UINT32 scaledWidth = width * scaleFactor;
+	const UINT32 scaledHeight = height * scaleFactor;
+	return D2D1::SizeU(scaledWidth, scaledHeight);
+}
+
+}
 
 void ScintillaWin::EnsureRenderTarget(HDC hdc) {
 	if (!renderTargetValid) {
@@ -626,19 +656,15 @@ void ScintillaWin::EnsureRenderTarget(HDC hdc) {
 		RECT rc;
 		::GetClientRect(hw, &rc);
 
-		const D2D1_SIZE_U size = D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top);
-
 		// Create a Direct2D render target.
 		D2D1_RENDER_TARGET_PROPERTIES drtp {};
 		drtp.type = D2D1_RENDER_TARGET_TYPE_DEFAULT;
-		drtp.pixelFormat.format = DXGI_FORMAT_UNKNOWN;
-		drtp.pixelFormat.alphaMode = D2D1_ALPHA_MODE_UNKNOWN;
-		drtp.dpiX = 96.0;
-		drtp.dpiY = 96.0;
 		drtp.usage = D2D1_RENDER_TARGET_USAGE_NONE;
 		drtp.minLevel = D2D1_FEATURE_LEVEL_DEFAULT;
 
 		if (technology == Technology::DirectWriteDC) {
+			drtp.dpiX = 96.f;
+			drtp.dpiY = 96.f;
 			// Explicit pixel format needed.
 			drtp.pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM,
 				D2D1_ALPHA_MODE_IGNORE);
@@ -653,9 +679,14 @@ void ScintillaWin::EnsureRenderTarget(HDC hdc) {
 			}
 
 		} else {
+			drtp.dpiX = 96.f * deviceScaleFactor;
+			drtp.dpiY = 96.f * deviceScaleFactor;
+			drtp.pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN,
+				D2D1_ALPHA_MODE_UNKNOWN);
+
 			D2D1_HWND_RENDER_TARGET_PROPERTIES dhrtp {};
 			dhrtp.hwnd = hw;
-			dhrtp.pixelSize = size;
+			dhrtp.pixelSize = ::GetSizeUFromRect(rc, deviceScaleFactor);
 			dhrtp.presentOptions = (technology == Technology::DirectWriteRetain) ?
 			D2D1_PRESENT_OPTIONS_RETAIN_CONTENTS : D2D1_PRESENT_OPTIONS_NONE;
 
@@ -1527,6 +1558,7 @@ sptr_t ScintillaWin::MouseMessage(unsigned int iMessage, uptr_t wParam, sptr_t l
 		return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
 
 	case WM_MOUSEWHEEL:
+	case WM_MOUSEHWHEEL:
 		if (!mouseWheelCaptures) {
 			// if the mouse wheel is not captured, test if the mouse
 			// pointer is over the editor window and if not, don't
@@ -1544,27 +1576,30 @@ sptr_t ScintillaWin::MouseMessage(unsigned int iMessage, uptr_t wParam, sptr_t l
 			break;
 		}
 
-		// Don't handle datazoom.
-		// (A good idea for datazoom would be to "fold" or "unfold" details.
-		// i.e. if datazoomed out only class structures are visible, when datazooming in the control
-		// structures appear, then eventually the individual statements...)
-		if (wParam & MK_SHIFT) {
-			return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
+		// Treat Shift+WM_MOUSEWHEEL as horizontal scrolling, not data-zoom.
+		if (iMessage == WM_MOUSEHWHEEL || (wParam & MK_SHIFT)) {
+			if (vs.wrap.state != Wrap::None || charsPerScroll == 0) {
+				return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
+			}
+
+			MouseWheelDelta &wheelDelta = (iMessage == WM_MOUSEHWHEEL) ? horizontalWheelDelta : verticalWheelDelta;
+			if (wheelDelta.Accumulate(wParam)) {
+				const int charsToScroll = charsPerScroll * wheelDelta.Actions();
+				const int widthToScroll = static_cast<int>(std::lround(charsToScroll * vs.aveCharWidth));
+				HorizontalScrollToClamped(xOffset + widthToScroll);
+			}
+			return 0;
 		}
-		// Either SCROLL or ZOOM. We handle the wheel steppings calculation
-		wheelDelta -= GET_WHEEL_DELTA_WPARAM(wParam);
-		if (std::abs(wheelDelta) >= WHEEL_DELTA && linesPerScroll > 0) {
+
+		// Either SCROLL vertically or ZOOM. We handle the wheel steppings calculation
+		if (linesPerScroll != 0 && verticalWheelDelta.Accumulate(wParam)) {
 			Sci::Line linesToScroll = linesPerScroll;
 			if (linesPerScroll == WHEEL_PAGESCROLL)
 				linesToScroll = LinesOnScreen() - 1;
 			if (linesToScroll == 0) {
 				linesToScroll = 1;
 			}
-			linesToScroll *= (wheelDelta / WHEEL_DELTA);
-			if (wheelDelta >= 0)
-				wheelDelta = wheelDelta % WHEEL_DELTA;
-			else
-				wheelDelta = -(-wheelDelta % WHEEL_DELTA);
+			linesToScroll *= verticalWheelDelta.Actions();
 
 			if (wParam & MK_CONTROL) {
 				// Zoom! We play with the font sizes in the styles.
@@ -1981,6 +2016,7 @@ sptr_t ScintillaWin::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
 		case WM_MOUSEMOVE:
 		case WM_MOUSELEAVE:
 		case WM_MOUSEWHEEL:
+		case WM_MOUSEHWHEEL:
 			return MouseMessage(msg, wParam, lParam);
 
 		case WM_SETCURSOR:
@@ -2251,7 +2287,7 @@ void ScintillaWin::SetTrackMouseLeaveEvent(bool on) noexcept {
 
 void ScintillaWin::UpdateBaseElements() {
 	struct ElementToIndex { Element element; int nIndex; };
-	ElementToIndex eti[] = {
+	const ElementToIndex eti[] = {
 		{ Element::List, COLOR_WINDOWTEXT },
 		{ Element::ListBack, COLOR_WINDOW },
 		{ Element::ListSelected, COLOR_HIGHLIGHTTEXT },
@@ -2353,6 +2389,20 @@ bool ScintillaWin::ChangeScrollRange(int nBar, int nMin, int nMax, UINT nPage) n
 	return false;
 }
 
+void ScintillaWin::HorizontalScrollToClamped(int xPos) {
+	const HorizontalScrollRange range = GetHorizontalScrollRange();
+	HorizontalScrollTo(std::clamp(xPos, 0, range.documentWidth - range.pageWidth + 1));
+}
+
+HorizontalScrollRange ScintillaWin::GetHorizontalScrollRange() const {
+	const PRectangle rcText = GetTextRectangle();
+	int pageWidth = static_cast<int>(rcText.Width());
+	const int horizEndPreferred = std::max({ scrollWidth, pageWidth - 1, 0 });
+	if (!horizontalScrollBarVisible || Wrapping())
+		pageWidth = horizEndPreferred + 1;
+	return { pageWidth, horizEndPreferred };
+}
+
 bool ScintillaWin::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
 	if (!IsVisible()) {
 		return false;
@@ -2365,15 +2415,10 @@ bool ScintillaWin::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
 	if (ChangeScrollRange(SB_VERT, 0, static_cast<int>(vertEndPreferred), static_cast<unsigned int>(nPage))) {
 		modified = true;
 	}
-
-	const PRectangle rcText = GetTextRectangle();
-	int pageWidth = static_cast<int>(rcText.Width());
-	const int horizEndPreferred = std::max({scrollWidth, pageWidth - 1, 0});
-	if (!horizontalScrollBarVisible || Wrapping())
-		pageWidth = horizEndPreferred + 1;
-	if (ChangeScrollRange(SB_HORZ, 0, horizEndPreferred, pageWidth)) {
+	const HorizontalScrollRange range = GetHorizontalScrollRange();
+	if (ChangeScrollRange(SB_HORZ, 0, range.documentWidth, range.pageWidth)) {
 		modified = true;
-		if (scrollWidth < pageWidth) {
+		if (scrollWidth < range.pageWidth) {
 			HorizontalScrollTo(0);
 		}
 	}
@@ -2431,7 +2476,6 @@ class CaseFolderDBCS : public CaseFolderTable {
 	UINT cp;
 public:
 	explicit CaseFolderDBCS(UINT cp_) : cp(cp_) {
-		StandardASCII();
 	}
 	size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) override {
 		if ((lenMixed == 1) && (sizeFolded > 0)) {
@@ -2491,7 +2535,6 @@ std::unique_ptr<CaseFolder> ScintillaWin::CaseFolderForEncoding() {
 	} else {
 		if (pdoc->dbcsCodePage == 0) {
 			std::unique_ptr<CaseFolderTable> pcf = std::make_unique<CaseFolderTable>();
-			pcf->StandardASCII();
 			// Only for single byte encodings
 			for (int i=0x80; i<0x100; i++) {
 				char sCharacter[2] = "A";
@@ -3115,6 +3158,10 @@ LRESULT ScintillaWin::ImeOnReconvert(LPARAM lParam) {
 void ScintillaWin::GetIntelliMouseParameters() noexcept {
 	// This retrieves the number of lines per scroll as configured in the Mouse Properties sheet in Control Panel
 	::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &linesPerScroll, 0);
+	if (!::SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &charsPerScroll, 0)) {
+		// no horizontal scrolling configuration on Windows XP
+		charsPerScroll = (linesPerScroll == WHEEL_PAGESCROLL) ? 3 : linesPerScroll;
+	}
 }
 
 void ScintillaWin::CopyToGlobal(GlobalMemory &gmUnicode, const SelectionText &selectedText) {
@@ -3218,9 +3265,6 @@ void ScintillaWin::HorizontalScrollMessage(WPARAM wParam) {
 		break;
 	case SB_PAGEDOWN:
 		xPos += pageWidth;
-		if (xPos > scrollWidth - rcText.Width()) {	// Hit the end exactly
-			xPos = scrollWidth - static_cast<int>(rcText.Width());
-		}
 		break;
 	case SB_TOP:
 		xPos = 0;
@@ -3240,7 +3284,7 @@ void ScintillaWin::HorizontalScrollMessage(WPARAM wParam) {
 		}
 		break;
 	}
-	HorizontalScrollTo(xPos);
+	HorizontalScrollToClamped(xPos);
 }
 
 /**
@@ -3565,10 +3609,12 @@ LRESULT PASCAL ScintillaWin::CTWndProc(
 					surfaceWindow->Init(ps.hdc, hWnd);
 				} else {
 #if defined(USE_D2D)
+					const int scaleFactor = sciThis->deviceScaleFactor;
+
 					// Create a Direct2D render target.
 					D2D1_HWND_RENDER_TARGET_PROPERTIES dhrtp {};
 					dhrtp.hwnd = hWnd;
-					dhrtp.pixelSize = D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top);
+					dhrtp.pixelSize = ::GetSizeUFromRect(rc, scaleFactor);
 					dhrtp.presentOptions = (sciThis->technology == Technology::DirectWriteRetain) ?
 						D2D1_PRESENT_OPTIONS_RETAIN_CONTENTS : D2D1_PRESENT_OPTIONS_NONE;
 
@@ -3576,8 +3622,8 @@ LRESULT PASCAL ScintillaWin::CTWndProc(
 					drtp.type = D2D1_RENDER_TARGET_TYPE_DEFAULT;
 					drtp.pixelFormat.format = DXGI_FORMAT_UNKNOWN;
 					drtp.pixelFormat.alphaMode = D2D1_ALPHA_MODE_UNKNOWN;
-					drtp.dpiX = 96.0;
-					drtp.dpiY = 96.0;
+					drtp.dpiX = 96.f * scaleFactor;
+					drtp.dpiY = 96.f * scaleFactor;
 					drtp.usage = D2D1_RENDER_TARGET_USAGE_NONE;
 					drtp.minLevel = D2D1_FEATURE_LEVEL_DEFAULT;
 

@@ -62,6 +62,15 @@ class TestSimple(unittest.TestCase):
 		self.assertEquals(self.ed.GetStyleAt(0), 0)
 		self.assertEquals(self.ed.StyledTextRange(0, 1), b"x\0")
 
+	def testStyledTextRangeFull(self):
+		self.assertEquals(self.ed.EndStyled, 0)
+		self.ed.AddStyledText(4, b"x\002y\377")
+		self.assertEquals(self.ed.StyledTextRangeFull(0, 1), b"x\002")
+		self.assertEquals(self.ed.StyledTextRangeFull(1, 2), b"y\377")
+		self.ed.ClearDocumentStyle()
+		self.assertEquals(self.ed.Length, 2)
+		self.assertEquals(self.ed.StyledTextRangeFull(0, 1), b"x\0")
+
 	def testStyling(self):
 		self.assertEquals(self.ed.EndStyled, 0)
 		self.ed.AddStyledText(4, b"x\002y\003")
@@ -164,6 +173,17 @@ class TestSimple(unittest.TestCase):
 		# Should now be "xxyy"
 		self.assertEquals(self.ed.Length, 4)
 		self.assertEquals(b"xxyy", self.ed.ByteRange(0,4))
+
+	def testTextRangeFull(self):
+		data = b"xy"
+		self.ed.InsertText(0, data)
+		self.assertEquals(self.ed.Length, 2)
+		self.assertEquals(data, self.ed.ByteRangeFull(0,2))
+
+		self.ed.InsertText(1, data)
+		# Should now be "xxyy"
+		self.assertEquals(self.ed.Length, 4)
+		self.assertEquals(b"xxyy", self.ed.ByteRangeFull(0,4))
 
 	def testInsertNul(self):
 		data = b"\0"
@@ -614,6 +634,45 @@ class TestSimple(unittest.TestCase):
 		self.assertEquals(self.ed.TargetStart, 4)
 		self.assertEquals(self.ed.TargetEnd, 5)
 
+	def testReplaceTargetMinimal(self):
+		# 1: No common characters
+		self.ed.SetContents(b"abcd")
+		self.ed.TargetStart = 1
+		self.ed.TargetEnd = 3
+		self.assertEquals(self.ed.TargetStart, 1)
+		self.assertEquals(self.ed.TargetEnd, 3)
+		rep = b"321"
+		self.ed.ReplaceTargetMinimal(len(rep), rep)
+		self.assertEquals(self.ed.Contents(), b"a321d")
+
+		# 2: New characters with common prefix and suffix
+		self.ed.TargetStart = 1
+		self.ed.TargetEnd = 4
+		rep = b"3<>1"
+		self.ed.ReplaceTargetMinimal(len(rep), rep)
+		self.assertEquals(self.ed.Contents(), b"a3<>1d")
+
+		# 3: Remove characters with common prefix and suffix
+		self.ed.TargetStart = 1
+		self.ed.TargetEnd = 5
+		rep = b"31"
+		self.ed.ReplaceTargetMinimal(len(rep), rep)
+		self.assertEquals(self.ed.Contents(), b"a31d")
+
+		# 4: Common prefix
+		self.ed.TargetStart = 1
+		self.ed.TargetEnd = 3
+		rep = b"3bc"
+		self.ed.ReplaceTargetMinimal(len(rep), rep)
+		self.assertEquals(self.ed.Contents(), b"a3bcd")
+
+		# 5: Common suffix
+		self.ed.TargetStart = 2
+		self.ed.TargetEnd = 5
+		rep = b"cd"
+		self.ed.ReplaceTargetMinimal(len(rep), rep)
+		self.assertEquals(self.ed.Contents(), b"a3cd")
+
 	def testTargetWhole(self):
 		self.ed.SetContents(b"abcd")
 		self.ed.TargetStart = 1
@@ -696,6 +755,32 @@ class TestSimple(unittest.TestCase):
 		self.assertEquals(self.ed.IsRangeWord(0, 5), 1)
 		self.assertEquals(self.ed.IsRangeWord(6, 7), 0)
 		self.assertEquals(self.ed.IsRangeWord(6, 8), 1)
+
+class TestChangeHistory(unittest.TestCase):
+
+	def setUp(self):
+		self.xite = Xite.xiteFrame
+		self.ed = self.xite.ed
+		self.ed.ClearAll()
+		self.ed.EmptyUndoBuffer()
+		self.data = b"xy"
+
+	def testChangeHistory(self):
+		self.assertEquals(self.ed.ChangeHistory, 0)
+		self.assertEquals(self.ed.UndoCollection, 1)
+		self.ed.UndoCollection = 0
+		self.assertEquals(self.ed.UndoCollection, 0)
+		self.ed.InsertText(0, self.data)
+		self.ed.UndoCollection = 1
+		self.ed.ChangeHistory = 1
+		self.assertEquals(self.ed.ChangeHistory, 1)
+		self.ed.InsertText(0, self.data)
+		self.ed.DeleteRange(0, 2)
+		self.ed.ChangeHistory = 0
+		self.assertEquals(self.ed.ChangeHistory, 0)
+		self.ed.ChangeHistory = 1
+		self.assertEquals(self.ed.ChangeHistory, 1)
+		self.ed.Undo()
 
 MODI = 1
 UNDO = 2
@@ -935,6 +1020,46 @@ class TestKeyCommands(unittest.TestCase):
 		self.assertEquals(self.selRange(), (0, 3))
 		self.ed.DocumentEndExtend()
 		self.assertEquals(self.selRange(), (10, 3))
+
+	def testParagraphMove(self):
+		example = b"a\n\nbig\n\n\n\nboat"
+		self.ed.AddText(len(example), example)
+		start1 = 0	# Before 'a'
+		start2 = 3	# Before 'big'
+		start3 = 10	# Before 'boat'
+
+		# Paragraph 2 to 1
+		self.ed.SetSel(start2, start2)
+		self.ed.ParaUp()
+		self.assertEquals(self.selRange(), (start1, start1))
+		self.ed.ParaDown()
+		self.assertEquals(self.selRange(), (start2, start2))
+		self.ed.SetSel(start2, start2)
+		self.ed.ParaUpExtend()
+		self.assertEquals(self.selRange(), (start1, start2))
+		self.ed.ParaDownExtend()
+		self.assertEquals(self.selRange(), (start2, start2))
+
+		# Inside paragraph 2 to start paragraph 2
+		mid2 = start2+1
+		self.ed.SetSel(mid2, mid2)
+		# Next line behaved differently before change for bug #2363
+		self.ed.ParaUp()
+		self.assertEquals(self.selRange(), (start2, start2))
+		self.ed.ParaDown()
+		self.assertEquals(self.selRange(), (start3, start3))
+		self.ed.SetSel(mid2, mid2)
+		self.ed.ParaUpExtend()
+		self.assertEquals(self.selRange(), (start2, mid2))
+		self.ed.ParaDownExtend()
+		self.assertEquals(self.selRange(), (start3, mid2))
+
+		# Paragraph 3 to 2
+		self.ed.SetSel(start3, start3)
+		self.ed.ParaUp()
+		self.assertEquals(self.selRange(), (start2, start2))
+		self.ed.ParaDown()
+		self.assertEquals(self.selRange(), (start3, start3))
 
 
 class TestMarkers(unittest.TestCase):
@@ -1185,6 +1310,12 @@ class TestSearch(unittest.TestCase):
 		pos = self.ed.FindBytes(0, self.ed.Length, b"zzz", 0)
 		self.assertEquals(pos, -1)
 		pos = self.ed.FindBytes(0, self.ed.Length, b"big", 0)
+		self.assertEquals(pos, 2)
+
+	def testFindFull(self):
+		pos = self.ed.FindBytesFull(0, self.ed.Length, b"zzz", 0)
+		self.assertEquals(pos, -1)
+		pos = self.ed.FindBytesFull(0, self.ed.Length, b"big", 0)
 		self.assertEquals(pos, 2)
 
 	def testFindEmpty(self):
@@ -1913,6 +2044,7 @@ class TestStyleAttributes(unittest.TestCase):
 		self.ed.EmptyUndoBuffer()
 		self.testColour = 0x171615
 		self.testFont = b"Georgia"
+		self.testRepresentation = "\N{BULLET}".encode("utf-8")
 
 	def tearDown(self):
 		self.ed.StyleResetDefault()
@@ -1927,6 +2059,13 @@ class TestStyleAttributes(unittest.TestCase):
 		self.assertEquals(self.ed.StyleGetSizeFractional(self.ed.STYLE_DEFAULT), 12*self.ed.SC_FONT_SIZE_MULTIPLIER)
 		self.ed.StyleSetSizeFractional(self.ed.STYLE_DEFAULT, 1234)
 		self.assertEquals(self.ed.StyleGetSizeFractional(self.ed.STYLE_DEFAULT), 1234)
+
+	def testInvisibleRepresentation(self):
+		self.assertEquals(self.ed.StyleGetInvisibleRepresentation(self.ed.STYLE_DEFAULT), b"")
+		self.ed.StyleSetInvisibleRepresentation(self.ed.STYLE_DEFAULT, self.testRepresentation)
+		self.assertEquals(self.ed.StyleGetInvisibleRepresentation(self.ed.STYLE_DEFAULT), self.testRepresentation)
+		self.ed.StyleSetInvisibleRepresentation(self.ed.STYLE_DEFAULT, b"\000")
+		self.assertEquals(self.ed.StyleGetInvisibleRepresentation(self.ed.STYLE_DEFAULT), b"")
 
 	def testBold(self):
 		self.ed.StyleSetBold(self.ed.STYLE_DEFAULT, 1)
@@ -2184,6 +2323,13 @@ class TestElements(unittest.TestCase):
 		self.ed.ResetElementColour(self.ed.SC_ELEMENT_HOT_SPOT_ACTIVE)
 		self.ed.ResetElementColour(self.ed.SC_ELEMENT_HOT_SPOT_ACTIVE_BACK)
 
+	def testHideSelection(self):
+		self.assertEquals(self.ed.SelectionHidden, False)
+		self.ed.HideSelection(True)
+		self.assertEquals(self.ed.SelectionHidden, True)
+		self.ed.HideSelection(False)	# Restore
+		self.assertEquals(self.ed.SelectionHidden, False)
+		
 class TestIndices(unittest.TestCase):
 	def setUp(self):
 		self.xite = Xite.xiteFrame

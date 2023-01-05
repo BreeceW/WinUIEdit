@@ -87,6 +87,7 @@ $(DIR_O)/CaseConvert.o: \
 	../src/UniConversion.h
 $(DIR_O)/CaseFolder.o: \
 	../src/CaseFolder.cxx \
+	../src/CharacterType.h \
 	../src/CaseFolder.h \
 	../src/CaseConvert.h
 $(DIR_O)/CellBuffer.o: \
@@ -96,8 +97,21 @@ $(DIR_O)/CellBuffer.o: \
 	../src/Position.h \
 	../src/SplitVector.h \
 	../src/Partitioning.h \
+	../src/RunStyles.h \
+	../src/SparseVector.h \
+	../src/ChangeHistory.h \
 	../src/CellBuffer.h \
 	../src/UniConversion.h
+$(DIR_O)/ChangeHistory.o: \
+	../src/ChangeHistory.cxx \
+	../include/ScintillaTypes.h \
+	../src/Debugging.h \
+	../src/Position.h \
+	../src/SplitVector.h \
+	../src/Partitioning.h \
+	../src/RunStyles.h \
+	../src/SparseVector.h \
+	../src/ChangeHistory.h
 $(DIR_O)/CharacterCategoryMap.o: \
 	../src/CharacterCategoryMap.cxx \
 	../src/CharacterCategoryMap.h
