@@ -1689,17 +1689,111 @@ namespace Scintilla::Internal {
 		GetTimerForReason(reason).Stop();
 	}
 
-	void ScintillaWinUI::SetVerticalScrollPos()
-	{
+	void ScintillaWinUI::ScrollText(Sci::Line /* linesToMove */) {
+		//Platform::DebugPrintf("ScintillaWin::ScrollText %d\n", linesToMove);
+		//::ScrollWindow(MainHWND(), 0,
+		//	vs.lineHeight * linesToMove, 0, 0);
+		//::UpdateWindow(MainHWND());
+		Redraw();
+		UpdateSystemCaret();
 	}
 
-	void ScintillaWinUI::SetHorizontalScrollPos()
-	{
+	void ScintillaWinUI::SetVerticalScrollPos() {
+		ChangeScrollPos(SB_VERT, topLine);
 	}
 
-	bool ScintillaWinUI::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage)
-	{
+	void ScintillaWinUI::SetHorizontalScrollPos() {
+		ChangeScrollPos(SB_HORZ, xOffset);
+	}
+
+	void ScintillaWinUI::HorizontalScrollToClamped(int xPos) {
+		const HorizontalScrollRange range = GetHorizontalScrollRange();
+		HorizontalScrollTo(std::clamp(xPos, 0, range.documentWidth - range.pageWidth + 1));
+	}
+
+	HorizontalScrollRange ScintillaWinUI::GetHorizontalScrollRange() const {
+		const PRectangle rcText = GetTextRectangle();
+		int pageWidth = static_cast<int>(rcText.Width());
+		const int horizEndPreferred = std::max({ scrollWidth, pageWidth - 1, 0 });
+		if (!horizontalScrollBarVisible || Wrapping())
+			pageWidth = horizEndPreferred + 1;
+		return { pageWidth, horizEndPreferred };
+	}
+
+	bool ScintillaWinUI::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
+		/*if (!IsVisible()) {
+			return false;
+		}*/
+
+		bool modified = false;
+		const Sci::Line vertEndPreferred = nMax;
+		if (!verticalScrollBarVisible)
+			nPage = vertEndPreferred + 1;
+		if (ChangeScrollRange(SB_VERT, 0, static_cast<int>(vertEndPreferred), static_cast<unsigned int>(nPage))) {
+			modified = true;
+		}
+		const HorizontalScrollRange range = GetHorizontalScrollRange();
+		if (ChangeScrollRange(SB_HORZ, 0, range.documentWidth, range.pageWidth)) {
+			modified = true;
+			if (scrollWidth < range.pageWidth) {
+				HorizontalScrollTo(0);
+			}
+		}
+
+		return modified;
+	}
+
+	bool ScintillaWinUI::ChangeScrollRange(int nBar, int nMin, int nMax, UINT nPage) noexcept {
+		if (!_wrapper || !_wrapper->HasScrollBars())
+		{
+			return false;
+		}
+
+		const auto max{ std::max(0, nMax - static_cast<int>(nPage) + 1) };
+
+		// ViewportSize must be set first or this causes an issue where the bars are the wrong length after a window resize
+
+		if (nBar == SB_HORZ)
+		{
+			if (static_cast<int>(_wrapper->HorizontalScrollBarMinimum()) != nMin || static_cast<int>(_wrapper->HorizontalScrollBarMaximum()) != max || static_cast<UINT>(_wrapper->HorizontalScrollBarViewportSize()) != nPage)
+			{
+				_wrapper->HorizontalScrollBarViewportSize(nPage);
+				_wrapper->HorizontalScrollBarMinimum(nMin);
+				_wrapper->HorizontalScrollBarMaximum(max);
+				return true;
+			}
+		}
+		else
+		{
+			if (static_cast<int>(_wrapper->VerticalScrollBarMinimum()) != nMin || static_cast<int>(_wrapper->VerticalScrollBarMaximum()) != max || static_cast<UINT>(_wrapper->VerticalScrollBarViewportSize()) != nPage)
+			{
+				_wrapper->VerticalScrollBarViewportSize(nPage);
+				_wrapper->VerticalScrollBarMinimum(nMin);
+				_wrapper->VerticalScrollBarMaximum(max);
+				return true;
+			}
+		}
 		return false;
+	}
+
+	// Change the scroll position but avoid repaint if changing to same value
+	void ScintillaWinUI::ChangeScrollPos(int barType, Sci::Position pos) {
+		/*if (!IsVisible()) {
+			return;
+		}*/
+
+		const auto value{ static_cast<int>(barType == SB_HORZ ? _wrapper->HorizontalScrollBarValue() : _wrapper->VerticalScrollBarValue()) };
+		if (value != pos) {
+			DwellEnd(true);
+			if (barType == SB_HORZ)
+			{
+				_wrapper->HorizontalScrollBarValue(pos);
+			}
+			else
+			{
+				_wrapper->VerticalScrollBarValue(pos);
+			}
+		}
 	}
 
 	void ScintillaWinUI::Copy()
@@ -1965,6 +2059,145 @@ namespace Scintilla::Internal {
 	void ScintillaWinUI::ProcessPointerReleasedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers)
 	{
 		ButtonUpWithModifiers(Point{ point.X, point.Y }, timestamp, WindowsModifiers(modifiers));
+	}
+
+	void ScintillaWinUI::PointerWheelChanged(int delta, bool horizontal, winrt::Windows::System::VirtualKeyModifiers modifiers)
+	{
+		/*if (!mouseWheelCaptures) {
+			// if the mouse wheel is not captured, test if the mouse
+			// pointer is over the editor window and if not, don't
+			// handle the message but pass it on.
+			RECT rc;
+			GetWindowRect(MainHWND(), &rc);
+			const POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+			if (!PtInRect(&rc, pt))
+				return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
+		}
+		// if autocomplete list active then send mousewheel message to it
+		if (ac.Active()) {
+			HWND hWnd = HwndFromWindow(*(ac.lb));
+			::SendMessage(hWnd, iMessage, wParam, lParam);
+			break;
+		}*/
+
+		// Treat Shift+WM_MOUSEWHEEL as horizontal scrolling, not data-zoom.
+		if (horizontal || (static_cast<int>(modifiers) & static_cast<int>(winrt::Windows::System::VirtualKeyModifiers::Shift))) {
+			if (vs.wrap.state != Wrap::None || charsPerScroll == 0) {
+				return;
+			}
+
+			MouseWheelDelta &wheelDelta = horizontal ? horizontalWheelDelta : verticalWheelDelta;
+			if (wheelDelta.Accumulate(delta)) {
+				const int charsToScroll = charsPerScroll * wheelDelta.Actions() * (horizontal ? -1 : 1); // WinUI Todo: Make sure horizontal scrolling direction is correct
+				const int widthToScroll = static_cast<int>(std::lround(charsToScroll * vs.aveCharWidth));
+
+				// signChanged and uniformWheel prevent bumping at the edges on touchpads
+				auto uniformWheel{ std::abs(_lastHorizontalScrollDelta) == std::abs(delta) };
+				auto signChanged{ _lastHorizontalScrollDelta <= 0 && delta > 0 || _lastHorizontalScrollDelta >= 0 && delta < 0 };
+				_lastHorizontalScrollDelta = delta;
+
+				if (!uniformWheel && signChanged)
+				{
+					return;
+				}
+
+				HorizontalScrollToClamped(xOffset + widthToScroll);
+			}
+			return;
+		}
+
+		// Either SCROLL vertically or ZOOM. We handle the wheel steppings calculation
+		if (linesPerScroll != 0 && verticalWheelDelta.Accumulate(delta)) {
+			Sci::Line linesToScroll = linesPerScroll;
+			if (linesPerScroll == WHEEL_PAGESCROLL)
+				linesToScroll = LinesOnScreen() - 1;
+			if (linesToScroll == 0) {
+				linesToScroll = 1;
+			}
+			linesToScroll *= verticalWheelDelta.Actions();
+
+			if (static_cast<int>(modifiers) & static_cast<int>(winrt::Windows::System::VirtualKeyModifiers::Control)) {
+				// Zoom! We play with the font sizes in the styles.
+				// Number of steps/line is ignored, we just care if sizing up or down
+				if (linesToScroll < 0) {
+					KeyCommand(Message::ZoomIn);
+				}
+				else {
+					KeyCommand(Message::ZoomOut);
+				}
+			}
+			else {
+				// Scroll
+
+				// signChanged and uniformWheel prevent bumping at the edges on touchpads
+				auto uniformWheel{ std::abs(_lastVerticalScrollDelta) == std::abs(delta) };
+				auto signChanged{ _lastVerticalScrollDelta <= 0 && delta > 0 || _lastVerticalScrollDelta >= 0 && delta < 0 };
+				_lastVerticalScrollDelta = delta;
+				if (!uniformWheel && signChanged)
+				{
+					return;
+				}
+
+				ScrollTo(topLine + linesToScroll);
+			}
+		}
+	}
+
+	void ScintillaWinUI::HorizontalScroll(ScrollEventType event, int value) {
+		int xPos = xOffset;
+		const PRectangle rcText = GetTextRectangle();
+		const int pageWidth = static_cast<int>(rcText.Width() * 2 / 3);
+		switch (event) {
+		case ScrollEventType::SmallDecrement:
+			xPos -= 20;
+			break;
+		case ScrollEventType::SmallIncrement:	// May move past the logical end
+			xPos += 20;
+			break;
+		case ScrollEventType::LargeDecrement:
+			xPos -= pageWidth;
+			break;
+		case ScrollEventType::LargeIncrement:
+			xPos += pageWidth;
+			break;
+		case ScrollEventType::First:
+			xPos = 0;
+			break;
+		case ScrollEventType::Last:
+			xPos = scrollWidth;
+			break;
+		case ScrollEventType::ThumbPosition:
+		case ScrollEventType::ThumbTrack: {
+			xPos = value;
+		}
+										break;
+		}
+		HorizontalScrollToClamped(xPos);
+	}
+
+	void ScintillaWinUI::Scroll(ScrollEventType event, int value) {
+		//DWORD dwStart = timeGetTime();
+		//Platform::DebugPrintf("Scroll %x %d\n", wParam, lParam);
+
+		//Platform::DebugPrintf("ScrollInfo %d mask=%x min=%d max=%d page=%d pos=%d track=%d\n", b,sci.fMask,
+		//sci.nMin, sci.nMax, sci.nPage, sci.nPos, sci.nTrackPos);
+		Sci::Line topLineNew = topLine;
+		switch (event) {
+		case ScrollEventType::SmallDecrement:
+			topLineNew -= 1;
+			break;
+		case ScrollEventType::SmallIncrement:
+			topLineNew += 1;
+			break;
+		case ScrollEventType::LargeDecrement:
+			topLineNew -= LinesToScroll(); break;
+		case ScrollEventType::LargeIncrement: topLineNew += LinesToScroll(); break;
+		case ScrollEventType::First: topLineNew = 0; break;
+		case ScrollEventType::Last: topLineNew = MaxScrollPos(); break;
+		case ScrollEventType::ThumbPosition: topLineNew = value; break;
+		case ScrollEventType::ThumbTrack: topLineNew = value; break;
+		}
+		ScrollTo(topLineNew);
 	}
 
 	void ScintillaWinUI::KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers)

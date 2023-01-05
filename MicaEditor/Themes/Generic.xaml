@@ -8,13 +8,40 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MicaEditorControl">
-                    <Border
+                    <Grid
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}">
-                        <Border x:Name="ImageTarget" />
-                    </Border>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            x:Name="ImageTarget"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2" />
+                        <ScrollBar
+                            x:Name="VerticalScrollBar"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            IndicatorMode="MouseIndicator"
+                            IsTabStop="False"
+                            Orientation="Vertical" />
+                        <ScrollBar
+                            x:Name="HorizontalScrollBar"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            IndicatorMode="MouseIndicator"
+                            IsTabStop="False"
+                            Orientation="Horizontal" />
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

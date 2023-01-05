@@ -8,6 +8,7 @@ using namespace ::MicaEditor;
 using namespace winrt;
 using namespace DUX;
 using namespace DUX::Controls;
+using namespace DUX::Controls::Primitives;
 using namespace DUX::Input;
 using namespace DUX::Media;
 using namespace DUX::Media::Imaging;
@@ -331,12 +332,25 @@ namespace winrt::MicaEditor::implementation
 
 		// The SurfaceImageSource object's underlying 
 		// ISurfaceImageSourceNativeWithD2D object will contain the completed bitmap.
+		
+		auto horizontalScrollBar{ GetTemplateChild(L"HorizontalScrollBar").try_as<ScrollBar>() };
+		auto verticalScrollBar{ GetTemplateChild(L"VerticalScrollBar").try_as<ScrollBar>() };
+		if (horizontalScrollBar)
+		{
+			horizontalScrollBar.Scroll({ this, &MicaEditorControl::HorizontalScrollBar_Scroll });
+		}
+		if (verticalScrollBar)
+		{
+			verticalScrollBar.Scroll({ this, &MicaEditorControl::VerticalScrollBar_Scroll });
+		}
+		_wrapper->SetScrollBars(horizontalScrollBar, verticalScrollBar);
 
 		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Border>() })
 		{
 			// Todo: do these need auto revokers
 			// Todo: is this safe to have in OnApplyTemplate?
 			imageTarget.SizeChanged({ this, &MicaEditorControl::ImageTarget_SizeChanged });
+			imageTarget.PointerWheelChanged({ this, &MicaEditorControl::ImageTarget_PointerWheelChanged });
 
 			_wrapper->SetMouseCaptureElement(imageTarget);
 
@@ -542,6 +556,22 @@ namespace winrt::MicaEditor::implementation
 			_vsisNative->Resize(width, height);
 			_scintilla->SizeChanged();
 		}
+	}
+
+	void MicaEditorControl::ImageTarget_PointerWheelChanged(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e)
+	{
+		auto properties{ e.GetCurrentPoint(sender.as<UIElement>()).Properties() };
+		_scintilla->PointerWheelChanged(properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), e.KeyModifiers());
+	}
+
+	void MicaEditorControl::HorizontalScrollBar_Scroll(IInspectable const &sender, ScrollEventArgs const &e)
+	{
+		_scintilla->HorizontalScroll(static_cast<Scintilla::Internal::ScrollEventType>(e.ScrollEventType()), static_cast<int>(e.NewValue()));
+	}
+
+	void MicaEditorControl::VerticalScrollBar_Scroll(IInspectable const &sender, ScrollEventArgs const &e)
+	{
+		_scintilla->Scroll(static_cast<Scintilla::Internal::ScrollEventType>(e.ScrollEventType()), static_cast<int>(e.NewValue()));
 	}
 
 	LRESULT MicaEditorControl::WndProc(Windows::Foundation::IInspectable const &tag, UINT msg, WPARAM wParam, LPARAM lParam)

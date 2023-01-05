@@ -9,7 +9,37 @@
 #define SCINTILLAWIN_H
 
 namespace Scintilla::Internal {
-	class ScintillaWin;
+	enum class ScrollEventType : int32_t
+	{
+		SmallDecrement = 0,
+		SmallIncrement = 1,
+		LargeDecrement = 2,
+		LargeIncrement = 3,
+		ThumbPosition = 4,
+		ThumbTrack = 5,
+		First = 6,
+		Last = 7,
+		EndScroll = 8,
+	};
+
+	class MouseWheelDelta {
+		int wheelDelta = 0;
+	public:
+		bool Accumulate(int delta) noexcept {
+			wheelDelta -= delta;
+			return std::abs(wheelDelta) >= WHEEL_DELTA;
+		}
+		int Actions() noexcept {
+			const int actions = wheelDelta / WHEEL_DELTA;
+			wheelDelta = wheelDelta % WHEEL_DELTA;
+			return actions;
+		}
+	};
+
+	struct HorizontalScrollRange {
+		int pageWidth;
+		int documentWidth;
+	};
 
 	// TSF message queue
 	class IMessage
@@ -37,8 +67,10 @@ namespace Scintilla::Internal {
 		void RightPointerPressed(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
 		void PointerMoved(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
 		void PointerReleased(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void PointerWheelChanged(int delta, bool horizontal, winrt::Windows::System::VirtualKeyModifiers modifiers);
+		void HorizontalScroll(ScrollEventType event, int value);
+		void Scroll(ScrollEventType event, int value);
 		void KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers);
-		std::pair<bool, LRESULT> Subclass(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		void Finalize();
 		void CharacterReceived(char16_t character);
 
@@ -78,6 +110,14 @@ namespace Scintilla::Internal {
 		std::queue<std::unique_ptr<IMessage>> msgq{}; //31
 		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
 		bool _shouldNotifyTsf{ true };
+
+		// WinUI Todo: These two values should be updated to use the Windows setting
+		unsigned int linesPerScroll{ 3 };	///< Intellimouse support
+		unsigned int charsPerScroll{ 3 };	///< Intellimouse support
+		int _lastVerticalScrollDelta{ 0 };
+		int _lastHorizontalScrollDelta{ 0 };
+		MouseWheelDelta verticalWheelDelta{};
+		MouseWheelDelta horizontalWheelDelta{};
 
 		// Deleted so ScintillaWinUI objects can not be copied.
 		ScintillaWinUI(const ScintillaWinUI &) = delete;
@@ -175,9 +215,14 @@ namespace Scintilla::Internal {
 		virtual bool FineTickerRunning(TickReason reason) override;
 		virtual void FineTickerStart(TickReason reason, int millis, int tolerance) override;
 		virtual void FineTickerCancel(TickReason reason) override;
+		void ScrollText(Sci::Line linesToMove) override;
 		virtual void SetVerticalScrollPos() override;
 		virtual void SetHorizontalScrollPos() override;
+		void HorizontalScrollToClamped(int xPos);
+		HorizontalScrollRange GetHorizontalScrollRange() const;
 		virtual bool ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) override;
+		bool ChangeScrollRange(int nBar, int nMin, int nMax, UINT nPage) noexcept;
+		void ChangeScrollPos(int barType, Sci::Position pos);
 		virtual void Copy() override;
 		virtual void Paste() override;
 		winrt::fire_and_forget PasteAsync();
