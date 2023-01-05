@@ -1976,6 +1976,7 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::DpiChanged()
 	{
+		// Todo: need to re-evaluate how DPI is handled. might need to set DPI property on pBitmapRenderTarget in PlatWin.cxx
 		InvalidateStyleRedraw();
 	}
 
