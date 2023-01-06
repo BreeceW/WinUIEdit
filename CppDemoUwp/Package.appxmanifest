@@ -1,29 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" IgnorableNamespaces="uap5 uap mp">
-  <Identity
-    Name="3735BreeceWalker.MicaEditor"
-    Publisher="CN=90C29CE0-B07C-4318-A20E-CCD992FA5F1B"
-    Version="0.2.1.0" />
-  <mp:PhoneIdentity PhoneProductId="c0e1c7ff-08c7-4035-bc77-2dc970e754b9" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-  <Properties>
-    <DisplayName>Mica Editor</DisplayName>
-    <PublisherDisplayName>Breece Walker</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
-  </Properties>
-  <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
-  </Dependencies>
-  <Resources>
-    <Resource Language="x-generate" />
-  </Resources>
-  <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CppDemoUwp.App">
-      <uap:VisualElements DisplayName="Mica Editor" Description="Demo for Mica Editor Control"
-        Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
-        </uap:DefaultTile>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" uap5:Optional="true"  />
-      </uap:VisualElements>
-    </Application>
-  </Applications>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+		 xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+		 xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+		 xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+		 xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4"
+		 xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+		 xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+		 xmlns:iot2="http://schemas.microsoft.com/appx/manifest/iot/windows10/2"
+		 IgnorableNamespaces="uap uap3 uap4 uap5 desktop4 iot2 mp">
+	<Identity
+	  Name="3735BreeceWalker.MicaEditor"
+	  Publisher="CN=90C29CE0-B07C-4318-A20E-CCD992FA5F1B"
+	  Version="0.3.0.0" />
+	<mp:PhoneIdentity PhoneProductId="c0e1c7ff-08c7-4035-bc77-2dc970e754b9" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+	<Properties>
+		<DisplayName>Mica Editor</DisplayName>
+		<PublisherDisplayName>Breece Walker</PublisherDisplayName>
+		<Logo>Assets\StoreLogo.png</Logo>
+	</Properties>
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+	</Dependencies>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="CppDemoUwp.App"
+					 desktop4:SupportsMultipleInstances="true"
+					 iot2:SupportsMultipleInstances="true">
+			<uap:VisualElements DisplayName="Mica Editor" Description="Demo for Mica Editor Control"
+			  Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" BackgroundColor="transparent">
+				<uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+				</uap:DefaultTile>
+				<uap:SplashScreen Image="Assets\SplashScreen.png" uap5:Optional="true" />
+			</uap:VisualElements>
+			<Extensions>
+				<uap:Extension Category="windows.fileTypeAssociation">
+					<uap:FileTypeAssociation Name="txtfile">
+						<uap:SupportedFileTypes>
+							<uap:FileType uap4:ShellNewFileName="Assets\NewTextDocument.txt" uap4:ShellNewDisplayName="Text Document">.txt</uap:FileType>
+						</uap:SupportedFileTypes>
+						<uap:EditFlags OpenIsSafe="true" />
+						<uap:DisplayName>Text Document</uap:DisplayName>
+						<uap:Logo>Assets\Square44x44Logo.scale-200.png</uap:Logo>
+					</uap:FileTypeAssociation>
+				</uap:Extension>
+			</Extensions>
+		</Application>
+	</Applications>
 </Package>

@@ -14,6 +14,7 @@ using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::UI::ViewManagement;
+using namespace Windows::Storage;
 using namespace CppDemoUwp;
 using namespace CppDemoUwp::implementation;
 
@@ -37,56 +38,17 @@ App::App()
 
 void App::OnLaunched(LaunchActivatedEventArgs const &e)
 {
-	CoreApplication::GetCurrentView().TitleBar().ExtendViewIntoTitleBar(true);
-	ApplicationView::GetForCurrentView().SetPreferredMinSize(Size{ 308, 188 });
-	UpdateTitleBar(RequestedTheme());
-
-	Frame rootFrame{ nullptr };
-	auto content = Window::Current().Content();
-	if (content)
+	if (!e.PrelaunchActivated())
 	{
-		rootFrame = content.try_as<Frame>();
+		NewWindow(nullptr);
 	}
+}
 
-	// Do not repeat app initialization when the Window already has content,
-	// just ensure that the window is active
-	if (rootFrame == nullptr)
+void App::OnFileActivated(FileActivatedEventArgs const &e)
+{
+	for (const auto &file : e.Files())
 	{
-		// Create a Frame to act as the navigation context and associate it with
-		// a SuspensionManager key
-		rootFrame = Frame();
-
-		rootFrame.NavigationFailed({ this, &App::OnNavigationFailed });
-
-		if (e.PrelaunchActivated() == false)
-		{
-			if (rootFrame.Content() == nullptr)
-			{
-				// When the navigation stack isn't restored navigate to the first page,
-				// configuring the new page by passing required information as a navigation
-				// parameter
-				rootFrame.Navigate(xaml_typename<CppDemoUwp::MainPage>());
-			}
-			// Place the frame in the current Window
-			Window::Current().Content(rootFrame);
-			// Ensure the current window is active
-			Window::Current().Activate();
-		}
-	}
-	else
-	{
-		if (e.PrelaunchActivated() == false)
-		{
-			if (rootFrame.Content() == nullptr)
-			{
-				// When the navigation stack isn't restored navigate to the first page,
-				// configuring the new page by passing required information as a navigation
-				// parameter
-				rootFrame.Navigate(xaml_typename<CppDemoUwp::MainPage>());
-			}
-			// Ensure the current window is active
-			Window::Current().Activate();
-		}
+		NewWindow(file);
 	}
 }
 
@@ -95,24 +57,39 @@ void App::OnNavigationFailed(IInspectable const &, NavigationFailedEventArgs con
 	throw hresult_error(E_FAIL, hstring(L"Failed to load Page ") + e.SourcePageType().Name);
 }
 
+int32_t App::NewWindow(IStorageItem const &file)
+{
+	const auto window{ Window::Current() };
+
+	Frame frame{ window.Content().try_as<Frame>() };
+	if (!frame)
+	{
+		frame = Frame{};
+		frame.NavigationFailed({ this, &App::OnNavigationFailed });
+	}
+	if (!frame.Content())
+	{
+		frame.Navigate(xaml_typename<CppDemoUwp::MainPage>(), file);
+	}
+	window.Content(frame);
+
+	window.Activate();
+
+	CoreApplication::GetCurrentView().TitleBar().ExtendViewIntoTitleBar(true);
+	const auto &view{ ApplicationView::GetForCurrentView() };
+	view.SetPreferredMinSize(Size{ 308, 188 });
+	UpdateTitleBar(RequestedTheme());
+
+	return view.Id();
+}
+
 IAsyncAction App::NewWindowAsync()
 {
 	const auto newView{ CoreApplication::CreateNewView() };
 	int newViewId = 0;
 	co_await newView.Dispatcher().RunAsync(CoreDispatcherPriority::Normal, [&]()
 		{
-			CoreApplication::GetCurrentView().TitleBar().ExtendViewIntoTitleBar(true);
-			const auto view{ ApplicationView::GetForCurrentView() };
-			view.SetPreferredMinSize(Size{ 308, 188 });
-			UpdateTitleBar(RequestedTheme());
-
-			const Frame frame{};
-			frame.NavigationFailed({ this, &App::OnNavigationFailed });
-			frame.Navigate(xaml_typename<CppDemoUwp::MainPage>());
-			Window::Current().Content(frame);
-			Window::Current().Activate();
-
-			newViewId = view.Id();
+			newViewId = NewWindow(nullptr);
 		});
 	co_await ApplicationViewSwitcher::TryShowAsStandaloneAsync(newViewId);
 }

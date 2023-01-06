@@ -11,6 +11,7 @@ namespace winrt::CppDemoUwp::implementation
 		Windows::Foundation::IAsyncAction SaveMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction SaveAsMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction NewWindowMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+		void OnNavigatedTo(Windows::UI::Xaml::Navigation::NavigationEventArgs const &e);
 
 	private:
 		Windows::UI::Core::CoreWindow::Activated_revoker _activatedRevoker{};
@@ -18,8 +19,10 @@ namespace winrt::CppDemoUwp::implementation
 		void Activated(bool active);
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 		Windows::Storage::StorageFile _activeFile{ nullptr };
+		Windows::Foundation::IAsyncAction OpenAsync(Windows::Storage::StorageFile file);
 		Windows::Foundation::IAsyncAction SaveAsync(Windows::Storage::StorageFile file);
 		Windows::Foundation::IAsyncAction SaveAsAsync();
+		void SetOpenFile(Windows::Storage::StorageFile const &file);
 	};
 }
 

@@ -5,7 +5,9 @@
 
 using namespace winrt;
 using namespace Windows::UI::Core;
+using namespace Windows::UI::ViewManagement;
 using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::Foundation;
 using namespace Windows::Storage;
 using namespace Windows::Storage::Pickers;
@@ -50,9 +52,7 @@ namespace winrt::CppDemoUwp::implementation
 		const auto file{ co_await picker.PickSingleFileAsync() };
 		if (file)
 		{
-			_activeFile = file;
-			const auto buffer{ co_await FileIO::ReadBufferAsync(file) };
-			Editor().Scintilla(/*SCI_SETTEXT*/ 2181, 0, reinterpret_cast<uint64_t>(buffer.data()));
+			co_await OpenAsync(file);
 		}
 	}
 
@@ -78,17 +78,28 @@ namespace winrt::CppDemoUwp::implementation
 		co_await Application::Current().as<App>()->NewWindowAsync();
 	}
 
-	IAsyncAction MainPage::SaveAsAsync()
+	void MainPage::OnNavigatedTo(NavigationEventArgs const &e)
 	{
-		const FileSavePicker savePicker{};
-		savePicker.FileTypeChoices().Insert(L"Text documents", single_threaded_vector<hstring>({ L".txt" }));
-		savePicker.FileTypeChoices().Insert(L"All files", single_threaded_vector<hstring>({ L"." }));
-		const auto file{ co_await savePicker.PickSaveFileAsync() };
-		if (file)
+		if (const auto file{ e.Parameter().try_as<StorageFile>() })
 		{
-			_activeFile = file;
-			co_await SaveAsync(file);
+			OpenAsync(file);
 		}
+	}
+
+	IAsyncAction MainPage::OpenAsync(StorageFile file)
+	{
+		SetOpenFile(file);
+		const auto stream{ co_await file.OpenReadAsync() };
+		if (stream.Size() >= (std::numeric_limits<uint32_t>::max)())
+		{
+			co_return;
+		}
+		const Buffer string{ static_cast<uint32_t>(stream.Size() + 1) };
+		co_await stream.ReadAsync(string, stream.Size(), InputStreamOptions::None);
+		string.data()[stream.Size()] = '\0';
+		stream.Close();
+		Editor().Scintilla(/*SCI_ALLOCATE*/ 2446, static_cast<uint64_t>(string.Length() + 1000), 0);
+		Editor().Scintilla(/*SCI_SETTEXT*/ 2181, 0, reinterpret_cast<uint64_t>(string.data()));
 	}
 
 	IAsyncAction MainPage::SaveAsync(StorageFile file)
@@ -99,5 +110,25 @@ namespace winrt::CppDemoUwp::implementation
 		Editor().Scintilla(/*SCI_GETTEXT*/ 2182, length, reinterpret_cast<uint64_t>(buffer.data()));
 		Editor().Scintilla(/*SCI_SETSAVEPOINT*/ 2014, 0, 0);
 		co_await FileIO::WriteBufferAsync(file, buffer);
+	}
+
+	IAsyncAction MainPage::SaveAsAsync()
+	{
+		const FileSavePicker savePicker{};
+		savePicker.FileTypeChoices().Insert(L"Text documents", single_threaded_vector<hstring>({ L".txt" }));
+		savePicker.FileTypeChoices().Insert(L"All files", single_threaded_vector<hstring>({ L"." }));
+		const auto file{ co_await savePicker.PickSaveFileAsync() };
+		if (file)
+		{
+			SetOpenFile(file);
+			co_await SaveAsync(file);
+		}
+	}
+	
+	void MainPage::SetOpenFile(StorageFile const &file)
+	{
+		_activeFile = file;
+		TitleText().Text(_activeFile.Name() + L" - Mica Editor");
+		ApplicationView::GetForCurrentView().Title(_activeFile.Name());
 	}
 }
