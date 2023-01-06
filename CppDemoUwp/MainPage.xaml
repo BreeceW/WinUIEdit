@@ -9,7 +9,6 @@
     xmlns:local="using:CppDemoUwp"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mica="using:MicaEditor"
-    xmlns:micaWindows10version1809="using:MicaEditor?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
@@ -68,17 +67,24 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Grid
+        <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Grid.ColumnSpan="2">
+            Grid.ColumnSpan="2"
+            Orientation="Horizontal">
+            <Image
+                Width="16"
+                Height="16"
+                Margin="16,0,0,0"
+                Source="ms-appx:///Assets/TitleBarIcon.png"
+                Stretch="UniformToFill" />
             <TextBlock
                 x:Name="TitleText"
-                Margin="12,0,0,0"
+                Margin="16,0,0,0"
                 VerticalAlignment="Center"
                 Style="{StaticResource CaptionTextBlockStyle}"
                 Text="Untitled - Mica Editor" />
-        </Grid>
+        </StackPanel>
         <muxc:MenuBar Grid.Row="1" Grid.Column="0">
             <muxc:MenuBarItem Title="File" AccessKey="F">
                 <MenuFlyoutItem

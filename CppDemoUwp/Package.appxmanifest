@@ -42,7 +42,7 @@
 						</uap:SupportedFileTypes>
 						<uap:EditFlags OpenIsSafe="true" />
 						<uap:DisplayName>Text Document</uap:DisplayName>
-						<uap:Logo>Assets\Square44x44Logo.scale-200.png</uap:Logo>
+						<!--<uap:Logo></uap:Logo>-->
 					</uap:FileTypeAssociation>
 				</uap:Extension>
 			</Extensions>

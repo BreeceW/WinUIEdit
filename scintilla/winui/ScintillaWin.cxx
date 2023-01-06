@@ -2225,6 +2225,9 @@ namespace Scintilla::Internal {
 		if (FAILED(hr))
 			return hr;
 
+		// Todo: Make sure paintState is being used correctly in this method
+		paintState = PaintState::painting;
+
 		// This code doesn't try to coalesce multiple drawing bounds into one. Although that
 		// extra process will reduce the number of draw calls, it requires the virtual surface
 		// image source to manage non-uniform tile size, which requires it to make extra copy
@@ -2237,6 +2240,8 @@ namespace Scintilla::Internal {
 		{
 			DrawBit(drawingBounds[i]);
 		}
+
+		paintState = PaintState::notPainting;
 
 		return hr;
 	}
