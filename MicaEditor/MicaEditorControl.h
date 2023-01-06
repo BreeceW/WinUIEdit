@@ -59,6 +59,11 @@ namespace winrt::MicaEditor::implementation
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);
 		Windows::UI::ViewManagement::UISettings _uiSettings{};
+		winrt::com_ptr<::IDXGIDevice3> _dxgiDevice;
+#ifndef WINUI3
+		Windows::UI::Xaml::Application::Suspending_revoker _suspendingRevoker{};
+		void Application_Suspending(Windows::Foundation::IInspectable const &sender, Windows::ApplicationModel::SuspendingEventArgs const &args);
+#endif
 	};
 }
 

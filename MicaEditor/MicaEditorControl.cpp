@@ -15,6 +15,7 @@ using namespace DUX::Media::Imaging;
 using namespace Windows::Foundation;
 using namespace Windows::System;
 using namespace Windows::Graphics::Display;
+using namespace Windows::ApplicationModel;
 
 namespace winrt::MicaEditor::implementation
 {
@@ -139,7 +140,7 @@ namespace winrt::MicaEditor::implementation
 				UpdateColors(UseDarkColors());
 			});
 	}
-	
+
 	bool MicaEditorControl::UseDarkColors()
 	{
 		auto theme{ RequestedTheme() };
@@ -292,12 +293,11 @@ namespace winrt::MicaEditor::implementation
 		);
 
 		// Get the Direct3D device.
-		winrt::com_ptr<::IDXGIDevice> dxgiDevice{
-			d3dDevice.as<::IDXGIDevice>() };
+		_dxgiDevice = d3dDevice.as<::IDXGIDevice3>();
 
 		// Create the Direct2D device and a corresponding context.
 		winrt::com_ptr<::ID2D1Device> d2dDevice;
-		::D2D1CreateDevice(dxgiDevice.get(), nullptr, d2dDevice.put());
+		::D2D1CreateDevice(_dxgiDevice.get(), nullptr, d2dDevice.put());
 
 		winrt::com_ptr<::ID2D1DeviceContext> d2dDeviceContext;
 		winrt::check_hresult(
@@ -332,7 +332,7 @@ namespace winrt::MicaEditor::implementation
 
 		// The SurfaceImageSource object's underlying 
 		// ISurfaceImageSourceNativeWithD2D object will contain the completed bitmap.
-		
+
 		auto horizontalScrollBar{ GetTemplateChild(L"HorizontalScrollBar").try_as<ScrollBar>() };
 		auto verticalScrollBar{ GetTemplateChild(L"VerticalScrollBar").try_as<ScrollBar>() };
 		if (horizontalScrollBar)
@@ -358,6 +358,11 @@ namespace winrt::MicaEditor::implementation
 			brush.ImageSource(virtualSurfaceImageSource);
 			imageTarget.Background(brush);
 		}
+
+#ifndef WINUI3
+		// Todo: Evaluate if this is an appropriate place to add this event (and other code in this method)
+		_suspendingRevoker = Application::Current().Suspending(auto_revoke, { this, &MicaEditorControl::Application_Suspending });
+#endif
 	}
 
 	// Todo: Focus bug: deactive window, click on control, press ctrl+a quickly. result: selection disappears
@@ -501,7 +506,7 @@ namespace winrt::MicaEditor::implementation
 			|| (Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::RightWindows) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
 		{
 			modifiers |= VirtualKeyModifiers::Windows;
-	}
+		}
 #else
 		auto window{ Windows::UI::Core::CoreWindow::GetForCurrentThread() }; // Todo: is it worth it to store this?
 		// Todo: Do we need to check Locked?
@@ -593,4 +598,14 @@ namespace winrt::MicaEditor::implementation
 
 		return 0;
 	}
+
+#ifndef WINUI3
+	void MicaEditorControl::Application_Suspending(IInspectable const &sender, SuspendingEventArgs const &args)
+	{
+		// Required or crashes on resume
+		// https://learn.microsoft.com/en-us/windows/uwp/gaming/directx-and-xaml-interop
+		// https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_3/nf-dxgi1_3-idxgidevice3-trim
+		_dxgiDevice->Trim();
+	}
+#endif
 }
