@@ -1170,23 +1170,33 @@ namespace Scintilla::Internal {
 		// Todo: Suspecting this method might be some kind of bottleneck. Look at ScintillaWin::GetText for inspiration
 
 		if (_lock == NONE)
+		{
 			return TS_E_NOLOCK;
+		}
 		// acpEnd can be -1, initialize it properly.
 		if (acpEnd == -1)
+		{
 			acpEnd = pdoc->Length();
+		}
 
 		if ((acpStart < 0) || (acpStart > acpEnd) || (acpEnd > pdoc->Length()))
+		{
 			return TF_E_INVALIDPOS;
+		}
 
 		// validate plain text buffers.
 		bool fDoPlainText = cchPlainReq > 0;
 		if (fDoPlainText && (pchPlain == NULL || pcchPlainRet == NULL))
+		{
 			return E_INVALIDARG;
+		}
 
 		// validate text run buffers.
 		bool fDoTextRun = cRunInfoReq > 0;
 		if ((prgRunInfo == NULL || pcRunInfoRet == NULL))
+		{
 			return E_INVALIDARG;
+		}
 
 		// Validate window
 		/*if (!MainHWND())
@@ -1195,7 +1205,9 @@ namespace Scintilla::Internal {
 			// limit request to size of internal buffers
 #define MAX_RUN 128
 		if (cchPlainReq > MAX_RUN)
+		{
 			cchPlainReq = MAX_RUN;
+		}
 
 		*pacpNext = acpStart;
 		*pcchPlainRet = 0;
@@ -1219,7 +1231,9 @@ namespace Scintilla::Internal {
 			// or unchangable, mark it hidden.
 			// TODO:  Consider marking unchangable text as visible & failing any SetText operations that cover unchangeable text.
 			if (fProtectionActive && vs.styles[pdoc->StyleAt(startPos)/* & mask*/].IsProtected()) // Todo: I don't think mask is needed since 2014
+			{
 				prgRunInfo->type = TS_RT_HIDDEN;
+			}
 
 			if (startPos < endPos)
 			{
@@ -1242,6 +1256,8 @@ namespace Scintilla::Internal {
 					}
 					else
 					{
+						// Todo: This code is problematic and breaks auto capitalization on new line and adds an extra space at the beginning of lines
+						// It seems to get confused with \r\n and this code is a holdover from a technique not being used here
 						for (DWORD i = 0; i < charSize; ++i)
 						{
 							text[i] = pdoc->CharAt(startPos + i);
@@ -1259,7 +1275,9 @@ namespace Scintilla::Internal {
 
 					TsRunType runtype = TS_RT_PLAIN;
 					if (fProtectionActive && vs.styles[pdoc->StyleAt(startPos)/* & mask*/].IsProtected()) // Todo: I don't think mask is needed since 2014
+					{
 						runtype = TS_RT_HIDDEN;
+					}
 					// update runs
 					if (prgRunInfo->type == runtype)
 					{
