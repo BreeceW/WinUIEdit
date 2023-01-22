@@ -372,7 +372,7 @@ namespace winrt::MicaEditor::implementation
 		// Todo: Evaluate if this is an appropriate place to add this event (and other code in this method)
 		_suspendingRevoker = Application::Current().Suspending(auto_revoke, { this, &MicaEditorControl::Application_Suspending });
 #endif
-	}
+}
 
 	// Todo: Focus bug: deactive window, click on control, press ctrl+a quickly. result: selection disappears
 
@@ -515,7 +515,7 @@ namespace winrt::MicaEditor::implementation
 			|| (Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::RightWindows) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
 		{
 			modifiers |= VirtualKeyModifiers::Windows;
-		}
+	}
 #else
 		auto window{ Windows::UI::Core::CoreWindow::GetForCurrentThread() }; // Todo: is it worth it to store this?
 		// Todo: Do we need to check Locked?
@@ -595,7 +595,7 @@ namespace winrt::MicaEditor::implementation
 			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
 			const auto sender{ tag.as<MicaEditorControl>() };
 			get_self<implementation::Editor>(sender->_editorWrapper)->ProcessEvent(data);
-			}
+		}
 
 		return 0;
 	}
