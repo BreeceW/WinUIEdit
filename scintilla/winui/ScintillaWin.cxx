@@ -635,7 +635,7 @@ namespace Scintilla::Internal {
 
 		case KeyMessageId:
 		{
-			const auto keyMessage{ static_cast<KeyMessage *>(message.get())};
+			const auto keyMessage{ static_cast<KeyMessage *>(message.get()) };
 			switch (keyMessage->KeyEvent())
 			{
 			case KeyMessage::KeyEventType::KeyDown:
@@ -810,6 +810,17 @@ namespace Scintilla::Internal {
 			}
 		}
 		pdoc->InsertString(startPos, szText, cchText);
+
+		int notifyChar = szText[0];
+
+		if (pdoc->InsertString(startPos, szText, cchText))
+		{
+			freeq.push(szText);
+		}
+		else
+		{
+			delete[] szText;
+		}
 
 		EnsureCaretVisible();
 		ShowCaretAtCurrentPosition(); // Todo: Reevaluate how text at the current position is inserted (this is copied out of InsertCharacter)
@@ -1033,6 +1044,11 @@ namespace Scintilla::Internal {
 			OutputDebugStringW(L"Processing Queued Notification\n");
 			ProcessMessage(notifyq.front());
 			notifyq.pop();
+		}
+		while (!freeq.empty())
+		{
+			delete[] freeq.front();
+			freeq.pop();
 		}
 
 		return hr;
@@ -1367,11 +1383,22 @@ namespace Scintilla::Internal {
 		}
 		pdoc->InsertString(startPos, szText, cchText);
 
+		int notifyChar = szText[0];
+
+		if (pdoc->InsertString(startPos, szText, cchText))
+		{
+			freeq.push(szText);
+		}
+		else
+		{
+			delete[] szText;
+		}
+
 		EnsureCaretVisible();
 		ShowCaretAtCurrentPosition(); // Todo: Reevaluate how text at the current position is inserted (this is copied out of InsertCharacter)
 		if (cchText == 1)
 		{
-			NotifyChar(szText[0], Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
+			NotifyChar(notifyChar, Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
 		}
 
 		delete[] szText;

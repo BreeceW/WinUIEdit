@@ -106,9 +106,9 @@ namespace Scintilla::Internal {
 		wchar_t lastHighSurrogateChar; // win32
 		bool lastKeyDownConsumed; // win32?
 		void ImeEndComposition();
-		bool ShouldQueueMessage(unsigned int iMessage);
 		std::queue<std::unique_ptr<IMessage>> msgq{}; //31
 		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
+		std::queue<char *> freeq{}; //3000
 		bool _shouldNotifyTsf{ true };
 
 		// WinUI Todo: These two values should be updated to use the Windows setting
