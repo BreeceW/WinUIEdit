@@ -5,6 +5,7 @@
 #include <winrt/Windows.Foundation.Metadata.h>
 #include <winrt/Windows.Graphics.Display.h>
 #include <winrt/Windows.System.h>
+#include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.UI.Text.Core.h>
 #include <winrt/Windows.UI.Core.h>
 #include <winrt/Windows.ApplicationModel.DataTransfer.h>
