@@ -126,6 +126,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="EditorWrapper.h">
+      <DependentUpon>EditorWrapper.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="MicaEditorControl.h">
       <DependentUpon>MicaEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
@@ -140,6 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="EditorWrapper.cpp">
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="MicaEditorControl.cpp">
       <SubType>Code</SubType>
     </ClCompile>
@@ -168,6 +175,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="EditorWrapper.idl">
+    <DependentUpon>EditorWrapper.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="MicaEditorControl.idl">
       <DependentUpon>MicaEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>

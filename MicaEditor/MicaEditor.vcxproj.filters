@@ -12,6 +12,8 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="EditorWrapper.cpp" />
+    <ClCompile Include="Wrapper.cpp" />
     <ClCompile Include="MicaEditorControl.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="..\scintilla\src\*.cxx" />
@@ -178,7 +180,6 @@
     <ClCompile Include="..\lexilla\src\Lexilla.cxx" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
-    <ClCompile Include="Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

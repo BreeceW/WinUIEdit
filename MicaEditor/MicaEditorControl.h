@@ -11,6 +11,7 @@ namespace winrt::MicaEditor::implementation
 		static DUX::DependencyProperty TextProperty() { return s_textProperty; }
 		hstring Text();
 		void Text(hstring const &value);
+		MicaEditor::Editor Editor();
 
 		void OnApplyTemplate(); // Should these have override?
 		void OnGotFocus(DUX::RoutedEventArgs const &e);
@@ -26,7 +27,7 @@ namespace winrt::MicaEditor::implementation
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnCharacterReceived(DUX::Input::CharacterReceivedRoutedEventArgs const &e);
 
-		uint64_t Scintilla(int32_t message, uint64_t wParam, uint64_t lParam);
+		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
 
 	private:
 		static void OnTextPropertyChanged(IInspectable const &sender, DUX::DependencyPropertyChangedEventArgs const &args);
@@ -36,6 +37,7 @@ namespace winrt::MicaEditor::implementation
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 		bool _isPointerOver{ false };
 #endif
+		MicaEditor::Editor _editorWrapper{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale = 1;
 		float _logicalDpi = 96;

@@ -4,7 +4,7 @@ using Windows.Storage;
 
 namespace Tool
 {
-    internal class ToggleTool : ITool
+    public class ToggleTool : ITool
     {
         private readonly bool _useWinUI3;
 

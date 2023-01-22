@@ -8,13 +8,17 @@
             "commandName": "Project",
             "commandLineArgs": "Compare 5.1.5 5.2.1"
         },
-        "Uwp Tool": {
+        "Switch to UWP Tool": {
             "commandName": "Project",
             "commandLineArgs": "Uwp"
         },
-        "WinUI3 Tool": {
+        "Switch to WinUI 3 Tool": {
             "commandName": "Project",
             "commandLineArgs": "WinUI3"
+        },
+        "Interface Generator Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "Interface"
         }
     }
 }

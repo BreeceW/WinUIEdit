@@ -3,6 +3,7 @@
 #if __has_include("MicaEditorControl.g.cpp")
 #include "MicaEditorControl.g.cpp"
 #endif
+#include "EditorWrapper.h"
 
 using namespace ::MicaEditor;
 using namespace winrt;
@@ -36,6 +37,8 @@ namespace winrt::MicaEditor::implementation
 #endif
 
 		_scintilla = make_self<::Scintilla::Internal::ScintillaWinUI>();
+
+		_editorWrapper = winrt::make<implementation::Editor>(_scintilla);
 
 		_scintilla->SetWndProcTag(*this);
 		_scintilla->SetWndProc(&MicaEditorControl::WndProc);
@@ -112,6 +115,11 @@ namespace winrt::MicaEditor::implementation
 	void MicaEditorControl::Text(hstring const &value)
 	{
 		SetValue(s_textProperty, box_value(value));
+	}
+
+	MicaEditor::Editor MicaEditorControl::Editor()
+	{
+		return _editorWrapper;
 	}
 
 	void MicaEditorControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
@@ -238,7 +246,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	uint64_t MicaEditorControl::Scintilla(int32_t message, uint64_t wParam, uint64_t lParam)
+	uint64_t MicaEditorControl::Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
 	{
 		return _scintilla->WndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
@@ -581,20 +589,12 @@ namespace winrt::MicaEditor::implementation
 
 	LRESULT MicaEditorControl::WndProc(Windows::Foundation::IInspectable const &tag, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		/*if (msg == WM_NOTIFY)
+		if (msg == WM_NOTIFY)
 		{
-			auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
-			if (data->nmhdr.code == Scintilla::Notification::Modified)
-			{
-				auto control{ tag.as<MicaEditorControl>() };
-				auto scintilla{ control->_scintilla };
-				auto size{ scintilla->GetTextLength() + 1 };
-				auto buff{ new wchar_t[size] };
-				scintilla->GetText(size, reinterpret_cast<sptr_t>(buff));
-				control->Text(buff);
-				delete buff;
+			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
+			const auto sender{ tag.as<MicaEditorControl>() };
+			get_self<implementation::Editor>(sender->_editorWrapper)->ProcessEvent(data);
 			}
-		}*/
 
 		return 0;
 	}
