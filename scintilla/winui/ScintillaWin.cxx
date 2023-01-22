@@ -809,7 +809,6 @@ namespace Scintilla::Internal {
 				szText[cchText] = '\0';
 			}
 		}
-		pdoc->InsertString(startPos, szText, cchText);
 
 		int notifyChar = szText[0];
 
@@ -826,7 +825,7 @@ namespace Scintilla::Internal {
 		ShowCaretAtCurrentPosition(); // Todo: Reevaluate how text at the current position is inserted (this is copied out of InsertCharacter)
 		if (cchText == 1)
 		{
-			NotifyChar(szText[0], Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
+			NotifyChar(notifyChar, Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
 		}
 
 		delete[] szText;
