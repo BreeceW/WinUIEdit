@@ -332,10 +332,6 @@ namespace winrt::MicaEditor::implementation
 		// Associate the Direct2D device with the SurfaceImageSource.
 		sisNativeWithD2D->SetDevice(d2dDevice.get());
 
-		// To enable multi-threaded access (optional)
-		winrt::com_ptr<::ID3D11Multithread> d3dMultiThread{
-			d3dDevice.as<::ID3D11Multithread>() };
-		d3dMultiThread->SetMultithreadProtected(true);
 
 		_vsisNative = virtualSurfaceImageSource.as<::IVirtualSurfaceImageSourceNative>();
 
