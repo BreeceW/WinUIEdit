@@ -43,9 +43,10 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->SetWndProcTag(*this);
 		_scintilla->SetWndProc(&MicaEditorControl::WndProc);
 
-		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 187 + (SCMOD_CTRL << 16), SCI_ZOOMIN);
-		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 189 + (SCMOD_CTRL << 16), SCI_ZOOMOUT);
-		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 48 + (SCMOD_CTRL << 16), SCI_SETZOOM);
+		// Scintilla has built-in shortcuts for zoom in and out, but they only work with the numpad plus/minus
+		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 187 + (SCMOD_CTRL << 16), SCI_ZOOMIN); // Ctrl+Plus
+		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 189 + (SCMOD_CTRL << 16), SCI_ZOOMOUT); // Ctrl+Minus
+		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 48 + (SCMOD_CTRL << 16), SCI_SETZOOM); // Ctrl+0
 
 		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>(
 			"// n! where n is greater than or equal to 0\r\n"
