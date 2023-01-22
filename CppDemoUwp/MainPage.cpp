@@ -12,6 +12,7 @@ using namespace Windows::Foundation;
 using namespace Windows::Storage;
 using namespace Windows::Storage::Pickers;
 using namespace Windows::Storage::Streams;
+using namespace MicaEditor;
 
 namespace winrt::CppDemoUwp::implementation
 {
@@ -19,8 +20,11 @@ namespace winrt::CppDemoUwp::implementation
 	{
 		InitializeComponent();
 
+		_updateUIRevoker = Editor().Editor().UpdateUI(auto_revoke, { this, &MainPage::Editor_UpdateUI });
+		_zoomChangedRevoker = Editor().Editor().ZoomChanged(auto_revoke, { this, &MainPage::Editor_ZoomChanged });
+
 		auto coreWindow{ CoreWindow::GetForCurrentThread() };
-		_activatedRevoker = coreWindow.Activated(winrt::auto_revoke, { this, &MainPage::OnActivated });
+		_activatedRevoker = coreWindow.Activated(auto_revoke, { this, &MainPage::OnActivated });
 		if (_hasFcu)
 		{
 			Activated(coreWindow.ActivationMode() != CoreWindowActivationMode::Deactivated);
@@ -78,6 +82,21 @@ namespace winrt::CppDemoUwp::implementation
 		co_await Application::Current().as<App>()->NewWindowAsync();
 	}
 
+	void MainPage::ZoomInMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		Editor().Editor().ZoomIn();
+	}
+
+	void MainPage::ZoomOutMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		Editor().Editor().ZoomOut();
+	}
+
+	void MainPage::ZoomRestoreMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		Editor().Editor().Zoom(0);
+	}
+
 	void MainPage::OnNavigatedTo(NavigationEventArgs const &e)
 	{
 		if (const auto file{ e.Parameter().try_as<StorageFile>() })
@@ -98,17 +117,17 @@ namespace winrt::CppDemoUwp::implementation
 		co_await stream.ReadAsync(string, stream.Size(), InputStreamOptions::None);
 		string.data()[stream.Size()] = '\0';
 		stream.Close();
-		Editor().Scintilla(/*SCI_ALLOCATE*/ 2446, static_cast<uint64_t>(string.Length() + 1000), 0);
-		Editor().Scintilla(/*SCI_SETTEXT*/ 2181, 0, reinterpret_cast<uint64_t>(string.data()));
+		Editor().Editor().Allocate(string.Length() + 1000);
+		Editor().Editor().SetTextFromBuffer(string);
 	}
 
 	IAsyncAction MainPage::SaveAsync(StorageFile file)
 	{
-		const auto length{ Editor().Scintilla(/*SCI_GETLENGTH*/ 2006, 0, 0) };
+		const auto length{ Editor().Editor().Length() };
 		const Buffer buffer{ static_cast<uint32_t>(length + 1) };
 		buffer.Length(length);
-		Editor().Scintilla(/*SCI_GETTEXT*/ 2182, length, reinterpret_cast<uint64_t>(buffer.data()));
-		Editor().Scintilla(/*SCI_SETSAVEPOINT*/ 2014, 0, 0);
+		Editor().Editor().GetTextWriteBuffer(length, buffer);
+		Editor().Editor().SetSavePoint();
 		co_await FileIO::WriteBufferAsync(file, buffer);
 	}
 
@@ -124,11 +143,28 @@ namespace winrt::CppDemoUwp::implementation
 			co_await SaveAsync(file);
 		}
 	}
-	
+
 	void MainPage::SetOpenFile(StorageFile const &file)
 	{
 		_activeFile = file;
 		TitleText().Text(_activeFile.Name() + L" - Mica Editor");
 		ApplicationView::GetForCurrentView().Title(_activeFile.Name());
+	}
+
+	void MainPage::Editor_UpdateUI(MicaEditor::Editor const &sender, UpdateUIEventArgs const &args)
+	{
+		if (static_cast<Update>(args.Updated()) == Update::Selection)
+		{
+			const auto pos{ sender.CurrentPos() };
+			const auto ln{ sender.LineFromPosition(pos) };
+			const auto col{ sender.GetColumn(pos) };
+			RCIndicator().Text(std::format(L"Ln {}, Col {}", ln + 1, col + 1));
+		}
+	}
+
+	void MainPage::Editor_ZoomChanged(MicaEditor::Editor const &sender, ZoomChangedEventArgs const &args)
+	{
+		const auto size{ sender.StyleGetSizeFractional(static_cast<int32_t>(StylesCommon::Default)) };
+		ZoomStatus().Text(to_hstring(static_cast<uint16_t>(std::round((size + sender.Zoom() * 100) * 100.0 / size))) + L"%");
 	}
 }

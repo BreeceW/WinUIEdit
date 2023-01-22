@@ -215,24 +215,18 @@
                     <MenuFlyoutItem
                         Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Plus"
                         AccessKey="I"
-                        Text="Zoom in">
-                        <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                            <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Add" Modifiers="Control" />
-                        </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                    </MenuFlyoutItem>
+                        Click="ZoomInMenuItem_Click"
+                        Text="Zoom in" />
                     <MenuFlyoutItem
                         Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Minus"
                         AccessKey="O"
-                        Text="Zoom out">
-                        <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                            <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Subtract" Modifiers="Control" />
-                        </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                    </MenuFlyoutItem>
-                    <MenuFlyoutItem AccessKey="R" Text="Restore default zoom">
-                        <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                            <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Number0" Modifiers="Control" />
-                        </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                    </MenuFlyoutItem>
+                        Click="ZoomOutMenuItem_Click"
+                        Text="Zoom out" />
+                    <MenuFlyoutItem
+                        Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+0"
+                        AccessKey="R"
+                        Click="ZoomRestoreMenuItem_Click"
+                        Text="Restore default zoom" />
                 </MenuFlyoutSubItem>
                 <ToggleMenuFlyoutItem
                     AccessKey="S"
@@ -352,9 +346,10 @@
                 <Rectangle
                     Width="1"
                     Height="16"
+                    Margin="0,0,22,0"
                     Fill="{ThemeResource SeparatorLineBrush}" />
                 <TextBlock
-                    Margin="22,0,0,0"
+                    x:Name="RCIndicator"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="Ln 1, Col 1" />
@@ -369,6 +364,7 @@
                     Height="16"
                     Fill="{ThemeResource SeparatorLineBrush}" />
                 <TextBlock
+                    x:Name="ZoomStatus"
                     Margin="12,0,0,0"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     Style="{StaticResource CaptionTextBlockStyle}"
