@@ -1,19 +1,22 @@
 # WinUIEdit
-This is a very early work-in-progress code editing control for both UWP and WinUI 3. It is a port of the [Scintilla editor](https://www.scintilla.org). The goal is to be a performant code editor that feels like it belongs on Windows and has a familiar API for XAML developers. It is written in C++, but is just as easily used from .NET in addition to C++ (it should work with any WinRT language).
+This is an early work-in-progress code editor control for both UWP and WinUI 3. It is a port of the [Scintilla editor](https://www.scintilla.org). The goal is to be a performant code editor that feels like it belongs on Windows and has a familiar API for XAML developers. It is written in C++, but is just as easily usable from .NET as C++ (it should work with any language with a WinRT projection).
 
 ## Demo
-You can download a demo from Microsoft Store [here](https://www.microsoft.com/store/apps/9PGZBDP9PSPF). This demo is not necessarily current with this repo and most features do not work at all. It will likely also experience crashes.
+You can download a demo from Microsoft Store [here](https://www.microsoft.com/store/apps/9PGZBDP9PSPF). Expect some occasional glitches.
 
-### Current state of demos
-You should be able to mostly use the mouse and keyboard to interact with the control. IME support is somewhat present, though far from finished. Text input support will vary depending on the kind of device you are using, ranging from fairly well, somewhat glitchy, to not at all. It will crash if you minimize the window and in some other scenarios. With large amounts of text, there will be significant slow downs. This is not a fault of the editor, but rather a complication of IME support that should be easily resolved. The demo is a clone of the Windows 11 Notepad app with minimal functionality.
+### Current state of the control
+Mouse and keyboard input are supported. IME support is somewhat present, though far from finished, especially on non-PC devices. Keyboard input does not currently work if using the control in a XAML Island. Currently, opening large files is not performant due to how IME support is implemented. This should be fixed in the future. The demo is a clone of the Windows 11 Notepad app with some functionality.
 
-![Mica Editor: replica of Windows 11 Notepad with WinUIEdit control and mica, demoing VB sample code](https://user-images.githubusercontent.com/18747724/168005735-28decaf4-0fa4-4710-a2f4-f293c5b7a488.png)
+<img alt="Mica Editor: replica of Windows 11 Notepad with WinUIEdit control using syntax highlighting, line numbers, and mica, demoing C++ sample code" src="https://user-images.githubusercontent.com/18747724/213900470-3c57b252-3488-40d1-b708-f392a30aab2f.png" width="500" />
 
 ## How to build
 Currently, to switch the build between UWP and WinUI 3, you will need to modify [MicaEditor.vcxproj](https://github.com/BreeceW/WinUIEdit/blob/main/MicaEditor/MicaEditor.vcxproj) to change `MicaEditorUseWinUI3` to `true` or `false`. To do this quickly, use the [WinUI3](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#winui3) and [Uwp](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#uwp) tools.
-Open WinUIEditor.sln in Visual Studio 2022. Then, set DemoUWP or CppDemoUWP as the startup project for UWP or DemoWinUI3 or CppDemoWinUI3 for WinUI 3. Now you can build and run the project.
+Open WinUIEditor.sln in Visual Studio 2022. Then, set CsDemoUWP or CppDemoUWP as the startup project for UWP or CsDemoWinUI3 or CppDemoWinUI3 for WinUI 3. Now you can build and run the project.
 
-## Project structure
+## Planned Windows version support
+The UWP version of this control should work on Windows 10, version 1703 and later. It is intended that the control will work equally well on all Windows platforms. It will run on ARM64, ARM32, x64, and x86. The WinUI 3 version of this control should work on Windows 10, version 1809 and later and support ARM64, x64, and x86.
+
+## Project file structure
 The project structure is very much not set in stone at this time.
 
 |Folder|Description|
@@ -35,14 +38,11 @@ The project structure is very much not set in stone at this time.
 
 The most relevant code is in the MicaEditor and scintilla\winui folders. These folders may merge in the future. The control name is also not yet decided (MicaEditor is a placeholder).
 
-## Planned Windows version support
-The UWP version of this control should work on Windows 10, version 1703 and later. It is intended that the control will work equally well on all Windows platforms. It will run on ARM64, ARM32, x64, and x86. The WinUI 3 version of this control should work on Windows 10, version 1809 and later, and support ARM64, x64, and x86.
-
 ### What are UWP and WinUI 3?
-[UWP](https://docs.microsoft.com/en-us/windows/uwp/) and [WinUI 3](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) are both modern ways of writing native apps for Windows 11 and 10. UWP includes a very performant and enjoyable XAML framework that was later developed into a new, though somewhat source compatible, UI framework that ships with the [Windows App SDK](https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/) called WinUI 3. As WinUI 3 is very new, it is not entirely equipped to replace UWP yet nor does it support older versions of Windows 10, so this control is being developed for both. This is fairly easy to do, as it mostly entails conditionally redefining namespaces.
+[UWP](https://docs.microsoft.com/en-us/windows/uwp/) and [WinUI 3](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) are both modern ways of writing native apps for Windows 11 and 10. UWP includes a very performant and enjoyable XAML framework that was later developed into a new and somewhat source compatible UI framework that ships with the [Windows App SDK](https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/) called WinUI 3. As WinUI 3 is very new, it is not entirely equipped to replace UWP yet nor does it support older versions of Windows 10, so this control is being developed for both. This is fairly easy to do, as it mostly involves conditionally redefining namespaces. Separate packages will likely be published for the UWP and WinUI 3 versions of this control.
 
 #### WinUI 2?
-WinUI 2 is a controls and styles library for the UWP XAML framework, not a UI framework on its own, like WinUI 3.
+WinUI 2 is a controls and styles library for the UWP XAML framework, whereas WinUI 3 is an entire XAML framework.
 This control does not depend on WinUI 2, so you can use this control with or without WinUI 2 installed.
 
 #### XAML Islands?
@@ -51,6 +51,6 @@ in an old-style win32 app, like a WinForms, WPF (see note below), or classic win
 Also note that WinUI 3 is planned to support its own form of XAML Islands in the future, allowing you to partially embed a WinUI 3 UI into an old app. Expect this control to support that scenario when it arrives.
 
 #### WPF?
-Please note that WinUI 3 is conceptually similar to WPF but is completely different in operation.
+Please note that while WinUI 3 is conceptually similar to WPF, it is a completely different UI framework and thus incompatible with it.
 This control will work in WPF using XAML Islands.
 If you are using WPF, you may want to use this control, or you can embed the original Windows version of Scintilla.
