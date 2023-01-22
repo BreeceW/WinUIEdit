@@ -1380,7 +1380,6 @@ namespace Scintilla::Internal {
 				szText[cchText] = '\0';
 			}
 		}
-		pdoc->InsertString(startPos, szText, cchText);
 
 		int notifyChar = szText[0];
 
@@ -1400,7 +1399,6 @@ namespace Scintilla::Internal {
 			NotifyChar(notifyChar, Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
 		}
 
-		delete[] szText;
 		if (pChange)
 		{
 			auto newAcpStart{ DocPositionToAcp(startPos) };
