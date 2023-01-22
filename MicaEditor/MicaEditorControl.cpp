@@ -276,67 +276,17 @@ namespace winrt::MicaEditor::implementation
 #endif
 		UpdateSizes();
 
-		uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-
-		D3D_FEATURE_LEVEL featureLevels[] =
-		{
-			D3D_FEATURE_LEVEL_11_1,
-			D3D_FEATURE_LEVEL_11_0,
-			D3D_FEATURE_LEVEL_10_1,
-			D3D_FEATURE_LEVEL_10_0,
-			D3D_FEATURE_LEVEL_9_3,
-			D3D_FEATURE_LEVEL_9_2,
-			D3D_FEATURE_LEVEL_9_1
-		};
-
-		// Create the Direct3D device.
-		winrt::com_ptr<::ID3D11Device> d3dDevice;
-		D3D_FEATURE_LEVEL supportedFeatureLevel;
-		winrt::check_hresult(::D3D11CreateDevice(
-			nullptr,
-			D3D_DRIVER_TYPE_HARDWARE,
-			0,
-			creationFlags,
-			featureLevels,
-			ARRAYSIZE(featureLevels),
-			D3D11_SDK_VERSION,
-			d3dDevice.put(),
-			&supportedFeatureLevel,
-			nullptr)
-		);
-
-		// Get the Direct3D device.
-		_dxgiDevice = d3dDevice.as<::IDXGIDevice3>();
-
-		// Create the Direct2D device and a corresponding context.
-		winrt::com_ptr<::ID2D1Device> d2dDevice;
-		::D2D1CreateDevice(_dxgiDevice.get(), nullptr, d2dDevice.put());
-
-		winrt::com_ptr<::ID2D1DeviceContext> d2dDeviceContext;
-		winrt::check_hresult(
-			d2dDevice->CreateDeviceContext(
-				D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
-				d2dDeviceContext.put()
-			)
-		);
-
 		auto width{ Helpers::ConvertFromDipToPixelUnit(ActualWidth(), _dpiScale) };
 		auto height{ Helpers::ConvertFromDipToPixelUnit(ActualHeight(), _dpiScale) };
 		_wrapper->Width(width); // Todo: Is this zero at this point?
 		_wrapper->Height(height);
 		VirtualSurfaceImageSource virtualSurfaceImageSource{ width, height };
 
-		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> sisNativeWithD2D{
-			virtualSurfaceImageSource.as<::ISurfaceImageSourceNativeWithD2D>() };
-
-		// Associate the Direct2D device with the SurfaceImageSource.
-		sisNativeWithD2D->SetDevice(d2dDevice.get());
-
 
 		_vsisNative = virtualSurfaceImageSource.as<::IVirtualSurfaceImageSourceNative>();
 
 		_wrapper->VsisNative(_vsisNative);
-		_scintilla->RegisterGraphics(sisNativeWithD2D, _vsisNative, d2dDeviceContext, _wrapper);
+		_scintilla->RegisterGraphics(_wrapper);
 		_vsisNative->RegisterForUpdatesNeeded(_scintilla.as<::IVirtualSurfaceUpdatesCallbackNative>().get());
 
 		// The SurfaceImageSource object's underlying 
@@ -606,7 +556,7 @@ namespace winrt::MicaEditor::implementation
 		// Required or crashes on resume
 		// https://learn.microsoft.com/en-us/windows/uwp/gaming/directx-and-xaml-interop
 		// https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_3/nf-dxgi1_3-idxgidevice3-trim
-		_dxgiDevice->Trim();
+		_scintilla->TrimGraphics();
 	}
 #endif
 }

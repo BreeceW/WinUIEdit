@@ -56,10 +56,8 @@ namespace Scintilla::Internal {
 	{
 	public:
 		ScintillaWinUI();
-		void RegisterGraphics(winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> const &sisNativeWithD2D,
-			winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative,
-			winrt::com_ptr<::ID2D1DeviceContext> const &d2dDeviceContext,
-			std::shared_ptr<MicaEditor::Wrapper> const &wrapper);
+		void RegisterGraphics(std::shared_ptr<MicaEditor::Wrapper> const &wrapper);
+		void TrimGraphics();
 		void DpiChanged();
 		void SizeChanged();
 		void FocusChanged(bool focused);
@@ -87,6 +85,8 @@ namespace Scintilla::Internal {
 		std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> _wndProc;
 		winrt::Windows::Foundation::IInspectable _wndProcTag;
 		LRESULT SendMessage(UINT msg, WPARAM wParam, LPARAM lParam);
+
+		void CreateGraphicsDevices();
 
 		Sci::Position AcpToDocPosition(Sci::Position acp);
 		Sci::Position DocPositionToAcp(Sci::Position docPosition);
@@ -192,6 +192,7 @@ namespace Scintilla::Internal {
 		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> _sisNativeWithD2D{ nullptr };
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
 		winrt::com_ptr<::ID2D1DeviceContext> _d2dDeviceContext{ nullptr };
+		winrt::com_ptr<::IDXGIDevice3> _dxgiDevice{ nullptr };
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 
 		// Timer implementation

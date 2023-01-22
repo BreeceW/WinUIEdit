@@ -550,12 +550,12 @@ namespace Scintilla::Internal {
 			{
 				_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpNewEnd - chg.acpStart, winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpNewEnd, chg.acpNewEnd });
 				_editContext.NotifySelectionChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
-		}
+			}
 			else if (_tfTextStoreACPSink)
 			{
 				_tfTextStoreACPSink->OnTextChange(0, &chg);
 				_tfTextStoreACPSink->OnSelectionChange();
-	}
+			}
 		}
 	}
 
@@ -2003,17 +2003,71 @@ namespace Scintilla::Internal {
 	{
 	}
 
-	void ScintillaWinUI::RegisterGraphics(winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> const &sisNativeWithD2D,
-		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative,
-		winrt::com_ptr<::ID2D1DeviceContext> const &d2dDeviceContext,
-		std::shared_ptr<MicaEditor::Wrapper> const &wrapper)
+	void ScintillaWinUI::CreateGraphicsDevices()
 	{
-		_sisNativeWithD2D = sisNativeWithD2D;
-		_vsisNative = vsisNative;
-		_d2dDeviceContext = d2dDeviceContext;
+		// Todo: Is there any cleanup that needs to be done when the control is deleted or if the device gets re-created?
 
+		uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+
+		D3D_FEATURE_LEVEL featureLevels[] =
+		{
+			D3D_FEATURE_LEVEL_11_1,
+			D3D_FEATURE_LEVEL_11_0,
+			D3D_FEATURE_LEVEL_10_1,
+			D3D_FEATURE_LEVEL_10_0,
+			D3D_FEATURE_LEVEL_9_3,
+			D3D_FEATURE_LEVEL_9_2,
+			D3D_FEATURE_LEVEL_9_1,
+		};
+
+		// Create the Direct3D device
+		winrt::com_ptr<ID3D11Device> d3dDevice;
+		D3D_FEATURE_LEVEL supportedFeatureLevel;
+		winrt::check_hresult(D3D11CreateDevice(
+			nullptr,
+			D3D_DRIVER_TYPE_HARDWARE,
+			0,
+			creationFlags,
+			featureLevels,
+			ARRAYSIZE(featureLevels),
+			D3D11_SDK_VERSION,
+			d3dDevice.put(),
+			&supportedFeatureLevel,
+			nullptr));
+
+		// Get the Direct3D device.
+		_dxgiDevice = d3dDevice.as<IDXGIDevice3>();
+
+		// Create the Direct2D device and a corresponding context
+		winrt::com_ptr<ID2D1Device> d2dDevice;
+		D2D1CreateDevice(_dxgiDevice.get(), nullptr, d2dDevice.put());
+
+		winrt::check_hresult(
+			d2dDevice->CreateDeviceContext(
+				D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
+				_d2dDeviceContext.put()));
+
+		// Todo: Call _d2dDeviceContext->SetDpi and fix how DPI is handled throughout control https://learn.microsoft.com/en-us/windows/win32/direct2d/direct2d-and-high-dpi
+
+		// Associate the Direct2D device with the SurfaceImageSource
+		_sisNativeWithD2D->SetDevice(d2dDevice.get());
+	}
+
+	void ScintillaWinUI::RegisterGraphics(std::shared_ptr<MicaEditor::Wrapper> const &wrapper)
+	{
 		_wrapper = wrapper;
-		wMain = _wrapper.get();
+		wMain = _wrapper.get(); // Todo: Make sure this makes sense
+
+		_vsisNative = wrapper->VsisNative();
+		_sisNativeWithD2D = _vsisNative.as<ISurfaceImageSourceNativeWithD2D>();
+
+		CreateGraphicsDevices();
+	}
+
+	void ScintillaWinUI::TrimGraphics()
+	{
+		// Todo: Should ClearResources get called too? https://github.com/microsoft/Win2D/blob/master/winrt/lib/drawing/CanvasDevice.cpp#L1040
+		_dxgiDevice->Trim();
 	}
 
 	void ScintillaWinUI::DpiChanged()
@@ -2300,14 +2354,28 @@ namespace Scintilla::Internal {
 		//This method returns the point (x,y) offset of the updated target rectangle in the offset
 		//parameter. You use this offset to determine where to draw into inside the IDXGISurface.
 		HRESULT beginDrawHR = _sisNativeWithD2D->BeginDraw(drawingBounds, __uuidof(::IDXGISurface), surface.put_void(), &surfaceOffset);
-		if (beginDrawHR == DXGI_ERROR_DEVICE_REMOVED || beginDrawHR == DXGI_ERROR_DEVICE_RESET) {
-			// device changed
+		if (beginDrawHR == DXGI_ERROR_DEVICE_REMOVED || beginDrawHR == DXGI_ERROR_DEVICE_RESET || beginDrawHR == E_SURFACE_CONTENTS_LOST)
+		{
+			// For surface lost:
+			// Handles what seems to be a XAML-specific issue https://github.com/Microsoft/Win2D/blob/master/winrt/lib/xaml/CanvasControl.cpp#L199
+			// Always reproducible by disabling GPU in Device Manager
+			// Sometimes reproducible by launching with debugger attached and switching virtual desktops (wait a few seconds before switching)
+			// Sometimes reproducible by minimize and restoring repeatedly
+			// See https://github.com/Microsoft/Win2D/issues/584
+			// https://learn.microsoft.com/en-us/windows/uwp/gaming/directx-and-xaml-interop
+			// That says you do not need to re-create the devices when E_SURFACE_CONTENTS_LOST but in testing it seems necessary
+			// https://learn.microsoft.com/en-us/windows/uwp/gaming/handling-device-lost-scenarios
+
+			CreateGraphicsDevices();
+			InvalidateStyleRedraw(); // just Redraw() does not work
 		}
-		else {
+		else
+		{
 			winrt::com_ptr<ID2D1Bitmap1> bitmap;
 			HRESULT hrBitMap = _d2dDeviceContext->CreateBitmapFromDxgiSurface(
 				surface.get(), nullptr, bitmap.put());
-			if (FAILED(hrBitMap)) {
+			if (FAILED(hrBitMap))
+			{
 				winrt::throw_hresult(hrBitMap);
 			}
 			_d2dDeviceContext->BeginDraw();
