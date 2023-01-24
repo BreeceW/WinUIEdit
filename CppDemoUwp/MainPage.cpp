@@ -7,6 +7,7 @@ using namespace winrt;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::ViewManagement;
 using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::Foundation;
 using namespace Windows::Storage;
@@ -20,8 +21,12 @@ namespace winrt::CppDemoUwp::implementation
 	{
 		InitializeComponent();
 
+		SetTitle(false);
+
 		_updateUIRevoker = Editor().Editor().UpdateUI(auto_revoke, { this, &MainPage::Editor_UpdateUI });
 		_zoomChangedRevoker = Editor().Editor().ZoomChanged(auto_revoke, { this, &MainPage::Editor_ZoomChanged });
+		_savePointReachedRevoker = Editor().Editor().SavePointReached(auto_revoke, { this, &MainPage::Editor_SavePointReached });
+		_savePointLeftRevoker = Editor().Editor().SavePointLeft(auto_revoke, { this, &MainPage::Editor_SavePointLeft });
 
 		auto coreWindow{ CoreWindow::GetForCurrentThread() };
 		_activatedRevoker = coreWindow.Activated(auto_revoke, { this, &MainPage::OnActivated });
@@ -97,6 +102,16 @@ namespace winrt::CppDemoUwp::implementation
 		Editor().Editor().Zoom(0);
 	}
 
+	void MainPage::StatusBarMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		StatusBar().Visibility(sender.as<ToggleMenuFlyoutItem>().IsChecked() ? Visibility::Visible : Visibility::Collapsed);
+	}
+
+	void MainPage::WordWrapMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		Editor().Editor().WrapMode(sender.as<ToggleMenuFlyoutItem>().IsChecked() ? Wrap::Word : Wrap::None);
+	}
+
 	void MainPage::OnNavigatedTo(NavigationEventArgs const &e)
 	{
 		if (const auto file{ e.Parameter().try_as<StorageFile>() })
@@ -119,6 +134,7 @@ namespace winrt::CppDemoUwp::implementation
 		stream.Close();
 		Editor().Editor().Allocate(string.Length() + 1000);
 		Editor().Editor().SetTextFromBuffer(string);
+		Editor().Editor().EmptyUndoBuffer();
 	}
 
 	IAsyncAction MainPage::SaveAsync(StorageFile file)
@@ -127,8 +143,8 @@ namespace winrt::CppDemoUwp::implementation
 		const Buffer buffer{ static_cast<uint32_t>(length + 1) };
 		buffer.Length(length);
 		Editor().Editor().GetTextWriteBuffer(length, buffer);
-		Editor().Editor().SetSavePoint();
 		co_await FileIO::WriteBufferAsync(file, buffer);
+		Editor().Editor().SetSavePoint();
 	}
 
 	IAsyncAction MainPage::SaveAsAsync()
@@ -147,8 +163,14 @@ namespace winrt::CppDemoUwp::implementation
 	void MainPage::SetOpenFile(StorageFile const &file)
 	{
 		_activeFile = file;
-		TitleText().Text(_activeFile.Name() + L" - Mica Editor");
-		ApplicationView::GetForCurrentView().Title(_activeFile.Name());
+		SetTitle(false);
+	}
+
+	void MainPage::SetTitle(bool modified)
+	{
+		const auto title{ (modified ? L"*" : L"") + (_activeFile ? _activeFile.Name() : L"Untitled") };
+		TitleText().Text(title + L" - Mica Editor");
+		ApplicationView::GetForCurrentView().Title(title);
 	}
 
 	void MainPage::Editor_UpdateUI(MicaEditor::Editor const &sender, UpdateUIEventArgs const &args)
@@ -166,5 +188,15 @@ namespace winrt::CppDemoUwp::implementation
 	{
 		const auto size{ sender.StyleGetSizeFractional(static_cast<int32_t>(StylesCommon::Default)) };
 		ZoomStatus().Text(to_hstring(static_cast<uint16_t>(std::round((size + sender.Zoom() * 100) * 100.0 / size))) + L"%");
+	}
+
+	void MainPage::Editor_SavePointReached(MicaEditor::Editor const &sender, SavePointReachedEventArgs const &args)
+	{
+		SetTitle(false);
+	}
+
+	void MainPage::Editor_SavePointLeft(MicaEditor::Editor const &sender, SavePointLeftEventArgs const &args)
+	{
+		SetTitle(true);
 	}
 }

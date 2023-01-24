@@ -230,9 +230,13 @@
                 </MenuFlyoutSubItem>
                 <ToggleMenuFlyoutItem
                     AccessKey="S"
+                    Click="StatusBarMenuItem_Click"
                     IsChecked="True"
                     Text="Status bar" />
-                <ToggleMenuFlyoutItem AccessKey="W" Text="Word wrap" />
+                <ToggleMenuFlyoutItem
+                    AccessKey="W"
+                    Click="WordWrapMenuItem_Click"
+                    Text="Word wrap" />
             </muxc:MenuBarItem>
         </muxc:MenuBar>
         <Button
@@ -316,6 +320,7 @@
             TabIndex="0" />
 
         <Grid
+            x:Name="StatusBar"
             Grid.Row="4"
             Grid.Column="0"
             Grid.ColumnSpan="2"
