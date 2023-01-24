@@ -5,6 +5,8 @@
 #endif
 #include "EditorWrapper.h"
 
+//#define JSON
+
 using namespace ::MicaEditor;
 using namespace winrt;
 using namespace DUX;
@@ -48,25 +50,6 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 189 + (SCMOD_CTRL << 16), SCI_ZOOMOUT); // Ctrl+Minus
 		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 48 + (SCMOD_CTRL << 16), SCI_SETZOOM); // Ctrl+0
 
-		_scintilla->WndProc(Scintilla::Message::InsertText, 0, reinterpret_cast<Scintilla::uptr_t>(
-			"// n! where n is greater than or equal to 0\r\n"
-			"int Factorial(int n)\r\n"
-			"{\r\n"
-			"    if (n <= 1)\r\n"
-			"    {\r\n"
-			"        return 1;\r\n"
-			"    }\r\n"
-			"    else\r\n"
-			"    {\r\n"
-			"        return n * Factorial(n - 1);\r\n"
-			"    }\r\n"
-			"}\r\n"));
-		/*for (int i = 1; i <= 10000000; i++)
-		{
-			char buf[50];
-			sprintf(buf, "Test line %d\r\n", i);
-			_scintilla->WndProc(Scintilla::Message::AppendText, strlen(buf), reinterpret_cast<Scintilla::uptr_t>(buf));
-		}*/
 		_scintilla->WndProc(Scintilla::Message::SetMultipleSelection, true, 0);
 		_scintilla->WndProc(Scintilla::Message::SetScrollWidth, 2000 * _dpiScale, 0); // Todo: Update on scale (careful not to override measured)
 		_scintilla->WndProc(Scintilla::Message::SetScrollWidthTracking, true, 0);
@@ -76,9 +59,14 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->WndProc(Scintilla::Message::SetHScrollBar, true, 0);
 		_scintilla->WndProc(Scintilla::Message::SetEndAtLastLine, false, 0);
 		_scintilla->WndProc(Scintilla::Message::SetTabWidth, 4, 0);
-		//_scintilla->WndProc(Scintilla::Message::SetWrapMode, SC_WRAP_WHITESPACE, 0);
 		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
 
+#ifdef JSON
+		const auto lexer{ CreateLexer("json") };
+		lexer->PropertySet("lexer.json.allow.comments", "1");
+		lexer->PropertySet("lexer.json.escape.sequence", "1");
+		_scintilla->WndProc(Scintilla::Message::SetILexer, 0, reinterpret_cast<Scintilla::uptr_t>(lexer));
+#else
 		_scintilla->WndProc(Scintilla::Message::SetILexer, 0, reinterpret_cast<Scintilla::uptr_t>(CreateLexer("cpp")));
 		// This list of keywords from SciTe (cpp.properties)
 		_scintilla->WndProc(Scintilla::Message::SetKeyWords, 0, reinterpret_cast<Scintilla::uptr_t>(
@@ -94,6 +82,7 @@ namespace winrt::MicaEditor::implementation
 			"virtual void volatile wchar_t xor xor_eq"));
 		_scintilla->WndProc(Scintilla::Message::SetKeyWords, 1, reinterpret_cast<Scintilla::uptr_t>(
 			"break case catch co_await co_return co_yield continue do else for goto if return switch throw try while "));
+#endif
 
 		// Use the new ActualTheme property on Fall Creators Update and above. On WinUI 3, this is always present, so the check is not needed
 #ifndef WINUI3
@@ -179,7 +168,11 @@ namespace winrt::MicaEditor::implementation
 		// These colors mostly adapted from https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_plus.json
 		if (useDarkTheme)
 		{
-			for (uptr_t i{ SCE_C_DEFAULT }; i < SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
+#ifdef JSON
+			for (uptr_t i{ SCE_JSON_DEFAULT }; i <= SCE_JSON_ERROR; i++)
+#else
+			for (uptr_t i{ SCE_C_DEFAULT }; i <= SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
+#endif
 			{
 				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i, RGB(0xD4, 0xD4, 0xD4));
 				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
@@ -188,7 +181,22 @@ namespace winrt::MicaEditor::implementation
 				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i + 64, transparencyColor);
 			}
 
+#ifdef JSON
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_PROPERTYNAME, RGB(0x9C, 0xDC, 0xFE));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_ESCAPESEQUENCE, RGB(0xD7, 0xBA, 0x7D));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_NUMBER, RGB(0xB5, 0xCE, 0xA8));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x56, 0x9C, 0xD6));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xC5, 0x86, 0xC0));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRING, RGB(0xCE, 0x91, 0x78));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRINGEOL, RGB(0xCE, 0x91, 0x78));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_OPERATOR, RGB(0xD4, 0xD4, 0xD4));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x9B, 0x9B, 0x9B));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_ERROR, RGB(0xcd, 0x31, 0x31));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_BLOCKCOMMENT, RGB(0x6A, 0x99, 0x55));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_LINECOMMENT, RGB(0x6A, 0x99, 0x55));
+#else
 			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_IDENTIFIER, RGB(0x9C, 0xDC, 0xFE));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ESCAPESEQUENCE, RGB(0xD7, 0xBA, 0x7D));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_NUMBER, RGB(0xB5, 0xCE, 0xA8));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x56, 0x9C, 0xD6));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xC5, 0x86, 0xC0));
@@ -198,6 +206,7 @@ namespace winrt::MicaEditor::implementation
 			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENT, RGB(0x6A, 0x99, 0x55));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENTLINE, RGB(0x6A, 0x99, 0x55));
+#endif
 
 			_scintilla->WndProc(Scintilla::Message::SetSelBack, true, RGB(0x26, 0x4F, 0x78));
 			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_DEFAULT, transparencyColor);
@@ -207,7 +216,11 @@ namespace winrt::MicaEditor::implementation
 		}
 		else
 		{
-			for (uptr_t i{ SCE_C_DEFAULT }; i < SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
+#ifdef JSON
+			for (uptr_t i{ SCE_JSON_DEFAULT }; i <= SCE_JSON_ERROR; i++)
+#else
+			for (uptr_t i{ SCE_C_DEFAULT }; i <= SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
+#endif
 			{
 				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i, RGB(0x00, 0x00, 0x00));
 				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
@@ -216,7 +229,22 @@ namespace winrt::MicaEditor::implementation
 				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i + 64, transparencyColor);
 			}
 
+#ifdef JSON
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_PROPERTYNAME, RGB(0x00, 0x10, 0x80));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_ESCAPESEQUENCE, RGB(0xEE, 0x00, 0x00));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_NUMBER, RGB(0x09, 0x86, 0x58));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x00, 0x00, 0xFF));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xaf, 0x00, 0xdb));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRING, RGB(0xa3, 0x15, 0x15));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRINGEOL, RGB(0xa3, 0x15, 0x15));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_OPERATOR, RGB(0x00, 0x00, 0x00));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x80, 0x80, 0x80));
+			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_BLOCKCOMMENT, RGB(0x00, 0x80, 0x00));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_LINECOMMENT, RGB(0x00, 0x80, 0x00));
+#else
 			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_IDENTIFIER, RGB(0x00, 0x10, 0x80));
+			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ESCAPESEQUENCE, RGB(0xEE, 0x00, 0x00));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_NUMBER, RGB(0x09, 0x86, 0x58));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x00, 0x00, 0xFF));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xaf, 0x00, 0xdb));
@@ -226,6 +254,7 @@ namespace winrt::MicaEditor::implementation
 			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENT, RGB(0x00, 0x80, 0x00));
 			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENTLINE, RGB(0x00, 0x80, 0x00));
+#endif
 
 			_scintilla->WndProc(Scintilla::Message::SetSelBack, true, RGB(0xAD, 0xD6, 0xFF));
 			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_DEFAULT, transparencyColor);
@@ -289,7 +318,7 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->RegisterGraphics(_wrapper);
 		_vsisNative->RegisterForUpdatesNeeded(_scintilla.as<::IVirtualSurfaceUpdatesCallbackNative>().get());
 
-		// The SurfaceImageSource object's underlying 
+		// The SurfaceImageSource object's underlying
 		// ISurfaceImageSourceNativeWithD2D object will contain the completed bitmap.
 
 		auto horizontalScrollBar{ GetTemplateChild(L"HorizontalScrollBar").try_as<ScrollBar>() };
@@ -322,7 +351,7 @@ namespace winrt::MicaEditor::implementation
 		// Todo: Evaluate if this is an appropriate place to add this event (and other code in this method)
 		_suspendingRevoker = Application::Current().Suspending(auto_revoke, { this, &MicaEditorControl::Application_Suspending });
 #endif
-}
+	}
 
 	// Todo: Focus bug: deactive window, click on control, press ctrl+a quickly. result: selection disappears
 
@@ -465,7 +494,7 @@ namespace winrt::MicaEditor::implementation
 			|| (Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::RightWindows) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
 		{
 			modifiers |= VirtualKeyModifiers::Windows;
-	}
+		}
 #else
 		auto window{ Windows::UI::Core::CoreWindow::GetForCurrentThread() }; // Todo: is it worth it to store this?
 		// Todo: Do we need to check Locked?
