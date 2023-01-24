@@ -698,7 +698,7 @@ namespace Scintilla::Internal {
 		// Called when IME Window closed
 		// clear IME composition state.
 		view.imeCaretBlockOverride = false;
-		pdoc->TentativeUndo();
+		pdoc->TentativeUndo(); // Todo: IME undo support needs work
 		ShowCaretAtCurrentPosition();
 	}
 
@@ -1029,25 +1029,28 @@ namespace Scintilla::Internal {
 				_lockAsync = NONE;
 				_tfTextStoreACPSink->OnLockGranted(_lock);
 			}
-			_lock = NONE;
-		}
 
-		while (!msgq.empty())
-		{
-			OutputDebugStringW(L"Processing Queued Message\n");
-			ProcessMessage(msgq.front());
-			msgq.pop();
-		}
-		while (!notifyq.empty())
-		{
-			OutputDebugStringW(L"Processing Queued Notification\n");
-			ProcessMessage(notifyq.front());
-			notifyq.pop();
-		}
-		while (!freeq.empty())
-		{
-			delete[] freeq.front();
-			freeq.pop();
+			while (!msgq.empty())
+			{
+				OutputDebugStringW(L"Processing Queued Message\n");
+				ProcessMessage(msgq.front());
+				msgq.pop();
+			}
+			_fromNotifyQueue = true;
+			while (!notifyq.empty())
+			{
+				OutputDebugStringW(L"Processing Queued Notification\n");
+				ProcessMessage(notifyq.front());
+				notifyq.pop();
+			}
+			_fromNotifyQueue = false;
+			while (!freeq.empty())
+			{
+				delete[] freeq.front();
+				freeq.pop();
+			}
+
+			_lock = NONE;
 		}
 
 		return hr;
@@ -1358,7 +1361,7 @@ namespace Scintilla::Internal {
 		auto  endPos{ pdoc->MovePositionOutsideChar(docEnd, 1, true) };
 		auto  len{ endPos - startPos };
 		auto utf16len{ pdoc->CountUTF16(startPos, endPos) };
-		pdoc->BeginUndoAction();
+		//pdoc->BeginUndoAction();
 		pdoc->DeleteChars(startPos, len);
 		int cchText{ -1 };
 		char *szText{ nullptr };
@@ -1407,7 +1410,7 @@ namespace Scintilla::Internal {
 			pChange->acpNewEnd = newAcpStart + cch;
 			DebugOut(L"SetText, Start: %d, Old End: %d, New End: %d\n", pChange->acpStart, pChange->acpOldEnd, pChange->acpNewEnd);
 		}
-		pdoc->EndUndoAction();
+		//pdoc->EndUndoAction();
 		NotifyChange();
 		Redraw();
 		return S_OK;
@@ -1938,7 +1941,8 @@ namespace Scintilla::Internal {
 	{
 		if (_lock != NONE)
 		{
-			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, false));
+			// Todo: notification queue might defeat the point of "before" notifications
+			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, _fromNotifyQueue));
 		}
 		else
 		{

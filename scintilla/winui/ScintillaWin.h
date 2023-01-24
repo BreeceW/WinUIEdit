@@ -110,6 +110,7 @@ namespace Scintilla::Internal {
 		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
 		std::queue<char *> freeq{}; //3000
 		bool _shouldNotifyTsf{ true };
+		bool _fromNotifyQueue{ false };
 
 		// WinUI Todo: These two values should be updated to use the Windows setting
 		unsigned int linesPerScroll{ 3 };	///< Intellimouse support
