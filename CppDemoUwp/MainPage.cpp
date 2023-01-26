@@ -175,7 +175,7 @@ namespace winrt::CppDemoUwp::implementation
 
 	void MainPage::Editor_UpdateUI(MicaEditor::Editor const &sender, UpdateUIEventArgs const &args)
 	{
-		if (static_cast<Update>(args.Updated()) == Update::Selection)
+		if (static_cast<int>(static_cast<Update>(args.Updated()) & (Update::Content | Update::Selection)))
 		{
 			const auto pos{ sender.CurrentPos() };
 			const auto ln{ sender.LineFromPosition(pos) };
