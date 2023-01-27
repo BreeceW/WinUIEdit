@@ -122,7 +122,7 @@ namespace winrt::CppDemoUwp::implementation
 
 	IAsyncAction MainPage::OpenAsync(StorageFile file)
 	{
-		SetOpenFile(file);
+		_activeFile = file;
 		const auto stream{ co_await file.OpenReadAsync() };
 		if (stream.Size() >= (std::numeric_limits<uint32_t>::max)())
 		{
@@ -135,6 +135,7 @@ namespace winrt::CppDemoUwp::implementation
 		Editor().Editor().Allocate(string.Length() + 1000);
 		Editor().Editor().SetTextFromBuffer(string);
 		Editor().Editor().EmptyUndoBuffer();
+		SetTitle(false);
 	}
 
 	IAsyncAction MainPage::SaveAsync(StorageFile file)
@@ -155,15 +156,10 @@ namespace winrt::CppDemoUwp::implementation
 		const auto file{ co_await savePicker.PickSaveFileAsync() };
 		if (file)
 		{
-			SetOpenFile(file);
+			_activeFile = file;
+			SetTitle(true);
 			co_await SaveAsync(file);
 		}
-	}
-
-	void MainPage::SetOpenFile(StorageFile const &file)
-	{
-		_activeFile = file;
-		SetTitle(false);
 	}
 
 	void MainPage::SetTitle(bool modified)

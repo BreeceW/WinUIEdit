@@ -35,7 +35,6 @@ namespace winrt::CppDemoUwp::implementation
 		Windows::Foundation::IAsyncAction OpenAsync(Windows::Storage::StorageFile file);
 		Windows::Foundation::IAsyncAction SaveAsync(Windows::Storage::StorageFile file);
 		Windows::Foundation::IAsyncAction SaveAsAsync();
-		void SetOpenFile(Windows::Storage::StorageFile const &file);
 		void SetTitle(bool modified);
 	};
 }
