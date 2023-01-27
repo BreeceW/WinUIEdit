@@ -1355,66 +1355,70 @@ namespace Scintilla::Internal {
 			return TS_E_READONLY;
 		}
 
-		auto docStart{ AcpToDocPosition(acpStart) };
-		auto docEnd{ AcpToDocPosition(acpEnd) };
+		const auto docStart{ AcpToDocPosition(acpStart) };
+		const auto docEnd{ AcpToDocPosition(acpEnd) };
 
-		// set text by deleting existing chars and inserting new text
-		auto startPos{ pdoc->MovePositionOutsideChar(docStart, -1, true) };
-		auto  endPos{ pdoc->MovePositionOutsideChar(docEnd, 1, true) };
-		auto  len{ endPos - startPos };
-		auto utf16len{ pdoc->CountUTF16(startPos, endPos) };
-		//pdoc->BeginUndoAction();
-		pdoc->DeleteChars(startPos, len);
-		int cchText{ -1 };
-		char *szText{ nullptr };
-		if (IsUnicodeMode())
+		const auto startPos{ pdoc->MovePositionOutsideChar(docStart, -1, true) };
+		const auto endPos{ pdoc->MovePositionOutsideChar(docEnd, 1, true) };
+
+		const auto len{ endPos - startPos };
+		Scintilla::Position utf16Len{ 0 };
+		if (cch == 0)
 		{
-			cchText = UTF8Length({ pchText, cch });
-			szText = new char[cchText + 1];
-			UTF8FromUTF16({ pchText, cch }, szText, cchText);
+			pdoc->DeleteChars(startPos, len);
 		}
 		else
 		{
-			UINT cpDest = CodePageFromCharSet(vs.styles[STYLE_DEFAULT].characterSet, pdoc->dbcsCodePage);
-			cchText = ::WideCharToMultiByte(cpDest, 0, pchText, cch,
-				NULL, 0, NULL, NULL);
-			szText = new char[cchText + 1];
-			if (szText) {
-				::WideCharToMultiByte(cpDest, 0, pchText, cch,
-					szText, cchText, NULL, NULL);
-				szText[cchText] = '\0';
+			utf16Len = pdoc->CountUTF16(startPos, endPos);
+
+			auto cchText{ -1 };
+			char *szText{ nullptr };
+
+			if (IsUnicodeMode())
+			{
+				cchText = UTF8Length({ pchText, cch });
+				szText = new char[cchText + 1];
+				if (!szText)
+				{
+					return E_OUTOFMEMORY;
+				}
+				UTF8FromUTF16({ pchText, cch }, szText, cchText);
 			}
-		}
+			else
+			{
+				const auto cpDest{ CodePageFromCharSet(vs.styles[STYLE_DEFAULT].characterSet, pdoc->dbcsCodePage) };
+				cchText = WideCharToMultiByte(cpDest, 0, pchText, cch, nullptr, 0, nullptr, nullptr);
+				szText = new char[cchText + 1];
+				if (!szText)
+				{
+					return E_OUTOFMEMORY;
+				}
+				WideCharToMultiByte(cpDest, 0, pchText, cch, szText, cchText, nullptr, nullptr);
+			}
+			szText[cchText] = '\0';
 
-		int notifyChar = szText[0];
-
-		if (pdoc->InsertString(startPos, szText, cchText))
-		{
+			__super::SetSelection(startPos, endPos); // Todo: Fix multi-caret support
+			try
+			{
+				InsertCharacter(szText, Scintilla::CharacterSource::DirectInput);
+			}
+			catch (std::runtime_error const &)
+			{
+				// Todo: this catches in error in trying to convert some longer strings into UTF-32
+				// This is not ideal and InsertCharacter should probably be replaced with a custom method based off it
+			}
 			freeq.push(szText);
-		}
-		else
-		{
-			delete[] szText;
-		}
-
-		EnsureCaretVisible();
-		ShowCaretAtCurrentPosition(); // Todo: Reevaluate how text at the current position is inserted (this is copied out of InsertCharacter)
-		if (cchText == 1)
-		{
-			NotifyChar(notifyChar, Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
 		}
 
 		if (pChange)
 		{
 			auto newAcpStart{ DocPositionToAcp(startPos) };
 			pChange->acpStart = newAcpStart;
-			pChange->acpOldEnd = newAcpStart + utf16len;
+			pChange->acpOldEnd = newAcpStart + utf16Len;
 			pChange->acpNewEnd = newAcpStart + cch;
 			DebugOut(L"SetText, Start: %d, Old End: %d, New End: %d\n", pChange->acpStart, pChange->acpOldEnd, pChange->acpNewEnd);
 		}
-		//pdoc->EndUndoAction();
-		NotifyChange();
-		Redraw();
+
 		return S_OK;
 	}
 
