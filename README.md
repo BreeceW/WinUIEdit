@@ -5,7 +5,7 @@ This is an early work-in-progress code editor control for both UWP and WinUI 3. 
 You can download a demo from Microsoft Store [here](https://www.microsoft.com/store/apps/9PGZBDP9PSPF). Expect some occasional glitches.
 
 ### Current state of the control
-Mouse and keyboard input are supported. IME support is somewhat present, though far from finished, especially on non-PC devices. Keyboard input does not currently work if using the control in a XAML Island. Currently, opening large files is not performant due to how IME support is implemented. This should be fixed in the future. The demo is a clone of the Windows 11 Notepad app with some functionality.
+Mouse and keyboard input are supported. IME support is somewhat present, though far from finished, especially on non-PC devices. Note that there is a currently a bug that keyboard input does not work if using the control in a XAML Island. The demo is a clone of the Windows 11 Notepad app with some functionality.
 
 <img alt="Mica Editor: replica of Windows 11 Notepad with WinUIEdit control using syntax highlighting, line numbers, and mica, demoing C++ sample code" src="https://user-images.githubusercontent.com/18747724/213900470-3c57b252-3488-40d1-b708-f392a30aab2f.png" width="500" />
 

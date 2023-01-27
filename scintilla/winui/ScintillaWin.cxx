@@ -425,6 +425,8 @@ namespace Scintilla::Internal {
 
 	ScintillaWinUI::ScintillaWinUI()
 	{
+		pdoc->AllocateLineCharacterIndex(Scintilla::LineCharacterIndexType::Utf16);
+
 		// Todo: Note that Windows Terminal repo may be able to help find a way to use TSF instead of WM_CHAR.
 		// Islands eats the text entry too
 		// This probably won't work, since it seems mandatory for win32 (https://stackoverflow.com/a/41452204/16152265)
@@ -1660,22 +1662,9 @@ namespace Scintilla::Internal {
 
 	Sci::Position ScintillaWinUI::AcpToDocPosition(Sci::Position acp)
 	{
-		/*Sci::Position i{0};
-		Sci::Position p{ 0 };
-		Sci::Position utf16{ 0 };
-
-		while (utf16 != acp)
-		{
-			utf16 = pdoc->CountUTF16(0, i++);
-		}
-		if (i != 0)
-		{
-			p = i - 1;
-		}
-		return p;*/
-
-		LONG c{ 0 };
-		Sci::Position p{ 0 };
+		Sci::Line line{ pdoc->LineFromPositionIndex(acp, Scintilla::LineCharacterIndexType::Utf16) };
+		Sci::Position c{ pdoc->IndexLineStart(line, Scintilla::LineCharacterIndexType::Utf16) };
+		Sci::Position p{ pdoc->LineStart(line) };
 
 		while (c != acp)
 		{
@@ -1693,11 +1682,8 @@ namespace Scintilla::Internal {
 
 	Sci::Position ScintillaWinUI::DocPositionToAcp(Sci::Position docPosition)
 	{
-		// A little worried that CountUTF16 calling MovePositionOutsideChar might make position translation inconsistent
-		// Also, we have calls that pass -1 and start and 1 and end to MovePositionOutsideChar, but this uses 1 and start and -1 and end
-		// Todo: So double check elsewhere if it makes the most sense to move in that direction
-		// Why not use pdoc->GetRelativePositionUTF16? Because it fails with multi-byte UTF-16 characters
-		return pdoc->CountUTF16(0, docPosition);
+		const auto line{ pdoc->LineFromPosition(docPosition) };
+		return pdoc->CountUTF16(pdoc->LineStart(line), docPosition) + pdoc->IndexLineStart(pdoc->LineFromPosition(docPosition), Scintilla::LineCharacterIndexType::Utf16);
 	}
 
 	winrt::DUX::DispatcherTimer ScintillaWinUI::GetTimerForReason(TickReason reason)
