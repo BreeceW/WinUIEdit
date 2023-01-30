@@ -363,14 +363,16 @@ namespace Scintilla::Internal {
 		winrt::Windows::Foundation::Point _point;
 		uint64_t _timestamp;
 		winrt::Windows::System::VirtualKeyModifiers _modifiers;
+		winrt::DUI::PointerPoint _pointerPoint{ nullptr };
 
 	public:
-		PointerMessage::PointerMessage(PointerEventType pointerEvent, winrt::Windows::Foundation::Point point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers)
+		PointerMessage::PointerMessage(PointerEventType pointerEvent, winrt::Windows::Foundation::Point point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers, winrt::DUI::PointerPoint const &pointerPoint = nullptr)
 		{
 			_pointerEvent = pointerEvent;
 			_point = point;
 			_timestamp = timestamp;
 			_modifiers = modifiers;
+			_pointerPoint = pointerPoint;
 		}
 
 		uint8_t PointerMessage::Type() const override
@@ -396,6 +398,11 @@ namespace Scintilla::Internal {
 		winrt::Windows::System::VirtualKeyModifiers Modifiers()
 		{
 			return _modifiers;
+		}
+
+		winrt::DUI::PointerPoint PointerPoint()
+		{
+			return _pointerPoint;
 		}
 	};
 
@@ -628,10 +635,10 @@ namespace Scintilla::Internal {
 	{
 		switch (message->Type())
 		{
-		case CharacterRecievedMessageId:
+		case NotifyMessageId:
 		{
-			const auto characterRecievedMessage{ static_cast<CharacterRecievedMessage *>(message.get()) };
-			ProcessCharacterRecievedMessage(characterRecievedMessage->Character());
+			const auto notifyMessage{ static_cast<NotifyMessage *>(message.get()) };
+			ProcessNotifyMessage(notifyMessage->WParam(), notifyMessage->NotificationData(), notifyMessage->NotifyTsf());
 		}
 		break;
 
@@ -647,10 +654,31 @@ namespace Scintilla::Internal {
 		}
 		break;
 
-		case NotifyMessageId:
+		case PointerMessageId:
 		{
-			const auto notifyMessage{ static_cast<NotifyMessage *>(message.get()) };
-			ProcessNotifyMessage(notifyMessage->WParam(), notifyMessage->NotificationData(), notifyMessage->NotifyTsf());
+			const auto pointerMessage{ static_cast<PointerMessage *>(message.get()) };
+			switch (pointerMessage->PointerEvent())
+			{
+			case PointerMessage::PointerEventType::PointerPressed:
+				ProcessPointerPressedMessage(pointerMessage->Point(), pointerMessage->Timestamp(), pointerMessage->Modifiers());
+				break;
+			case PointerMessage::PointerEventType::RightPointerPressed:
+				ProcessRightPointerPressedMessage(pointerMessage->Point(), pointerMessage->Timestamp(), pointerMessage->Modifiers());
+				break;
+			case PointerMessage::PointerEventType::PointerMoved:
+				ProcessPointerMovedMessage(pointerMessage->Point(), pointerMessage->Timestamp(), pointerMessage->Modifiers(), pointerMessage->PointerPoint());
+				break;
+			case PointerMessage::PointerEventType::PointerReleased:
+				ProcessPointerReleasedMessage(pointerMessage->Point(), pointerMessage->Timestamp(), pointerMessage->Modifiers());
+				break;
+			}
+		}
+		break;
+
+		case CharacterRecievedMessageId:
+		{
+			const auto characterRecievedMessage{ static_cast<CharacterRecievedMessage *>(message.get()) };
+			ProcessCharacterRecievedMessage(characterRecievedMessage->Character());
 		}
 		break;
 		}
@@ -2104,17 +2132,17 @@ namespace Scintilla::Internal {
 		}
 	}
 
-	void ScintillaWinUI::PointerMoved(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers)
+	void ScintillaWinUI::PointerMoved(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers, winrt::DUI::PointerPoint const &pointerPoint)
 	{
 		//SetTrackMouseLeaveEvent(true); // WinUI Todo: fix this
 		// Todo: might want to check if actually moved
 		if (_lock != NONE)
 		{
-			msgq.push(std::make_unique<PointerMessage>(PointerMessage::PointerEventType::PointerMoved, point, timestamp, modifiers));
+			msgq.push(std::make_unique<PointerMessage>(PointerMessage::PointerEventType::PointerMoved, point, timestamp, modifiers, pointerPoint));
 		}
 		else
 		{
-			ProcessPointerMovedMessage(point, timestamp, modifiers);
+			ProcessPointerMovedMessage(point, timestamp, modifiers, pointerPoint);
 		}
 	}
 
@@ -2137,13 +2165,24 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::ProcessRightPointerPressedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers)
 	{
-		RightButtonDownWithModifiers(Point{ point.X, point.Y }, timestamp, WindowsModifiers(modifiers));
+		const Point pt{ point.X, point.Y };
+		if (!PointInSelection(pt))
+		{
+			CancelModes();
+			SetEmptySelection(PositionFromLocation(pt));
+		}
+
+		RightButtonDownWithModifiers(pt, timestamp, WindowsModifiers(modifiers));
 	}
 
-	void ScintillaWinUI::ProcessPointerMovedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers)
+	void ScintillaWinUI::ProcessPointerMovedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers, winrt::DUI::PointerPoint const &pointerPoint)
 	{
 		//SetTrackMouseLeaveEvent(true); // WinUI Todo: fix this
 		// Todo: might want to check if actually moved
+		if (inDragDrop == DragDrop::initial)
+		{
+			_dragPointer = pointerPoint;
+		}
 		ButtonMoveWithModifiers(Point{ point.X, point.Y }, timestamp, WindowsModifiers(modifiers));
 	}
 
@@ -2515,6 +2554,145 @@ namespace Scintilla::Internal {
 	void ScintillaWinUI::SetWndProcTag(winrt::Windows::Foundation::IInspectable const &tag)
 	{
 		_wndProcTag = tag;
+	}
+
+	winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation ScintillaWinUI::EffectFromState(winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const &allowedOperations, winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers const &grfKeyState) const noexcept {
+		// Control is for copy and alt is for move
+		winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation dwEffect{ static_cast<int>(allowedOperations) & static_cast<int>(winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move)
+			? winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move
+			: winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Copy };
+		if (static_cast<int>(grfKeyState) & static_cast<int>(winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers::Alt)
+			&& static_cast<int>(allowedOperations) & static_cast<int>(winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move))
+		{
+			dwEffect = winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move;
+		}
+		if (static_cast<int>(grfKeyState) & static_cast<int>(winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers::Control)
+			&& static_cast<int>(allowedOperations) & static_cast<int>(winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Copy))
+		{
+			dwEffect = winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Copy;
+		}
+		return dwEffect;
+	}
+
+	void ScintillaWinUI::DragEnter(winrt::Windows::ApplicationModel::DataTransfer::DataPackageView const &dataView, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const &allowedOperations, winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers const &modifiers, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation &operation)
+	{
+		hasOKText = dataView.Contains(winrt::Windows::ApplicationModel::DataTransfer::StandardDataFormats::Text());
+		if (hasOKText)
+		{
+			operation = EffectFromState(allowedOperations, modifiers);
+		}
+	}
+
+	void ScintillaWinUI::DragOver(winrt::Windows::Foundation::Point const &point, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const &allowedOperations, winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers const &modifiers, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation &operation)
+	{
+		try
+		{
+			if (!hasOKText || pdoc->IsReadOnly())
+			{
+				operation = winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::None;
+				return;
+			}
+
+			operation = EffectFromState(allowedOperations, modifiers);
+
+			// Update the cursor.
+			SetDragPosition(SPositionFromLocation(Point{ point.X, point.Y }, false, false, UserVirtualSpace()));
+		}
+		catch (...)
+		{
+			errorStatus = Status::Failure;
+		}
+	}
+
+	void ScintillaWinUI::DragLeave()
+	{
+		try
+		{
+			SetDragPosition(SelectionPosition(Sci::invalidPosition));
+		}
+		catch (...)
+		{
+			errorStatus = Status::Failure;
+		}
+	}
+
+	void ScintillaWinUI::Drop(winrt::Windows::Foundation::Point const &point, winrt::Windows::ApplicationModel::DataTransfer::DataPackageView const &dataView, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const &allowedOperations, winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers const &modifiers, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation &operation)
+	{
+		try
+		{
+			operation = EffectFromState(allowedOperations, modifiers);
+
+			SetDragPosition(SelectionPosition(Sci::invalidPosition));
+
+			DoDropAsync(point, dataView, operation);
+		}
+		catch (...)
+		{
+			errorStatus = Status::Failure;
+		}
+	}
+
+	winrt::fire_and_forget ScintillaWinUI::DoDropAsync(winrt::Windows::Foundation::Point const point, winrt::Windows::ApplicationModel::DataTransfer::DataPackageView const dataView, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const operation)
+	{
+		try
+		{
+			std::string putf{ winrt::to_string(co_await dataView.GetTextAsync()) }; // Todo: Fix (check content type and async)
+
+			if (putf.empty())
+			{
+				co_return;
+			}
+
+			bool isRectangular{ false }; // WinUI Todo: implement
+
+			const SelectionPosition movePos = SPositionFromLocation(Point{ point.X, point.Y }, false, false, UserVirtualSpace());
+
+			DropAt(movePos, putf.c_str(), putf.size(), operation == winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move, isRectangular);
+		}
+		catch (...)
+		{
+			errorStatus = Status::Failure;
+		}
+	}
+
+	// WinUI Todo: consider overriding DragThreshold
+
+	void ScintillaWinUI::StartDrag()
+	{
+		DoDragAsync();
+	}
+
+	winrt::fire_and_forget ScintillaWinUI::DoDragAsync()
+	{
+		if (!_wrapper || !_dragPointer)
+		{
+			co_return;
+		}
+		inDragDrop = DragDrop::dragging;
+		DWORD dwEffect = 0;
+		dropWentOutside = true;
+		//Platform::DebugPrintf("About to DoDragDrop %x %x\n", pDataObject, pDropSource);
+		try
+		{
+			const auto operation{ co_await _wrapper->StartDragAsync(_dragPointer) };
+			//Platform::DebugPrintf("DoDragDrop = %x\n", hr);
+			if (operation == winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move && dropWentOutside)
+			{
+				// Remove dragged out text
+				ClearSelection();
+			}
+		}
+		catch (winrt::hresult_error const &)
+		{
+		}
+		inDragDrop = DragDrop::none;
+		_dragPointer = nullptr;
+		SetDragPosition(SelectionPosition(Sci::invalidPosition));
+	}
+
+	std::string_view ScintillaWinUI::GetDragData()
+	{
+		return { drag.Data(), drag.LengthWithTerminator() };
 	}
 
 	LRESULT ScintillaWinUI::SendMessage(UINT msg, WPARAM wParam, LPARAM lParam)
