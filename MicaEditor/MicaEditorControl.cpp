@@ -342,6 +342,8 @@ namespace winrt::MicaEditor::implementation
 
 			_wrapper->SetMouseCaptureElement(imageTarget);
 
+			imageTarget.ContextRequested({ this, &MicaEditorControl::ImageTarget_ContextRequested });
+
 			ImageBrush brush{};
 			brush.ImageSource(virtualSurfaceImageSource);
 			imageTarget.Background(brush);
@@ -366,7 +368,10 @@ namespace winrt::MicaEditor::implementation
 	{
 		__super::OnLostFocus(e);
 
-		_scintilla->FocusChanged(false);
+		if (!_isContextMenuOpen)
+		{
+			_scintilla->FocusChanged(false);
+		}
 	}
 
 	// Todo: Combine pointer events and use PointerPointProperties.PointerUpdateKind to determine which button and state
@@ -557,6 +562,98 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->PointerWheelChanged(properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), e.KeyModifiers());
 	}
 
+	void MicaEditorControl::ImageTarget_ContextRequested(UIElement const &sender, ContextRequestedEventArgs const &e)
+	{
+		// Todo: make shift+f10/context menu key button work
+
+		const MenuFlyout menu{};
+		menu.Opening([&](const auto &, const auto &)
+			{
+				_isContextMenuOpen = true;
+			});
+		menu.Closing([&](const auto &, const auto &)
+			{
+				_isContextMenuOpen = false;
+			});
+
+		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };
+		const auto selection{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetSelectionEmpty, 0, 0)) };
+
+		const MenuFlyoutItem undoItem{};
+		undoItem.Text(L"Undo"); // Todo: Localize
+		undoItem.Icon(SymbolIcon{ Symbol::Undo });
+		undoItem.Tag(box_value(ScintillaMessage::Undo));
+		undoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanUndo, 0, 0));
+		undoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click }); // Todo: Revoke event handler?
+		menu.Items().Append(undoItem);
+
+		const MenuFlyoutItem redoItem{};
+		redoItem.Text(L"Redo");
+		redoItem.Icon(SymbolIcon{ Symbol::Redo });
+		redoItem.Tag(box_value(ScintillaMessage::Redo));
+		redoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanRedo, 0, 0));
+		redoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(redoItem);
+
+		menu.Items().Append(MenuFlyoutSeparator{});
+
+		const MenuFlyoutItem cutItem{};
+		cutItem.Text(L"Cut");
+		cutItem.Icon(SymbolIcon{ Symbol::Cut });
+		cutItem.Tag(box_value(ScintillaMessage::Cut));
+		cutItem.IsEnabled(writable && selection);
+		cutItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(cutItem);
+
+		const MenuFlyoutItem copyItem{};
+		copyItem.Text(L"Copy");
+		copyItem.Icon(SymbolIcon{ Symbol::Copy });
+		copyItem.Tag(box_value(ScintillaMessage::Copy));
+		copyItem.IsEnabled(selection);
+		copyItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(copyItem);
+
+		const MenuFlyoutItem pasteItem{};
+		pasteItem.Text(L"Paste");
+		pasteItem.Icon(SymbolIcon{ Symbol::Paste });
+		pasteItem.Tag(box_value(ScintillaMessage::Paste));
+		pasteItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanPaste, 0, 0));
+		pasteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(pasteItem);
+
+		const MenuFlyoutItem deleteItem{};
+		deleteItem.Text(L"Delete");
+		deleteItem.Icon(SymbolIcon{ Symbol::Delete });
+		deleteItem.Tag(box_value(ScintillaMessage::Clear));
+		deleteItem.IsEnabled(writable && selection);
+		deleteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(deleteItem);
+
+		menu.Items().Append(MenuFlyoutSeparator{});
+
+		const MenuFlyoutItem selectAllItem{};
+		selectAllItem.Text(L"Select all");
+		selectAllItem.Icon(SymbolIcon{ Symbol::SelectAll });
+		selectAllItem.Tag(box_value(ScintillaMessage::SelectAll));
+		selectAllItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(selectAllItem);
+
+		Point point;
+		if (e.TryGetPosition(sender, point))
+		{
+			menu.ShowAt(sender, point);
+		}
+		else
+		{
+			menu.ShowAt(sender.as<FrameworkElement>());
+		}
+	}
+
+	void MicaEditorControl::ContextMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e)
+	{
+		_scintilla->WndProc(static_cast<Scintilla::Message>(unbox_value<ScintillaMessage>(sender.as<FrameworkElement>().Tag())), 0, 0);
+	}
+
 	void MicaEditorControl::HorizontalScrollBar_Scroll(IInspectable const &sender, ScrollEventArgs const &e)
 	{
 		_scintilla->HorizontalScroll(static_cast<Scintilla::Internal::ScrollEventType>(e.ScrollEventType()), static_cast<int>(e.NewValue()));
@@ -567,7 +664,7 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->Scroll(static_cast<Scintilla::Internal::ScrollEventType>(e.ScrollEventType()), static_cast<int>(e.NewValue()));
 	}
 
-	LRESULT MicaEditorControl::WndProc(Windows::Foundation::IInspectable const &tag, UINT msg, WPARAM wParam, LPARAM lParam)
+	LRESULT MicaEditorControl::WndProc(IInspectable const &tag, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		if (msg == WM_NOTIFY)
 		{
