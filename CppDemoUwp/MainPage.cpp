@@ -46,6 +46,11 @@ namespace winrt::CppDemoUwp::implementation
 		TitleText().Opacity(active ? 1 : 0.4);
 	}
 
+	void MainPage::Editor_Loaded(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+	}
+
 	/*
 	 * The Editor.Scintilla method is a temporary API that exposes Scintilla's window message-based API to WinRT.
 	 * The plan is to expose Scintilla's API in a manner more suitable for WinRT (properties, methods, and events instead of messages).
@@ -54,6 +59,8 @@ namespace winrt::CppDemoUwp::implementation
 
 	IAsyncAction MainPage::OpenMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		const FileOpenPicker picker{};
 		picker.FileTypeFilter().Append(L".txt");
 		picker.FileTypeFilter().Append(L"*");
@@ -67,6 +74,8 @@ namespace winrt::CppDemoUwp::implementation
 
 	IAsyncAction MainPage::SaveMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		if (_activeFile)
 		{
 			co_await SaveAsync(_activeFile);
@@ -79,37 +88,83 @@ namespace winrt::CppDemoUwp::implementation
 
 	IAsyncAction MainPage::SaveAsMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		co_await SaveAsAsync();
 	}
 
 	IAsyncAction MainPage::NewWindowMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		co_await Application::Current().as<App>()->NewWindowAsync();
+	}
+
+	void MainPage::NewMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+
+		_activeFile = nullptr;
+		Editor().Editor().ClearAll();
+		Editor().Editor().EmptyUndoBuffer();
+		SetTitle(false);
 	}
 
 	void MainPage::ZoomInMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		Editor().Editor().ZoomIn();
 	}
 
 	void MainPage::ZoomOutMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		Editor().Editor().ZoomOut();
 	}
 
 	void MainPage::ZoomRestoreMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		Editor().Editor().Zoom(0);
 	}
 
 	void MainPage::StatusBarMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		StatusBar().Visibility(sender.as<ToggleMenuFlyoutItem>().IsChecked() ? Visibility::Visible : Visibility::Collapsed);
 	}
 
 	void MainPage::WordWrapMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		FocusEditor();
+
 		Editor().Editor().WrapMode(sender.as<ToggleMenuFlyoutItem>().IsChecked() ? Wrap::Word : Wrap::None);
+	}
+
+	void MainPage::TimeDateMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+
+		// Using GetTimeFormatEx instead of Windows.Globalization.DateTimeFormatting because the latter adds left to right marks
+		SYSTEMTIME time;
+		GetLocalTime(&time);
+		WCHAR timeBuffer[MAX_PATH];
+		GetTimeFormatEx(LOCALE_NAME_USER_DEFAULT, TIME_NOSECONDS, &time, nullptr, timeBuffer, MAX_PATH);
+		WCHAR dateBuffer[MAX_PATH];
+		GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, DATE_SHORTDATE, &time, nullptr, dateBuffer, MAX_PATH, nullptr);
+		const auto formatted{ std::format(L"{} {}", timeBuffer, dateBuffer) };
+		Editor().Editor().AddText(formatted.size(), formatted);
+	}
+
+	void MainPage::CommandMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+
+		Editor().Scintilla(unbox_value<ScintillaMessage>(sender.as<FrameworkElement>().Tag()), 0, 0);
 	}
 
 	void MainPage::OnNavigatedTo(NavigationEventArgs const &e)
@@ -194,5 +249,10 @@ namespace winrt::CppDemoUwp::implementation
 	void MainPage::Editor_SavePointLeft(MicaEditor::Editor const &sender, SavePointLeftEventArgs const &args)
 	{
 		SetTitle(true);
+	}
+
+	void MainPage::FocusEditor()
+	{
+		Editor().Focus(FocusState::Programmatic);
 	}
 }

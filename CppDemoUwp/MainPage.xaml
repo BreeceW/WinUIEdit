@@ -90,6 +90,7 @@
                 <MenuFlyoutItem
                     MinWidth="230"
                     AccessKey="N"
+                    Click="NewMenuItem_Click"
                     Text="New">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="N" Modifiers="Control" />
@@ -140,31 +141,42 @@
             <muxc:MenuBarItem Title="Edit" AccessKey="E">
                 <MenuFlyoutItem
                     MinWidth="230"
+                    Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Z"
                     AccessKey="U"
-                    Text="Undo">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Z" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
+                    Click="CommandMenuItem_Click"
+                    Tag="{x:Bind mica:ScintillaMessage.Undo}"
+                    Text="Undo" />
+                <MenuFlyoutItem
+                    MinWidth="230"
+                    Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Y"
+                    AccessKey="U"
+                    Click="CommandMenuItem_Click"
+                    Tag="{x:Bind mica:ScintillaMessage.Redo}"
+                    Text="Redio" />
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem AccessKey="T" Text="Cut">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="X" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="C" Text="Copy">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="C" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="P" Text="Paste">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="V" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
+                <MenuFlyoutItem
+                    Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+X"
+                    AccessKey="T"
+                    Click="CommandMenuItem_Click"
+                    Tag="{x:Bind mica:ScintillaMessage.Cut}"
+                    Text="Cut" />
+                <MenuFlyoutItem
+                    Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+C"
+                    AccessKey="C"
+                    Click="CommandMenuItem_Click"
+                    Tag="{x:Bind mica:ScintillaMessage.Copy}"
+                    Text="Copy" />
+                <MenuFlyoutItem
+                    Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+V"
+                    AccessKey="P"
+                    Click="CommandMenuItem_Click"
+                    Tag="{x:Bind mica:ScintillaMessage.Paste}"
+                    Text="Paste" />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Del"
                     AccessKey="L"
+                    Click="CommandMenuItem_Click"
+                    Tag="{x:Bind mica:ScintillaMessage.Clear}"
                     Text="Delete" />
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem AccessKey="F" Text="Find">
@@ -193,12 +205,16 @@
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem AccessKey="A" Text="Select all">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="A" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="D" Text="Time/Date">
+                <MenuFlyoutItem
+                    Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+A"
+                    AccessKey="A"
+                    Click="CommandMenuItem_Click"
+                    Tag="{x:Bind mica:ScintillaMessage.SelectAll}"
+                    Text="Select all" />
+                <MenuFlyoutItem
+                    AccessKey="D"
+                    Click="TimeDateMenuItem_Click"
+                    Text="Time/Date">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F5" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
@@ -317,6 +333,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Background="{ThemeResource ControlFillColorTertiaryBrush}"
+            Loaded="Editor_Loaded"
             TabIndex="0" />
 
         <Grid

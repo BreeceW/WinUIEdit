@@ -7,15 +7,19 @@ namespace winrt::CppDemoUwp::implementation
 	struct MainPage : MainPageT<MainPage>
 	{
 		MainPage();
+		void Editor_Loaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction OpenMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction SaveMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction SaveAsMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction NewWindowMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+		void NewMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void ZoomInMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void ZoomOutMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void ZoomRestoreMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void StatusBarMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void WordWrapMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+		void TimeDateMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+		void CommandMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void OnNavigatedTo(Windows::UI::Xaml::Navigation::NavigationEventArgs const &e);
 
 	private:
@@ -36,6 +40,7 @@ namespace winrt::CppDemoUwp::implementation
 		Windows::Foundation::IAsyncAction SaveAsync(Windows::Storage::StorageFile file);
 		Windows::Foundation::IAsyncAction SaveAsAsync();
 		void SetTitle(bool modified);
+		void FocusEditor();
 	};
 }
 
