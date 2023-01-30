@@ -43,6 +43,8 @@ namespace MicaEditor
 		double HorizontalScrollBarViewportSize();
 		double VerticalScrollBarViewportSize();
 
+		winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation> StartDragAsync(winrt::DUI::PointerPoint const &pointerPoint);
+
 	private:
 		winrt::DUX::Input::Pointer _lastPointer{ nullptr };
 		winrt::DUX::UIElement _mouseCaptureElement{ nullptr };

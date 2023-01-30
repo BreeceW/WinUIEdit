@@ -19,6 +19,7 @@ using namespace Windows::Foundation;
 using namespace Windows::System;
 using namespace Windows::Graphics::Display;
 using namespace Windows::ApplicationModel;
+using namespace Windows::ApplicationModel::DataTransfer;
 
 namespace winrt::MicaEditor::implementation
 {
@@ -339,8 +340,13 @@ namespace winrt::MicaEditor::implementation
 			// Todo: is this safe to have in OnApplyTemplate?
 			imageTarget.SizeChanged({ this, &MicaEditorControl::ImageTarget_SizeChanged });
 			imageTarget.PointerWheelChanged({ this, &MicaEditorControl::ImageTarget_PointerWheelChanged });
+			imageTarget.DragEnter({ this, &MicaEditorControl::ImageTarget_DragEnter });
+			imageTarget.DragOver({ this, &MicaEditorControl::ImageTarget_DragOver });
+			imageTarget.DragLeave({ this, &MicaEditorControl::ImageTarget_DragLeave });
+			imageTarget.Drop({ this, &MicaEditorControl::ImageTarget_Drop });
 
 			_wrapper->SetMouseCaptureElement(imageTarget);
+			imageTarget.DragStarting({ this, &MicaEditorControl::ImageTarget_DragStarting });
 
 			imageTarget.ContextRequested({ this, &MicaEditorControl::ImageTarget_ContextRequested });
 
@@ -409,7 +415,7 @@ namespace winrt::MicaEditor::implementation
 			auto x{ scaled.X * _dpiScale };
 			auto y{ scaled.Y * _dpiScale };
 
-			_scintilla->PointerMoved(Point{ x, y }, point.Timestamp() / 1000ul, e.KeyModifiers());
+			_scintilla->PointerMoved(Point{ x, y }, point.Timestamp() / 1000ul, e.KeyModifiers(), point);
 
 			//auto cursor{ _scintilla->ContextCursor(Scintilla::Internal::Point{ x,y }) };
 			//switch (cursor)
@@ -556,10 +562,51 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::ImageTarget_PointerWheelChanged(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e)
+	void MicaEditorControl::ImageTarget_PointerWheelChanged(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		auto properties{ e.GetCurrentPoint(sender.as<UIElement>()).Properties() };
 		_scintilla->PointerWheelChanged(properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), e.KeyModifiers());
+	}
+
+	void MicaEditorControl::ImageTarget_DragEnter(IInspectable const &sender, DragEventArgs const &e)
+	{
+		DataPackageOperation op;
+		_scintilla->DragEnter(e.DataView(), e.AllowedOperations(), e.Modifiers(), op);
+		e.AcceptedOperation(op);
+		e.DragUIOverride().IsContentVisible(false);
+		e.DragUIOverride().IsCaptionVisible(false);
+	}
+
+	void MicaEditorControl::ImageTarget_DragOver(IInspectable const &sender, DragEventArgs const &e)
+	{
+		auto point{ e.GetPosition(sender.as<UIElement>()) };
+		point.X *= _dpiScale;
+		point.Y *= _dpiScale;
+		DataPackageOperation op;
+		_scintilla->DragOver(point, e.AllowedOperations(), e.Modifiers(), op);
+		e.AcceptedOperation(op);
+	}
+
+	void MicaEditorControl::ImageTarget_DragLeave(IInspectable const &sender, DragEventArgs const &e)
+	{
+		_scintilla->DragLeave();
+	}
+
+	void MicaEditorControl::ImageTarget_Drop(IInspectable const &sender, DragEventArgs const &e)
+	{
+		auto point{ e.GetPosition(sender.as<UIElement>()) };
+		point.X *= _dpiScale;
+		point.Y *= _dpiScale;
+		DataPackageOperation op;
+		_scintilla->Drop(point, e.DataView(), e.AllowedOperations(), e.Modifiers(), op);
+		e.AcceptedOperation(op);
+	}
+
+	void MicaEditorControl::ImageTarget_DragStarting(UIElement const &sender, DragStartingEventArgs const &e)
+	{
+		e.AllowedOperations(DataPackageOperation::Copy | DataPackageOperation::Move);
+		e.Data().SetText(winrt::to_hstring(_scintilla->GetDragData()));
+		e.DragUI().SetContentFromDataPackage();
 	}
 
 	void MicaEditorControl::ImageTarget_ContextRequested(UIElement const &sender, ContextRequestedEventArgs const &e)

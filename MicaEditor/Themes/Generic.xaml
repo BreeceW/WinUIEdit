@@ -26,7 +26,8 @@
                             Grid.Row="0"
                             Grid.RowSpan="2"
                             Grid.Column="0"
-                            Grid.ColumnSpan="2" />
+                            Grid.ColumnSpan="2"
+                            AllowDrop="True" />
                         <ScrollBar
                             x:Name="VerticalScrollBar"
                             Grid.Row="0"

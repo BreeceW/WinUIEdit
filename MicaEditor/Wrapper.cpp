@@ -197,4 +197,9 @@ namespace MicaEditor
 	{
 		return _verticalScrollBar.ViewportSize();
 	}
+
+	winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation> Wrapper::StartDragAsync(winrt::DUI::PointerPoint const &pointerPoint)
+	{
+		return _mouseCaptureElement.StartDragAsync(pointerPoint);
+	}
 }
