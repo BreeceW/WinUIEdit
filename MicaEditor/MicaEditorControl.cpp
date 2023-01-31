@@ -269,6 +269,94 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
+	void MicaEditorControl::AddContextMenuItems(MenuFlyout const &menu)
+	{
+		menu.Opening([&](const auto &, const auto &)
+			{
+				_isContextMenuOpen = true;
+			});
+		menu.Closing([&](const auto &, const auto &)
+			{
+				_isContextMenuOpen = false;
+			});
+
+		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };
+		const auto selection{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetSelectionEmpty, 0, 0)) };
+
+		const MenuFlyoutItem undoItem{};
+		undoItem.Text(L"Undo"); // Todo: Localize
+		undoItem.Icon(SymbolIcon{ Symbol::Undo });
+		undoItem.Tag(box_value(ScintillaMessage::Undo));
+		undoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanUndo, 0, 0));
+		undoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click }); // Todo: Revoke event handler?
+		menu.Items().Append(undoItem);
+
+		const MenuFlyoutItem redoItem{};
+		redoItem.Text(L"Redo");
+		redoItem.Icon(SymbolIcon{ Symbol::Redo });
+		redoItem.Tag(box_value(ScintillaMessage::Redo));
+		redoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanRedo, 0, 0));
+		redoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(redoItem);
+
+		menu.Items().Append(MenuFlyoutSeparator{});
+
+		const MenuFlyoutItem cutItem{};
+		cutItem.Text(L"Cut");
+		cutItem.Icon(SymbolIcon{ Symbol::Cut });
+		cutItem.Tag(box_value(ScintillaMessage::Cut));
+		cutItem.IsEnabled(writable && selection);
+		cutItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(cutItem);
+
+		const MenuFlyoutItem copyItem{};
+		copyItem.Text(L"Copy");
+		copyItem.Icon(SymbolIcon{ Symbol::Copy });
+		copyItem.Tag(box_value(ScintillaMessage::Copy));
+		copyItem.IsEnabled(selection);
+		copyItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(copyItem);
+
+		const MenuFlyoutItem pasteItem{};
+		pasteItem.Text(L"Paste");
+		pasteItem.Icon(SymbolIcon{ Symbol::Paste });
+		pasteItem.Tag(box_value(ScintillaMessage::Paste));
+		pasteItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanPaste, 0, 0));
+		pasteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(pasteItem);
+
+		const MenuFlyoutItem deleteItem{};
+		deleteItem.Text(L"Delete");
+		deleteItem.Icon(SymbolIcon{ Symbol::Delete });
+		deleteItem.Tag(box_value(ScintillaMessage::Clear));
+		deleteItem.IsEnabled(writable && selection);
+		deleteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(deleteItem);
+
+		menu.Items().Append(MenuFlyoutSeparator{});
+
+		const MenuFlyoutItem selectAllItem{};
+		selectAllItem.Text(L"Select all");
+		selectAllItem.Icon(SymbolIcon{ Symbol::SelectAll });
+		selectAllItem.Tag(box_value(ScintillaMessage::SelectAll));
+		selectAllItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		menu.Items().Append(selectAllItem);
+	}
+
+	void MicaEditorControl::ShowContextMenuAtCurrentPosition()
+	{
+		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
+		{
+			const MenuFlyout menu{};
+			AddContextMenuItems(menu);
+			const auto pos{ _scintilla->WndProc(Scintilla::Message::GetCurrentPos, 0, 0) };
+			menu.ShowAt(imageTarget, Point{
+				_scintilla->WndProc(Scintilla::Message::PointXFromPosition, 0, pos) / _dpiScale,
+				(_scintilla->WndProc(Scintilla::Message::PointYFromPosition, 0, pos) + _scintilla->WndProc(Scintilla::Message::TextHeight, 0, 0)) / _dpiScale
+				});
+		}
+	}
+
 	void MicaEditorControl::UpdateSizes()
 	{
 		_wrapper->DpiScale(_dpiScale);
@@ -538,6 +626,19 @@ namespace winrt::MicaEditor::implementation
 		}
 
 		_scintilla->KeyDown(e.Key(), modifiers); // Todo: Or use VirtualKey?
+
+		if (e.Key() == VirtualKey::F10 && (modifiers & VirtualKeyModifiers::Shift) == VirtualKeyModifiers::Shift)
+		{
+			ShowContextMenuAtCurrentPosition();
+		}
+	}
+
+	void MicaEditorControl::OnKeyUp(KeyRoutedEventArgs const &e)
+	{
+		if (e.Key() == VirtualKey::Application)
+		{
+			ShowContextMenuAtCurrentPosition();
+		}
 	}
 
 	void MicaEditorControl::OnCharacterReceived(CharacterReceivedRoutedEventArgs const &e)
@@ -611,79 +712,8 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::ImageTarget_ContextRequested(UIElement const &sender, ContextRequestedEventArgs const &e)
 	{
-		// Todo: make shift+f10/context menu key button work
-
 		const MenuFlyout menu{};
-		menu.Opening([&](const auto &, const auto &)
-			{
-				_isContextMenuOpen = true;
-			});
-		menu.Closing([&](const auto &, const auto &)
-			{
-				_isContextMenuOpen = false;
-			});
-
-		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };
-		const auto selection{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetSelectionEmpty, 0, 0)) };
-
-		const MenuFlyoutItem undoItem{};
-		undoItem.Text(L"Undo"); // Todo: Localize
-		undoItem.Icon(SymbolIcon{ Symbol::Undo });
-		undoItem.Tag(box_value(ScintillaMessage::Undo));
-		undoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanUndo, 0, 0));
-		undoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click }); // Todo: Revoke event handler?
-		menu.Items().Append(undoItem);
-
-		const MenuFlyoutItem redoItem{};
-		redoItem.Text(L"Redo");
-		redoItem.Icon(SymbolIcon{ Symbol::Redo });
-		redoItem.Tag(box_value(ScintillaMessage::Redo));
-		redoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanRedo, 0, 0));
-		redoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
-		menu.Items().Append(redoItem);
-
-		menu.Items().Append(MenuFlyoutSeparator{});
-
-		const MenuFlyoutItem cutItem{};
-		cutItem.Text(L"Cut");
-		cutItem.Icon(SymbolIcon{ Symbol::Cut });
-		cutItem.Tag(box_value(ScintillaMessage::Cut));
-		cutItem.IsEnabled(writable && selection);
-		cutItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
-		menu.Items().Append(cutItem);
-
-		const MenuFlyoutItem copyItem{};
-		copyItem.Text(L"Copy");
-		copyItem.Icon(SymbolIcon{ Symbol::Copy });
-		copyItem.Tag(box_value(ScintillaMessage::Copy));
-		copyItem.IsEnabled(selection);
-		copyItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
-		menu.Items().Append(copyItem);
-
-		const MenuFlyoutItem pasteItem{};
-		pasteItem.Text(L"Paste");
-		pasteItem.Icon(SymbolIcon{ Symbol::Paste });
-		pasteItem.Tag(box_value(ScintillaMessage::Paste));
-		pasteItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanPaste, 0, 0));
-		pasteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
-		menu.Items().Append(pasteItem);
-
-		const MenuFlyoutItem deleteItem{};
-		deleteItem.Text(L"Delete");
-		deleteItem.Icon(SymbolIcon{ Symbol::Delete });
-		deleteItem.Tag(box_value(ScintillaMessage::Clear));
-		deleteItem.IsEnabled(writable && selection);
-		deleteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
-		menu.Items().Append(deleteItem);
-
-		menu.Items().Append(MenuFlyoutSeparator{});
-
-		const MenuFlyoutItem selectAllItem{};
-		selectAllItem.Text(L"Select all");
-		selectAllItem.Icon(SymbolIcon{ Symbol::SelectAll });
-		selectAllItem.Tag(box_value(ScintillaMessage::SelectAll));
-		selectAllItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
-		menu.Items().Append(selectAllItem);
+		AddContextMenuItems(menu);
 
 		Point point;
 		if (e.TryGetPosition(sender, point))

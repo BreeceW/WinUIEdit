@@ -25,6 +25,7 @@ namespace winrt::MicaEditor::implementation
 		void OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e);
 #endif
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
+		void OnKeyUp(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnCharacterReceived(DUX::Input::CharacterReceivedRoutedEventArgs const &e);
 
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
@@ -65,6 +66,8 @@ namespace winrt::MicaEditor::implementation
 		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
 		void UpdateSizes();
 		void UpdateColors(bool useDarkTheme);
+		void AddContextMenuItems(DUX::Controls::MenuFlyout const &menu);
+		void ShowContextMenuAtCurrentPosition();
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative;
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);
