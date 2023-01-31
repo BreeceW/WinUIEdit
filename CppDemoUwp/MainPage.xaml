@@ -135,7 +135,15 @@
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="P" Modifiers="Control" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="X" Text="Exit" />
+                <MenuFlyoutItem
+                    Windows10version1803:KeyboardAcceleratorTextOverride=""
+                    AccessKey="X"
+                    Click="ExitMenuItem_Click"
+                    Text="Exit">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="W" Modifiers="Control" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
             </muxc:MenuBarItem>
 
             <muxc:MenuBarItem Title="Edit" AccessKey="E">
@@ -152,7 +160,7 @@
                     AccessKey="U"
                     Click="CommandMenuItem_Click"
                     Tag="{x:Bind mica:ScintillaMessage.Redo}"
-                    Text="Redio" />
+                    Text="Redo" />
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+X"

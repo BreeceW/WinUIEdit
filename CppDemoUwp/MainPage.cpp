@@ -4,9 +4,14 @@
 #include "App.h"
 
 using namespace winrt;
+using namespace Windows::System;
+using namespace Windows::ApplicationModel::Core;
 using namespace Windows::UI::Core;
+using namespace Windows::UI::Core::Preview;
 using namespace Windows::UI::ViewManagement;
 using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Input;
+using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::Foundation;
@@ -21,6 +26,8 @@ namespace winrt::CppDemoUwp::implementation
 	{
 		InitializeComponent();
 
+		_closeRequestedRevoker = SystemNavigationManagerPreview::GetForCurrentView().CloseRequested(auto_revoke, { this, &MainPage::OnCloseRequested });
+
 		SetTitle(false);
 
 		_updateUIRevoker = Editor().Editor().UpdateUI(auto_revoke, { this, &MainPage::Editor_UpdateUI });
@@ -33,6 +40,30 @@ namespace winrt::CppDemoUwp::implementation
 		if (_hasFcu)
 		{
 			Activated(coreWindow.ActivationMode() != CoreWindowActivationMode::Deactivated);
+		}
+	}
+
+	IAsyncAction MainPage::OnCloseRequested(IInspectable sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+	{
+		if (Editor().Editor().Modify())
+		{
+			const auto def{ e.GetDeferral() };
+
+			switch (co_await PromptSaveAsync())
+			{
+			case ContentDialogResult::None:
+				e.Handled(true);
+				break;
+
+			case ContentDialogResult::Primary:
+				if (!co_await SaveAsync())
+				{
+					e.Handled(true);
+				}
+				break;
+			}
+
+			def.Complete();
 		}
 	}
 
@@ -59,6 +90,24 @@ namespace winrt::CppDemoUwp::implementation
 
 	IAsyncAction MainPage::OpenMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		if (Editor().Editor().Modify())
+		{
+			switch (co_await PromptSaveAsync())
+			{
+			case ContentDialogResult::None:
+				FocusEditor();
+				co_return;
+
+			case ContentDialogResult::Primary:
+				if (!co_await SaveAsync())
+				{
+					FocusEditor();
+					co_return;
+				}
+				break;
+			}
+		}
+
 		FocusEditor();
 
 		const FileOpenPicker picker{};
@@ -76,14 +125,7 @@ namespace winrt::CppDemoUwp::implementation
 	{
 		FocusEditor();
 
-		if (_activeFile)
-		{
-			co_await SaveAsync(_activeFile);
-		}
-		else
-		{
-			co_await SaveAsAsync();
-		}
+		co_await SaveAsync();
 	}
 
 	IAsyncAction MainPage::SaveAsMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
@@ -100,14 +142,65 @@ namespace winrt::CppDemoUwp::implementation
 		co_await Application::Current().as<App>()->NewWindowAsync();
 	}
 
-	void MainPage::NewMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	IAsyncAction MainPage::NewMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
+		if (Editor().Editor().Modify())
+		{
+			switch (co_await PromptSaveAsync())
+			{
+			case ContentDialogResult::None:
+				FocusEditor();
+				co_return;
+
+			case ContentDialogResult::Primary:
+				if (!co_await SaveAsync())
+				{
+					FocusEditor();
+					co_return;
+				}
+				break;
+			}
+		}
+
 		FocusEditor();
 
 		_activeFile = nullptr;
 		Editor().Editor().ClearAll();
 		Editor().Editor().EmptyUndoBuffer();
 		SetTitle(false);
+	}
+
+	IAsyncAction MainPage::ExitMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		if (Editor().Editor().Modify())
+		{
+			switch (co_await PromptSaveAsync())
+			{
+			case ContentDialogResult::None:
+				FocusEditor();
+				co_return;
+
+			case ContentDialogResult::Primary:
+				if (!co_await SaveAsync())
+				{
+					FocusEditor();
+					co_return;
+				}
+				break;
+			}
+		}
+
+		if (!co_await ApplicationView::GetForCurrentView().TryConsolidateAsync())
+		{
+			if (CoreApplication::Views().Size() > 1)
+			{
+				Window::Current().Close();
+			}
+			else
+			{
+				Application::Current().Exit();
+			}
+		}
 	}
 
 	void MainPage::ZoomInMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
@@ -193,6 +286,19 @@ namespace winrt::CppDemoUwp::implementation
 		SetTitle(false);
 	}
 
+	IAsyncOperation<bool> MainPage::SaveAsync()
+	{
+		if (_activeFile)
+		{
+			co_await SaveAsync(_activeFile);
+			co_return true;
+		}
+		else
+		{
+			co_return co_await SaveAsAsync();
+		}
+	}
+
 	IAsyncAction MainPage::SaveAsync(StorageFile file)
 	{
 		const auto length{ Editor().Editor().Length() };
@@ -203,7 +309,7 @@ namespace winrt::CppDemoUwp::implementation
 		Editor().Editor().SetSavePoint();
 	}
 
-	IAsyncAction MainPage::SaveAsAsync()
+	IAsyncOperation<bool> MainPage::SaveAsAsync()
 	{
 		const FileSavePicker savePicker{};
 		savePicker.FileTypeChoices().Insert(L"Text documents", single_threaded_vector<hstring>({ L".txt" }));
@@ -214,6 +320,11 @@ namespace winrt::CppDemoUwp::implementation
 			_activeFile = file;
 			SetTitle(true);
 			co_await SaveAsync(file);
+			co_return true;
+		}
+		else
+		{
+			co_return false;
 		}
 	}
 
@@ -254,5 +365,63 @@ namespace winrt::CppDemoUwp::implementation
 	void MainPage::FocusEditor()
 	{
 		Editor().Focus(FocusState::Programmatic);
+	}
+
+	template <typename T>
+	T GetFirstOfTypeAndName(DependencyObject const &parent, hstring const &name)
+	{
+		const auto count{ VisualTreeHelper::GetChildrenCount(parent) };
+		for (auto i = 0; i < count; i++)
+		{
+			const auto child{ VisualTreeHelper::GetChild(parent, i) };
+			const auto c{ child.try_as<T>() };
+			if (c && c.Name() == name)
+			{
+				return c;
+			}
+			else if (const auto sub{ GetFirstOfTypeAndName<T>(child, name) })
+			{
+				return sub;
+			}
+		}
+
+		return nullptr;
+	}
+
+	IAsyncOperation<ContentDialogResult> MainPage::PromptSaveAsync()
+	{
+		const ContentDialog dialog{};
+		dialog.Style(Application::Current().Resources().Lookup(box_value(L"DefaultContentDialogStyle")).as<Windows::UI::Xaml::Style>()); // Fixes opening animation
+		dialog.Title(box_value(L"Mica Editor"));
+		dialog.Content(box_value(std::format(L"Do you want to save changes to {}?", _activeFile ? _activeFile.Name() : L"Untitled")));
+		dialog.DefaultButton(ContentDialogButton::Primary);
+		dialog.PrimaryButtonText(L"Save");
+		dialog.SecondaryButtonText(L"Don\u2019t save");
+		dialog.CloseButtonText(L"Cancel");
+		if (_hasFcu)
+		{
+			dialog.PreviewKeyDown([](IInspectable const &sender, KeyRoutedEventArgs const &e)
+				{
+					switch (e.Key())
+					{
+					case VirtualKey::S:
+						sender.as<FrameworkElement>().Tag(box_value(ContentDialogResult::Primary));
+						sender.as<ContentDialog>().Hide();
+						break;
+
+					case VirtualKey::N:
+						sender.as<FrameworkElement>().Tag(box_value(ContentDialogResult::Secondary));
+						sender.as<ContentDialog>().Hide();
+						break;
+					}
+				});
+		}
+		dialog.Opened([](ContentDialog const &sender, ContentDialogOpenedEventArgs const &e)
+			{
+				GetFirstOfTypeAndName<Button>(sender, L"PrimaryButton").AccessKey(L"S");
+				GetFirstOfTypeAndName<Button>(sender, L"SecondaryButton").AccessKey(L"N");
+			});
+		const auto result{ co_await dialog.ShowAsync() };
+		co_return unbox_value_or<ContentDialogResult>(dialog.Tag(), result);
 	}
 }
