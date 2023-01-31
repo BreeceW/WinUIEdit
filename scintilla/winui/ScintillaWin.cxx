@@ -1389,16 +1389,13 @@ namespace Scintilla::Internal {
 		const auto startPos{ pdoc->MovePositionOutsideChar(docStart, -1, true) };
 		const auto endPos{ pdoc->MovePositionOutsideChar(docEnd, 1, true) };
 
-		const auto len{ endPos - startPos };
-		Scintilla::Position utf16Len{ 0 };
+		const auto utf16Len{ pdoc->CountUTF16(startPos, endPos) };
 		if (cch == 0)
 		{
-			pdoc->DeleteChars(startPos, len);
+			pdoc->DeleteChars(startPos, endPos - startPos);
 		}
 		else
 		{
-			utf16Len = pdoc->CountUTF16(startPos, endPos);
-
 			auto cchText{ -1 };
 			char *szText{ nullptr };
 
