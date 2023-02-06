@@ -5,7 +5,7 @@ This is an early work-in-progress code editor control for both UWP and WinUI 3. 
 You can download a demo from Microsoft Store [here](https://www.microsoft.com/store/apps/9PGZBDP9PSPF). Expect some occasional glitches.
 
 ### Current state of the control
-Mouse and keyboard input are supported. IME support is somewhat present, though far from finished, especially on non-PC devices. Note that there is a currently a bug that keyboard input does not work if using the control in a XAML Island. The demo is a clone of the Windows 11 Notepad app with some functionality.
+Mouse and keyboard input are supported. IME support is a major work in progress and is somewhat usable on desktop devices. The demo is a replica of the Windows 11 Notepad app.
 
 <img alt="Mica Editor: replica of Windows 11 Notepad with WinUIEdit control using syntax highlighting, line numbers, and mica, demoing C++ sample code" src="https://user-images.githubusercontent.com/18747724/213900470-3c57b252-3488-40d1-b708-f392a30aab2f.png" width="500" />
 
@@ -26,7 +26,7 @@ The project structure is very much not set in stone at this time.
 |scintilla|Unmodified Scintilla source code with new winui subfolder|
 |lexilla|Unmodified Lexilla source code|
 |CsDemoUwp|Test project for C# UWP|
-|CppDemoUwp|Test project for C++/WinRT UWP|
+|CppDemoUwp|Test project for C++/WinRT UWP (Notepad replica)|
 |CsDemoWinUI3|Test project for C# WinUI 3|
 |CppDemoWinUI3|Test project for C++/WinRT WinUI 3|
 |WinFormsIslandsDemo|Test project for C# WinForms XAML Islands|
@@ -47,7 +47,7 @@ This control does not depend on WinUI 2, so you can use this control with or wit
 
 #### XAML Islands?
 [XAML Islands](https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/xaml-islands) is a way to use the UWP XAML framework
-in an old-style win32 app, like a WinForms, WPF (see note below), or classic win32 app written in C++. You can embed this control into a win32 app using XAML Islands. If you are not otherwise using XAML, you may want to use the original Scintilla, which supports this well.
+in an old-style Win32 app, like a WinForms, WPF (see below), or classic Win32 app written in C++. You can embed this control into a Win32 app using XAML Islands. If you are not using XAML, you may want to use the original Scintilla instead.
 Also note that WinUI 3 is planned to support its own form of XAML Islands in the future, allowing you to partially embed a WinUI 3 UI into an old app. Expect this control to support that scenario when it arrives.
 
 #### WPF?

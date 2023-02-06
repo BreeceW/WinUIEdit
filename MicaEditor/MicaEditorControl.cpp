@@ -90,6 +90,10 @@ namespace winrt::MicaEditor::implementation
 		if (_hasFcu)
 		{
 #endif
+			// The OnCharacterReceived override is not called in UWP,
+			// so the event is registered instead
+			CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
+
 			ActualThemeChanged({ this, &MicaEditorControl::OnActualThemeChanged });
 			UpdateColors(ActualTheme() == ElementTheme::Dark);
 #ifndef WINUI3
@@ -641,7 +645,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::OnCharacterReceived(CharacterReceivedRoutedEventArgs const &e)
+	void MicaEditorControl::MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, CharacterReceivedRoutedEventArgs const &e)
 	{
 		// Todo: This is 1709. What happens on 1703? Answer: Nothing, which is fine, since it is UWP-only anyway
 		// 1703 might be fine with TSF only. If not, CoreWindow has a CharacterReceived and you can probably just check focus
@@ -726,7 +730,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::ContextMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e)
+	void MicaEditorControl::ContextMenuItem_Click(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &e)
 	{
 		_scintilla->WndProc(static_cast<Scintilla::Message>(unbox_value<ScintillaMessage>(sender.as<FrameworkElement>().Tag())), 0, 0);
 	}

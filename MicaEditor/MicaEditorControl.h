@@ -26,7 +26,6 @@ namespace winrt::MicaEditor::implementation
 #endif
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnKeyUp(DUX::Input::KeyRoutedEventArgs const &e);
-		void OnCharacterReceived(DUX::Input::CharacterReceivedRoutedEventArgs const &e);
 
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
 
@@ -37,8 +36,8 @@ namespace winrt::MicaEditor::implementation
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 		bool _isPointerOver{ false };
-		bool _isContextMenuOpen{ false };
 #endif
+		bool _isContextMenuOpen{ false };
 		MicaEditor::Editor _editorWrapper{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale = 1;
@@ -62,6 +61,7 @@ namespace winrt::MicaEditor::implementation
 		void ContextMenuItem_Click(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &e);
 		void HorizontalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
 		void VerticalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
+		void MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, DUX::Input::CharacterReceivedRoutedEventArgs const &args);
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
 		void UpdateSizes();
