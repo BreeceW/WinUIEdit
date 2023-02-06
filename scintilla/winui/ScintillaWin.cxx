@@ -2000,7 +2000,7 @@ namespace Scintilla::Internal {
 				_editContext.NotifyFocusLeave();
 			}
 		}
-		else
+		else if (_tfThreadManager)
 		{
 			winrt::check_hresult(_tfThreadManager->SetFocus(focus ? _tfDocumentManager.get() : nullptr));
 		}
