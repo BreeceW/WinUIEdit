@@ -455,7 +455,6 @@ namespace Scintilla::Internal {
 		_tsfCore = FAILED(CoCreateInstanceFromApp(CLSID_TF_ThreadMgr, nullptr, CLSCTX_INPROC_SERVER, nullptr, 1, &mq)); // Todo NOTE: On HoloLens 2, this succeeds, even though it doesn't seem to work
 		if (_tsfCore)
 		{
-			//winrt::Windows::UI::Popups::MessageDialog{ L"TSF Core", L"Input method" }.ShowAsync();
 			auto manager{ winrt::Windows::UI::Text::Core::CoreTextServicesManager::GetForCurrentView() };
 			_editContext = manager.CreateEditContext();
 			_editContext.InputScope(winrt::Windows::UI::Text::Core::CoreTextInputScope::Text); // Todo: make sure this is needed. Update: Unset value is 0, Default
@@ -469,10 +468,10 @@ namespace Scintilla::Internal {
 			_compositionStartedRevoker = _editContext.CompositionStarted(winrt::auto_revoke, { this, &ScintillaWinUI::OnCompositionStarted });
 			_compositionCompletedRevoker = _editContext.CompositionCompleted(winrt::auto_revoke, { this, &ScintillaWinUI::OnCompositionCompleted });
 			// Todo: needs to close touch keyboard on backspace etc.
+			pdoc->InsertString(0, "This device can only use the modern TSF APIs,\r\nwhich this control currently has a poor implementation of,\r\nso text input will be very broken.");
 		}
 		else
 		{
-			//winrt::Windows::UI::Popups::MessageDialog{ L"TSF Classic", L"Input method" }.ShowAsync();
 			winrt::check_hresult(mq.hr);
 			winrt::copy_from_abi(_tfThreadManager, mq.pItf);
 			winrt::check_hresult(_tfThreadManager->Activate(&_tfClientId));
