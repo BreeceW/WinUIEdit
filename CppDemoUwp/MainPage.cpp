@@ -418,8 +418,14 @@ namespace winrt::CppDemoUwp::implementation
 		}
 		dialog.Opened([](ContentDialog const &sender, ContentDialogOpenedEventArgs const &e)
 			{
-				GetFirstOfTypeAndName<Button>(sender, L"PrimaryButton").AccessKey(L"S");
-				GetFirstOfTypeAndName<Button>(sender, L"SecondaryButton").AccessKey(L"N");
+				if (const auto primaryButton{ GetFirstOfTypeAndName<Button>(sender, L"PrimaryButton") })
+				{
+					primaryButton.AccessKey(L"S");
+				}
+				if (const auto secondaryButton{ GetFirstOfTypeAndName<Button>(sender, L"SecondaryButton") })
+				{
+					secondaryButton.AccessKey(L"N");
+				}
 			});
 		const auto result{ co_await dialog.ShowAsync() };
 		co_return unbox_value_or<ContentDialogResult>(dialog.Tag(), result);

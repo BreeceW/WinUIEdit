@@ -271,7 +271,8 @@
             Margin="0,0,8,0"
             Padding="0"
             AccessKey="S"
-            BorderThickness="0">
+            BorderThickness="0"
+            ToolTipService.ToolTip="Settings">
             <Button.Resources>
                 <ResourceDictionary>
                     <ResourceDictionary.ThemeDictionaries>
@@ -325,7 +326,10 @@
                     <animatedvisuals:AnimatedSettingsVisualSource />
                 </muxc:AnimatedIcon.Source>
                 <muxc:AnimatedIcon.FallbackIconSource>
-                    <muxc:SymbolIconSource Symbol="Setting" />
+                    <muxc:FontIconSource
+                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                        FontSize="14"
+                        Glyph="&#xE713;" />
                 </muxc:AnimatedIcon.FallbackIconSource>
             </muxc:AnimatedIcon>
         </Button>
@@ -366,7 +370,7 @@
             <Rectangle
                 Grid.Row="0"
                 Grid.Column="0"
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="5"
                 Height="1"
                 Fill="{ThemeResource DividerLineBrush}" />
             <StackPanel
