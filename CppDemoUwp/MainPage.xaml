@@ -361,6 +361,7 @@
                 <ColumnDefinition MinWidth="64" MaxWidth="88" />
                 <ColumnDefinition MinWidth="104" MaxWidth="160" />
                 <ColumnDefinition MinWidth="64" MaxWidth="128" />
+                <ColumnDefinition MinWidth="64" MaxWidth="128" />
             </Grid.ColumnDefinitions>
             <Rectangle
                 Grid.Row="0"
@@ -429,6 +430,21 @@
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="UTF-8" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="4"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Rectangle
+                    Width="1"
+                    Height="16"
+                    Fill="{ThemeResource SeparatorLineBrush}" />
+                <TextBlock
+                    Margin="12,0,0,0"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="C++" />
             </StackPanel>
         </Grid>
     </Grid>
