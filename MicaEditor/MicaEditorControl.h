@@ -37,6 +37,7 @@ namespace winrt::MicaEditor::implementation
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 		bool _isPointerOver{ false };
 #endif
+		bool _isFocused{ false };
 		bool _isContextMenuOpen{ false };
 		MicaEditor::Editor _editorWrapper{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };

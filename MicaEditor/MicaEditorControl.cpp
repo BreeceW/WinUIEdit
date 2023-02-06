@@ -459,12 +459,16 @@ namespace winrt::MicaEditor::implementation
 	{
 		__super::OnGotFocus(e);
 
+		_isFocused = true;
+
 		_scintilla->FocusChanged(true);
 	}
 
 	void MicaEditorControl::OnLostFocus(RoutedEventArgs const &e)
 	{
 		__super::OnLostFocus(e);
+
+		_isFocused = false;
 
 		if (!_isContextMenuOpen)
 		{
@@ -647,11 +651,10 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, CharacterReceivedRoutedEventArgs const &e)
 	{
-		// Todo: This is 1709. What happens on 1703? Answer: Nothing, which is fine, since it is UWP-only anyway
-		// 1703 might be fine with TSF only. If not, CoreWindow has a CharacterReceived and you can probably just check focus
-		// Todo: Queue these?
-		// It seems like this doesn't fire on UWP
-		_scintilla->CharacterReceived(e.Character());
+		if (_isFocused)
+		{
+			_scintilla->CharacterReceived(e.Character());
+		}
 	}
 
 	void MicaEditorControl::ImageTarget_SizeChanged(IInspectable const &sender, SizeChangedEventArgs const &args)
