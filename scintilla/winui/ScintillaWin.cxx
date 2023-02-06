@@ -271,9 +271,10 @@ namespace Scintilla::Internal {
 		uptr_t _wParam;
 		NotificationData _notificationData;
 		bool _notifyTsf;
+		int _utf16Length;
 
 	public:
-		NotifyMessage::NotifyMessage(uptr_t wParam, NotificationData notificationData, bool notifyTsf)
+		NotifyMessage::NotifyMessage(uptr_t wParam, NotificationData notificationData, bool notifyTsf, int utf16Length)
 		{
 			_wParam = wParam;
 			_notificationData = notificationData;
@@ -293,6 +294,11 @@ namespace Scintilla::Internal {
 		bool NotifyMessage::NotifyTsf() const
 		{
 			return _notifyTsf;
+		}
+
+		int NotifyMessage::Utf16Length() const
+		{
+			return _utf16Length;
 		}
 
 		NotificationData const &NotifyMessage::NotificationData() const
@@ -558,18 +564,19 @@ namespace Scintilla::Internal {
 			if (_tsfCore)
 			{
 				_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpNewEnd - chg.acpStart, winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpNewEnd, chg.acpNewEnd });
-				_editContext.NotifySelectionChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
+				//_editContext.NotifySelectionChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
 			}
 			else if (_tfTextStoreACPSink)
 			{
 				_tfTextStoreACPSink->OnTextChange(0, &chg);
-				_tfTextStoreACPSink->OnSelectionChange();
+				// Todo: Figure out if adding OnSelectionChange here was ever needed
+				//_tfTextStoreACPSink->OnSelectionChange();
 			}
 		}
 	}
 
 	// Todo: wParam might not make sense here
-	void ScintillaWinUI::ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf)
+	void ScintillaWinUI::ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf, int utf16Length)
 	{
 		SendMessage(WM_NOTIFY, GetCtrlID(), reinterpret_cast<LPARAM>(&notificationData));
 
@@ -592,18 +599,18 @@ namespace Scintilla::Internal {
 			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::InsertText))
 			{
 				fNotify = true;
-				chg.acpOldEnd = notificationData.position;
-				chg.acpNewEnd = notificationData.position + notificationData.length;
+				chg.acpOldEnd = DocPositionToAcp(notificationData.position);
+				chg.acpNewEnd = DocPositionToAcp(notificationData.position) + utf16Length;
 			}
 			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::BeforeDelete))
 			{
-				chg.acpStart = notificationData.position;
+				chg.acpStart = DocPositionToAcp(notificationData.position);
 			}
 			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::DeleteText))
 			{
 				fNotify = true;
-				chg.acpOldEnd = notificationData.position + notificationData.length;
-				chg.acpNewEnd = notificationData.position;
+				chg.acpOldEnd = DocPositionToAcp(notificationData.position) + utf16Length;
+				chg.acpNewEnd = DocPositionToAcp(notificationData.position);
 			}
 			if (fNotify)
 			{
@@ -613,7 +620,7 @@ namespace Scintilla::Internal {
 				}
 				else if (_tfTextStoreACPSink)
 				{
-					DebugOut(L"OnTextChange\n");
+					DebugOut(L"OnTextChange, Start: %d, Old End: %d, New End: %d\n", chg.acpStart, chg.acpOldEnd, chg.acpNewEnd);
 					_tfTextStoreACPSink->OnTextChange(0, &chg);
 				}
 			}
@@ -638,7 +645,7 @@ namespace Scintilla::Internal {
 		case NotifyMessageId:
 		{
 			const auto notifyMessage{ static_cast<NotifyMessage *>(message.get()) };
-			ProcessNotifyMessage(notifyMessage->WParam(), notifyMessage->NotificationData(), notifyMessage->NotifyTsf());
+			ProcessNotifyMessage(notifyMessage->WParam(), notifyMessage->NotificationData(), notifyMessage->NotifyTsf(), notifyMessage->Utf16Length());
 		}
 		break;
 
@@ -813,8 +820,8 @@ namespace Scintilla::Internal {
 		auto docEnd{ AcpToDocPosition(args.Range().EndCaretPosition) };
 
 		// set text by deleting existing chars and inserting new text
-		auto startPos{ pdoc->MovePositionOutsideChar(docStart, -1, true) };
-		auto endPos{ pdoc->MovePositionOutsideChar(docEnd, 1, true) };
+		auto startPos{ pdoc->MovePositionOutsideChar(docStart, 1, false) };
+		auto endPos{ pdoc->MovePositionOutsideChar(docEnd, -1, false) };
 		auto len{ endPos - startPos };
 		auto utf16len{ pdoc->CountUTF16(startPos, endPos) };
 		pdoc->BeginUndoAction();
@@ -1114,9 +1121,10 @@ namespace Scintilla::Internal {
 		/*if (MainHWND()) // WinUI Todo
 		{*/
 		// Set the start point to the given start point.
-		*pacpResultStart = pdoc->MovePositionOutsideChar(acpTestStart, -1, true);
+		// Todo: Convert ACP to doc pos
+		*pacpResultStart = pdoc->MovePositionOutsideChar(acpTestStart, 1, true);
 		// Set the end point to the given end point.
-		*pacpResultEnd = pdoc->MovePositionOutsideChar(acpTestEnd, 1, true);
+		*pacpResultEnd = pdoc->MovePositionOutsideChar(acpTestEnd, -1, true);
 		/*}
 		else
 		{
@@ -1210,36 +1218,34 @@ namespace Scintilla::Internal {
 
 	IFACEMETHODIMP ScintillaWinUI::GetText(LONG acpStart, LONG acpEnd, WCHAR *pchPlain, ULONG cchPlainReq, ULONG *pcchPlainRet, TS_RUNINFO *prgRunInfo, ULONG cRunInfoReq, ULONG *pcRunInfoRet, LONG *pacpNext)
 	{
-		// Todo: Probably don't return whole document if acpEnd is -1. Callers will ask for more if they need it.
-		// Todo: Remove UTF-8 hack
-
 		DebugOut(L"GetText: %d_%d\n", acpStart, acpEnd);
-
-		// Todo: Suspecting this method might be some kind of bottleneck. Look at ScintillaWin::GetText for inspiration
 
 		if (_lock == NONE)
 		{
 			return TS_E_NOLOCK;
 		}
+
+		const auto lastAcp{ DocPositionToAcp(pdoc->Length()) };
+
 		// acpEnd can be -1, initialize it properly.
 		if (acpEnd == -1)
 		{
-			acpEnd = pdoc->Length();
+			acpEnd = lastAcp;
 		}
 
-		if ((acpStart < 0) || (acpStart > acpEnd) || (acpEnd > pdoc->Length()))
+		if ((acpStart < 0) || (acpStart > acpEnd) || (acpEnd > lastAcp))
 		{
 			return TF_E_INVALIDPOS;
 		}
 
-		// validate plain text buffers.
+		// Validate plain text buffers
 		bool fDoPlainText = cchPlainReq > 0;
 		if (fDoPlainText && (pchPlain == NULL || pcchPlainRet == NULL))
 		{
 			return E_INVALIDARG;
 		}
 
-		// validate text run buffers.
+		// Validate text run buffers
 		bool fDoTextRun = cRunInfoReq > 0;
 		if ((prgRunInfo == NULL || pcRunInfoRet == NULL))
 		{
@@ -1247,10 +1253,11 @@ namespace Scintilla::Internal {
 		}
 
 		// Validate window
-		/*if (!MainHWND())
-			return E_FAIL;*/ // WinUI Todo
+		// WinUI Todo
+		//if (!MainHWND())
+			//return E_FAIL;
 
-			// limit request to size of internal buffers
+			// Limit request to size of internal buffers
 #define MAX_RUN 128
 		if (cchPlainReq > MAX_RUN)
 		{
@@ -1263,102 +1270,147 @@ namespace Scintilla::Internal {
 
 		if (fDoPlainText || fDoTextRun)
 		{
-			//int mask = pdoc->stylingBitsMask; // Todo: check
+			const UINT codePage{ static_cast<UINT>(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage) };
+
 			prgRunInfo->type = TS_RT_PLAIN;
 			prgRunInfo->uCount = 0;
 			ULONG cchFetched(0);
 			ULONG cRunsFetched(1);
-			// this gets a bit weird.  Text data in the document is stored as DBCS/UTF8 (8-bit chars); we need to convert the text into
-			// unicode, without changing the character positions.  I cheat here by converting the lead byte as plain text and changing the
-			// trail bytes to hidden spaces.
-			int startPos = pdoc->MovePositionOutsideChar(acpStart, -1, true);
-			int endPos = pdoc->MovePositionOutsideChar(acpEnd, 1, true);
+			bool acpStartWithinSurrogatePair;
+			const auto startPos{ AcpToDocPosition(acpStart, &acpStartWithinSurrogatePair) };
+			bool acpEndWithinSurrogatePair;
+			const auto endPos{ AcpToDocPosition(acpEnd, &acpEndWithinSurrogatePair) };
 			bool fProtectionActive = vs.ProtectionActive();
 
-			// Scintilla supports folds (to hide un-necessary text).  If we're requesting text that's either invisible
-			// or unchangable, mark it hidden.
-			// TODO:  Consider marking unchangable text as visible & failing any SetText operations that cover unchangeable text.
-			if (fProtectionActive && vs.styles[pdoc->StyleAt(startPos)/* & mask*/].IsProtected()) // Todo: I don't think mask is needed since 2014
-			{
-				prgRunInfo->type = TS_RT_HIDDEN;
-			}
+			auto iPos{ startPos };
 
-			if (startPos < endPos)
+			if (iPos < endPos)
 			{
-				char text[MAX_RUN];		// Enough to handle an entire run of text
-				// go until we run out of space in the output buffers or we run out of text
-				while (cchPlainReq > 0 && cRunInfoReq > 0 && startPos < endPos)
+				// IMEs can request an ACP that is within a surrogate pair, so special handling is needed
+				// to insert half the character (two bytes of four) at the ends of the requested string
+				if (acpStartWithinSurrogatePair && cchPlainReq > 0 && iPos - 3 > 0 && pdoc->LenChar(iPos - 4) == 4)
 				{
-					DWORD charSize = pdoc->LenChar(startPos);
-
-					if (charSize > cchPlainReq)     // don't put a char in if it won't fit.
+					char narrowChar[4];
+					for (auto i{ 0 }; i < 4; i++)
 					{
-						break;
+						narrowChar[i] = pdoc->CharAt(iPos - 4 + i);
 					}
 
-					// Bypass conversion for single-byte characters (the common case)
-					if (charSize == 1)
+					wchar_t wideChar[2];
+					const auto wideCharSize{ MultiByteToWideChar(codePage, 0, narrowChar, 4, wideChar, 2) };
+					if (wideCharSize == 2)
 					{
-						*pchPlain++ = pdoc->CharAt(startPos);
-						--cchPlainReq;
-					}
-					else
-					{
-						// Todo: This code is problematic and breaks auto capitalization on new line and adds an extra space at the beginning of lines
-						// It seems to get confused with \r\n and this code is a holdover from a technique not being used here
-						for (DWORD i = 0; i < charSize; ++i)
-						{
-							text[i] = pdoc->CharAt(startPos + i);
-						}
-						text[charSize] = '\0';
-						::MultiByteToWideChar(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage, 0, text, charSize, pchPlain, cchPlainReq);
+						pchPlain[0] = wideChar[1];
+
 						pchPlain++;
-						--cchPlainReq;
-						for (DWORD i = 0; i < charSize - 1 && cchPlainReq > 0; ++i, --cchPlainReq)	// copy out trail bytes as spaces
-						{
-							*pchPlain++ = L' ';
-						}
-					}
-					cchFetched += charSize;
+						cchPlainReq--;
+						cchFetched++;
 
-					TsRunType runtype = TS_RT_PLAIN;
-					if (fProtectionActive && vs.styles[pdoc->StyleAt(startPos)/* & mask*/].IsProtected()) // Todo: I don't think mask is needed since 2014
-					{
-						runtype = TS_RT_HIDDEN;
-					}
-					// update runs
-					if (prgRunInfo->type == runtype)
-					{
-						prgRunInfo->uCount++;
-					}
-					else		// prev char had trail bytes.  Add an entry for this char
-					{
-						prgRunInfo++;
-						cRunsFetched++;
-						cRunInfoReq--;
-						prgRunInfo->type = runtype;
-						prgRunInfo->uCount = 1;
-					}
-					if (charSize > 1)		// tag trail bytes as hidden
-					{
-						if (runtype == TS_RT_PLAIN) // add a new run
+						const auto runType{ vs.styles[pdoc->StyleAt(iPos - 4)].IsProtected() ? TsRunType::TS_RT_HIDDEN : TsRunType::TS_RT_PLAIN };
+						if (prgRunInfo->type == runType || cRunInfoReq == 0)
+						{
+							prgRunInfo->uCount++;
+						}
+						else
 						{
 							prgRunInfo++;
 							cRunsFetched++;
 							cRunInfoReq--;
-							prgRunInfo->type = TS_RT_HIDDEN;
-							prgRunInfo->uCount = charSize - 1;
+							prgRunInfo->type = runType;
+							prgRunInfo->uCount = 1;
+						}
+					}
+				}
+
+				// Scintilla supports folds (to hide unnecessary text). If we're requesting text that's either invisible
+				// or unchangable, mark it hidden.
+				// Todo: Consider marking unchangable text as visible & failing any SetText operations that cover unchangeable text
+				if (fProtectionActive && vs.styles[pdoc->StyleAt(iPos)].IsProtected())
+				{
+					prgRunInfo->type = TS_RT_HIDDEN;
+				}
+
+				char text[MAX_RUN];	// Enough to handle an entire run of text
+				// Go until we run out of space in the output buffers or we run out of text
+				while (cchPlainReq > 0 && cRunInfoReq > 0 && iPos < endPos && (!acpEndWithinSurrogatePair || iPos < endPos - 4))
+				{
+					const auto multiByteCharSize{ pdoc->LenChar(iPos) };
+
+					for (auto i{ 0 }; i < multiByteCharSize; i++)
+					{
+						text[i] = pdoc->CharAt(iPos + i);
+					}
+					const auto wideCharSize{ MultiByteToWideChar(codePage, 0, text, multiByteCharSize, pchPlain, cchPlainReq) }; // Todo: What are all the overloads of this method in this class?
+					if (wideCharSize == 0 && GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+					{
+						break;
+					}
+					pchPlain += wideCharSize;
+					cchPlainReq -= wideCharSize;
+					cchFetched += wideCharSize;
+
+					auto runType{ TsRunType::TS_RT_PLAIN };
+					if (fProtectionActive && vs.styles[pdoc->StyleAt(iPos)].IsProtected())
+					{
+						runType = TsRunType::TS_RT_HIDDEN;
+					}
+					// Update runs
+					if (prgRunInfo->type == runType)
+					{
+						prgRunInfo->uCount += wideCharSize;
+					}
+					else
+					{
+						prgRunInfo++;
+						cRunsFetched++;
+						cRunInfoReq--;
+						prgRunInfo->type = runType;
+						prgRunInfo->uCount = wideCharSize;
+					}
+					iPos += multiByteCharSize;
+				}
+
+				if (acpEndWithinSurrogatePair && cchPlainReq > 0 && iPos + 3 < endPos && pdoc->LenChar(iPos) == 4)
+				{
+					char narrowChar[4];
+					for (auto i{ 0 }; i < 4; i++)
+					{
+						narrowChar[i] = pdoc->CharAt(iPos + i);
+					}
+
+					wchar_t wideChar[2];
+					const auto wideCharSize{ MultiByteToWideChar(codePage, 0, narrowChar, 4, wideChar, 2) };
+					if (wideCharSize == 2)
+					{
+						pchPlain[0] = wideChar[0];
+
+						pchPlain++;
+						cchPlainReq--;
+						cchFetched++;
+
+						const auto runType{ vs.styles[pdoc->StyleAt(iPos)].IsProtected() ? TsRunType::TS_RT_HIDDEN : TsRunType::TS_RT_PLAIN };
+						if (prgRunInfo->type == runType || cRunInfoReq == 0)
+						{
+							prgRunInfo->uCount++;
 						}
 						else
 						{
-							prgRunInfo->uCount += charSize - 1;
+							prgRunInfo++;
+							cRunsFetched++;
+							cRunInfoReq--;
+							prgRunInfo->type = runType;
+							prgRunInfo->uCount = 1;
 						}
 					}
-					startPos += charSize;
 				}
-				*pacpNext = startPos;
+
+				*pacpNext = cchFetched + acpStart;
 				*pcchPlainRet = cchFetched;
 				*pcRunInfoRet = cRunsFetched;
+			}
+			else if (fProtectionActive && vs.styles[pdoc->StyleAt(iPos)].IsProtected())
+			{
+				prgRunInfo->type = TS_RT_HIDDEN;
 			}
 		}
 		return S_OK;
@@ -1383,11 +1435,8 @@ namespace Scintilla::Internal {
 			return TS_E_READONLY;
 		}
 
-		const auto docStart{ AcpToDocPosition(acpStart) };
-		const auto docEnd{ AcpToDocPosition(acpEnd) };
-
-		const auto startPos{ pdoc->MovePositionOutsideChar(docStart, -1, true) };
-		const auto endPos{ pdoc->MovePositionOutsideChar(docEnd, 1, true) };
+		const auto startPos{ AcpToDocPosition(acpStart) };
+		const auto endPos{ AcpToDocPosition(acpEnd) };
 
 		const auto utf16Len{ pdoc->CountUTF16(startPos, endPos) };
 		if (cch == 0)
@@ -1626,6 +1675,7 @@ namespace Scintilla::Internal {
 		return hr;*/
 	}
 
+	// Todo: Implement this so IMEs appear in the right position
 	IFACEMETHODIMP ScintillaWinUI::GetTextExt(TsViewCookie vcView, LONG acpStart, LONG acpEnd, RECT *prc, BOOL *pfClipped)
 	{
 		if (vcView != 0 || prc == 0 || pfClipped == 0)
@@ -1689,13 +1739,13 @@ namespace Scintilla::Internal {
 		return S_OK;
 	}
 
-	Sci::Position ScintillaWinUI::AcpToDocPosition(Sci::Position acp)
+	Sci::Position ScintillaWinUI::AcpToDocPosition(Sci::Position acp, bool *acpWithinSurrogatePair)
 	{
-		Sci::Line line{ pdoc->LineFromPositionIndex(acp, Scintilla::LineCharacterIndexType::Utf16) };
+		const Sci::Line line{ pdoc->LineFromPositionIndex(acp, Scintilla::LineCharacterIndexType::Utf16) };
 		Sci::Position c{ pdoc->IndexLineStart(line, Scintilla::LineCharacterIndexType::Utf16) };
 		Sci::Position p{ pdoc->LineStart(line) };
 
-		while (c != acp)
+		while (c < acp)
 		{
 			Sci::Position lp{ p };
 			p = pdoc->NextPosition(p, 1);
@@ -1703,7 +1753,12 @@ namespace Scintilla::Internal {
 			{
 				c++;
 			}
-			c++; // Todo: Make sure there is an escape so this does not act as an infinite loop
+			c++;
+		}
+
+		if (acpWithinSurrogatePair)
+		{
+			*acpWithinSurrogatePair = c != acp;
 		}
 
 		return p;
@@ -1957,11 +2012,11 @@ namespace Scintilla::Internal {
 		if (_lock != NONE)
 		{
 			// Todo: notification queue might defeat the point of "before" notifications
-			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, _fromNotifyQueue));
+			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, _fromNotifyQueue, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text)));
 		}
 		else
 		{
-			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn, _shouldNotifyTsf);
+			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn, _shouldNotifyTsf, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text));
 		}
 		// Todo: Probably do not need GetCtrlID
 	}
@@ -2402,6 +2457,8 @@ namespace Scintilla::Internal {
 		else
 		{
 			winrt::com_ptr<ID2D1Bitmap1> bitmap;
+			// surface can be null if E_FAIL (got while debugging)
+			// Todo: handle general fail case for above
 			HRESULT hrBitMap = _d2dDeviceContext->CreateBitmapFromDxgiSurface(
 				surface.get(), nullptr, bitmap.put());
 			if (FAILED(hrBitMap))
@@ -2685,6 +2742,15 @@ namespace Scintilla::Internal {
 		inDragDrop = DragDrop::none;
 		_dragPointer = nullptr;
 		SetDragPosition(SelectionPosition(Sci::invalidPosition));
+	}
+
+	int ScintillaWinUI::CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text)
+	{
+		return notifyTsf
+			&& code == Scintilla::Notification::Modified
+			&& FlagSet(modFlags, Scintilla::ModificationFlags::InsertText | Scintilla::ModificationFlags::DeleteText)
+			? WideCharLenFromMultiByte(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage, text)
+			: 0;
 	}
 
 	std::string_view ScintillaWinUI::GetDragData()
