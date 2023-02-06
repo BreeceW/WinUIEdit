@@ -580,7 +580,7 @@ namespace Scintilla::Internal {
 	{
 		SendMessage(WM_NOTIFY, GetCtrlID(), reinterpret_cast<LPARAM>(&notificationData));
 
-		if (!notifyTsf)
+		if (!notifyTsf || !(_tsfCore || _tfTextStoreACPSink))
 		{
 			return;
 		}
