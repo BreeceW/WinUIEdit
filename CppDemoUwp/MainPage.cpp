@@ -238,6 +238,27 @@ namespace winrt::CppDemoUwp::implementation
 		Editor().Editor().WrapMode(sender.as<ToggleMenuFlyoutItem>().IsChecked() ? Wrap::Word : Wrap::None);
 	}
 
+	void MainPage::DisableBidirectionalMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+
+		Editor().Editor().Bidirectional(Bidirectional::Disabled);
+	}
+
+	void MainPage::LtrBidirectionalMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+
+		Editor().Editor().Bidirectional(Bidirectional::L2r);
+	}
+
+	void MainPage::RtlBidirectionalMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+
+		Editor().Editor().Bidirectional(Bidirectional::R2l);
+	}
+
 	void MainPage::TimeDateMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
 		FocusEditor();
@@ -422,10 +443,10 @@ namespace winrt::CppDemoUwp::implementation
 				{
 					primaryButton.AccessKey(L"S");
 				}
-				if (const auto secondaryButton{ GetFirstOfTypeAndName<Button>(sender, L"SecondaryButton") })
-				{
-					secondaryButton.AccessKey(L"N");
-				}
+		if (const auto secondaryButton{ GetFirstOfTypeAndName<Button>(sender, L"SecondaryButton") })
+		{
+			secondaryButton.AccessKey(L"N");
+		}
 			});
 		const auto result{ co_await dialog.ShowAsync() };
 		co_return unbox_value_or<ContentDialogResult>(dialog.Tag(), result);

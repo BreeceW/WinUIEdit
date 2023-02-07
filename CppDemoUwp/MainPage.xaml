@@ -261,6 +261,28 @@
                     AccessKey="W"
                     Click="WordWrapMenuItem_Click"
                     Text="Word wrap" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutSubItem
+                    MinWidth="230"
+                    AccessKey="B"
+                    Text="Bidirectional text">
+                    <muxc:RadioMenuFlyoutItem
+                        AccessKey="D"
+                        Click="DisableBidirectionalMenuItem_Click"
+                        GroupName="Bidirectional"
+                        IsChecked="True"
+                        Text="Disabled" />
+                    <muxc:RadioMenuFlyoutItem
+                        AccessKey="L"
+                        Click="LtrBidirectionalMenuItem_Click"
+                        GroupName="Bidirectional"
+                        Text="LTR (experimental)" />
+                    <muxc:RadioMenuFlyoutItem
+                        AccessKey="R"
+                        Click="RtlBidirectionalMenuItem_Click"
+                        GroupName="Bidirectional"
+                        Text="RTL (experimental)" />
+                </MenuFlyoutSubItem>
             </muxc:MenuBarItem>
         </muxc:MenuBar>
         <Button

@@ -2761,4 +2761,36 @@ namespace Scintilla::Internal {
 	{
 		return _wndProc ? _wndProc(_wndProcTag, msg, wParam, lParam) : 0;
 	}
+
+	sptr_t ScintillaWinUI::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam)
+	{
+		// Todo: Consider implementing these
+		/*
+		case Message::GetDirectFunction:
+		case Message::GetDirectStatusFunction:
+		case Message::GetDirectPointer:
+		case Message::GrabFocus:
+		case Message::SetTechnology:
+		case Message::SetBidirectional:
+		case Message::TargetAsUTF8:
+		case Message::EncodedFromUTF8:
+		*/
+
+		switch (iMessage)
+		{
+		case Scintilla::Message::SetBidirectional:
+		{
+			if (static_cast<Bidirectional>(wParam) <= Bidirectional::R2L)
+			{
+				bidirectional = static_cast<Bidirectional>(wParam);
+			}
+			// Invalidate all cached information including layout.
+			InvalidateStyleRedraw();
+		}
+		return 0;
+
+		default:
+			return __super::WndProc(iMessage, wParam, lParam);
+		}
+	}
 }
