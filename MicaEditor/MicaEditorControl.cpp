@@ -576,6 +576,11 @@ namespace winrt::MicaEditor::implementation
 	}
 #endif
 
+	void MicaEditorControl::OnPreviewKeyDown(KeyRoutedEventArgs const &e)
+	{
+		_scintilla->PreviewKeyDown();
+	}
+
 	void MicaEditorControl::OnKeyDown(KeyRoutedEventArgs const &e)
 	{
 		__super::OnKeyDown(e);
@@ -625,19 +630,20 @@ namespace winrt::MicaEditor::implementation
 		}
 #endif
 
-		if ((e.Key() == VirtualKey::Tab || e.Key() == VirtualKey::Enter) && (modifiers == winrt::Windows::System::VirtualKeyModifiers::None || modifiers == winrt::Windows::System::VirtualKeyModifiers::Shift))
-		{
-			e.Handled(true);
-			// Handle tab to prevent tab navigation
-			// Todo: do we want to do this if document is read-only?
-			// Handle enter due to system XAML bug in older Windows versions that fired enter key specifically twice
-		}
-
-		_scintilla->KeyDown(e.Key(), modifiers); // Todo: Or use VirtualKey?
+		bool handled = true;
+		_scintilla->KeyDown(e.Key(), modifiers, e.KeyStatus().IsExtendedKey, &handled); // Todo: Or use VirtualKey?
+		e.Handled(handled);
 
 		if (e.Key() == VirtualKey::F10 && (modifiers & VirtualKeyModifiers::Shift) == VirtualKeyModifiers::Shift)
 		{
 			ShowContextMenuAtCurrentPosition();
+		}
+
+		if (!handled)
+		{
+			// Windows versions prior to 11 fire CharacterReceived twice,
+			// so this makes sure that each CharacterReceived is associated with one key
+			_hasChar = true;
 		}
 	}
 
@@ -651,9 +657,11 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, CharacterReceivedRoutedEventArgs const &e)
 	{
-		if (_isFocused)
+		if (_isFocused && _hasChar)
 		{
 			_scintilla->CharacterReceived(e.Character());
+			_hasChar = false;
+			e.Handled(true);
 		}
 	}
 

@@ -24,6 +24,7 @@ namespace winrt::MicaEditor::implementation
 		void OnPointerEntered(DUX::Input::PointerRoutedEventArgs const &e);
 		void OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e);
 #endif
+		void OnPreviewKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnKeyUp(DUX::Input::KeyRoutedEventArgs const &e);
 
@@ -37,6 +38,7 @@ namespace winrt::MicaEditor::implementation
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 		bool _isPointerOver{ false };
 #endif
+		bool _hasChar{ false };
 		bool _isFocused{ false };
 		bool _isContextMenuOpen{ false };
 		MicaEditor::Editor _editorWrapper{ nullptr };

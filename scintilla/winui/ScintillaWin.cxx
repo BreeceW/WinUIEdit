@@ -321,13 +321,15 @@ namespace Scintilla::Internal {
 		KeyEventType _keyEvent;
 		winrt::Windows::System::VirtualKey _key;
 		winrt::Windows::System::VirtualKeyModifiers _modifiers;
+		bool _isExtendedKey;
 
 	public:
-		KeyMessage::KeyMessage(KeyEventType keyEvent, winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers)
+		KeyMessage::KeyMessage(KeyEventType keyEvent, winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey)
 		{
 			_keyEvent = keyEvent;
 			_key = key;
 			_modifiers = modifiers;
+			_isExtendedKey = isExtendedKey;
 		}
 
 		uint8_t KeyMessage::Type() const override
@@ -348,6 +350,11 @@ namespace Scintilla::Internal {
 		winrt::Windows::System::VirtualKeyModifiers Modifiers() const
 		{
 			return _modifiers;
+		}
+
+		bool IsExtendedKey()
+		{
+			return _isExtendedKey;
 		}
 	};
 
@@ -412,22 +419,22 @@ namespace Scintilla::Internal {
 		}
 	};
 
-	constexpr uint8_t CharacterRecievedMessageId = 4;
-	class CharacterRecievedMessage
+	constexpr uint8_t CharacterReceivedMessageId = 4;
+	class CharacterReceivedMessage
 		: public IMessage
 	{
 	private:
 		char16_t _character;
 
 	public:
-		CharacterRecievedMessage(char16_t character)
+		CharacterReceivedMessage(char16_t character)
 		{
 			_character = character;
 		}
 
-		uint8_t CharacterRecievedMessage::Type() const override
+		uint8_t CharacterReceivedMessage::Type() const override
 		{
-			return CharacterRecievedMessageId;
+			return CharacterReceivedMessageId;
 		}
 
 		char16_t Character() const
@@ -468,7 +475,6 @@ namespace Scintilla::Internal {
 			_compositionStartedRevoker = _editContext.CompositionStarted(winrt::auto_revoke, { this, &ScintillaWinUI::OnCompositionStarted });
 			_compositionCompletedRevoker = _editContext.CompositionCompleted(winrt::auto_revoke, { this, &ScintillaWinUI::OnCompositionCompleted });
 			// Todo: needs to close touch keyboard on backspace etc.
-			pdoc->InsertString(0, "This device can only use the modern TSF APIs,\r\nwhich this control currently has a poor implementation of,\r\nso text input will be very broken.");
 		}
 		else
 		{
@@ -476,9 +482,7 @@ namespace Scintilla::Internal {
 			winrt::copy_from_abi(_tfThreadManager, mq.pItf);
 			winrt::check_hresult(_tfThreadManager->Activate(&_tfClientId));
 			winrt::check_hresult(_tfThreadManager->CreateDocumentMgr(_tfDocumentManager.put()));
-			winrt::com_ptr<IUnknown> t{ nullptr };
-			this->QueryInterface(__uuidof(IUnknown), t.put_void()); // Todo: See if there is a better way to get this
-			winrt::check_hresult(_tfDocumentManager->CreateContext(_tfClientId, 0, t.get(), _tfContext.put(), &_tfEditCookie));
+			winrt::check_hresult(_tfDocumentManager->CreateContext(_tfClientId, 0, static_cast<ITextStoreACP2 *>(this), _tfContext.put(), &_tfEditCookie));
 			winrt::check_hresult(_tfDocumentManager->Push(_tfContext.get()));
 			// Todo: Some of this might have to be manually deinitialized. Namely, the Push part (Pop?)
 		}
@@ -534,11 +538,15 @@ namespace Scintilla::Internal {
 		}
 	}
 
-	void ScintillaWinUI::ProcessCharacterRecievedMessage(char16_t character)
+	void ScintillaWinUI::ProcessCharacterReceivedMessage(char16_t character)
 	{
 		// Todo: Make sure this updates TSF caret position correctly
 
-		if (((character >= 128) || !iscntrl(static_cast<int>(character))) || !lastKeyDownConsumed) {
+		// Win32 code is:
+		// ((wParam >= 128) || !iscntrl(static_cast<int>(wParam))) || !lastKeyDownConsumed
+		// We are blocking control characters because, unlike in Win32, keyboard accelerators
+		// do not override them
+		if (character >= 128 || (!lastKeyDownConsumed && !iscntrl(static_cast<int>(character)))) {
 			wchar_t wcs[3] = { static_cast<wchar_t>(character), 0 };
 			unsigned int wclen = 1;
 			if (IS_HIGH_SURROGATE(wcs[0])) { // There is a WinRT API UnicodeCharacters.IsHighSurrogate for this, but it is probably lower performance for no gain
@@ -593,7 +601,7 @@ namespace Scintilla::Internal {
 			// insert operations have before/after notifications, so we save up info
 			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::BeforeInsert))
 			{
-				chg.acpStart = notificationData.position;
+				chg.acpStart = DocPositionToAcp(notificationData.position);
 			}
 			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::InsertText))
 			{
@@ -615,7 +623,7 @@ namespace Scintilla::Internal {
 			{
 				if (_tsfCore)
 				{
-					_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpNewEnd - chg.acpStart, winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpNewEnd, chg.acpNewEnd });
+					_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpOldEnd > chg.acpNewEnd ? 0 : utf16Length, winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpNewEnd, chg.acpNewEnd });
 				}
 				else if (_tfTextStoreACPSink)
 				{
@@ -654,7 +662,7 @@ namespace Scintilla::Internal {
 			switch (keyMessage->KeyEvent())
 			{
 			case KeyMessage::KeyEventType::KeyDown:
-				ProcessKeyDownMessage(keyMessage->Key(), keyMessage->Modifiers());
+				ProcessKeyDownMessage(keyMessage->Key(), keyMessage->Modifiers(), keyMessage->IsExtendedKey(), nullptr);
 				break;
 			}
 		}
@@ -681,30 +689,58 @@ namespace Scintilla::Internal {
 		}
 		break;
 
-		case CharacterRecievedMessageId:
+		case CharacterReceivedMessageId:
 		{
-			const auto characterRecievedMessage{ static_cast<CharacterRecievedMessage *>(message.get()) };
-			ProcessCharacterRecievedMessage(characterRecievedMessage->Character());
+			const auto characterReceivedMessage{ static_cast<CharacterReceivedMessage *>(message.get()) };
+			ProcessCharacterReceivedMessage(characterReceivedMessage->Character());
 		}
 		break;
 		}
 	}
 
-	void ScintillaWinUI::ProcessKeyDownMessage(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers)
+	constexpr bool KeyboardIsNumericKeypadFunction(winrt::Windows::System::VirtualKey key, bool const isExtendedKey)
+	{
+		if (isExtendedKey)
+		{
+			// Not from the numeric keypad
+			return false;
+		}
+
+		switch (key)
+		{
+		case winrt::Windows::System::VirtualKey::Insert: // 0
+		case winrt::Windows::System::VirtualKey::End: // 1
+		case winrt::Windows::System::VirtualKey::Down: // 2
+		case winrt::Windows::System::VirtualKey::PageDown: // 3
+		case winrt::Windows::System::VirtualKey::Left: // 4
+		case winrt::Windows::System::VirtualKey::Clear: // 5
+		case winrt::Windows::System::VirtualKey::Right: // 6
+		case winrt::Windows::System::VirtualKey::Home: // 7
+		case winrt::Windows::System::VirtualKey::Up: // 8
+		case winrt::Windows::System::VirtualKey::PageUp: // 9
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	void ScintillaWinUI::ProcessKeyDownMessage(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey, bool *handled)
 	{
 		lastKeyDownConsumed = false;
-		/*const bool altDown = KeyboardIsKeyDown(VK_MENU);
-		if (altDown && KeyboardIsNumericKeypadFunction(wParam, lParam)) {
+		if (handled
+			&& (static_cast<int>(modifiers) & static_cast<int>(winrt::Windows::System::VirtualKeyModifiers::Menu))
+			&& KeyboardIsNumericKeypadFunction(key, isExtendedKey))
+		{
 			// Don't interpret these as they may be characters entered by number.
+			*handled = false;
 			return;
-		}*/
-		// Todo: Number pad key
-		// Not sure if need KeyStatus.IsMenuKeyDown	(alt)
-		/*const int ret = */KeyDownWithModifiers(
+		}
+		const int ret = KeyDownWithModifiers(
 			KeyTranslate(static_cast<uptr_t>(key)),
 			WindowsModifiers(modifiers),
 			&lastKeyDownConsumed);
-		// On Win32, the newline is inserted by CharacterRecieved. This works fine
+
+		// On Win32, the newline is inserted by CharacterReceived. This works fine
 		// On UWP, the tab key event works because TSF seems to automatically check for the cursor position after the key is pressed regardless of what we do
 		// UPDATE: in order to prevent XAML from moving focus on tab, we mark the tab key as handled, which prevents TSF from getting it, so now we do the same for tab
 		// It does not do this for delete or backspace, but I don't think it would need to
@@ -726,7 +762,11 @@ namespace Scintilla::Internal {
 				}
 			}
 		}
-		// Todo: not sure if we need return value
+
+		if (handled && !ret && !lastKeyDownConsumed)
+		{
+			*handled = false;
+		}
 	}
 
 	void ScintillaWinUI::ImeEndComposition()
@@ -740,13 +780,16 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::CharacterReceived(char16_t character)
 	{
-		if (_lock != NONE)
+		if (!_didTsfInput)
 		{
-			msgq.push(std::make_unique<CharacterRecievedMessage>(character));
-		}
-		else
-		{
-			ProcessCharacterRecievedMessage(character);
+			if (_lock != NONE)
+			{
+				msgq.push(std::make_unique<CharacterReceivedMessage>(character));
+			}
+			else
+			{
+				ProcessCharacterReceivedMessage(character);
+			}
 		}
 	}
 
@@ -1492,6 +1535,8 @@ namespace Scintilla::Internal {
 			DebugOut(L"SetText, Start: %d, Old End: %d, New End: %d\n", pChange->acpStart, pChange->acpOldEnd, pChange->acpNewEnd);
 		}
 
+		_didTsfInput = true;
+
 		return S_OK;
 	}
 
@@ -1674,7 +1719,6 @@ namespace Scintilla::Internal {
 		return hr;*/
 	}
 
-	// Todo: Implement this so IMEs appear in the right position
 	IFACEMETHODIMP ScintillaWinUI::GetTextExt(TsViewCookie vcView, LONG acpStart, LONG acpEnd, RECT *prc, BOOL *pfClipped)
 	{
 		if (vcView != 0 || prc == 0 || pfClipped == 0)
@@ -1682,16 +1726,20 @@ namespace Scintilla::Internal {
 			return E_INVALIDARG;
 		}
 		if (_lock == NONE)
-			return TS_E_NOLOCK;
-		// TODO:  What about offscreen positions?  I really don't think this works here.
-		PRectangle pr(RectangleFromRange(Range{ pdoc->MovePositionOutsideChar(acpStart, -1, false), pdoc->MovePositionOutsideChar(acpEnd, 1, false) }, 0));
-		*prc = *(reinterpret_cast<RECT *>(&pr));
-		// and change it into screen coordinates.
-		/*if (!::MapWindowPoints(MainHWND(), NULL, (LPPOINT)prc, 2))
 		{
-			return HRESULT_FROM_WIN32(::GetLastError());
-		}*/ // WinUI Todo
-		*pfClipped = 0;
+			return TS_E_NOLOCK;
+		}
+
+		// Todo: Original note: What about offscreen positions? I really don't think this works here.
+		// Todo: Translate to screen. DPI?
+		const auto pr{ RectangleFromRange(Range{ AcpToDocPosition(acpStart), AcpToDocPosition(acpEnd) }, 0) };
+		prc->left = pr.left;
+		prc->top = pr.top;
+		prc->right = pr.right;
+		prc->bottom = pr.bottom;
+
+		*pfClipped = 0; // Todo: Not sure what this needs to be
+
 		return S_OK;
 	}
 
@@ -1705,16 +1753,14 @@ namespace Scintilla::Internal {
 		{
 			return TS_E_NOLOCK;
 		}
-		// Get the client rectangle
-		//::SetRectEmpty(prc); // WinUI Todo
-		PRectangle prClient(GetClientRectangle());
-		PRectangle prText(GetTextRectangle());
-		//::IntersectRect(prc, reinterpret_cast<RECT *>(&prClient), reinterpret_cast<RECT *>(&prText)); // WinUI Todo
-		// and change it into screen coordinates.
-		/*if (!::MapWindowPoints(MainHWND(), NULL, (LPPOINT)prc, 2))
-		{
-			return HRESULT_FROM_WIN32(::GetLastError());
-		}*/ // WinUI Todo
+
+		// Todo: Translate to screen. DPI?
+		const auto pr{ GetTextRectangle() };
+		prc->left = pr.left;
+		prc->top = pr.top;
+		prc->right = pr.right;
+		prc->bottom = pr.bottom;
+
 		return S_OK;
 	}
 
@@ -2011,11 +2057,11 @@ namespace Scintilla::Internal {
 		if (_lock != NONE)
 		{
 			// Todo: notification queue might defeat the point of "before" notifications
-			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, _fromNotifyQueue, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text)));
+			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, _fromNotifyQueue, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text, scn.length)));
 		}
 		else
 		{
-			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn, _shouldNotifyTsf, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text));
+			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn, _shouldNotifyTsf, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text, scn.length));
 		}
 		// Todo: Probably do not need GetCtrlID
 	}
@@ -2381,15 +2427,20 @@ namespace Scintilla::Internal {
 		ScrollTo(topLineNew);
 	}
 
-	void ScintillaWinUI::KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers)
+	void ScintillaWinUI::PreviewKeyDown()
+	{
+		_didTsfInput = false;
+	}
+
+	void ScintillaWinUI::KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey, bool *handled)
 	{
 		if (_lock != NONE)
 		{
-			msgq.push(std::make_unique<KeyMessage>(KeyMessage::KeyEventType::KeyDown, key, modifiers));
+			msgq.push(std::make_unique<KeyMessage>(KeyMessage::KeyEventType::KeyDown, key, modifiers, isExtendedKey));
 		}
 		else
 		{
-			ProcessKeyDownMessage(key, modifiers);
+			ProcessKeyDownMessage(key, modifiers, isExtendedKey, handled);
 		}
 	}
 
@@ -2748,7 +2799,7 @@ namespace Scintilla::Internal {
 		return notifyTsf
 			&& code == Scintilla::Notification::Modified
 			&& FlagSet(modFlags, Scintilla::ModificationFlags::InsertText | Scintilla::ModificationFlags::DeleteText)
-			? WideCharLenFromMultiByte(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage, text)
+			? WideCharLenFromMultiByte(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage, std::string_view{ text, static_cast<size_t>(mbLength) })
 			: 0;
 	}
 
