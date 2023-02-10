@@ -69,6 +69,7 @@
 #include <new>
 #include <string>
 #include <string_view>
+#include <sstream>
 #include <vector>
 #include <map>
 #include <set>

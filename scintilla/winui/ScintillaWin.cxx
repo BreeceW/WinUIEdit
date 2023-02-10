@@ -814,34 +814,48 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::OnTextRequested(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextTextRequestedEventArgs const &args)
 	{
-		// Todo: Probably don't return whole document if acpEnd is -1. Callers will ask for more if they need it.
-
-		auto acpStart{ args.Request().Range().StartCaretPosition };
-		auto acpEnd{ args.Request().Range().EndCaretPosition };
-		// acpEnd can be -1, initialize it properly.
-		if (acpEnd == -1)
-		{
-			acpEnd = pdoc->Length();
-		}
-
-		if ((acpStart < 0) || (acpStart > acpEnd) || (acpEnd > pdoc->Length()))
+		if (!TsfCoreLock(READONLY))
 		{
 			return;
 		}
 
-		auto length{ acpEnd - acpStart };
-		auto size{ length + 1 };
-		auto buff{ new wchar_t[size] };
-		GetText(size, reinterpret_cast<sptr_t>(buff));
-		args.Request().Text(buff);
-		delete[] buff;
-		// Todo: incomplete
+		WCHAR text[128];
+		ULONG retText;
+		TS_RUNINFO runs[33];
+		ULONG retRuns;
+		LONG next{ args.Request().Range().StartCaretPosition };
+		LONG end{ std::min(args.Request().Range().EndCaretPosition, static_cast<int32_t>(DocPositionToAcp(pdoc->Length()))) };
+		std::wstringstream str{};
+		while (next < end)
+		{
+			if (FAILED(GetText(next, end, text, 128, &retText, runs, 33, &retRuns, &next)))
+			{
+				TsfCoreUnlock();
+
+				return;
+			}
+			str << std::wstring_view{ text, retText };
+		}
+		args.Request().Text(str.str());
+
+		TsfCoreUnlock();
 	}
 
 	void ScintillaWinUI::OnSelectionRequested(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextSelectionRequestedEventArgs const &args)
 	{
-		DebugOut(L"OnSelectionRequested, Start: %d, End: %d\n", DocPositionToAcp(SelectionStart().Position()), DocPositionToAcp(SelectionEnd().Position()));
-		args.Request().Selection(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
+		if (!TsfCoreLock(READONLY))
+		{
+			return;
+		}
+
+		TS_SELECTION_ACP sel;
+		ULONG sels;
+		if (SUCCEEDED(GetSelection(TF_DEFAULT_SELECTION, 1, &sel, &sels)) && sels == 1)
+		{
+			args.Request().Selection(winrt::Windows::UI::Text::Core::CoreTextRange{ sel.acpStart, sel.acpEnd });
+		}
+
+		TsfCoreUnlock();
 	}
 
 	void ScintillaWinUI::OnFocusRemoved(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::Foundation::IInspectable const &args)
@@ -851,121 +865,82 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::OnTextUpdating(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextTextUpdatingEventArgs const &args)
 	{
-		DebugOut(L"OnTextUpdating\n");
-
-		if (pdoc->IsReadOnly())
+		if (!TsfCoreLock(READWRITE))
 		{
-			args.Result(winrt::Windows::UI::Text::Core::CoreTextTextUpdatingResult::Failed);
+			return;
 		}
 
-		auto docStart{ AcpToDocPosition(args.Range().StartCaretPosition) };
-		auto docEnd{ AcpToDocPosition(args.Range().EndCaretPosition) };
+		TS_TEXTCHANGE chg;
+		const auto hr{ SetText(0, args.Range().StartCaretPosition, args.Range().EndCaretPosition, args.Text().c_str(), args.Text().size(), &chg) };
+		__super::SetSelection(DocPositionToAcp(args.NewSelection().StartCaretPosition), DocPositionToAcp(args.NewSelection().EndCaretPosition));
+		args.Result(SUCCEEDED(hr)
+			? winrt::Windows::UI::Text::Core::CoreTextTextUpdatingResult::Succeeded
+			: winrt::Windows::UI::Text::Core::CoreTextTextUpdatingResult::Failed);
 
-		// set text by deleting existing chars and inserting new text
-		auto startPos{ pdoc->MovePositionOutsideChar(docStart, 1, false) };
-		auto endPos{ pdoc->MovePositionOutsideChar(docEnd, -1, false) };
-		auto len{ endPos - startPos };
-		auto utf16len{ pdoc->CountUTF16(startPos, endPos) };
-		pdoc->BeginUndoAction();
-		pdoc->DeleteChars(startPos, len);
-		int cchText{ -1 };
-		char *szText{ nullptr };
-		if (IsUnicodeMode())
-		{
-			cchText = UTF8Length(args.Text());
-			szText = new char[cchText + 1];
-			UTF8FromUTF16(args.Text(), szText, cchText);
-		}
-		else
-		{
-			UINT cpDest = CodePageFromCharSet(vs.styles[STYLE_DEFAULT].characterSet, pdoc->dbcsCodePage);
-			cchText = ::WideCharToMultiByte(cpDest, 0, args.Text().c_str(), args.Text().size(),
-				NULL, 0, NULL, NULL);
-			szText = new char[cchText + 1];
-			if (szText) {
-				::WideCharToMultiByte(cpDest, 0, args.Text().c_str(), args.Text().size(),
-					szText, cchText, NULL, NULL);
-				szText[cchText] = '\0';
-			}
-		}
-
-		int notifyChar = szText[0];
-
-		if (pdoc->InsertString(startPos, szText, cchText))
-		{
-			freeq.push(szText);
-		}
-		else
-		{
-			delete[] szText;
-		}
-
-		EnsureCaretVisible();
-		ShowCaretAtCurrentPosition(); // Todo: Reevaluate how text at the current position is inserted (this is copied out of InsertCharacter)
-		if (cchText == 1)
-		{
-			NotifyChar(notifyChar, Scintilla::CharacterSource::DirectInput); // Todo: This is temporary
-		}
-
-		delete[] szText;
-		/*if (pChange)
-		{
-			auto newAcpStart{ DocPositionToAcp(startPos) };
-			pChange->acpStart = newAcpStart;
-			pChange->acpOldEnd = newAcpStart + utf16len;
-			pChange->acpNewEnd = newAcpStart + cch;
-			DebugOut(L"SetText, Start: %d, Old End: %d, New End: %d\n", pChange->acpStart, pChange->acpOldEnd, pChange->acpNewEnd);
-		}*/
-		auto newSelection{ args.NewSelection() };
-		// Todo: Do not duplicate
-		__super::SetSelection(AcpToDocPosition(newSelection.StartCaretPosition), AcpToDocPosition(newSelection.EndCaretPosition));
-		pdoc->EndUndoAction();
-		NotifyChange();
-		Redraw();
+		TsfCoreUnlock();
 	}
 
 	void ScintillaWinUI::OnSelectionUpdating(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextSelectionUpdatingEventArgs const &args)
 	{
-		auto selection{ args.Selection() };
-
-		// Todo: Not sure how to set the style
-
-		__super::SetSelection(AcpToDocPosition(selection.StartCaretPosition), AcpToDocPosition(selection.EndCaretPosition));
-
-		/*switch (pSelection->style.ase)
+		if (!TsfCoreLock(READWRITE))
 		{
-		case TsActiveSelEnd::TS_AE_START:
-			__super::SetSelection(AcpToDocPosition(pSelection->acpStart), AcpToDocPosition(pSelection->acpEnd));
-			break;
-		case TsActiveSelEnd::TS_AE_NONE:
-			DropCaret();
-			[[fallthrough]];
-		case TsActiveSelEnd::TS_AE_END:
-			__super::SetSelection(AcpToDocPosition(pSelection->acpEnd), AcpToDocPosition(pSelection->acpStart));
-			break;
+			return;
 		}
-		DebugOut(L"SetSelection, ACP: %d, Sci: %d; ACP: %d, Sci: %d; Mode: %d\n", pSelection->acpStart, AcpToDocPosition(pSelection->acpStart), pSelection->acpEnd, AcpToDocPosition(pSelection->acpEnd), pSelection->style.ase);
-		return S_OK;*/
+
+		TS_SELECTION_ACP sel;
+		sel.acpStart = args.Selection().StartCaretPosition;
+		sel.acpEnd = args.Selection().EndCaretPosition;
+		sel.style.ase = TS_AE_END; // Todo: Figure out how to set this
+		// Docs say "StartCaretPosition must always be less than or equal to the EndCaretPosition"
+		// so it does not work like Scintilla, where they can be flipped
+		sel.style.fInterimChar = 0; // Todo: Figure out how to set this
+		const auto hr{ SetSelection(1, &sel) };
+		args.Result(SUCCEEDED(hr)
+			? winrt::Windows::UI::Text::Core::CoreTextSelectionUpdatingResult::Succeeded
+			: winrt::Windows::UI::Text::Core::CoreTextSelectionUpdatingResult::Failed);
+
+		TsfCoreUnlock();
 	}
 
 	void ScintillaWinUI::OnFormatUpdating(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextFormatUpdatingEventArgs const &args)
 	{
-
 	}
 
 	void ScintillaWinUI::OnLayoutRequested(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextLayoutRequestedEventArgs const &args)
 	{
+		if (!TsfCoreLock(READONLY))
+		{
+			return;
+		}
 
+		RECT textRect;
+		BOOL clipped;
+		// Normally get cookie by GetActiveView, but it is hardcoded to 0 anyway
+		if (SUCCEEDED(GetTextExt(0, args.Request().Range().StartCaretPosition, args.Request().Range().EndCaretPosition, &textRect, &clipped)))
+		{
+			// LayoutBoundsVisualPixels on Windows 1809+ should be useful but causes a crash
+			args.Request().LayoutBounds().TextBounds(winrt::Windows::Foundation::Rect{ static_cast<float>(textRect.left), static_cast<float>(textRect.top), static_cast<float>(textRect.right - textRect.left), static_cast<float>(textRect.bottom - textRect.top) });
+		}
+
+		RECT screenRect;
+		if (SUCCEEDED(GetScreenExt(0, &screenRect)))
+		{
+			args.Request().LayoutBounds().ControlBounds(winrt::Windows::Foundation::Rect{ static_cast<float>(screenRect.left), static_cast<float>(screenRect.top), static_cast<float>(screenRect.right - screenRect.left), static_cast<float>(screenRect.bottom - screenRect.top) });
+		}
+
+		// Todo: Make a helper method for converting RECT to Windows.Foundation.Rect
+
+		TsfCoreUnlock();
 	}
 
 	void ScintillaWinUI::OnCompositionStarted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionStartedEventArgs const &args)
 	{
-
+		OnStartComposition(nullptr, nullptr);
 	}
 
 	void ScintillaWinUI::OnCompositionCompleted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionCompletedEventArgs const &args)
 	{
-
+		OnEndComposition(nullptr);
 	}
 
 	void ScintillaWinUI::OnCaretTimerTick(winrt::Windows::Foundation::IInspectable const &sender, winrt::Windows::Foundation::IInspectable const &args)
@@ -1042,6 +1017,23 @@ namespace Scintilla::Internal {
 		return hr;
 	}
 
+	bool ScintillaWinUI::TsfCoreLock(DWORD lock)
+	{
+		if (_lock == NONE)
+		{
+			_lock = static_cast<LockTypes>(lock);
+			return true;
+		}
+		return false;
+	}
+
+	void ScintillaWinUI::TsfCoreUnlock()
+	{
+		ProcessQueues();
+
+		_lock = NONE;
+	}
+
 	IFACEMETHODIMP ScintillaWinUI::UnadviseSink(IUnknown *)
 	{
 		return E_NOTIMPL;
@@ -1109,30 +1101,35 @@ namespace Scintilla::Internal {
 				_tfTextStoreACPSink->OnLockGranted(_lock);
 			}
 
-			while (!msgq.empty())
-			{
-				OutputDebugStringW(L"Processing Queued Message\n");
-				ProcessMessage(msgq.front());
-				msgq.pop();
-			}
-			_fromNotifyQueue = true;
-			while (!notifyq.empty())
-			{
-				OutputDebugStringW(L"Processing Queued Notification\n");
-				ProcessMessage(notifyq.front());
-				notifyq.pop();
-			}
-			_fromNotifyQueue = false;
-			while (!freeq.empty())
-			{
-				delete[] freeq.front();
-				freeq.pop();
-			}
+			ProcessQueues();
 
 			_lock = NONE;
 		}
 
 		return hr;
+	}
+
+	void ScintillaWinUI::ProcessQueues()
+	{
+		while (!msgq.empty())
+		{
+			OutputDebugStringW(L"Processing Queued Message\n");
+			ProcessMessage(msgq.front());
+			msgq.pop();
+		}
+		_fromNotifyQueue = true;
+		while (!notifyq.empty())
+		{
+			OutputDebugStringW(L"Processing Queued Notification\n");
+			ProcessMessage(notifyq.front());
+			notifyq.pop();
+		}
+		_fromNotifyQueue = false;
+		while (!freeq.empty())
+		{
+			delete[] freeq.front();
+			freeq.pop();
+		}
 	}
 
 	IFACEMETHODIMP ScintillaWinUI::GetStatus(TS_STATUS *pdcs)
@@ -2794,7 +2791,7 @@ namespace Scintilla::Internal {
 		SetDragPosition(SelectionPosition(Sci::invalidPosition));
 	}
 
-	int ScintillaWinUI::CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text)
+	int ScintillaWinUI::CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength)
 	{
 		return notifyTsf
 			&& code == Scintilla::Notification::Modified

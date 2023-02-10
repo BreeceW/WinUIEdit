@@ -123,6 +123,7 @@ namespace Scintilla::Internal {
 		std::queue<std::unique_ptr<IMessage>> msgq{}; //31
 		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
 		std::queue<char *> freeq{}; //3000
+		void ProcessQueues();
 		bool _shouldNotifyTsf{ true };
 		bool _fromNotifyQueue{ false };
 
@@ -159,6 +160,8 @@ namespace Scintilla::Internal {
 		void OnLayoutRequested(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextLayoutRequestedEventArgs const &args);
 		void OnCompositionStarted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionStartedEventArgs const &args);
 		void OnCompositionCompleted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionCompletedEventArgs const &args);
+		bool TsfCoreLock(DWORD lock);
+		void TsfCoreUnlock();
 
 		winrt::com_ptr<ITfThreadMgr2> _tfThreadManager{ nullptr };
 		winrt::com_ptr<ITfDocumentMgr> _tfDocumentManager{ nullptr };
