@@ -15,6 +15,7 @@ using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::Foundation;
+using namespace Windows::Foundation::Metadata;
 using namespace Windows::Storage;
 using namespace Windows::Storage::Pickers;
 using namespace Windows::Storage::Streams;
@@ -40,6 +41,11 @@ namespace winrt::CppDemoUwp::implementation
 		if (_hasFcu)
 		{
 			Activated(coreWindow.ActivationMode() != CoreWindowActivationMode::Deactivated);
+		}
+
+		if (!ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14, 0))
+		{
+			Editor().Editor().StyleSetFont(static_cast<int32_t>(StylesCommon::Default), L"Consolas");
 		}
 	}
 
