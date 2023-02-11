@@ -869,7 +869,7 @@ namespace Scintilla::Internal {
 
 		TS_TEXTCHANGE chg;
 		const auto hr{ SetText(0, args.Range().StartCaretPosition, args.Range().EndCaretPosition, args.Text().c_str(), args.Text().size(), &chg) };
-		__super::SetSelection(DocPositionToAcp(args.NewSelection().StartCaretPosition), DocPositionToAcp(args.NewSelection().EndCaretPosition));
+		__super::SetSelection(AcpToDocPosition(args.NewSelection().StartCaretPosition), AcpToDocPosition(args.NewSelection().EndCaretPosition));
 		args.Result(SUCCEEDED(hr)
 			? winrt::Windows::UI::Text::Core::CoreTextTextUpdatingResult::Succeeded
 			: winrt::Windows::UI::Text::Core::CoreTextTextUpdatingResult::Failed);
