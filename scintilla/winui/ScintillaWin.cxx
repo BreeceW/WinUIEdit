@@ -780,16 +780,13 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::CharacterReceived(char16_t character)
 	{
-		if (!_didTsfInput)
+		if (_lock != NONE)
 		{
-			if (_lock != NONE)
-			{
-				msgq.push(std::make_unique<CharacterReceivedMessage>(character));
-			}
-			else
-			{
-				ProcessCharacterReceivedMessage(character);
-			}
+			msgq.push(std::make_unique<CharacterReceivedMessage>(character));
+		}
+		else
+		{
+			ProcessCharacterReceivedMessage(character);
 		}
 	}
 
@@ -1531,8 +1528,6 @@ namespace Scintilla::Internal {
 			pChange->acpNewEnd = newAcpStart + cch;
 			DebugOut(L"SetText, Start: %d, Old End: %d, New End: %d\n", pChange->acpStart, pChange->acpOldEnd, pChange->acpNewEnd);
 		}
-
-		_didTsfInput = true;
 
 		return S_OK;
 	}
@@ -2422,11 +2417,6 @@ namespace Scintilla::Internal {
 		case ScrollEventType::ThumbTrack: topLineNew = value; break;
 		}
 		ScrollTo(topLineNew);
-	}
-
-	void ScintillaWinUI::PreviewKeyDown()
-	{
-		_didTsfInput = false;
 	}
 
 	void ScintillaWinUI::KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey, bool *handled)

@@ -90,9 +90,14 @@ namespace winrt::MicaEditor::implementation
 		if (_hasFcu)
 		{
 #endif
-			// The OnCharacterReceived override is not called in UWP,
-			// so the event is registered instead
-			CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
+			// Registering the CharacterReceived event causes undesirable behavior with TSF in CoreWindow (normal UWP)
+			// but is required to get text in classic windows (XAML Islands and WinUI 3)
+			// Todo: Find more ideal way to do this
+			// Tried using _tfThreadManager->GetActiveFlags but TF_TMF_IMMERSIVEMODE flag was not accurate
+			if (Helpers::IsClassicWindow())
+			{
+				CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
+			}
 
 			ActualThemeChanged({ this, &MicaEditorControl::OnActualThemeChanged });
 			UpdateColors(ActualTheme() == ElementTheme::Dark);
@@ -576,11 +581,6 @@ namespace winrt::MicaEditor::implementation
 	}
 #endif
 
-	void MicaEditorControl::OnPreviewKeyDown(KeyRoutedEventArgs const &e)
-	{
-		_scintilla->PreviewKeyDown();
-	}
-
 	void MicaEditorControl::OnKeyDown(KeyRoutedEventArgs const &e)
 	{
 		__super::OnKeyDown(e);
@@ -638,13 +638,6 @@ namespace winrt::MicaEditor::implementation
 		{
 			ShowContextMenuAtCurrentPosition();
 		}
-
-		if (!handled)
-		{
-			// Windows versions prior to 11 fire CharacterReceived twice,
-			// so this makes sure that each CharacterReceived is associated with one key
-			_hasChar = true;
-		}
 	}
 
 	void MicaEditorControl::OnKeyUp(KeyRoutedEventArgs const &e)
@@ -657,10 +650,9 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, CharacterReceivedRoutedEventArgs const &e)
 	{
-		if (_isFocused && _hasChar)
+		if (_isFocused)
 		{
 			_scintilla->CharacterReceived(e.Character());
-			_hasChar = false;
 			e.Handled(true);
 		}
 	}

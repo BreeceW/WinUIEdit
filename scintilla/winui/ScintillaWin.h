@@ -68,7 +68,6 @@ namespace Scintilla::Internal {
 		void PointerWheelChanged(int delta, bool horizontal, winrt::Windows::System::VirtualKeyModifiers modifiers);
 		void HorizontalScroll(ScrollEventType event, int value);
 		void Scroll(ScrollEventType event, int value);
-		void PreviewKeyDown();
 		void KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey, bool *handled);
 		void Finalize();
 		void CharacterReceived(char16_t character);
@@ -90,8 +89,6 @@ namespace Scintilla::Internal {
 
 	private:
 		bool _tsfCore;
-
-		bool _didTsfInput{ false };
 
 		bool hasOKText{ false };
 

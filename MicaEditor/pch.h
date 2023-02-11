@@ -83,6 +83,7 @@
 
 #include <olectl.h>
 #include <msctf.h>
+#include <appmodel.h>
 
 #include "Helpers.h"
 #include "Wrapper.h"

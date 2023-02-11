@@ -9,4 +9,11 @@ namespace MicaEditor
 		float pixelVal = val * dpiAdjustmentRatio;
 		return static_cast<int>(rounded ? floorf(pixelVal + 0.5f) : pixelVal); // Todo: Test if this is ever necessary
 	}
+
+	bool Helpers::IsClassicWindow()
+	{
+		AppPolicyWindowingModel model;
+		return FAILED(AppPolicyGetWindowingModel(GetCurrentThreadEffectiveToken(), &model))
+			|| model != AppPolicyWindowingModel_Universal;
+	}
 }
