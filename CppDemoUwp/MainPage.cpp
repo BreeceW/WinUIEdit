@@ -276,7 +276,7 @@ namespace winrt::CppDemoUwp::implementation
 		GetTimeFormatEx(LOCALE_NAME_USER_DEFAULT, TIME_NOSECONDS, &time, nullptr, timeBuffer, MAX_PATH);
 		WCHAR dateBuffer[MAX_PATH];
 		GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, DATE_SHORTDATE, &time, nullptr, dateBuffer, MAX_PATH, nullptr);
-		const auto formatted{ std::format(L"{} {}", timeBuffer, dateBuffer) };
+		const auto formatted{ format(L"{} {}", timeBuffer, dateBuffer) };
 		Editor().Editor().AddText(formatted.size(), formatted);
 	}
 
@@ -369,7 +369,7 @@ namespace winrt::CppDemoUwp::implementation
 			const auto pos{ sender.CurrentPos() };
 			const auto ln{ sender.LineFromPosition(pos) };
 			const auto col{ sender.GetColumn(pos) };
-			RCIndicator().Text(std::format(L"Ln {}, Col {}", ln + 1, col + 1));
+			RCIndicator().Text(format(L"Ln {}, Col {}", ln + 1, col + 1));
 		}
 	}
 
@@ -420,7 +420,7 @@ namespace winrt::CppDemoUwp::implementation
 		const ContentDialog dialog{};
 		dialog.Style(Application::Current().Resources().Lookup(box_value(L"DefaultContentDialogStyle")).as<Windows::UI::Xaml::Style>()); // Fixes opening animation
 		dialog.Title(box_value(L"Mica Editor"));
-		dialog.Content(box_value(std::format(L"Do you want to save changes to {}?", _activeFile ? _activeFile.Name() : L"Untitled")));
+		dialog.Content(box_value(format(L"Do you want to save changes to {}?", _activeFile ? _activeFile.Name() : L"Untitled")));
 		dialog.DefaultButton(ContentDialogButton::Primary);
 		dialog.PrimaryButtonText(L"Save");
 		dialog.SecondaryButtonText(L"Don\u2019t save");
