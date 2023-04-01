@@ -2158,8 +2158,6 @@ namespace Scintilla::Internal {
 				D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
 				_d2dDeviceContext.put()));
 
-		// Todo: Call _d2dDeviceContext->SetDpi and fix how DPI is handled throughout control https://learn.microsoft.com/en-us/windows/win32/direct2d/direct2d-and-high-dpi
-
 		// Associate the Direct2D device with the SurfaceImageSource
 		_sisNativeWithD2D->SetDevice(d2dDevice.get());
 	}
@@ -2183,7 +2181,6 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::DpiChanged()
 	{
-		// Todo: need to re-evaluate how DPI is handled. might need to set DPI property on pBitmapRenderTarget in PlatWin.cxx
 		InvalidateStyleRedraw();
 	}
 
@@ -2504,31 +2501,24 @@ namespace Scintilla::Internal {
 			}
 			_d2dDeviceContext->BeginDraw();
 			_d2dDeviceContext->SetTarget(bitmap.get());
-			_d2dDeviceContext->SetTransform(D2D1::IdentityMatrix());
+		
+			surfaceOffset.x -= drawingBounds.left;
+			surfaceOffset.y -= drawingBounds.top;
+			float offsetX = surfaceOffset.x;
+			float offsetY = surfaceOffset.y;
 
-			// Translate the drawing to the designated place on the surface.
-			D2D1::Matrix3x2F transform =
-				D2D1::Matrix3x2F::Scale(1.0f, 1.0f) *
-				D2D1::Matrix3x2F::Translation(
-					static_cast<float>(surfaceOffset.x - drawingBounds.left),
-					static_cast<float>(surfaceOffset.y - drawingBounds.top)
-				);
+			_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Translation(offsetX, offsetY));
 
 			// Constrain the drawing only to the designated portion of the surface
 			_d2dDeviceContext->PushAxisAlignedClip(
 				D2D1::RectF(
-					static_cast<float>(surfaceOffset.x),
-					static_cast<float>(surfaceOffset.y),
-					static_cast<float>(surfaceOffset.x + (drawingBounds.right - drawingBounds.left)),
-					static_cast<float>(surfaceOffset.y + (drawingBounds.bottom - drawingBounds.top))
+					drawingBounds.left, drawingBounds.top, drawingBounds.right, drawingBounds.bottom
 				),
 				D2D1_ANTIALIAS_MODE_ALIASED
 			);
 
-			_d2dDeviceContext->SetTransform(transform);
-
 			auto surf{ Scintilla::Internal::Surface::Allocate(technology) };
-			surf->Init(_d2dDeviceContext.get(), nullptr);
+			surf->Init(_d2dDeviceContext.get(), _wrapper.get());
 			//surf->SetUnicodeMode(true); // Todo: Figure out what to make this
 			//surf->SetDBCSMode(0);  // Todo: Figure out what to make this
 			surf->SetMode(SurfaceMode{ 65001, false }); // Todo: Ensure these values are good

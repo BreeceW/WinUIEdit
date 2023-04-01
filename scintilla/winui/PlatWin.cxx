@@ -597,7 +597,7 @@ int SurfaceD2D::LogPixelsY() {
 void SurfaceD2D::SetDeviceScaleFactor(const ID2D1RenderTarget *const pD2D1RenderTarget) noexcept {
 	FLOAT dpiX = 0.f;
 	FLOAT dpiY = 0.f;
-	pD2D1RenderTarget->GetDpi(&dpiX, &dpiY); // Todo: This is always 96. Need to see if scaling should be done here instead of increasing font sizes
+	pD2D1RenderTarget->GetDpi(&dpiX, &dpiY);
 	deviceScaleFactor = static_cast<int>(dpiX / 96.f);
 }
 
@@ -2156,11 +2156,11 @@ ColourRGBA Platform::ChromeHighlight() {
 }
 
 const char *Platform::DefaultFont() {
-	return "Cascadia Code";
+	return "Verdana";
 }
 
 int Platform::DefaultFontSize() {
-	return 11;
+	return 8;
 }
 
 unsigned int Platform::DoubleClickTime() {
