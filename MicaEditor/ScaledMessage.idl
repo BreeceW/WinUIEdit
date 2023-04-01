@@ -1,0 +1,11 @@
+import "MicaEditorControl.idl";
+
+namespace MicaEditor
+{
+	runtimeclass ScaledMessage
+	{
+		ScaledMessage(Boolean scaleWParam, Boolean scaleLParam);
+		Boolean ScaleWParam { get; set; };
+		Boolean ScaleLParam { get; set; };
+	}
+}

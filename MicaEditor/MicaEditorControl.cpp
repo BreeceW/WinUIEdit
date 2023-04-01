@@ -4,6 +4,7 @@
 #include "MicaEditorControl.g.cpp"
 #endif
 #include "EditorWrapper.h"
+#include "ScaledMessage.h"
 
 //#define JSON
 
@@ -16,6 +17,7 @@ using namespace DUX::Input;
 using namespace DUX::Media;
 using namespace DUX::Media::Imaging;
 using namespace Windows::Foundation;
+using namespace Windows::Foundation::Collections;
 using namespace Windows::System;
 using namespace Windows::Graphics::Display;
 using namespace Windows::ApplicationModel;
@@ -35,13 +37,13 @@ namespace winrt::MicaEditor::implementation
 
 #ifndef WINUI3
 		auto displayInformation{ DisplayInformation::GetForCurrentView() };
-		_dpiChangedRevoker = displayInformation.DpiChanged(winrt::auto_revoke, { this, &MicaEditorControl::OnDpiChanged });
+		_dpiChangedRevoker = displayInformation.DpiChanged(auto_revoke, { this, &MicaEditorControl::OnDpiChanged });
 		UpdateDisplayInformation(displayInformation.RawPixelsPerViewPixel(), displayInformation.LogicalDpi());
 #endif
 
-		_scintilla = make_self<::Scintilla::Internal::ScintillaWinUI>();
+		_scintilla = make_self<Scintilla::Internal::ScintillaWinUI>();
 
-		_editorWrapper = winrt::make<implementation::Editor>(_scintilla);
+		_editorWrapper = make<implementation::Editor>(get_strong());
 
 		_scintilla->SetWndProcTag(*this);
 		_scintilla->SetWndProc(&MicaEditorControl::WndProc);
@@ -52,15 +54,28 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 48 + (SCMOD_CTRL << 16), SCI_SETZOOM); // Ctrl+0
 
 		_scintilla->WndProc(Scintilla::Message::SetMultipleSelection, true, 0);
-		_scintilla->WndProc(Scintilla::Message::SetScrollWidth, 2000 * _dpiScale, 0); // Todo: Update on scale (careful not to override measured)
+		_scintilla->WndProc(Scintilla::Message::SetScrollWidth, 2000 * _dpiScale, 0); // Not updating on DPI change because this value can change
 		_scintilla->WndProc(Scintilla::Message::SetScrollWidthTracking, true, 0);
-		_scintilla->WndProc(Scintilla::Message::SetXCaretPolicy, CARET_SLOP, 20 * _dpiScale); // Todo: Update on scale (should this be scaled?)
 		_scintilla->WndProc(Scintilla::Message::SetYCaretPolicy, CARET_SLOP | CARET_STRICT | CARET_EVEN, 1);
 		_scintilla->WndProc(Scintilla::Message::SetVisiblePolicy, VISIBLE_SLOP, 0);
 		_scintilla->WndProc(Scintilla::Message::SetHScrollBar, true, 0);
 		_scintilla->WndProc(Scintilla::Message::SetEndAtLastLine, false, 0);
 		_scintilla->WndProc(Scintilla::Message::SetTabWidth, 4, 0);
 		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
+		_scintilla->WndProc(Scintilla::Message::StyleSetFont, STYLE_DEFAULT, reinterpret_cast<Scintilla::sptr_t>("Cascadia Code"));
+		_scintilla->WndProc(Scintilla::Message::StyleSetSizeFractional, STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
+
+		_scaleMessages = single_threaded_map<ScintillaMessage, MicaEditor::ScaledMessage>();
+		_scaleMessages.Insert(ScintillaMessage::SetXCaretPolicy, MicaEditor::ScaledMessage{ false, true });
+		_scaleMessages.Insert(ScintillaMessage::SetMarginWidthN, MicaEditor::ScaledMessage{ false, true });
+		_scaleMessages.Insert(ScintillaMessage::SetMarginLeft, MicaEditor::ScaledMessage{ false, true });
+		_scaleMessages.Insert(ScintillaMessage::SetMarginRight, MicaEditor::ScaledMessage{ false, true });
+		_scaleMessages.Insert(ScintillaMessage::SetCaretWidth, MicaEditor::ScaledMessage{ true, false });
+		PublicWndProc(Scintilla::Message::SetXCaretPolicy, CARET_SLOP, 20);
+		PublicWndProc(Scintilla::Message::SetMarginWidthN, 1, 45);
+		PublicWndProc(Scintilla::Message::SetMarginLeft, 0, 23);
+		PublicWndProc(Scintilla::Message::SetMarginRight, 0, 12);
+		PublicWndProc(Scintilla::Message::SetCaretWidth, _uiSettings.CaretWidth(), 0); // Todo: Needs to stop blinking after timeout and respect blink rate*/
 
 #ifdef JSON
 		const auto lexer{ CreateLexer("json") };
@@ -372,15 +387,59 @@ namespace winrt::MicaEditor::implementation
 		_wrapper->LogicalDpi(_logicalDpi);
 		if (_scintilla)
 		{
-			_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, Helpers::ConvertFromDipToPixelUnit(45, _dpiScale));
-			_scintilla->WndProc(Scintilla::Message::SetMarginLeft, 0, Helpers::ConvertFromDipToPixelUnit(23, _dpiScale));
-			_scintilla->WndProc(Scintilla::Message::SetCaretWidth, Helpers::ConvertFromDipToPixelUnit(_uiSettings.CaretWidth(), _dpiScale), 0); // Todo: Needs to stop blinking after timeout and respect blink rate
+			ApplyScaleSettings();
 		}
+	}
+
+	uint64_t MicaEditorControl::ScaleWParam(uint64_t wParam)
+	{
+		return static_cast<uint64_t>(floor(wParam * _dpiScale + 0.5f));
+	}
+
+	int64_t MicaEditorControl::ScaleLParam(int64_t lParam)
+	{
+		return static_cast<int64_t>(floor(lParam * _dpiScale + 0.5f));
+	}
+
+	void MicaEditorControl::ApplyScaleSettings()
+	{
+		for (const auto &scaledMessage : _scaleMessages)
+		{
+			const auto scaledMessageImpl{ scaledMessage.Value().as<ScaledMessage>() };
+			_scintilla->WndProc(
+				static_cast<Scintilla::Message>(scaledMessage.Key()),
+				scaledMessageImpl->ScaleWParam() ? ScaleWParam(scaledMessageImpl->WParam()) : scaledMessageImpl->WParam(),
+				scaledMessageImpl->ScaleLParam() ? ScaleLParam(scaledMessageImpl->LParam()) : scaledMessageImpl->LParam());
+		}
+	}
+
+	Scintilla::sptr_t MicaEditorControl::PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
+	{
+		if (_scaleMessages.HasKey(static_cast<ScintillaMessage>(iMessage)))
+		{
+			const auto scaledMessageImpl{ _scaleMessages.Lookup(static_cast<ScintillaMessage>(iMessage)).as<ScaledMessage>() };
+			scaledMessageImpl->WParam(wParam);
+			scaledMessageImpl->LParam(lParam);
+			if (scaledMessageImpl->ScaleWParam())
+			{
+				wParam = ScaleWParam(wParam);
+			}
+			if (scaledMessageImpl->ScaleLParam())
+			{
+				lParam = ScaleLParam(lParam);
+			}
+		}
+		return _scintilla->WndProc(iMessage, wParam, lParam);
 	}
 
 	uint64_t MicaEditorControl::Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
 	{
-		return _scintilla->WndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
+		return PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
+	}
+
+	IMap<ScintillaMessage, MicaEditor::ScaledMessage> MicaEditorControl::ScaleMessages()
+	{
+		return _scaleMessages;
 	}
 
 	void MicaEditorControl::OnTextPropertyChanged(IInspectable const &sender, DUX::DependencyPropertyChangedEventArgs const &args)
@@ -396,7 +455,7 @@ namespace winrt::MicaEditor::implementation
 	void MicaEditorControl::OnApplyTemplate()
 	{
 #ifdef WINUI3
-		// Temporary until it is known how to respond to DPI changes with WASDK
+		// Temporary until it is known how to respond to DPI changes with WASDK (answer: XamlRoot.Changed)
 		// Todo: Can the UWP version of this code go down here also?
 		auto scale{ XamlRoot().RasterizationScale() };
 		UpdateDisplayInformation(scale, scale * 96);
@@ -754,7 +813,7 @@ namespace winrt::MicaEditor::implementation
 		{
 			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
 			const auto sender{ tag.as<MicaEditorControl>() };
-			get_self<implementation::Editor>(sender->_editorWrapper)->ProcessEvent(data);
+			sender->_editorWrapper.as<implementation::Editor>()->ProcessEvent(data);
 		}
 
 		return 0;

@@ -140,6 +140,10 @@
     <ClInclude Include="..\scintilla\winui\*.h" />
     <ClInclude Include="..\lexilla\include\SciLexer.h" />
     <ClInclude Include="..\lexilla\lexlib\*.h" />
+    <ClInclude Include="ScaledMessage.h">
+      <DependentUpon>ScaledMessage.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +172,10 @@
     </ClCompile>
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
+    <ClCompile Include="ScaledMessage.cpp">
+      <DependentUpon>ScaledMessage.idl</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,12 +184,15 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="EditorWrapper.idl">
-    <DependentUpon>EditorWrapper.cpp</DependentUpon>
+      <DependentUpon>EditorWrapper.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
     <Midl Include="MicaEditorControl.idl">
       <DependentUpon>MicaEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
+    </Midl>
+    <Midl Include="ScaledMessage.idl">
+      <SubType>Designer</SubType>
     </Midl>
   </ItemGroup>
   <ItemGroup>

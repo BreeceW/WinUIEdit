@@ -403,7 +403,7 @@ namespace winrt::MicaEditor::implementation
 
 	struct Editor : EditorT<Editor>
 	{
-		Editor(com_ptr<Scintilla::Internal::ScintillaWinUI> const &scintilla);
+		Editor(com_ptr<MicaEditorControl> const &editor);
 
 		void ProcessEvent(Scintilla::NotificationData *data);
 
@@ -4663,6 +4663,6 @@ namespace winrt::MicaEditor::implementation
 		event<MicaEditor::MarginRightClickHandler> _marginRightClickEvent;
 		event<MicaEditor::AutoCSelectionChangeHandler> _autoCSelectionChangeEvent;
 
-		com_ptr<Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
+		com_ptr<MicaEditorControl> _editor{ nullptr };
 	};
 }

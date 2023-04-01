@@ -1,5 +1,6 @@
 #include "Defines.idl"
 import "EditorWrapper.idl";
+import "ScaledMessage.idl";
 
 namespace MicaEditor
 {
@@ -10,6 +11,7 @@ namespace MicaEditor
 		String Text { get; set; };
 		UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
 		Editor Editor { get; };
+		IMap<ScintillaMessage, ScaledMessage> ScaleMessages { get; };
 	}
 
 	// Todo: Make auto-generated

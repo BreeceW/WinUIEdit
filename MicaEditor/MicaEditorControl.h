@@ -27,7 +27,9 @@ namespace winrt::MicaEditor::implementation
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnKeyUp(DUX::Input::KeyRoutedEventArgs const &e);
 
+		Scintilla::sptr_t PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam);
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
+		Windows::Foundation::Collections::IMap<ScintillaMessage, MicaEditor::ScaledMessage> ScaleMessages();
 
 	private:
 		static void OnTextPropertyChanged(IInspectable const &sender, DUX::DependencyPropertyChangedEventArgs const &args);
@@ -43,6 +45,7 @@ namespace winrt::MicaEditor::implementation
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale = 1;
 		float _logicalDpi = 96;
+		Windows::Foundation::Collections::IMap<ScintillaMessage, MicaEditor::ScaledMessage> _scaleMessages;
 		Windows::Graphics::Display::DisplayInformation::DpiChanged_revoker _dpiChangedRevoker{};
 		void OnDpiChanged(Windows::Graphics::Display::DisplayInformation const &sender, Windows::Foundation::IInspectable const &args);
 		void OnActualThemeChanged(DUX::FrameworkElement const &sender, Windows::Foundation::IInspectable const &args);
@@ -66,6 +69,9 @@ namespace winrt::MicaEditor::implementation
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
 		void UpdateSizes();
+		uint64_t ScaleWParam(uint64_t wParam);
+		int64_t ScaleLParam(int64_t lParam);
+		void ApplyScaleSettings();
 		void UpdateColors(bool useDarkTheme);
 		void AddContextMenuItems(DUX::Controls::MenuFlyout const &menu);
 		void ShowContextMenuAtCurrentPosition();
