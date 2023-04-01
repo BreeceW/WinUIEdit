@@ -45,6 +45,8 @@ namespace Tool
             var alis = new Dictionary<string, string>(200);
             var evts = new List<Event>(100);
 
+            var messageEnu = new Enum("ScintillaMessage", new List<string>(0), false);
+
             List<string> currentComment = new List<string>();
             string currentCat = null;
             foreach (var line in ifaceLines.Concat(ifaceLinesLexilla))
@@ -61,15 +63,21 @@ namespace Tool
 
                 if (Keyword(line, "fun", out var fun))
                 {
-                    funs.Add(DecodeFunDef(fun, currentComment));
+                    var addFun = DecodeFunDef(fun, currentComment);
+                    funs.Add(addFun);
+                    messageEnu.Values.Add(addFun.Name, addFun.MsgValue);
                 }
                 if (Keyword(line, "get", out var get))
                 {
-                    allGets.Add(DecodeFunDef(get, currentComment));
+                    var addGet = DecodeFunDef(get, currentComment);
+                    allGets.Add(addGet);
+                    messageEnu.Values.Add(addGet.Name, addGet.MsgValue);
                 }
                 if (Keyword(line, "set", out var set))
                 {
-                    allSets.Add(DecodeFunDef(set, currentComment));
+                    var addSet = DecodeFunDef(set, currentComment);
+                    allSets.Add(addSet);
+                    messageEnu.Values.Add(addSet.Name, addSet.MsgValue);
                 }
                 else if (Keyword(line, "enu", out var enu))
                 {
@@ -151,7 +159,7 @@ namespace Tool
                     : null;
                 if (get.Params.Count == 0 && (set == null || (set.Params.Count == 1 && get.RetType == set.Params[0].Type)))
                 {
-                    properties.Add(new Property(getIndex != -1 ? get.Name[..getIndex] + get.Name[(getIndex + 3)..] : get.Name, get.RetType, get.Msg, set?.Msg ?? default, set?.Params[0].Position ?? ParamType.None, new List<string>(get.Comment), set != null ? new List<string>(set.Comment) : new List<string>(0)));
+                    properties.Add(new Property(getIndex != -1 ? get.Name[..getIndex] + get.Name[(getIndex + 3)..] : get.Name, get.RetType, get.Msg, set?.Msg ?? default, get.MsgValue, set?.MsgValue ?? default, set?.Params[0].Position ?? ParamType.None, new List<string>(get.Comment), set != null ? new List<string>(set.Comment) : new List<string>(0)));
                     getCount++;
                     if (set != null)
                     {
@@ -198,6 +206,8 @@ namespace Tool
             hSB.Append(End
                 + "namespace winrt::MicaEditor::implementation" + End
                 + "{" + End);
+
+            WriteIdlEnu(idlSB, messageEnu);
 
             foreach (var enu in enus)
             {
@@ -331,9 +341,9 @@ namespace Tool
             return sb.ToString();
         }
 
-        private record Property(string Name, string Type, string GetMsg, string SetMsg, ParamType SetPosition, IList<string> GetComment, IList<string> SetComment);
+        private record Property(string Name, string Type, string GetMsg, string SetMsg, int GetMsgValue, int SetMsgValue, ParamType SetPosition, IList<string> GetComment, IList<string> SetComment);
 
-        private record Function(string Name, string RetType, IList<(string Type, string Name, ParamType Position)> Params, string Msg, IList<string> Comment);
+        private record Function(string Name, string RetType, IList<(string Type, string Name, ParamType Position)> Params, string Msg, int MsgValue, IList<string> Comment);
 
         private record Event(string Name, string RetType, IList<(string Type, string Name)> Params, int Msg, IList<string> Comment);
 
@@ -366,7 +376,7 @@ namespace Tool
             {
                 paramList.Add((groups[6].Value, groups[7].Value, ParamType.LParam));
             }
-            return new Function(groups[2].Value, groups[1].Value, paramList, groups[2].Value, new List<string>(comment));
+            return new Function(groups[2].Value, groups[1].Value, paramList, groups[2].Value, int.Parse(groups[3].Value), new List<string>(comment));
         }
 
         [GeneratedRegex("(\\w+) (\\w+)=(\\w+)\\((\\w+)?[ ]?(\\w+)?,[ ]?(\\w+)?[ ]?(\\w+)?\\)")]
@@ -484,7 +494,7 @@ namespace Tool
             return new Function(prop.Name, setter ? "void" : prop.Type, setter ? new List<(string Type, string Name, ParamType Position)>(1)
             {
                 (prop.Type, "value", prop.SetPosition),
-            } : new List<(string Type, string Name, ParamType Position)>(0), setter ? prop.SetMsg : prop.GetMsg, setter ? prop.SetComment : prop.GetComment);
+            } : new List<(string Type, string Name, ParamType Position)>(0), setter ? prop.SetMsg : prop.GetMsg, setter ? prop.SetMsgValue : prop.GetMsgValue, setter ? prop.SetComment : prop.GetComment);
         }
 
         private static void WriteCppSignature(StringBuilder sb, bool header, Function func, bool usesString)
