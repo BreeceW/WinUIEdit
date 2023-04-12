@@ -62,7 +62,7 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->WndProc(Scintilla::Message::SetHScrollBar, true, 0);
 		_scintilla->WndProc(Scintilla::Message::SetEndAtLastLine, false, 0);
 		_scintilla->WndProc(Scintilla::Message::SetTabWidth, 4, 0);
-		_scintilla->WndProc(Scintilla::Message::SetMarginTypeN, 1, SC_MARGIN_NUMBER);
+		_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, 0);
 		_scintilla->WndProc(Scintilla::Message::StyleSetFont, STYLE_DEFAULT, reinterpret_cast<Scintilla::sptr_t>("Cascadia Code"));
 		_scintilla->WndProc(Scintilla::Message::StyleSetSizeFractional, STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
 
@@ -73,7 +73,7 @@ namespace winrt::MicaEditor::implementation
 		_scaleMessages.Insert(ScintillaMessage::SetMarginRight, MicaEditor::ScaledMessage{ false, true });
 		_scaleMessages.Insert(ScintillaMessage::SetCaretWidth, MicaEditor::ScaledMessage{ true, false });
 		PublicWndProc(Scintilla::Message::SetXCaretPolicy, CARET_SLOP, 20);
-		PublicWndProc(Scintilla::Message::SetMarginWidthN, 1, 45);
+		PublicWndProc(Scintilla::Message::SetMarginWidthN, 0, 45);
 		PublicWndProc(Scintilla::Message::SetMarginLeft, 0, 23);
 		PublicWndProc(Scintilla::Message::SetMarginRight, 0, 12);
 		PublicWndProc(Scintilla::Message::SetCaretWidth, _uiSettings.CaretWidth(), 0); // Todo: Needs to stop blinking after timeout and respect blink rate*/
