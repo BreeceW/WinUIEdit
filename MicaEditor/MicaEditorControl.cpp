@@ -65,6 +65,8 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, 0);
 		_scintilla->WndProc(Scintilla::Message::StyleSetFont, STYLE_DEFAULT, reinterpret_cast<Scintilla::sptr_t>("Cascadia Code"));
 		_scintilla->WndProc(Scintilla::Message::StyleSetSizeFractional, STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
+		// Todo: Determine performance impact
+		_scintilla->WndProc(Scintilla::Message::SetLayoutThreads, 16, 0);
 
 		_scaleMessages = single_threaded_map<ScintillaMessage, MicaEditor::ScaledMessage>();
 		_scaleMessages.Insert(ScintillaMessage::SetXCaretPolicy, MicaEditor::ScaledMessage{ false, true });
