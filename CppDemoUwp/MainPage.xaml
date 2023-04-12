@@ -11,6 +11,7 @@
     xmlns:mica="using:MicaEditor"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -82,6 +83,7 @@
                 x:Name="TitleText"
                 Margin="16,0,0,0"
                 VerticalAlignment="Center"
+                Opacity="0.4"
                 Style="{StaticResource CaptionTextBlockStyle}"
                 Text="Untitled - Mica Editor" />
         </StackPanel>
@@ -129,12 +131,12 @@
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem AccessKey="U" Text="Page setup" />
+                <!--<MenuFlyoutItem AccessKey="U" Text="Page setup" />
                 <MenuFlyoutItem AccessKey="P" Text="Print">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="P" Modifiers="Control" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
+                </MenuFlyoutItem>-->
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride=""
                     AccessKey="X"
@@ -186,7 +188,7 @@
                     Click="CommandMenuItem_Click"
                     Tag="{x:Bind mica:ScintillaMessage.Clear}"
                     Text="Delete" />
-                <MenuFlyoutSeparator />
+                <!--<MenuFlyoutSeparator />
                 <MenuFlyoutItem AccessKey="F" Text="Find">
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F" Modifiers="Control" />
@@ -211,7 +213,7 @@
                     <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="G" Modifiers="Control" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
+                </MenuFlyoutItem>-->
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+A"
@@ -227,8 +229,8 @@
                         <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F5" />
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutSeparator />
-                <MenuFlyoutItem AccessKey="O" Text="Font" />
+                <!--<MenuFlyoutSeparator />
+                <MenuFlyoutItem AccessKey="O" Text="Font" />-->
             </muxc:MenuBarItem>
 
             <muxc:MenuBarItem Title="View" AccessKey="V">
@@ -294,6 +296,7 @@
             Padding="0"
             AccessKey="S"
             BorderThickness="0"
+            Click="SettingsButton_Click"
             ToolTipService.ToolTip="Settings">
             <Button.Resources>
                 <ResourceDictionary>

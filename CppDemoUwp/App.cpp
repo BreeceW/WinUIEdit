@@ -12,6 +12,7 @@ using namespace Windows::UI;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
+using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::UI::ViewManagement;
 using namespace Windows::Storage;
@@ -33,7 +34,7 @@ App::App()
 		});
 #endif
 
-	_colorValuesChangedRevoker = _uiSettings.ColorValuesChanged(winrt::auto_revoke, { this, &App::OnColorValuesChanged });
+	_colorValuesChangedRevoker = _uiSettings.ColorValuesChanged(auto_revoke, { this, &App::OnColorValuesChanged });
 }
 
 void App::OnLaunched(LaunchActivatedEventArgs const &e)
@@ -67,6 +68,8 @@ int32_t App::NewWindow(IStorageItem const &file)
 		frame = Frame{};
 		frame.NavigationFailed({ this, &App::OnNavigationFailed });
 	}
+	const auto theme{ Theme() };
+	frame.RequestedTheme(theme);
 	if (!frame.Content())
 	{
 		frame.Navigate(xaml_typename<CppDemoUwp::MainPage>(), file);
@@ -78,9 +81,16 @@ int32_t App::NewWindow(IStorageItem const &file)
 	CoreApplication::GetCurrentView().TitleBar().ExtendViewIntoTitleBar(true);
 	const auto &view{ ApplicationView::GetForCurrentView() };
 	view.SetPreferredMinSize(Size{ 308, 188 });
-	UpdateTitleBar(RequestedTheme());
+	UpdateTitleBar(CurrentTheme(theme));
+
+	SystemNavigationManager::GetForCurrentView().BackRequested({ this, &App::OnSystemBackRequested });
 
 	return view.Id();
+}
+
+void App::OnSystemBackRequested(IInspectable const &sender, BackRequestedEventArgs const &e)
+{
+	GoBack();
 }
 
 IAsyncAction App::NewWindowAsync()
@@ -94,15 +104,90 @@ IAsyncAction App::NewWindowAsync()
 	co_await ApplicationViewSwitcher::TryShowAsStandaloneAsync(newViewId);
 }
 
-void App::OnColorValuesChanged(UISettings const &uiSettings, IInspectable const &args)
+void App::GoToSettingsPage()
 {
-	// Todo: Not sure if there is a way to detect if the RequestedTheme changes in Creators Update. Unimportant
+	const auto frame{ Window::Current().Content().as<Frame>() };
+
+	frame.Navigate(xaml_typename<CppDemoUwp::SettingsPage>());
+
+	UpdateTitleBarBackButton(frame);
+}
+
+void App::GoBack()
+{
+	const auto frame{ Window::Current().Content().as<Frame>() };
+
+	if (frame.CanGoBack())
+	{
+		frame.GoBack();
+	}
+
+	UpdateTitleBarBackButton(frame);
+}
+
+ElementTheme App::Theme()
+{
+	return unbox_value_or<ElementTheme>(ApplicationData::Current().LocalSettings().Values().TryLookup(L"Theme"), ElementTheme::Default);
+}
+
+void App::Theme(ElementTheme theme)
+{
+	ApplicationData::Current().LocalSettings().Values().Insert(L"Theme", box_value(static_cast<int32_t>(theme)));
+	ReloadTheme(theme);
+}
+
+void App::UpdateTitleBarBackButton(Frame const &frame)
+{
+	SystemNavigationManager::GetForCurrentView().AppViewBackButtonVisibility(frame.CanGoBack()
+		? AppViewBackButtonVisibility::Visible
+		: AppViewBackButtonVisibility::Disabled);
+}
+
+void App::ReloadTheme(ElementTheme theme)
+{
+	const auto currentTheme{ CurrentTheme(theme) };
 	for (const auto &view : CoreApplication::Views())
 	{
-		view.Dispatcher().RunAsync(CoreDispatcherPriority::Normal, [&]()
+		view.Dispatcher().RunAsync(CoreDispatcherPriority::Normal, [&, theme, currentTheme]()
 			{
-				UpdateTitleBar(RequestedTheme());
+				const auto window{ Window::Current() };
+				window.Content().as<FrameworkElement>().RequestedTheme(theme);
+				for (const auto &popup : VisualTreeHelper::GetOpenPopups(window))
+				{
+					if (const auto dialog{ popup.Child().try_as<ContentDialog>() })
+					{
+						dialog.RequestedTheme(theme);
+					}
+				}
+				UpdateTitleBar(currentTheme);
 			});
+	}
+}
+
+bool IsColorLight(Color const &color)
+{
+	return (5 * color.G) + (2 * color.R) + color.B > 8 * 128;
+}
+
+ApplicationTheme App::CurrentTheme(ElementTheme theme)
+{
+	switch (theme)
+	{
+	case ElementTheme::Default:
+		return IsColorLight(_uiSettings.GetColorValue(UIColorType::Foreground)) ? ApplicationTheme::Dark : ApplicationTheme::Light;
+	case ElementTheme::Dark:
+		return ApplicationTheme::Dark;
+	default:
+		return ApplicationTheme::Light;
+	}
+}
+
+void App::OnColorValuesChanged(UISettings const &uiSettings, IInspectable const &args)
+{
+	const auto theme{ Theme() };
+	if (theme == ElementTheme::Default)
+	{
+		ReloadTheme(theme);
 	}
 }
 

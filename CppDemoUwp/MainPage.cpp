@@ -13,12 +13,14 @@ using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Input;
 using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Controls;
+using namespace Windows::UI::Xaml::Controls::Primitives;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Metadata;
 using namespace Windows::Storage;
 using namespace Windows::Storage::Pickers;
 using namespace Windows::Storage::Streams;
+using namespace Microsoft::UI::Xaml::Controls;
 using namespace MicaEditor;
 
 namespace winrt::CppDemoUwp::implementation
@@ -36,12 +38,7 @@ namespace winrt::CppDemoUwp::implementation
 		_savePointReachedRevoker = Editor().Editor().SavePointReached(auto_revoke, { this, &MainPage::Editor_SavePointReached });
 		_savePointLeftRevoker = Editor().Editor().SavePointLeft(auto_revoke, { this, &MainPage::Editor_SavePointLeft });
 
-		auto coreWindow{ CoreWindow::GetForCurrentThread() };
-		_activatedRevoker = coreWindow.Activated(auto_revoke, { this, &MainPage::OnActivated });
-		if (_hasFcu)
-		{
-			Activated(coreWindow.ActivationMode() != CoreWindowActivationMode::Deactivated);
-		}
+		_activatedRevoker = CoreWindow::GetForCurrentThread().Activated(auto_revoke, { this, &MainPage::OnActivated });
 
 		if (!ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14, 0))
 		{
@@ -86,6 +83,11 @@ namespace winrt::CppDemoUwp::implementation
 	void MainPage::Editor_Loaded(IInspectable const &sender, RoutedEventArgs const &e)
 	{
 		FocusEditor();
+	}
+
+	void MainPage::SettingsButton_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		Application::Current().as<App>()->GoToSettingsPage();
 	}
 
 	/*
@@ -418,6 +420,7 @@ namespace winrt::CppDemoUwp::implementation
 	IAsyncOperation<ContentDialogResult> MainPage::PromptSaveAsync()
 	{
 		const ContentDialog dialog{};
+		dialog.RequestedTheme(Application::Current().as<App>()->Theme());
 		dialog.Style(Application::Current().Resources().Lookup(box_value(L"DefaultContentDialogStyle")).as<Windows::UI::Xaml::Style>()); // Fixes opening animation
 		dialog.Title(box_value(L"Mica Editor"));
 		dialog.Content(box_value(format(L"Do you want to save changes to {}?", _activeFile ? _activeFile.Name() : L"Untitled")));
@@ -449,10 +452,10 @@ namespace winrt::CppDemoUwp::implementation
 				{
 					primaryButton.AccessKey(L"S");
 				}
-		if (const auto secondaryButton{ GetFirstOfTypeAndName<Button>(sender, L"SecondaryButton") })
-		{
-			secondaryButton.AccessKey(L"N");
-		}
+				if (const auto secondaryButton{ GetFirstOfTypeAndName<Button>(sender, L"SecondaryButton") })
+				{
+					secondaryButton.AccessKey(L"N");
+				}
 			});
 		const auto result{ co_await dialog.ShowAsync() };
 		co_return unbox_value_or<ContentDialogResult>(dialog.Tag(), result);
