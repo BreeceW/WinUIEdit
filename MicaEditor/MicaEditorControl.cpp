@@ -33,7 +33,8 @@ namespace winrt::MicaEditor::implementation
 
 		_wrapper = std::make_shared<Wrapper>();
 
-		Unloaded({ this, &MicaEditorControl::OnUnloaded });
+		_loadedRevoker = Loaded(auto_revoke, { this, &MicaEditorControl::OnLoaded });
+		_unloadedRevoker = Unloaded(auto_revoke, { this, &MicaEditorControl::OnUnloaded });
 
 #ifndef WINUI3
 		auto displayInformation{ DisplayInformation::GetForCurrentView() };
@@ -101,6 +102,7 @@ namespace winrt::MicaEditor::implementation
 #endif
 
 		// Use the new ActualTheme property on Fall Creators Update and above. On WinUI 3, this is always present, so the check is not needed
+		// ActualThemeChanged has to be registered and unregistered in Loaded/Unloaded or it will not work after unloading
 #ifndef WINUI3
 		if (_hasFcu)
 		{
@@ -114,16 +116,21 @@ namespace winrt::MicaEditor::implementation
 				CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
 			}
 
-			ActualThemeChanged({ this, &MicaEditorControl::OnActualThemeChanged });
 			UpdateColors(ActualTheme() == ElementTheme::Dark);
 #ifndef WINUI3
 		}
 		else
 		{
-			_colorValuesChangedRevoker = _uiSettings.ColorValuesChanged(winrt::auto_revoke, { this, &MicaEditorControl::OnColorValuesChanged });
+			// This does not work if RequestedTheme is changed on a parent control in Windows 10, version 1703
+			_colorValuesChangedRevoker = _uiSettings.ColorValuesChanged(auto_revoke, { this, &MicaEditorControl::OnColorValuesChanged });
 			UpdateColors(UseDarkColors());
 		}
 #endif
+	}
+
+	MicaEditorControl::~MicaEditorControl()
+	{
+		_scintilla->Finalize();
 	}
 
 	hstring MicaEditorControl::Text()
@@ -141,10 +148,32 @@ namespace winrt::MicaEditor::implementation
 		return _editorWrapper;
 	}
 
+	void MicaEditorControl::OnLoaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
+	{
+#ifndef WINUI3
+		if (_hasFcu)
+		{
+#endif
+			// Registering and unregistering in Loaded/Unloaded fixes an issue
+			// where ActualThemeChanged stopped firing after navigating to a different page
+			_actualThemeChangedRevoker = ActualThemeChanged(auto_revoke, { this, &MicaEditorControl::OnActualThemeChanged });
+#ifndef WINUI3
+		}
+#endif
+	}
+
 	void MicaEditorControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
 	{
-		_scintilla->Finalize();
-		// Todo: Finish Finalize method and figure out what else needs to get cleaned up
+		_scintilla->StopTimers();
+
+#ifndef WINUI3
+		if (_hasFcu)
+		{
+#endif
+			_actualThemeChangedRevoker.revoke();
+#ifndef WINUI3
+		}
+#endif
 	}
 
 	void MicaEditorControl::OnDpiChanged(DisplayInformation const &sender, IInspectable const &args)
@@ -184,6 +213,12 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::UpdateColors(bool useDarkTheme)
 	{
+		if (_useDarkTheme.has_value() && useDarkTheme == *_useDarkTheme)
+		{
+			return;
+		}
+		_useDarkTheme = useDarkTheme;
+
 		// This is just a random color that our backend will treat as transparent
 		// The Scintilla API doesn't let us set alpha on back color, so this is easier
 		// Users of this control are meant to control the background through XAML

@@ -790,14 +790,19 @@ namespace Scintilla::Internal {
 		}
 	}
 
-	// Todo: conflated with the incorrectly spelled version
-	void ScintillaWinUI::Finalize()
+	void ScintillaWinUI::StopTimers()
 	{
-		ScintillaBase::Finalise();
 		_caretTimer.Stop();
 		_scrollTimer.Stop();
 		_widenTimer.Stop();
 		_dwellTimer.Stop();
+	}
+
+	// Todo: conflated with the incorrectly spelled version
+	void ScintillaWinUI::Finalize()
+	{
+		ScintillaBase::Finalise();
+		StopTimers();
 		SetIdle(false);
 		//DropRenderTarget(); // WinUI Todo
 		/*::RevokeDragDrop(MainHWND());
@@ -2501,7 +2506,7 @@ namespace Scintilla::Internal {
 			}
 			_d2dDeviceContext->BeginDraw();
 			_d2dDeviceContext->SetTarget(bitmap.get());
-		
+
 			surfaceOffset.x -= drawingBounds.left;
 			surfaceOffset.y -= drawingBounds.top;
 			float offsetX = surfaceOffset.x;

@@ -69,6 +69,7 @@ namespace Scintilla::Internal {
 		void HorizontalScroll(ScrollEventType event, int value);
 		void Scroll(ScrollEventType event, int value);
 		void KeyDown(winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey, bool *handled);
+		void StopTimers();
 		void Finalize();
 		void CharacterReceived(char16_t character);
 
