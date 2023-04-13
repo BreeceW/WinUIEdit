@@ -65,6 +65,9 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, 0);
 		_scintilla->WndProc(Scintilla::Message::StyleSetFont, STYLE_DEFAULT, reinterpret_cast<Scintilla::sptr_t>("Cascadia Code"));
 		_scintilla->WndProc(Scintilla::Message::StyleSetSizeFractional, STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
+		// Todo: Broken with IME on
+		_scintilla->WndProc(Scintilla::Message::SetAdditionalSelectionTyping, 1, 0);
+		_scintilla->WndProc(Scintilla::Message::SetMultiPaste, SC_MULTIPASTE_EACH, 0);
 		// Todo: Determine performance impact
 		_scintilla->WndProc(Scintilla::Message::SetLayoutThreads, 16, 0);
 
@@ -734,6 +737,59 @@ namespace winrt::MicaEditor::implementation
 		{
 			ShowContextMenuAtCurrentPosition();
 		}
+		else if (e.Key() == VirtualKey::F2 && (modifiers & VirtualKeyModifiers::Control) == VirtualKeyModifiers::Control)
+		{
+			auto start{ _scintilla->WndProc(Scintilla::Message::GetSelectionStart, 0, 0) };
+			auto end{ _scintilla->WndProc(Scintilla::Message::GetSelectionEnd, 0, 0) };
+			if (start == end)
+			{
+				start = _scintilla->WndProc(Scintilla::Message::WordStartPosition, start, true);
+				end = _scintilla->WndProc(Scintilla::Message::WordEndPosition, start, true);
+
+				if (start == end)
+				{
+					return;
+				}
+			}
+			_scintilla->WndProc(Scintilla::Message::SetSelectionStart, start, 0);
+			_scintilla->WndProc(Scintilla::Message::SetSelectionEnd, end, 0);
+
+			_scintilla->WndProc(Scintilla::Message::TargetWholeDocument, 0, 0);
+			_scintilla->WndProc(Scintilla::Message::SetSearchFlags, static_cast<Scintilla::uptr_t>(Scintilla::FindOption::MatchCase), 0);
+
+			const auto length{ end - start };
+			std::string s(length, '\0');
+			const Sci_TextRangeFull range
+			{
+				{ start, end, },
+				&s[0],
+			};
+			_scintilla->WndProc(Scintilla::Message::GetTextRangeFull, 0, reinterpret_cast<sptr_t>(&range));
+
+			const auto mainSelection{ _scintilla->WndProc(Scintilla::Message::GetMainSelection, 0, 0) };
+
+			while (true)
+			{
+				const auto match{ _scintilla->WndProc(Scintilla::Message::SearchInTarget, length, reinterpret_cast<sptr_t>(&s[0])) };
+
+				if (match == -1)
+				{
+					break;
+				}
+
+				if (match != start)
+				{
+					// Todo: Add maximum number of carets and notify user if exceeded (VS Code allows 10,000)
+					// Todo: This method calls a lot of redraws in a loop. You might need to use the lower level API to avoid that
+					_scintilla->WndProc(Scintilla::Message::AddSelection, match + length, match);
+				}
+
+				_scintilla->WndProc(Scintilla::Message::SetTargetStart, _scintilla->WndProc(Scintilla::Message::GetTargetEnd, 0, 0), 0);
+				_scintilla->WndProc(Scintilla::Message::SetTargetEnd, _scintilla->WndProc(Scintilla::Message::GetLength, 0, 0), 0);
+			}
+
+			_scintilla->WndProc(Scintilla::Message::SetMainSelection, mainSelection, 0);
+		}
 	}
 
 	void MicaEditorControl::OnKeyUp(KeyRoutedEventArgs const &e)
@@ -850,6 +906,14 @@ namespace winrt::MicaEditor::implementation
 		{
 			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
 			const auto sender{ tag.as<MicaEditorControl>() };
+			if (data->nmhdr.code == Scintilla::Notification::Zoom)
+			{
+				const auto size{ sender->Scintilla(ScintillaMessage::StyleGetSizeFractional, static_cast<uint64_t>(Scintilla::StylesCommon::Default), 0) };
+				const auto zoom{ static_cast<int>(sender->Scintilla(ScintillaMessage::GetZoom, 0, 0)) };
+				const auto factor{ static_cast<float>((size + zoom * 100)) / size };
+				sender->PublicWndProc(Scintilla::Message::SetMarginWidthN, 0, floorf(factor * 45 + 0.5f));
+				sender->PublicWndProc(Scintilla::Message::SetMarginLeft, 0, floorf(factor * 23 + 0.5f));
+			}
 			sender->_editorWrapper.as<implementation::Editor>()->ProcessEvent(data);
 		}
 
