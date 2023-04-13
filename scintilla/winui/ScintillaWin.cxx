@@ -1140,7 +1140,7 @@ namespace Scintilla::Internal {
 		{
 			return E_INVALIDARG;
 		}
-		pdcs->dwStaticFlags = 0; // Scintilla doesn't support regions, disjoint selections, etc.
+		pdcs->dwStaticFlags = 0; // Scintilla doesn't support regions, disjoint selections, etc. // Todo: TF_SS_DISJOINTSEL
 		pdcs->dwDynamicFlags = pdoc->IsReadOnly() ? TS_SD_READONLY : 0; // Todo: TS_SS_TKBAUTOCORRECTENABLE, TS_SS_TKBPREDICTIONENABLE?
 		return S_OK;
 	}
