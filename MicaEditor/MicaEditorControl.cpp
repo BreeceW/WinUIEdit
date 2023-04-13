@@ -908,7 +908,7 @@ namespace winrt::MicaEditor::implementation
 			const auto sender{ tag.as<MicaEditorControl>() };
 			if (data->nmhdr.code == Scintilla::Notification::Zoom)
 			{
-				const auto size{ sender->Scintilla(ScintillaMessage::StyleGetSizeFractional, static_cast<uint64_t>(Scintilla::StylesCommon::Default), 0) };
+				const auto size{ sender->_scintilla->WndProc(Scintilla::Message::StyleGetSizeFractional, static_cast<uint64_t>(Scintilla::StylesCommon::Default), 0) };
 				const auto zoom{ static_cast<int>(sender->Scintilla(ScintillaMessage::GetZoom, 0, 0)) };
 				const auto factor{ static_cast<float>((size + zoom * 100)) / size };
 				sender->PublicWndProc(Scintilla::Message::SetMarginWidthN, 0, floorf(factor * 45 + 0.5f));
