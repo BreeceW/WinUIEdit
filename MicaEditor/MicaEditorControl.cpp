@@ -684,50 +684,7 @@ namespace winrt::MicaEditor::implementation
 	{
 		__super::OnKeyDown(e);
 
-		auto modifiers{ VirtualKeyModifiers::None };
-#ifdef WINUI3
-		// Todo: Do we need to check Locked?
-		// Todo: Left vs right keys?
-		//  does not help us
-		if ((Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::Shift) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Shift;
-		}
-		if ((Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::Control) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Control;
-		}
-		if ((Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::Menu) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Menu; // Todo: KeyStatus.IsMenuKeyDown?
-		}
-		if ((Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::LeftWindows) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down
-			|| (Microsoft::UI::Input::InputKeyboardSource::GetKeyStateForCurrentThread(VirtualKey::RightWindows) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Windows;
-		}
-#else
-		auto window{ Windows::UI::Core::CoreWindow::GetForCurrentThread() }; // Todo: is it worth it to store this?
-		// Todo: Do we need to check Locked?
-		// Todo: Left vs right keys?
-		if ((window.GetKeyState(VirtualKey::Shift) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Shift;
-		}
-		if ((window.GetKeyState(VirtualKey::Control) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Control;
-		}
-		if ((window.GetKeyState(VirtualKey::Menu) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Menu; // Todo: KeyStatus.IsMenuKeyDown?
-		}
-		if ((window.GetKeyState(VirtualKey::LeftWindows) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down
-			|| (window.GetKeyState(VirtualKey::RightWindows) & Windows::UI::Core::CoreVirtualKeyStates::Down) == Windows::UI::Core::CoreVirtualKeyStates::Down)
-		{
-			modifiers |= VirtualKeyModifiers::Windows;
-		}
-#endif
+		const auto modifiers{ Helpers::GetKeyModifiersForCurrentThread() };
 
 		bool handled = true;
 		_scintilla->KeyDown(e.Key(), modifiers, e.KeyStatus().IsExtendedKey, &handled); // Todo: Or use VirtualKey?
@@ -749,8 +706,8 @@ namespace winrt::MicaEditor::implementation
 				if (start == end)
 				{
 					return;
-				}
-			}
+	}
+}
 			_scintilla->WndProc(Scintilla::Message::SetSelectionStart, start, 0);
 			_scintilla->WndProc(Scintilla::Message::SetSelectionEnd, end, 0);
 
