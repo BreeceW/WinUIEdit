@@ -119,8 +119,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		HWND hWndXamlIsland = nullptr;
 		interop->get_WindowHandle(&hWndXamlIsland);
 		RECT windowRect;
-		::GetWindowRect(hWnd, &windowRect);
-		::SetWindowPos(hWndXamlIsland, NULL, 0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, SWP_SHOWWINDOW);
+		::GetClientRect(hWnd, &windowRect);
+		::SetWindowPos(hWndXamlIsland, NULL, 0, 0, windowRect.right, windowRect.bottom, SWP_SHOWWINDOW);
 		_myUserControl = winrt::CppIslandsUwpDemoApp::EditorDemoControl();
 		_desktopWindowXamlSource.Content(_myUserControl);
 	}
@@ -216,7 +216,18 @@ void AdjustLayout(HWND hWnd)
 		HWND xamlHostHwnd = NULL;
 		check_hresult(interop->get_WindowHandle(&xamlHostHwnd));
 		RECT windowRect;
-		::GetWindowRect(hWnd, &windowRect);
-		::SetWindowPos(xamlHostHwnd, NULL, 0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top, SWP_SHOWWINDOW);
+		::GetClientRect(hWnd, &windowRect);
+		::SetWindowPos(xamlHostHwnd, NULL, 0, 0, windowRect.right, windowRect.bottom, SWP_SHOWWINDOW);
+
+		// Required or else the drawing code will get cut off
+		if (const auto coreWindow{ winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread() })
+		{
+			if (const auto interop{ coreWindow.as<ICoreWindowInterop>() })
+			{
+				HWND coreWindowInterop;
+				interop->get_WindowHandle(&coreWindowInterop);
+				::SetWindowPos(coreWindowInterop, NULL, 0, 0, windowRect.right, windowRect.bottom, SWP_NOMOVE | SWP_NOZORDER);
+			}
+		}
 	}
 }

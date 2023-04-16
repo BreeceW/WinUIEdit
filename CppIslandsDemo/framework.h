@@ -7,6 +7,8 @@
 #include "targetver.h"
 // Windows Header Files
 #include <windows.h>
+#include <CoreWindow.h>
+#include <winrt/Windows.UI.Core.h>
 // C RunTime Header Files
 #include <stdlib.h>
 #include <malloc.h>
