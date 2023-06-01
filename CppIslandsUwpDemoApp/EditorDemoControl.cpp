@@ -6,11 +6,17 @@
 
 using namespace winrt;
 using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Controls;
 
 namespace winrt::CppIslandsUwpDemoApp::implementation
 {
-    EditorDemoControl::EditorDemoControl()
-    {
-        InitializeComponent();
-    }
+	EditorDemoControl::EditorDemoControl()
+	{
+		InitializeComponent();
+	}
+
+	void EditorDemoControl::MicaEditorControl_Loaded(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		sender.as<Control>().Focus(FocusState::Programmatic);
+	}
 }

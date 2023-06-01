@@ -19,7 +19,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-void AdjustLayout(HWND);
+void AdjustLayout(HWND, WORD, WORD);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -163,14 +163,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 	}
 	break;
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hWnd, &ps);
-		// TODO: Add any drawing code that uses hdc here...
-		EndPaint(hWnd, &ps);
-	}
-	break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		if (_desktopWindowXamlSource != nullptr)
@@ -180,7 +172,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_SIZE:
-		AdjustLayout(hWnd);
+		AdjustLayout(hWnd, LOWORD(lParam), HIWORD(lParam));
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -208,16 +200,14 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	return (INT_PTR)FALSE;
 }
 
-void AdjustLayout(HWND hWnd)
+void AdjustLayout(HWND hWnd, WORD width, WORD height)
 {
 	if (_desktopWindowXamlSource != nullptr)
 	{
 		auto interop = _desktopWindowXamlSource.as<IDesktopWindowXamlSourceNative>();
 		HWND xamlHostHwnd = NULL;
 		check_hresult(interop->get_WindowHandle(&xamlHostHwnd));
-		RECT windowRect;
-		::GetClientRect(hWnd, &windowRect);
-		::SetWindowPos(xamlHostHwnd, NULL, 0, 0, windowRect.right, windowRect.bottom, SWP_SHOWWINDOW);
+		::SetWindowPos(xamlHostHwnd, NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER);
 
 		// Required or else the drawing code will get cut off
 		if (const auto coreWindow{ winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread() })
@@ -226,7 +216,7 @@ void AdjustLayout(HWND hWnd)
 			{
 				HWND coreWindowInterop;
 				interop->get_WindowHandle(&coreWindowInterop);
-				::SetWindowPos(coreWindowInterop, NULL, 0, 0, windowRect.right, windowRect.bottom, SWP_NOMOVE | SWP_NOZORDER);
+				::SetWindowPos(coreWindowInterop, NULL, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER);
 			}
 		}
 	}
