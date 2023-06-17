@@ -937,7 +937,8 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::OnCompositionStarted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionStartedEventArgs const &args)
 	{
-		OnStartComposition(nullptr, nullptr);
+		BOOL ok;
+		OnStartComposition(nullptr, &ok);
 	}
 
 	void ScintillaWinUI::OnCompositionCompleted(winrt::Windows::UI::Text::Core::CoreTextEditContext const &sender, winrt::Windows::UI::Text::Core::CoreTextCompositionCompletedEventArgs const &args)
@@ -1571,7 +1572,7 @@ namespace Scintilla::Internal {
 
 	IFACEMETHODIMP ScintillaWinUI::InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText, ULONG cch, LONG *pacpStart, LONG *pacpEnd, TS_TEXTCHANGE *pChange)
 	{
-		if (pchText == 0 || pChange == 0)
+		if (pChange == 0)
 			return E_POINTER;
 		if ((dwFlags & TS_IAS_QUERYONLY) || !(dwFlags & TS_IAS_NOQUERY))
 		{
@@ -1605,6 +1606,10 @@ namespace Scintilla::Internal {
 			*pacpStart = acpResultStart;
 			*pacpEnd = acpResultEnd;
 			return S_OK;
+		}
+		if (pchText == 0)
+		{
+			return E_POINTER;
 		}
 		hr = SetText(0, acpResultStart, acpResultEnd, pchText, cch, pChange);
 
@@ -1771,6 +1776,7 @@ namespace Scintilla::Internal {
 	IFACEMETHODIMP ScintillaWinUI::OnStartComposition(ITfCompositionView *pComposition, BOOL *pfOk)
 	{
 		DebugOut(L"OnStartComposition");
+		*pfOk = true;
 		view.imeCaretBlockOverride = true;
 		return S_OK;
 	}
