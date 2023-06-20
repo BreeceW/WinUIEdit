@@ -9,9 +9,6 @@ namespace winrt::MicaEditor::implementation
 		MicaEditorControl();
 		~MicaEditorControl();
 
-		static DUX::DependencyProperty TextProperty() { return s_textProperty; }
-		hstring Text();
-		void Text(hstring const &value);
 		MicaEditor::Editor Editor();
 
 		void OnApplyTemplate(); // Should these have override?
@@ -30,12 +27,8 @@ namespace winrt::MicaEditor::implementation
 
 		Scintilla::sptr_t PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam);
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
-		Windows::Foundation::Collections::IMap<ScintillaMessage, MicaEditor::ScaledMessage> ScaleMessages();
 
 	private:
-		static void OnTextPropertyChanged(IInspectable const &sender, DUX::DependencyPropertyChangedEventArgs const &args);
-		inline static DUX::DependencyProperty s_textProperty{ DUX::DependencyProperty::Register(L"Text", xaml_typename<hstring>(), xaml_typename<MicaEditor::MicaEditorControl>(), DUX::PropertyMetadata{box_value(L""), &OnTextPropertyChanged}) };
-
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 		bool _isPointerOver{ false };
@@ -46,16 +39,8 @@ namespace winrt::MicaEditor::implementation
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale = 1;
 		float _logicalDpi = 96;
-		Windows::Foundation::Collections::IMap<ScintillaMessage, MicaEditor::ScaledMessage> _scaleMessages;
 		Windows::Graphics::Display::DisplayInformation::DpiChanged_revoker _dpiChangedRevoker{};
 		void OnDpiChanged(Windows::Graphics::Display::DisplayInformation const &sender, Windows::Foundation::IInspectable const &args);
-		DUX::FrameworkElement::ActualThemeChanged_revoker _actualThemeChangedRevoker{};
-		void OnActualThemeChanged(DUX::FrameworkElement const &sender, Windows::Foundation::IInspectable const &args);
-#ifndef WINUI3
-		Windows::UI::ViewManagement::UISettings::ColorValuesChanged_revoker _colorValuesChangedRevoker{};
-		void OnColorValuesChanged(Windows::UI::ViewManagement::UISettings const &uiSettings, Windows::Foundation::IInspectable const &args);
-		bool UseDarkColors();
-#endif
 		void ImageTarget_SizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
 		void ImageTarget_PointerWheelChanged(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
 		void ImageTarget_DragEnter(Windows::Foundation::IInspectable const &sender, DUX::DragEventArgs const &e);
@@ -68,23 +53,15 @@ namespace winrt::MicaEditor::implementation
 		void HorizontalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
 		void VerticalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
 		void MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, DUX::Input::CharacterReceivedRoutedEventArgs const &args);
-		DUX::FrameworkElement::Loaded_revoker _loadedRevoker{};
-		void OnLoaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		DUX::FrameworkElement::Unloaded_revoker _unloadedRevoker{};
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
 		void UpdateSizes();
-		uint64_t ScaleWParam(uint64_t wParam);
-		int64_t ScaleLParam(int64_t lParam);
-		void ApplyScaleSettings();
-		void UpdateColors(bool useDarkTheme);
 		void AddContextMenuItems(DUX::Controls::MenuFlyout const &menu);
 		void ShowContextMenuAtCurrentPosition();
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative;
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);
-		Windows::UI::ViewManagement::UISettings _uiSettings{};
-		std::optional<bool> _useDarkTheme{};
 #ifndef WINUI3
 		Windows::UI::Xaml::Application::Suspending_revoker _suspendingRevoker{};
 		void Application_Suspending(Windows::Foundation::IInspectable const &sender, Windows::ApplicationModel::SuspendingEventArgs const &args);

@@ -51,6 +51,5 @@
     <Midl Include="Defines.idl" />
     <Midl Include="EditorWrapper.idl" />
     <Midl Include="MicaEditorControl.idl" />
-    <Midl Include="ScaledMessage.idl" />
   </ItemGroup>
 </Project>

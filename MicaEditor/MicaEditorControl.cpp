@@ -4,9 +4,6 @@
 #include "MicaEditorControl.g.cpp"
 #endif
 #include "EditorWrapper.h"
-#include "ScaledMessage.h"
-
-//#define JSON
 
 using namespace ::MicaEditor;
 using namespace winrt;
@@ -33,7 +30,6 @@ namespace winrt::MicaEditor::implementation
 
 		_wrapper = std::make_shared<Wrapper>();
 
-		_loadedRevoker = Loaded(auto_revoke, { this, &MicaEditorControl::OnLoaded });
 		_unloadedRevoker = Unloaded(auto_revoke, { this, &MicaEditorControl::OnUnloaded });
 
 #ifndef WINUI3
@@ -49,65 +45,6 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->SetWndProcTag(*this);
 		_scintilla->SetWndProc(&MicaEditorControl::WndProc);
 
-		// Scintilla has built-in shortcuts for zoom in and out, but they only work with the numpad plus/minus
-		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 187 + (SCMOD_CTRL << 16), SCI_ZOOMIN); // Ctrl+Plus
-		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 189 + (SCMOD_CTRL << 16), SCI_ZOOMOUT); // Ctrl+Minus
-		_scintilla->WndProc(Scintilla::Message::AssignCmdKey, 48 + (SCMOD_CTRL << 16), SCI_SETZOOM); // Ctrl+0
-
-		_scintilla->WndProc(Scintilla::Message::SetMultipleSelection, true, 0);
-		_scintilla->WndProc(Scintilla::Message::SetScrollWidth, 2000 * _dpiScale, 0); // Not updating on DPI change because this value can change
-		_scintilla->WndProc(Scintilla::Message::SetScrollWidthTracking, true, 0);
-		_scintilla->WndProc(Scintilla::Message::SetYCaretPolicy, CARET_SLOP | CARET_STRICT | CARET_EVEN, 1);
-		_scintilla->WndProc(Scintilla::Message::SetVisiblePolicy, VISIBLE_SLOP, 0);
-		_scintilla->WndProc(Scintilla::Message::SetHScrollBar, true, 0);
-		_scintilla->WndProc(Scintilla::Message::SetEndAtLastLine, false, 0);
-		_scintilla->WndProc(Scintilla::Message::SetTabWidth, 4, 0);
-		_scintilla->WndProc(Scintilla::Message::SetMarginWidthN, 1, 0);
-		_scintilla->WndProc(Scintilla::Message::StyleSetFont, STYLE_DEFAULT, reinterpret_cast<Scintilla::sptr_t>("Cascadia Code"));
-		_scintilla->WndProc(Scintilla::Message::StyleSetSizeFractional, STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
-		// Todo: Broken with IME on
-		_scintilla->WndProc(Scintilla::Message::SetAdditionalSelectionTyping, 1, 0);
-		_scintilla->WndProc(Scintilla::Message::SetMultiPaste, SC_MULTIPASTE_EACH, 0);
-		// Todo: Determine performance impact
-		_scintilla->WndProc(Scintilla::Message::SetLayoutThreads, 16, 0);
-
-		_scaleMessages = single_threaded_map<ScintillaMessage, MicaEditor::ScaledMessage>();
-		_scaleMessages.Insert(ScintillaMessage::SetXCaretPolicy, MicaEditor::ScaledMessage{ false, true });
-		_scaleMessages.Insert(ScintillaMessage::SetMarginWidthN, MicaEditor::ScaledMessage{ false, true });
-		_scaleMessages.Insert(ScintillaMessage::SetMarginLeft, MicaEditor::ScaledMessage{ false, true });
-		_scaleMessages.Insert(ScintillaMessage::SetMarginRight, MicaEditor::ScaledMessage{ false, true });
-		_scaleMessages.Insert(ScintillaMessage::SetCaretWidth, MicaEditor::ScaledMessage{ true, false });
-		PublicWndProc(Scintilla::Message::SetXCaretPolicy, CARET_SLOP, 20);
-		PublicWndProc(Scintilla::Message::SetMarginWidthN, 0, 45);
-		PublicWndProc(Scintilla::Message::SetMarginLeft, 0, 23);
-		PublicWndProc(Scintilla::Message::SetMarginRight, 0, 12);
-		PublicWndProc(Scintilla::Message::SetCaretWidth, _uiSettings.CaretWidth(), 0); // Todo: Needs to stop blinking after timeout and respect blink rate*/
-
-#ifdef JSON
-		const auto lexer{ CreateLexer("json") };
-		lexer->PropertySet("lexer.json.allow.comments", "1");
-		lexer->PropertySet("lexer.json.escape.sequence", "1");
-		_scintilla->WndProc(Scintilla::Message::SetILexer, 0, reinterpret_cast<Scintilla::uptr_t>(lexer));
-#else
-		_scintilla->WndProc(Scintilla::Message::SetILexer, 0, reinterpret_cast<Scintilla::uptr_t>(CreateLexer("cpp")));
-		// This list of keywords from SciTe (cpp.properties)
-		_scintilla->WndProc(Scintilla::Message::SetKeyWords, 0, reinterpret_cast<Scintilla::uptr_t>(
-			"alignas alignof and and_eq asm audit auto axiom bitand bitor bool "
-			"char char8_t char16_t char32_t class compl concept "
-			"const consteval constexpr const_cast "
-			"decltype default delete double dynamic_cast enum explicit export extern false final float "
-			"friend import inline int long module mutable namespace new noexcept not not_eq nullptr "
-			"operator or or_eq override private protected public "
-			"register reinterpret_cast requires "
-			"short signed sizeof static static_assert static_cast struct "
-			"template this thread_local true typedef typeid typename union unsigned using "
-			"virtual void volatile wchar_t xor xor_eq"));
-		_scintilla->WndProc(Scintilla::Message::SetKeyWords, 1, reinterpret_cast<Scintilla::uptr_t>(
-			"break case catch co_await co_return co_yield continue do else for goto if return switch throw try while "));
-#endif
-
-		// Use the new ActualTheme property on Fall Creators Update and above. On WinUI 3, this is always present, so the check is not needed
-		// ActualThemeChanged has to be registered and unregistered in Loaded/Unloaded or it will not work after unloading
 #ifndef WINUI3
 		if (_hasFcu)
 		{
@@ -120,15 +57,7 @@ namespace winrt::MicaEditor::implementation
 			{
 				CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
 			}
-
-			UpdateColors(ActualTheme() == ElementTheme::Dark);
 #ifndef WINUI3
-		}
-		else
-		{
-			// This does not work if RequestedTheme is changed on a parent control in Windows 10, version 1703
-			_colorValuesChangedRevoker = _uiSettings.ColorValuesChanged(auto_revoke, { this, &MicaEditorControl::OnColorValuesChanged });
-			UpdateColors(UseDarkColors());
 		}
 #endif
 	}
@@ -138,47 +67,14 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->Finalize();
 	}
 
-	hstring MicaEditorControl::Text()
-	{
-		return GetValue(s_textProperty).as<hstring>();
-	}
-
-	void MicaEditorControl::Text(hstring const &value)
-	{
-		SetValue(s_textProperty, box_value(value));
-	}
-
 	MicaEditor::Editor MicaEditorControl::Editor()
 	{
 		return _editorWrapper;
 	}
 
-	void MicaEditorControl::OnLoaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
-	{
-#ifndef WINUI3
-		if (_hasFcu)
-		{
-#endif
-			// Registering and unregistering in Loaded/Unloaded fixes an issue
-			// where ActualThemeChanged stopped firing after navigating to a different page
-			_actualThemeChangedRevoker = ActualThemeChanged(auto_revoke, { this, &MicaEditorControl::OnActualThemeChanged });
-#ifndef WINUI3
-		}
-#endif
-	}
-
 	void MicaEditorControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
 	{
 		_scintilla->StopTimers();
-
-#ifndef WINUI3
-		if (_hasFcu)
-		{
-#endif
-			_actualThemeChangedRevoker.revoke();
-#ifndef WINUI3
-		}
-#endif
 	}
 
 	void MicaEditorControl::OnDpiChanged(DisplayInformation const &sender, IInspectable const &args)
@@ -187,150 +83,11 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->DpiChanged();
 	}
 
-	void MicaEditorControl::OnActualThemeChanged(FrameworkElement const &sender, IInspectable const &args)
-	{
-		UpdateColors(ActualTheme() == ElementTheme::Dark);
-	}
-
-#ifndef WINUI3
-	void MicaEditorControl::OnColorValuesChanged(Windows::UI::ViewManagement::UISettings const &uiSettings, IInspectable const &args)
-	{
-		// Todo: Not sure if there is a way to detect if the RequestedTheme changes in Creators Update. Unimportant
-		Dispatcher().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, [&]()
-			{
-				UpdateColors(UseDarkColors());
-			});
-	}
-
-	bool MicaEditorControl::UseDarkColors()
-	{
-		auto theme{ RequestedTheme() };
-		return theme == ElementTheme::Default ? Application::Current().RequestedTheme() == ApplicationTheme::Dark : theme == ElementTheme::Dark;
-	}
-#endif
-
 	void MicaEditorControl::UpdateDisplayInformation(float dpiScale, float logicalDpi)
 	{
 		_dpiScale = dpiScale;
 		_logicalDpi = logicalDpi;
 		UpdateSizes();
-	}
-
-	void MicaEditorControl::UpdateColors(bool useDarkTheme)
-	{
-		if (_useDarkTheme.has_value() && useDarkTheme == *_useDarkTheme)
-		{
-			return;
-		}
-		_useDarkTheme = useDarkTheme;
-
-		// This is just a random color that our backend will treat as transparent
-		// The Scintilla API doesn't let us set alpha on back color, so this is easier
-		// Users of this control are meant to control the background through XAML
-		// This only affects rectangles. Text can use this color
-		// Todo: Come up with a better solution
-		constexpr sptr_t transparencyColor{ -7791875 };
-		// These colors mostly adapted from https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_plus.json
-		if (useDarkTheme)
-		{
-#ifdef JSON
-			for (uptr_t i{ SCE_JSON_DEFAULT }; i <= SCE_JSON_ERROR; i++)
-#else
-			for (uptr_t i{ SCE_C_DEFAULT }; i <= SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
-#endif
-			{
-				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i, RGB(0xD4, 0xD4, 0xD4));
-				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
-
-				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i + 64, RGB(167, 167, 167)); // Inactive states
-				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i + 64, transparencyColor);
-			}
-
-#ifdef JSON
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_PROPERTYNAME, RGB(0x9C, 0xDC, 0xFE));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_ESCAPESEQUENCE, RGB(0xD7, 0xBA, 0x7D));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_NUMBER, RGB(0xB5, 0xCE, 0xA8));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x56, 0x9C, 0xD6));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xC5, 0x86, 0xC0));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRING, RGB(0xCE, 0x91, 0x78));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRINGEOL, RGB(0xCE, 0x91, 0x78));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_OPERATOR, RGB(0xD4, 0xD4, 0xD4));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x9B, 0x9B, 0x9B));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_ERROR, RGB(0xcd, 0x31, 0x31));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_BLOCKCOMMENT, RGB(0x6A, 0x99, 0x55));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_LINECOMMENT, RGB(0x6A, 0x99, 0x55));
-#else
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_IDENTIFIER, RGB(0x9C, 0xDC, 0xFE));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ESCAPESEQUENCE, RGB(0xD7, 0xBA, 0x7D));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_NUMBER, RGB(0xB5, 0xCE, 0xA8));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x56, 0x9C, 0xD6));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xC5, 0x86, 0xC0));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_STRING, RGB(0xCE, 0x91, 0x78));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_OPERATOR, RGB(0xD4, 0xD4, 0xD4));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x9B, 0x9B, 0x9B));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENT, RGB(0x6A, 0x99, 0x55));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENTLINE, RGB(0x6A, 0x99, 0x55));
-#endif
-
-			_scintilla->WndProc(Scintilla::Message::SetSelBack, true, RGB(0x26, 0x4F, 0x78));
-			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_DEFAULT, transparencyColor);
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x85, 0x85, 0x85));
-			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_LINENUMBER, transparencyColor);
-			_scintilla->WndProc(Scintilla::Message::SetCaretFore, RGB(0xAE, 0xAF, 0xAD), 0);
-		}
-		else
-		{
-#ifdef JSON
-			for (uptr_t i{ SCE_JSON_DEFAULT }; i <= SCE_JSON_ERROR; i++)
-#else
-			for (uptr_t i{ SCE_C_DEFAULT }; i <= SCE_C_ESCAPESEQUENCE; i++) // Todo: see if there is better way
-#endif
-			{
-				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i, RGB(0x00, 0x00, 0x00));
-				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
-
-				_scintilla->WndProc(Scintilla::Message::StyleSetFore, i + 64, RGB(185, 185, 185)); // Inactive states
-				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i + 64, transparencyColor);
-			}
-
-#ifdef JSON
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_PROPERTYNAME, RGB(0x00, 0x10, 0x80));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_ESCAPESEQUENCE, RGB(0xEE, 0x00, 0x00));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_NUMBER, RGB(0x09, 0x86, 0x58));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x00, 0x00, 0xFF));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xaf, 0x00, 0xdb));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRING, RGB(0xa3, 0x15, 0x15));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_STRINGEOL, RGB(0xa3, 0x15, 0x15));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_OPERATOR, RGB(0x00, 0x00, 0x00));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x80, 0x80, 0x80));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_BLOCKCOMMENT, RGB(0x00, 0x80, 0x00));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_JSON_LINECOMMENT, RGB(0x00, 0x80, 0x00));
-#else
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_IDENTIFIER, RGB(0x00, 0x10, 0x80));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ESCAPESEQUENCE, RGB(0xEE, 0x00, 0x00));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_NUMBER, RGB(0x09, 0x86, 0x58));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD, RGB(0x00, 0x00, 0xFF));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_WORD2, RGB(0xaf, 0x00, 0xdb));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_STRING, RGB(0xa3, 0x15, 0x15));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_OPERATOR, RGB(0x00, 0x00, 0x00));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_PREPROCESSOR, RGB(0x80, 0x80, 0x80));
-			//_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_ERROR, RGB(0xcd, 0x31, 0x31));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENT, RGB(0x00, 0x80, 0x00));
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, SCE_C_COMMENTLINE, RGB(0x00, 0x80, 0x00));
-#endif
-
-			_scintilla->WndProc(Scintilla::Message::SetSelBack, true, RGB(0xAD, 0xD6, 0xFF));
-			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_DEFAULT, transparencyColor);
-			for (uptr_t i{ SCE_B_DEFAULT }; i < SCE_B_DOCKEYWORD; i++) // Todo: see if there is better way
-			{
-				_scintilla->WndProc(Scintilla::Message::StyleSetBack, i, transparencyColor);
-			}
-			_scintilla->WndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x23, 0x78, 0x93));
-			_scintilla->WndProc(Scintilla::Message::StyleSetBack, STYLE_LINENUMBER, transparencyColor);
-			_scintilla->WndProc(Scintilla::Message::SetCaretFore, RGB(0x00, 0x00, 0x00), 0);
-		}
 	}
 
 	void MicaEditorControl::AddContextMenuItems(MenuFlyout const &menu)
@@ -425,71 +182,16 @@ namespace winrt::MicaEditor::implementation
 	{
 		_wrapper->DpiScale(_dpiScale);
 		_wrapper->LogicalDpi(_logicalDpi);
-		if (_scintilla)
-		{
-			ApplyScaleSettings();
-		}
-	}
-
-	uint64_t MicaEditorControl::ScaleWParam(uint64_t wParam)
-	{
-		return static_cast<uint64_t>(floor(wParam * _dpiScale + 0.5f));
-	}
-
-	int64_t MicaEditorControl::ScaleLParam(int64_t lParam)
-	{
-		return static_cast<int64_t>(floor(lParam * _dpiScale + 0.5f));
-	}
-
-	void MicaEditorControl::ApplyScaleSettings()
-	{
-		for (const auto &scaledMessage : _scaleMessages)
-		{
-			const auto scaledMessageImpl{ scaledMessage.Value().as<ScaledMessage>() };
-			_scintilla->WndProc(
-				static_cast<Scintilla::Message>(scaledMessage.Key()),
-				scaledMessageImpl->ScaleWParam() ? ScaleWParam(scaledMessageImpl->WParam()) : scaledMessageImpl->WParam(),
-				scaledMessageImpl->ScaleLParam() ? ScaleLParam(scaledMessageImpl->LParam()) : scaledMessageImpl->LParam());
-		}
 	}
 
 	Scintilla::sptr_t MicaEditorControl::PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
 	{
-		if (_scaleMessages.HasKey(static_cast<ScintillaMessage>(iMessage)))
-		{
-			const auto scaledMessageImpl{ _scaleMessages.Lookup(static_cast<ScintillaMessage>(iMessage)).as<ScaledMessage>() };
-			scaledMessageImpl->WParam(wParam);
-			scaledMessageImpl->LParam(lParam);
-			if (scaledMessageImpl->ScaleWParam())
-			{
-				wParam = ScaleWParam(wParam);
-			}
-			if (scaledMessageImpl->ScaleLParam())
-			{
-				lParam = ScaleLParam(lParam);
-			}
-		}
 		return _scintilla->WndProc(iMessage, wParam, lParam);
 	}
 
 	uint64_t MicaEditorControl::Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
 	{
 		return PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
-	}
-
-	IMap<ScintillaMessage, MicaEditor::ScaledMessage> MicaEditorControl::ScaleMessages()
-	{
-		return _scaleMessages;
-	}
-
-	void MicaEditorControl::OnTextPropertyChanged(IInspectable const &sender, DUX::DependencyPropertyChangedEventArgs const &args)
-	{
-		auto scintilla{ sender.as<MicaEditorControl>()->_scintilla };
-		if (scintilla)
-		{
-			auto str{ args.NewValue().as<hstring>() };
-			scintilla->SetText(str);
-		}
 	}
 
 	void MicaEditorControl::OnApplyTemplate()
@@ -694,59 +396,6 @@ namespace winrt::MicaEditor::implementation
 		{
 			ShowContextMenuAtCurrentPosition();
 		}
-		else if (e.Key() == VirtualKey::F2 && (modifiers & VirtualKeyModifiers::Control) == VirtualKeyModifiers::Control)
-		{
-			auto start{ _scintilla->WndProc(Scintilla::Message::GetSelectionStart, 0, 0) };
-			auto end{ _scintilla->WndProc(Scintilla::Message::GetSelectionEnd, 0, 0) };
-			if (start == end)
-			{
-				start = _scintilla->WndProc(Scintilla::Message::WordStartPosition, start, true);
-				end = _scintilla->WndProc(Scintilla::Message::WordEndPosition, start, true);
-
-				if (start == end)
-				{
-					return;
-	}
-}
-			_scintilla->WndProc(Scintilla::Message::SetSelectionStart, start, 0);
-			_scintilla->WndProc(Scintilla::Message::SetSelectionEnd, end, 0);
-
-			_scintilla->WndProc(Scintilla::Message::TargetWholeDocument, 0, 0);
-			_scintilla->WndProc(Scintilla::Message::SetSearchFlags, static_cast<Scintilla::uptr_t>(Scintilla::FindOption::MatchCase), 0);
-
-			const auto length{ end - start };
-			std::string s(length, '\0');
-			const Sci_TextRangeFull range
-			{
-				{ start, end, },
-				&s[0],
-			};
-			_scintilla->WndProc(Scintilla::Message::GetTextRangeFull, 0, reinterpret_cast<sptr_t>(&range));
-
-			const auto mainSelection{ _scintilla->WndProc(Scintilla::Message::GetMainSelection, 0, 0) };
-
-			while (true)
-			{
-				const auto match{ _scintilla->WndProc(Scintilla::Message::SearchInTarget, length, reinterpret_cast<sptr_t>(&s[0])) };
-
-				if (match == -1)
-				{
-					break;
-				}
-
-				if (match != start)
-				{
-					// Todo: Add maximum number of carets and notify user if exceeded (VS Code allows 10,000)
-					// Todo: This method calls a lot of redraws in a loop. You might need to use the lower level API to avoid that
-					_scintilla->WndProc(Scintilla::Message::AddSelection, match + length, match);
-				}
-
-				_scintilla->WndProc(Scintilla::Message::SetTargetStart, _scintilla->WndProc(Scintilla::Message::GetTargetEnd, 0, 0), 0);
-				_scintilla->WndProc(Scintilla::Message::SetTargetEnd, _scintilla->WndProc(Scintilla::Message::GetLength, 0, 0), 0);
-			}
-
-			_scintilla->WndProc(Scintilla::Message::SetMainSelection, mainSelection, 0);
-		}
 	}
 
 	void MicaEditorControl::OnKeyUp(KeyRoutedEventArgs const &e)
@@ -863,14 +512,6 @@ namespace winrt::MicaEditor::implementation
 		{
 			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
 			const auto sender{ tag.as<MicaEditorControl>() };
-			if (data->nmhdr.code == Scintilla::Notification::Zoom)
-			{
-				const auto size{ sender->_scintilla->WndProc(Scintilla::Message::StyleGetSizeFractional, static_cast<uint64_t>(Scintilla::StylesCommon::Default), 0) };
-				const auto zoom{ static_cast<int>(sender->Scintilla(ScintillaMessage::GetZoom, 0, 0)) };
-				const auto factor{ static_cast<float>((size + zoom * 100)) / size };
-				sender->PublicWndProc(Scintilla::Message::SetMarginWidthN, 0, floorf(factor * 45 + 0.5f));
-				sender->PublicWndProc(Scintilla::Message::SetMarginLeft, 0, floorf(factor * 23 + 0.5f));
-			}
 			sender->_editorWrapper.as<implementation::Editor>()->ProcessEvent(data);
 		}
 
