@@ -164,18 +164,29 @@ namespace winrt::MicaEditor::implementation
 		menu.Items().Append(selectAllItem);
 	}
 
-	void MicaEditorControl::ShowContextMenuAtCurrentPosition()
+	bool MicaEditorControl::ShowContextMenu(UIElement const &targetElement, Point const &point)
 	{
-		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
+		if (_scintilla->ShouldShowContextMenu(Point{ point.X * _dpiScale, point.Y * _dpiScale }))
 		{
 			const MenuFlyout menu{};
 			AddContextMenuItems(menu);
+			menu.ShowAt(targetElement, point);
+			return true;
+		}
+		return false;
+	}
+
+	bool MicaEditorControl::ShowContextMenuAtCurrentPosition()
+	{
+		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
+		{
 			const auto pos{ _scintilla->WndProc(Scintilla::Message::GetCurrentPos, 0, 0) };
-			menu.ShowAt(imageTarget, Point{
+			return ShowContextMenu(imageTarget, Point{
 				_scintilla->WndProc(Scintilla::Message::PointXFromPosition, 0, pos) / _dpiScale,
 				(_scintilla->WndProc(Scintilla::Message::PointYFromPosition, 0, pos) + _scintilla->WndProc(Scintilla::Message::TextHeight, 0, 0)) / _dpiScale
 				});
 		}
+		return false;
 	}
 
 	void MicaEditorControl::UpdateSizes()
@@ -388,21 +399,24 @@ namespace winrt::MicaEditor::implementation
 
 		const auto modifiers{ Helpers::GetKeyModifiersForCurrentThread() };
 
-		bool handled = true;
+		auto handled = true;
 		_scintilla->KeyDown(e.Key(), modifiers, e.KeyStatus().IsExtendedKey, &handled); // Todo: Or use VirtualKey?
-		e.Handled(handled);
 
-		if (e.Key() == VirtualKey::F10 && (modifiers & VirtualKeyModifiers::Shift) == VirtualKeyModifiers::Shift)
+		if (!handled
+			&& e.Key() == VirtualKey::F10 && (modifiers & VirtualKeyModifiers::Shift) == VirtualKeyModifiers::Shift
+			&& ShowContextMenuAtCurrentPosition())
 		{
-			ShowContextMenuAtCurrentPosition();
+			handled = true;
 		}
+
+		e.Handled(handled);
 	}
 
 	void MicaEditorControl::OnKeyUp(KeyRoutedEventArgs const &e)
 	{
 		if (e.Key() == VirtualKey::Application)
 		{
-			ShowContextMenuAtCurrentPosition();
+			e.Handled(ShowContextMenuAtCurrentPosition());
 		}
 	}
 
@@ -477,17 +491,14 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::ImageTarget_ContextRequested(UIElement const &sender, ContextRequestedEventArgs const &e)
 	{
-		const MenuFlyout menu{};
-		AddContextMenuItems(menu);
-
 		Point point;
 		if (e.TryGetPosition(sender, point))
 		{
-			menu.ShowAt(sender, point);
+			e.Handled(ShowContextMenu(sender, point));
 		}
-		else
+		else if (const auto frameworkElement{ sender.try_as<FrameworkElement>() })
 		{
-			menu.ShowAt(sender.as<FrameworkElement>());
+			e.Handled(ShowContextMenuAtCurrentPosition());
 		}
 	}
 

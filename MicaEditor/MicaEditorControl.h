@@ -58,7 +58,8 @@ namespace winrt::MicaEditor::implementation
 		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
 		void UpdateSizes();
 		void AddContextMenuItems(DUX::Controls::MenuFlyout const &menu);
-		void ShowContextMenuAtCurrentPosition();
+		bool ShowContextMenu(DUX::UIElement const &targetElement, Windows::Foundation::Point const &point);
+		bool ShowContextMenuAtCurrentPosition();
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative;
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);

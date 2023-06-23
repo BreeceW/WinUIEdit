@@ -790,6 +790,11 @@ namespace Scintilla::Internal {
 		}
 	}
 
+	bool ScintillaWinUI::ShouldShowContextMenu(winrt::Windows::Foundation::Point const &point)
+	{
+		return ShouldDisplayPopup(Point{ point.X, point.Y });
+	}
+
 	void ScintillaWinUI::StopTimers()
 	{
 		_caretTimer.Stop();

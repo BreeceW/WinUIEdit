@@ -72,6 +72,7 @@ namespace Scintilla::Internal {
 		void StopTimers();
 		void Finalize();
 		void CharacterReceived(char16_t character);
+		bool ShouldShowContextMenu(winrt::Windows::Foundation::Point const &point);
 
 		sptr_t GetTextLength();
 		sptr_t GetText(uptr_t bufferSize, sptr_t buffer);
