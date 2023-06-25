@@ -134,6 +134,10 @@
       <DependentUpon>MicaEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="CodeEditorControl.h">
+      <DependentUpon>CodeEditorControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="..\scintilla\include\*.h" />
     <ClInclude Include="..\scintilla\src\*.h" />
@@ -148,6 +152,9 @@
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="MicaEditorControl.cpp">
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="CodeEditorControl.cpp">
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -181,6 +188,10 @@
     </Midl>
     <Midl Include="MicaEditorControl.idl">
       <DependentUpon>MicaEditorControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
+    <Midl Include="CodeEditorControl.idl">
+      <DependentUpon>CodeEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
   </ItemGroup>

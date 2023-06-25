@@ -1,0 +1,13 @@
+#include "Defines.idl"
+import "EditorWrapper.idl";
+
+namespace MicaEditor
+{
+    [default_interface]
+    runtimeclass CodeEditorControl : DUX.Controls.Control
+    {
+        CodeEditorControl();
+        Editor Editor{ get; };
+        UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
+    }
+}

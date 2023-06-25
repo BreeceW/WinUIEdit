@@ -15,7 +15,7 @@
     <ClCompile Include="EditorWrapper.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="MicaEditorControl.cpp" />
-    <ClCompile Include="ScaledMessage.cpp" />
+    <ClCompile Include="CodeEditorControl.cpp" />
     <ClCompile Include="Wrapper.cpp" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
@@ -29,7 +29,7 @@
     <ClInclude Include="EditorWrapper.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="MicaEditorControl.h" />
-    <ClInclude Include="ScaledMessage.h" />
+    <ClInclude Include="CodeEditorControl.h" />
     <ClInclude Include="Wrapper.h" />
     <ClInclude Include="..\scintilla\winui\*.h" />
     <ClInclude Include="..\scintilla\include\*.h" />
@@ -51,5 +51,6 @@
     <Midl Include="Defines.idl" />
     <Midl Include="EditorWrapper.idl" />
     <Midl Include="MicaEditorControl.idl" />
+    <Midl Include="CodeEditorControl.idl" />
   </ItemGroup>
 </Project>

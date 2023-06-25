@@ -34,6 +34,7 @@
 #define DUXC Microsoft::UI::Xaml::Controls
 #define DUI Microsoft::UI::Input
 #define DCUR Microsoft::UI::Input::InputSystemCursorShape
+#define DUD Microsoft::UI::Dispatching
 #else
 #include <winrt/Windows.UI.Input.h>
 #include <winrt/Windows.UI.Composition.h>
@@ -51,6 +52,7 @@
 #define DUXC Windows::UI::Xaml::Controls
 #define DUI Windows::UI::Input
 #define DCUR Windows::UI::Core::CoreCursorType
+#define DUD Windows::System
 #endif
 
 #include <d3d11_4.h>
@@ -137,3 +139,4 @@
 #include "SciLexer.h"
 
 #include "MicaEditorControl.h"
+#include "CodeEditorControl.h"

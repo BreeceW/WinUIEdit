@@ -364,7 +364,7 @@
             Grid.ColumnSpan="2"
             Height="1"
             Fill="{ThemeResource DividerLineBrush}" />
-        <mica:MicaEditorControl
+        <mica:CodeEditorControl
             x:Name="Editor"
             Grid.Row="3"
             Grid.Column="0"
