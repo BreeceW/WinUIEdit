@@ -5,8 +5,9 @@
  // Copyright 1998-2018 by Neil Hodgson <neilh@scintilla.org>
  // The License.txt file describes the conditions under which this software may be distributed.
 
-#ifndef SCINTILLAWIN_H
-#define SCINTILLAWIN_H
+#pragma once
+
+#include "Wrapper.h"
 
 namespace Scintilla::Internal {
 	enum class ScrollEventType : int32_t
@@ -265,5 +266,3 @@ namespace Scintilla::Internal {
 		int CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength);
 	};
 }
-
-#endif

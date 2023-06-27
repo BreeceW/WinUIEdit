@@ -60,6 +60,8 @@
 #include "WinTypes.h"
 #include "PlatWin.h"
 
+#include "Wrapper.h"
+
 // __uuidof is a Microsoft extension but makes COM code neater, so disable warning
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wlanguage-extension-token"

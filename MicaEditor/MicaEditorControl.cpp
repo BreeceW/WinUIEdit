@@ -4,6 +4,7 @@
 #include "MicaEditorControl.g.cpp"
 #endif
 #include "EditorWrapper.h"
+#include "Helpers.h"
 
 using namespace ::MicaEditor;
 using namespace winrt;

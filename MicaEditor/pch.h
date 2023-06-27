@@ -87,9 +87,6 @@
 #include <msctf.h>
 #include <appmodel.h>
 
-#include "Helpers.h"
-#include "Wrapper.h"
-
 #include "ScintillaTypes.h"
 #include "ScintillaMessages.h"
 #include "ScintillaStructures.h"
@@ -135,7 +132,6 @@
 
 #include "Lexilla.h"
 #include "SciLexer.h"
-
 
 #ifndef USE_DUMMY_PAGE
 #include "ControlIncludes.h"

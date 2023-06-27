@@ -3,6 +3,7 @@
 #include "MicaEditorControl.g.h"
 
 #include "ScintillaWin.h"
+#include "Wrapper.h"
 
 namespace winrt::MicaEditor::implementation
 {

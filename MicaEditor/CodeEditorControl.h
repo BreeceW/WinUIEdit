@@ -2,6 +2,8 @@
 
 #include "CodeEditorControl.g.h"
 
+#include "MicaEditorControl.h"
+
 namespace winrt::MicaEditor::implementation
 {
 	struct CodeEditorControl : CodeEditorControlT<CodeEditorControl>

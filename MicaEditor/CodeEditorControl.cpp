@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "MicaEditorControl.h"
 #include "CodeEditorControl.h"
 #if __has_include("CodeEditorControl.g.cpp")
 #include "CodeEditorControl.g.cpp"
