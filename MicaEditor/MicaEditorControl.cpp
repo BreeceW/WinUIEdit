@@ -389,7 +389,7 @@ namespace winrt::MicaEditor::implementation
 	void MicaEditorControl::OnPointerExited(PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = false;
-		if (!e.GetCurrentPoint(nullptr).Properties().IsLeftButtonPressed())
+		if (!_wrapper->HaveMouseCapture())
 		{
 			winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(Windows::UI::Core::CoreCursor{ Windows::UI::Core::CoreCursorType::Arrow, 0 });
 		}
