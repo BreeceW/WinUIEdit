@@ -54,7 +54,7 @@ namespace winrt::MicaEditor::implementation
 			// but is required to get text in classic windows (XAML Islands and WinUI 3)
 			// Todo: Find more ideal way to do this
 			// Tried using _tfThreadManager->GetActiveFlags but TF_TMF_IMMERSIVEMODE flag was not accurate
-			if (Helpers::IsClassicWindow())
+			if (IsClassicWindow())
 			{
 				CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
 			}
@@ -216,8 +216,8 @@ namespace winrt::MicaEditor::implementation
 #endif
 		UpdateSizes();
 
-		auto width{ Helpers::ConvertFromDipToPixelUnit(ActualWidth(), _dpiScale) };
-		auto height{ Helpers::ConvertFromDipToPixelUnit(ActualHeight(), _dpiScale) };
+		auto width{ ConvertFromDipToPixelUnit(ActualWidth(), _dpiScale) };
+		auto height{ ConvertFromDipToPixelUnit(ActualHeight(), _dpiScale) };
 		_wrapper->Width(width); // Todo: Is this zero at this point?
 		_wrapper->Height(height);
 		VirtualSurfaceImageSource virtualSurfaceImageSource{ width, height };
@@ -398,7 +398,7 @@ namespace winrt::MicaEditor::implementation
 	{
 		__super::OnKeyDown(e);
 
-		const auto modifiers{ Helpers::GetKeyModifiersForCurrentThread() };
+		const auto modifiers{ GetKeyModifiersForCurrentThread() };
 
 		auto handled = true;
 		_scintilla->KeyDown(e.Key(), modifiers, e.KeyStatus().IsExtendedKey, &handled); // Todo: Or use VirtualKey?
@@ -434,8 +434,8 @@ namespace winrt::MicaEditor::implementation
 	{
 		if (_vsisNative)
 		{
-			auto width{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Width, _dpiScale) };
-			auto height{ Helpers::ConvertFromDipToPixelUnit(args.NewSize().Height, _dpiScale) };
+			auto width{ ConvertFromDipToPixelUnit(args.NewSize().Width, _dpiScale) };
+			auto height{ ConvertFromDipToPixelUnit(args.NewSize().Height, _dpiScale) };
 			_wrapper->Width(width);
 			_wrapper->Height(height);
 			_vsisNative->Resize(width, height);
