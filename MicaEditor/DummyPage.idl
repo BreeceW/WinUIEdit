@@ -1,7 +1,9 @@
+#include "Defines.idl"
+
 namespace MicaEditor
 {
     [default_interface]
-    runtimeclass DummyPage : Windows.UI.Xaml.Controls.Page
+    runtimeclass DummyPage : DUX.Controls.Page
     {
         DummyPage();
     }
