@@ -70,6 +70,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <LinkIncremental>true</LinkIncremental>
+    <UseDummyPage>true</UseDummyPage>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -111,7 +112,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)' == 'Debug'">
     <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_DUMMY_PAGE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
@@ -125,6 +126,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ControlIncludes.h" />
+    <ClInclude Include="DummyPage.h" Condition="'$(UseDummyPage)' == 'true'">
+      <DependentUpon>DummyPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="EditorWrapper.h">
       <DependentUpon>EditorWrapper.cpp</DependentUpon>
@@ -147,6 +153,10 @@
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DummyPage.cpp" Condition="'$(UseDummyPage)' == 'true'">
+      <DependentUpon>DummyPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </ClCompile>
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="EditorWrapper.cpp">
       <SubType>Code</SubType>
@@ -182,6 +192,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="DummyPage.idl" Condition="'$(UseDummyPage)' == 'true'">
+      <DependentUpon>DummyPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="EditorWrapper.idl">
       <DependentUpon>EditorWrapper.cpp</DependentUpon>
       <SubType>Code</SubType>
@@ -196,6 +210,9 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DummyPage.xaml" Condition="'$(UseDummyPage)' == 'true'">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

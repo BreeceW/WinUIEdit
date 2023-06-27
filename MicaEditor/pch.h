@@ -131,12 +131,12 @@
 #include "AutoComplete.h"
 #include "ScintillaBase.h"
 
-#include "ScintillaWin.h"
-
 #include "Scintilla.h"
 
 #include "Lexilla.h"
 #include "SciLexer.h"
 
-#include "MicaEditorControl.h"
-#include "CodeEditorControl.h"
+
+#ifndef USE_DUMMY_PAGE
+#include "ControlIncludes.h"
+#endif

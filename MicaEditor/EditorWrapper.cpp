@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "MicaEditorControl.h"
 #include "EditorWrapper.h"
 #include "Editor.g.cpp"
 

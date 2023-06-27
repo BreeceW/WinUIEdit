@@ -16,6 +16,7 @@
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="MicaEditorControl.cpp" />
     <ClCompile Include="CodeEditorControl.cpp" />
+    <ClCompile Include="DummyPage.cpp" />
     <ClCompile Include="Wrapper.cpp" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
@@ -30,7 +31,9 @@
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="MicaEditorControl.h" />
     <ClInclude Include="CodeEditorControl.h" />
+    <ClInclude Include="DummyPage.h" />
     <ClInclude Include="Wrapper.h" />
+    <ClInclude Include="ControlIncludes.h" />
     <ClInclude Include="..\scintilla\winui\*.h" />
     <ClInclude Include="..\scintilla\include\*.h" />
     <ClInclude Include="..\scintilla\src\*.h" />
@@ -43,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml" />
+    <Page Include="DummyPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
@@ -52,5 +56,6 @@
     <Midl Include="EditorWrapper.idl" />
     <Midl Include="MicaEditorControl.idl" />
     <Midl Include="CodeEditorControl.idl" />
+    <Midl Include="DummyPage.idl" />
   </ItemGroup>
 </Project>

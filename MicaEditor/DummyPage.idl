@@ -1,0 +1,8 @@
+namespace MicaEditor
+{
+    [default_interface]
+    runtimeclass DummyPage : Windows.UI.Xaml.Controls.Page
+    {
+        DummyPage();
+    }
+}

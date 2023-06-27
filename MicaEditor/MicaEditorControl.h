@@ -2,6 +2,8 @@
 
 #include "MicaEditorControl.g.h"
 
+#include "ScintillaWin.h"
+
 namespace winrt::MicaEditor::implementation
 {
 	struct MicaEditorControl : MicaEditorControlT<MicaEditorControl>

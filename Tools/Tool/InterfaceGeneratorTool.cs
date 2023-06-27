@@ -192,7 +192,7 @@ namespace Tool
 
             var idlSB = new StringBuilder("namespace MicaEditor" + End + "{" + End);
             var cppSB = new StringBuilder(
-                "#include \"pch.h\"" + End + "#include \"EditorWrapper.h\"" + End + "#include \"Editor.g.cpp\"" + End
+                "#include \"pch.h\"" + End + "#include \"MicaEditorControl.h\"" + End + "#include \"EditorWrapper.h\"" + End + "#include \"Editor.g.cpp\"" + End
                 + End
                 + "namespace winrt::MicaEditor::implementation" + End
                 + "{" + End);
