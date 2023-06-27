@@ -208,6 +208,8 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::OnApplyTemplate()
 	{
+		__super::OnApplyTemplate();
+
 #ifdef WINUI3
 		// Temporary until it is known how to respond to DPI changes with WASDK (answer: XamlRoot.Changed)
 		// Todo: Can the UWP version of this code go down here also?

@@ -38,6 +38,8 @@ namespace winrt::MicaEditor::implementation
 
 	void CodeEditorControl::OnApplyTemplate()
 	{
+		__super::OnApplyTemplate();
+
 		if (const auto presenter{ GetTemplateChild(L"EditorContainer").try_as<ContentPresenter>() })
 		{
 			presenter.Content(_editor.as<MicaEditor::MicaEditorControl>());
