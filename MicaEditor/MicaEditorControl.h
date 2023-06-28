@@ -31,6 +31,8 @@ namespace winrt::MicaEditor::implementation
 		Scintilla::sptr_t PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam);
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
 
+		void StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color);
+
 	private:
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static

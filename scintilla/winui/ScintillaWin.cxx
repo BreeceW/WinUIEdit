@@ -2643,6 +2643,12 @@ namespace Scintilla::Internal {
 		return 1;
 	}
 
+	// Replacement for the public Scintilla API StyleSetBack that does not ignore the alpha component
+	void ScintillaWinUI::StyleSetBackTransparent(int style, ColourRGBA color)
+	{
+		vs.styles[style].back = color;
+	}
+
 	void ScintillaWinUI::SetWndProc(std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> wndProc)
 	{
 		_wndProc = wndProc;

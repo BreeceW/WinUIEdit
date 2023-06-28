@@ -79,6 +79,8 @@ namespace Scintilla::Internal {
 		sptr_t GetText(uptr_t bufferSize, sptr_t buffer);
 		bool SetText(std::wstring_view const &text);
 
+		void StyleSetBackTransparent(int style, ColourRGBA color);
+
 		void SetWndProc(std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> wndProc);
 		void SetWndProcTag(winrt::Windows::Foundation::IInspectable const &tag);
 

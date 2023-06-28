@@ -16,7 +16,7 @@ namespace MicaEditor
 	bool IsClassicWindow()
 	{
 		// To avoid issues with AppPolicyGetWindowingModel and Store certification, this method cannot be called normally
-		// See https://github.com/microsoft/react-native-windows/pull/5369 (though OneCoreUAP_apiset.lib did pass either)
+		// See https://github.com/microsoft/react-native-windows/pull/5369 (though OneCoreUAP_apiset.lib did not pass either)
 
 		if (!s_appPolicyGetWindowingModel)
 		{

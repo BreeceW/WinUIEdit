@@ -206,6 +206,11 @@ namespace winrt::MicaEditor::implementation
 		return PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
 
+	void MicaEditorControl::StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color)
+	{
+		_scintilla->StyleSetBackTransparent(style, color);
+	}
+
 	void MicaEditorControl::OnApplyTemplate()
 	{
 		__super::OnApplyTemplate();

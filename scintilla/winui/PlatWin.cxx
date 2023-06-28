@@ -739,7 +739,7 @@ void SurfaceD2D::ClearRectangle(PRectangle rc) // Mica: We still need to empty t
 
 void SurfaceD2D::FillRectangle(PRectangle rc, Fill fill) {
 	if (pRenderTarget) {
-		if (fill.colour.AsInteger() == -7791875) // Mica: Arbitrary color to treat as transparent to avoid forking Scintilla
+		if (fill.colour.GetAlpha() == 0)
 		{
 			ClearRectangle(rc);
 		}
