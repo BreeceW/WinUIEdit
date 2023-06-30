@@ -12,7 +12,7 @@ namespace winrt::CppIslandsUwpDemoApp::implementation
     {
         EditorDemoControl();
 
-        void MicaEditorControl_Loaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+        void CodeEditorControl_Loaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
     };
 }
 

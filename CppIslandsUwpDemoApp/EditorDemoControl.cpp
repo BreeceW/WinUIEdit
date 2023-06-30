@@ -15,7 +15,7 @@ namespace winrt::CppIslandsUwpDemoApp::implementation
 		InitializeComponent();
 	}
 
-	void EditorDemoControl::MicaEditorControl_Loaded(IInspectable const &sender, RoutedEventArgs const &e)
+	void EditorDemoControl::CodeEditorControl_Loaded(IInspectable const &sender, RoutedEventArgs const &e)
 	{
 		sender.as<Control>().Focus(FocusState::Programmatic);
 	}
