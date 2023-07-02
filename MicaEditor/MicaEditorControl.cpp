@@ -300,8 +300,7 @@ namespace winrt::MicaEditor::implementation
 		}
 #endif
 
-		VirtualSurfaceImageSource virtualSurfaceImageSource{ 0, 0 };
-
+		const VirtualSurfaceImageSource virtualSurfaceImageSource{ 0, 0 };
 
 		_vsisNative = virtualSurfaceImageSource.as<::IVirtualSurfaceImageSourceNative>();
 
@@ -312,35 +311,33 @@ namespace winrt::MicaEditor::implementation
 		// The SurfaceImageSource object's underlying
 		// ISurfaceImageSourceNativeWithD2D object will contain the completed bitmap.
 
-		auto horizontalScrollBar{ GetTemplateChild(L"HorizontalScrollBar").try_as<ScrollBar>() };
-		auto verticalScrollBar{ GetTemplateChild(L"VerticalScrollBar").try_as<ScrollBar>() };
+		const auto horizontalScrollBar{ GetTemplateChild(L"HorizontalScrollBar").try_as<ScrollBar>() };
+		const auto verticalScrollBar{ GetTemplateChild(L"VerticalScrollBar").try_as<ScrollBar>() };
 		if (horizontalScrollBar)
 		{
-			horizontalScrollBar.Scroll({ this, &MicaEditorControl::HorizontalScrollBar_Scroll });
+			_horizontalScrollBarScrollRevoker = horizontalScrollBar.Scroll(auto_revoke, { this, &MicaEditorControl::HorizontalScrollBar_Scroll });
 		}
 		if (verticalScrollBar)
 		{
-			verticalScrollBar.Scroll({ this, &MicaEditorControl::VerticalScrollBar_Scroll });
+			_verticalScrollBarScrollRevoker = verticalScrollBar.Scroll(auto_revoke, { this, &MicaEditorControl::VerticalScrollBar_Scroll });
 		}
 		_wrapper->SetScrollBars(horizontalScrollBar, verticalScrollBar);
 
-		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Border>() })
+		if (const auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Border>() })
 		{
-			// Todo: do these need auto revokers
-			// Todo: is this safe to have in OnApplyTemplate?
-			imageTarget.SizeChanged({ this, &MicaEditorControl::ImageTarget_SizeChanged });
-			imageTarget.PointerWheelChanged({ this, &MicaEditorControl::ImageTarget_PointerWheelChanged });
-			imageTarget.DragEnter({ this, &MicaEditorControl::ImageTarget_DragEnter });
-			imageTarget.DragOver({ this, &MicaEditorControl::ImageTarget_DragOver });
-			imageTarget.DragLeave({ this, &MicaEditorControl::ImageTarget_DragLeave });
-			imageTarget.Drop({ this, &MicaEditorControl::ImageTarget_Drop });
+			_imageTargetSizeChangedRevoker = imageTarget.SizeChanged(auto_revoke, { this, &MicaEditorControl::ImageTarget_SizeChanged });
+			_imageTargetPointerWheelChangedRevoker = imageTarget.PointerWheelChanged(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerWheelChanged });
+			_imageTargetDragEnterRevoker = imageTarget.DragEnter(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragEnter });
+			_imageTargetDragOverRevoker = imageTarget.DragOver(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragOver });
+			_imageTargetDragLeaveRevoker = imageTarget.DragLeave(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragLeave });
+			_imageTargetDropRevoker = imageTarget.Drop(auto_revoke, { this, &MicaEditorControl::ImageTarget_Drop });
 
 			_wrapper->SetMouseCaptureElement(imageTarget);
-			imageTarget.DragStarting({ this, &MicaEditorControl::ImageTarget_DragStarting });
+			_imageTargetDragStartingRevoker = imageTarget.DragStarting(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragStarting });
 
-			imageTarget.ContextRequested({ this, &MicaEditorControl::ImageTarget_ContextRequested });
+			_imageTargetContextRequestedRevoker = imageTarget.ContextRequested(auto_revoke, { this, &MicaEditorControl::ImageTarget_ContextRequested });
 
-			ImageBrush brush{};
+			const ImageBrush brush{};
 			brush.ImageSource(virtualSurfaceImageSource);
 			imageTarget.Background(brush);
 		}
