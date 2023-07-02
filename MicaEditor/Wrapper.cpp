@@ -13,16 +13,6 @@ namespace MicaEditor
 		_vsisNative = vsisNative;
 	}
 
-	float Wrapper::DpiScale()
-	{
-		return _dpiScale;
-	}
-
-	void Wrapper::DpiScale(float value)
-	{
-		_dpiScale = value;
-	}
-
 	float Wrapper::LogicalDpi()
 	{
 		return _logicalDpi;

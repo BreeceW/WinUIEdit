@@ -31,12 +31,14 @@ namespace winrt::MicaEditor::implementation
 
 		_wrapper = std::make_shared<Wrapper>();
 
+		_loadedRevoker = Loaded(auto_revoke, { this, &MicaEditorControl::OnLoaded });
 		_unloadedRevoker = Unloaded(auto_revoke, { this, &MicaEditorControl::OnUnloaded });
 
 #ifndef WINUI3
-		auto displayInformation{ DisplayInformation::GetForCurrentView() };
-		_dpiChangedRevoker = displayInformation.DpiChanged(auto_revoke, { this, &MicaEditorControl::OnDpiChanged });
-		UpdateDisplayInformation(displayInformation.RawPixelsPerViewPixel(), displayInformation.LogicalDpi());
+		if (!_hasXamlRoot)
+		{
+			_displayInformation = DisplayInformation::GetForCurrentView();
+		}
 #endif
 
 		_scintilla = make_self<Scintilla::Internal::ScintillaWinUI>();
@@ -73,22 +75,98 @@ namespace winrt::MicaEditor::implementation
 		return _editorWrapper;
 	}
 
+	void MicaEditorControl::OnLoaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
+	{
+		// Following pattern from https://github.com/microsoft/microsoft-ui-xaml/blob/a7183df20367bc0e2b8c825430597a5c1e6871b6/dev/WebView2/WebView2.cpp#L1556
+
+#ifndef WINUI3
+		_isLoaded = true;
+#endif
+
+		if (!IsLoadedCompat())
+		{
+			return;
+		}
+
+#ifndef WINUI3
+		if (_hasXamlRoot)
+		{
+#endif
+			UpdateDpi(XamlRoot().RasterizationScale());
+			_xamlRootChangedRevoker = XamlRoot().Changed(auto_revoke, { this, &MicaEditorControl::XamlRoot_Changed });
+#ifndef WINUI3
+		}
+		else
+		{
+			UpdateDpi(_displayInformation.RawPixelsPerViewPixel());
+			_dpiChangedRevoker = _displayInformation.DpiChanged(auto_revoke, { this, &MicaEditorControl::DisplayInformation_DpiChanged });
+		}
+#endif
+	}
+
 	void MicaEditorControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
 	{
+#ifndef WINUI3
+		_isLoaded = false;
+#endif
+
+		if (IsLoadedCompat())
+		{
+			return;
+		}
+
+#ifndef WINUI3
+		if (_hasXamlRoot)
+		{
+#endif
+			_xamlRootChangedRevoker.revoke();
+#ifndef WINUI3
+		}
+		else
+		{
+			_dpiChangedRevoker.revoke();
+		}
+#endif
+
 		_scintilla->StopTimers();
 	}
 
-	void MicaEditorControl::OnDpiChanged(DisplayInformation const &sender, IInspectable const &args)
+	bool MicaEditorControl::IsLoadedCompat()
 	{
-		UpdateDisplayInformation(sender.RawPixelsPerViewPixel(), sender.LogicalDpi());
-		_scintilla->DpiChanged();
+#ifndef WINUI3
+		if (_hasIsLoaded)
+		{
+#endif
+			return IsLoaded();
+#ifndef WINUI3
+		}
+		else
+		{
+			return _isLoaded;
+		}
+#endif
 	}
 
-	void MicaEditorControl::UpdateDisplayInformation(float dpiScale, float logicalDpi)
+#ifndef WINUI3
+	void MicaEditorControl::DisplayInformation_DpiChanged(DisplayInformation const &sender, IInspectable const &args)
 	{
-		_dpiScale = dpiScale;
-		_logicalDpi = logicalDpi;
-		UpdateSizes();
+		UpdateDpi(sender.RawPixelsPerViewPixel());
+	}
+#endif
+
+	void MicaEditorControl::XamlRoot_Changed(DUX::XamlRoot const &sender, XamlRootChangedEventArgs const &args)
+	{
+		UpdateDpi(sender.RasterizationScale());
+	}
+
+	void MicaEditorControl::UpdateDpi(float dpiScale)
+	{
+		if (_dpiScale != dpiScale)
+		{
+			_wrapper->LogicalDpi(dpiScale * 96);
+			_dpiScale = dpiScale;
+			_scintilla->DpiChanged();
+		}
 	}
 
 	void MicaEditorControl::AddContextMenuItems(MenuFlyout const &menu)
@@ -190,12 +268,6 @@ namespace winrt::MicaEditor::implementation
 		return false;
 	}
 
-	void MicaEditorControl::UpdateSizes()
-	{
-		_wrapper->DpiScale(_dpiScale);
-		_wrapper->LogicalDpi(_logicalDpi);
-	}
-
 	Scintilla::sptr_t MicaEditorControl::PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
 	{
 		return _scintilla->WndProc(iMessage, wParam, lParam);
@@ -215,19 +287,20 @@ namespace winrt::MicaEditor::implementation
 	{
 		__super::OnApplyTemplate();
 
-#ifdef WINUI3
-		// Temporary until it is known how to respond to DPI changes with WASDK (answer: XamlRoot.Changed)
-		// Todo: Can the UWP version of this code go down here also?
-		auto scale{ XamlRoot().RasterizationScale() };
-		UpdateDisplayInformation(scale, scale * 96);
+#ifndef WINUI3
+		if (_hasXamlRoot)
+		{
 #endif
-		UpdateSizes();
+			UpdateDpi(XamlRoot().RasterizationScale());
+#ifndef WINUI3
+		}
+		else
+		{
+			UpdateDpi(_displayInformation.RawPixelsPerViewPixel());
+		}
+#endif
 
-		auto width{ ConvertFromDipToPixelUnit(ActualWidth(), _dpiScale) };
-		auto height{ ConvertFromDipToPixelUnit(ActualHeight(), _dpiScale) };
-		_wrapper->Width(width); // Todo: Is this zero at this point?
-		_wrapper->Height(height);
-		VirtualSurfaceImageSource virtualSurfaceImageSource{ width, height };
+		VirtualSurfaceImageSource virtualSurfaceImageSource{ 0, 0 };
 
 
 		_vsisNative = virtualSurfaceImageSource.as<::IVirtualSurfaceImageSourceNative>();

@@ -7,8 +7,6 @@ namespace MicaEditor
 	public:
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> VsisNative();
 		void VsisNative(winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative);
-		float DpiScale();
-		void DpiScale(float value);
 		float LogicalDpi();
 		void LogicalDpi(float value);
 		int Width();
@@ -52,7 +50,6 @@ namespace MicaEditor
 		winrt::DUX::Controls::Primitives::ScrollBar _verticalScrollBar{ nullptr };
 		bool _captured;
 		winrt::com_ptr<IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
-		float _dpiScale;
 		float _logicalDpi;
 		int _width;
 		int _height;

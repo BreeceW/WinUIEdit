@@ -36,16 +36,17 @@ namespace winrt::MicaEditor::implementation
 	private:
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
+		bool _hasXamlRoot{ Windows::Foundation::Metadata::ApiInformation::IsTypePresent(L"Windows.UI.Xaml.XamlRoot") }; // Todo: Make static
+		bool _hasIsLoaded{ Windows::Foundation::Metadata::ApiInformation::IsPropertyPresent(L"Windows.UI.Xaml.FrameworkElement", L"IsLoaded") }; // Todo: Make static
 		bool _isPointerOver{ false };
+		Windows::Graphics::Display::DisplayInformation _displayInformation{ nullptr };
+		bool _isLoaded{ false };
 #endif
 		bool _isFocused{ false };
 		bool _isContextMenuOpen{ false };
 		MicaEditor::Editor _editorWrapper{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
-		float _dpiScale = 1;
-		float _logicalDpi = 96;
-		Windows::Graphics::Display::DisplayInformation::DpiChanged_revoker _dpiChangedRevoker{};
-		void OnDpiChanged(Windows::Graphics::Display::DisplayInformation const &sender, Windows::Foundation::IInspectable const &args);
+		float _dpiScale;
 		void ImageTarget_SizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
 		void ImageTarget_PointerWheelChanged(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
 		void ImageTarget_DragEnter(Windows::Foundation::IInspectable const &sender, DUX::DragEventArgs const &e);
@@ -58,10 +59,14 @@ namespace winrt::MicaEditor::implementation
 		void HorizontalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
 		void VerticalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
 		void MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, DUX::Input::CharacterReceivedRoutedEventArgs const &args);
+		DUX::FrameworkElement::Loaded_revoker _loadedRevoker{};
+		void OnLoaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		DUX::FrameworkElement::Unloaded_revoker _unloadedRevoker{};
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
-		void UpdateDisplayInformation(float dpiScale, float logicalDpi);
-		void UpdateSizes();
+		bool IsLoadedCompat();
+		DUX::XamlRoot::Changed_revoker _xamlRootChangedRevoker{};
+		void XamlRoot_Changed(DUX::XamlRoot const &sender, DUX::XamlRootChangedEventArgs const &args);
+		void UpdateDpi(float dpiScale);
 		void AddContextMenuItems(DUX::Controls::MenuFlyout const &menu);
 		bool ShowContextMenu(DUX::UIElement const &targetElement, Windows::Foundation::Point const &point);
 		bool ShowContextMenuAtCurrentPosition();
@@ -69,6 +74,8 @@ namespace winrt::MicaEditor::implementation
 		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);
 #ifndef WINUI3
+		Windows::Graphics::Display::DisplayInformation::DpiChanged_revoker _dpiChangedRevoker{};
+		void DisplayInformation_DpiChanged(Windows::Graphics::Display::DisplayInformation const &sender, Windows::Foundation::IInspectable const &args);
 		Windows::UI::Xaml::Application::Suspending_revoker _suspendingRevoker{};
 		void Application_Suspending(Windows::Foundation::IInspectable const &sender, Windows::ApplicationModel::SuspendingEventArgs const &args);
 #endif
