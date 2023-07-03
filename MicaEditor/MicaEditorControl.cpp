@@ -31,8 +31,8 @@ namespace winrt::MicaEditor::implementation
 
 		_wrapper = std::make_shared<Wrapper>();
 
-		_loadedRevoker = Loaded(auto_revoke, { this, &MicaEditorControl::OnLoaded });
-		_unloadedRevoker = Unloaded(auto_revoke, { this, &MicaEditorControl::OnUnloaded });
+		Loaded({ this, &MicaEditorControl::OnLoaded });
+		Unloaded({ this, &MicaEditorControl::OnUnloaded });
 
 #ifndef WINUI3
 		if (!_hasXamlRoot)

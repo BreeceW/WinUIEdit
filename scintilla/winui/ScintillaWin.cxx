@@ -2809,7 +2809,7 @@ namespace Scintilla::Internal {
 
 	LRESULT ScintillaWinUI::SendMessage(UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		return _wndProc ? _wndProc(_wndProcTag, msg, wParam, lParam) : 0;
+		return _wndProc && _wndProcTag ? _wndProc(_wndProcTag.get(), msg, wParam, lParam) : 0;
 	}
 
 	sptr_t ScintillaWinUI::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam)

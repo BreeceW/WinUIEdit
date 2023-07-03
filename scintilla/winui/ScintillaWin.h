@@ -98,7 +98,7 @@ namespace Scintilla::Internal {
 		bool hasOKText{ false };
 
 		std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> _wndProc;
-		winrt::Windows::Foundation::IInspectable _wndProcTag;
+		winrt::weak_ref<winrt::Windows::Foundation::IInspectable> _wndProcTag;
 		LRESULT SendMessage(UINT msg, WPARAM wParam, LPARAM lParam);
 
 		void CreateGraphicsDevices();

@@ -69,9 +69,7 @@ namespace winrt::MicaEditor::implementation
 		DUXC::Primitives::ScrollBar::Scroll_revoker _verticalScrollBarScrollRevoker{};
 		void VerticalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
 		void MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, DUX::Input::CharacterReceivedRoutedEventArgs const &args);
-		DUX::FrameworkElement::Loaded_revoker _loadedRevoker{};
 		void OnLoaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
-		DUX::FrameworkElement::Unloaded_revoker _unloadedRevoker{};
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		bool IsLoadedCompat();
 		DUX::XamlRoot::Changed_revoker _xamlRootChangedRevoker{};

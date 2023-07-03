@@ -302,7 +302,7 @@ namespace Tool
 
             idlSB.Append(In + "}" + End + "}" + End);
             cppSB.Append("}" + End);
-            hSB.Append(In + In + "com_ptr<MicaEditorControl> _editor{ nullptr };" + End + In + "};" + End + "}" + End);
+            hSB.Append(In + In + "weak_ref<MicaEditorControl> _editor{ nullptr };" + End + In + "};" + End + "}" + End);
 
             var idlFile = await parent.CreateFileAsync("MicaEditor\\EditorWrapper.idl", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(idlFile, idlSB.ToString());
@@ -601,11 +601,11 @@ namespace Tool
                     wParamArg = "static_cast<Scintilla::uptr_t>(0)";
                 }
 
-                sb.Append(In).Append(In).Append("const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::").Append(func.Msg).Append(", ").Append(wParamArg).Append(", static_cast<Scintilla::sptr_t>(0))) };").Append(End)
+                sb.Append(In).Append(In).Append("const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::").Append(func.Msg).Append(", ").Append(wParamArg).Append(", static_cast<Scintilla::sptr_t>(0))) };").Append(End)
                     .Append(In).Append(In).Append("if (len)").Append(End)
                     .Append(In).Append(In).Append('{').Append(End)
                     .Append(In).Append(In).Append(In).Append("std::string value(len, '\\0');").Append(End)
-                    .Append(In).Append(In).Append(In).Append("_editor->PublicWndProc(Scintilla::Message::").Append(func.Msg).Append(", ").Append(wParamArg).Append(", reinterpret_cast<Scintilla::sptr_t>(value.data()));").Append(End)
+                    .Append(In).Append(In).Append(In).Append("_editor.get()->PublicWndProc(Scintilla::Message::").Append(func.Msg).Append(", ").Append(wParamArg).Append(", reinterpret_cast<Scintilla::sptr_t>(value.data()));").Append(End)
                     .Append(In).Append(In).Append(In).Append("return to_hstring(value);").Append(End)
                     .Append(In).Append(In).Append('}').Append(End)
                     .Append(In).Append(In).Append("else").Append(End)
@@ -628,7 +628,7 @@ namespace Tool
                     }
                     sb.Append(" static_cast<").Append(ConvertToCppType(func.RetType, false)).Append(">(");
                 }
-                sb.Append("_editor->PublicWndProc(Scintilla::Message::")
+                sb.Append("_editor.get()->PublicWndProc(Scintilla::Message::")
                     .Append(func.Msg).Append(", ")
                     .Append(hasWParam ? wParam.Argument : "static_cast<Scintilla::uptr_t>(0)")
                     .Append(", ")

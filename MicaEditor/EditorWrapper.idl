@@ -2497,6 +2497,7 @@ namespace MicaEditor
 		BatCommand = 5,
 		BatIdentifier = 6,
 		BatOperator = 7,
+		BatAfterLabel = 8,
 	};
 
 	enum TCMD

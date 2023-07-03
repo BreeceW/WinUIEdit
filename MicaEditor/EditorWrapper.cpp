@@ -1170,7 +1170,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::Length()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLength, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLength, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1178,7 +1178,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::CurrentPos()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetCurrentPos, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCurrentPos, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1186,7 +1186,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CurrentPos(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCurrentPos, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCurrentPos, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1194,7 +1194,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::Anchor()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetAnchor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetAnchor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1203,7 +1203,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Anchor(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAnchor, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAnchor, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1211,7 +1211,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::UndoCollection()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetUndoCollection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoCollection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1220,7 +1220,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::UndoCollection(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetUndoCollection, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetUndoCollection, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1229,7 +1229,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::WhiteSpace Editor::ViewWS()
 	{
-		return static_cast<MicaEditor::WhiteSpace>(_editor->PublicWndProc(Scintilla::Message::GetViewWS, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::WhiteSpace>(_editor.get()->PublicWndProc(Scintilla::Message::GetViewWS, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1237,7 +1237,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ViewWS(MicaEditor::WhiteSpace const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetViewWS, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetViewWS, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1246,7 +1246,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::TabDrawMode Editor::TabDrawMode()
 	{
-		return static_cast<MicaEditor::TabDrawMode>(_editor->PublicWndProc(Scintilla::Message::GetTabDrawMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::TabDrawMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetTabDrawMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1254,7 +1254,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TabDrawMode(MicaEditor::TabDrawMode const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTabDrawMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTabDrawMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1262,7 +1262,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::EndStyled()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetEndStyled, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetEndStyled, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1270,7 +1270,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::EndOfLine Editor::EOLMode()
 	{
-		return static_cast<MicaEditor::EndOfLine>(_editor->PublicWndProc(Scintilla::Message::GetEOLMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::EndOfLine>(_editor.get()->PublicWndProc(Scintilla::Message::GetEOLMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1278,7 +1278,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EOLMode(MicaEditor::EndOfLine const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetEOLMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetEOLMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1286,7 +1286,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::BufferedDraw()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetBufferedDraw, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetBufferedDraw, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1295,7 +1295,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BufferedDraw(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetBufferedDraw, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetBufferedDraw, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1303,7 +1303,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::TabWidth()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetTabWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTabWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1311,7 +1311,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TabWidth(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTabWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTabWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1319,7 +1319,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::TabMinimumWidth()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetTabMinimumWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTabMinimumWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1327,7 +1327,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TabMinimumWidth(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTabMinimumWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTabMinimumWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1335,7 +1335,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::IMEInteraction Editor::IMEInteraction()
 	{
-		return static_cast<MicaEditor::IMEInteraction>(_editor->PublicWndProc(Scintilla::Message::GetIMEInteraction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::IMEInteraction>(_editor.get()->PublicWndProc(Scintilla::Message::GetIMEInteraction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1343,7 +1343,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IMEInteraction(MicaEditor::IMEInteraction const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIMEInteraction, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIMEInteraction, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1351,7 +1351,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::Margins()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMargins, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMargins, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1359,7 +1359,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Margins(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMargins, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMargins, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1367,7 +1367,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Alpha Editor::SelAlpha()
 	{
-		return static_cast<MicaEditor::Alpha>(_editor->PublicWndProc(Scintilla::Message::GetSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1375,7 +1375,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelAlpha(MicaEditor::Alpha const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1383,7 +1383,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::SelEOLFilled()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetSelEOLFilled, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelEOLFilled, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1391,7 +1391,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelEOLFilled(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelEOLFilled, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelEOLFilled, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1399,7 +1399,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Layer Editor::SelectionLayer()
 	{
-		return static_cast<MicaEditor::Layer>(_editor->PublicWndProc(Scintilla::Message::GetSelectionLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1407,7 +1407,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelectionLayer(MicaEditor::Layer const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionLayer, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionLayer, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1415,7 +1415,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Layer Editor::CaretLineLayer()
 	{
-		return static_cast<MicaEditor::Layer>(_editor->PublicWndProc(Scintilla::Message::GetCaretLineLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1423,7 +1423,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretLineLayer(MicaEditor::Layer const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineLayer, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineLayer, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1431,7 +1431,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CaretLineHighlightSubLine()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetCaretLineHighlightSubLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineHighlightSubLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1439,7 +1439,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretLineHighlightSubLine(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineHighlightSubLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineHighlightSubLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1447,7 +1447,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::CaretPeriod()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCaretPeriod, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretPeriod, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1455,7 +1455,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretPeriod(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretPeriod, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretPeriod, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1463,7 +1463,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::CharacterCategoryOptimization()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCharacterCategoryOptimization, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCharacterCategoryOptimization, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1471,7 +1471,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CharacterCategoryOptimization(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCharacterCategoryOptimization, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCharacterCategoryOptimization, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1479,7 +1479,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::WhitespaceSize()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetWhitespaceSize, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetWhitespaceSize, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1487,7 +1487,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WhitespaceSize(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWhitespaceSize, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWhitespaceSize, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1495,7 +1495,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MaxLineState()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMaxLineState, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMaxLineState, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1503,7 +1503,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CaretLineVisible()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetCaretLineVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1511,7 +1511,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretLineVisible(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1519,7 +1519,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::CaretLineBack()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCaretLineBack, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineBack, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1527,7 +1527,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretLineBack(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineBack, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineBack, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1536,7 +1536,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::CaretLineFrame()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCaretLineFrame, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineFrame, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1545,7 +1545,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretLineFrame(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineFrame, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineFrame, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1553,7 +1553,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AutoCSeparator()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AutoCGetSeparator, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetSeparator, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1562,7 +1562,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCSeparator(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetSeparator, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetSeparator, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1570,7 +1570,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AutoCCancelAtStart()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::AutoCGetCancelAtStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCancelAtStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1579,7 +1579,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCCancelAtStart(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetCancelAtStart, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetCancelAtStart, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1587,7 +1587,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AutoCChooseSingle()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::AutoCGetChooseSingle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetChooseSingle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1595,7 +1595,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCChooseSingle(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetChooseSingle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetChooseSingle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1603,7 +1603,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AutoCIgnoreCase()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::AutoCGetIgnoreCase, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetIgnoreCase, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1611,7 +1611,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCIgnoreCase(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetIgnoreCase, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetIgnoreCase, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1619,7 +1619,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AutoCAutoHide()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::AutoCGetAutoHide, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetAutoHide, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1627,7 +1627,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCAutoHide(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetAutoHide, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetAutoHide, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1635,7 +1635,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::AutoCompleteOption Editor::AutoCOptions()
 	{
-		return static_cast<MicaEditor::AutoCompleteOption>(_editor->PublicWndProc(Scintilla::Message::AutoCGetOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::AutoCompleteOption>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1643,7 +1643,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCOptions(MicaEditor::AutoCompleteOption const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1652,7 +1652,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AutoCDropRestOfWord()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::AutoCGetDropRestOfWord, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetDropRestOfWord, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1661,7 +1661,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCDropRestOfWord(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetDropRestOfWord, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetDropRestOfWord, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1669,7 +1669,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AutoCTypeSeparator()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AutoCGetTypeSeparator, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetTypeSeparator, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1678,7 +1678,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCTypeSeparator(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetTypeSeparator, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetTypeSeparator, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1686,7 +1686,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AutoCMaxWidth()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AutoCGetMaxWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetMaxWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1695,7 +1695,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCMaxWidth(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetMaxWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetMaxWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1703,7 +1703,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AutoCMaxHeight()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AutoCGetMaxHeight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetMaxHeight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1712,7 +1712,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCMaxHeight(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetMaxHeight, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetMaxHeight, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1720,7 +1720,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::Indent()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetIndent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetIndent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1728,7 +1728,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Indent(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIndent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIndent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1736,7 +1736,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::UseTabs()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetUseTabs, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetUseTabs, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1745,7 +1745,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::UseTabs(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetUseTabs, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetUseTabs, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1753,7 +1753,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::HScrollBar()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetHScrollBar, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetHScrollBar, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1761,7 +1761,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HScrollBar(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetHScrollBar, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetHScrollBar, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1769,7 +1769,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::IndentView Editor::IndentationGuides()
 	{
-		return static_cast<MicaEditor::IndentView>(_editor->PublicWndProc(Scintilla::Message::GetIndentationGuides, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::IndentView>(_editor.get()->PublicWndProc(Scintilla::Message::GetIndentationGuides, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1777,7 +1777,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndentationGuides(MicaEditor::IndentView const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIndentationGuides, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIndentationGuides, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1785,7 +1785,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::HighlightGuide()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetHighlightGuide, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetHighlightGuide, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1794,7 +1794,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HighlightGuide(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetHighlightGuide, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetHighlightGuide, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1802,7 +1802,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::CodePage()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCodePage, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCodePage, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1811,7 +1811,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CodePage(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCodePage, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCodePage, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1819,7 +1819,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::CaretFore()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCaretFore, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretFore, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1827,7 +1827,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretFore(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretFore, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretFore, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1835,7 +1835,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::ReadOnly()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetReadOnly, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetReadOnly, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1843,7 +1843,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ReadOnly(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetReadOnly, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetReadOnly, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1851,7 +1851,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::SelectionStart()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1859,7 +1859,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelectionStart(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionStart, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionStart, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1867,7 +1867,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::SelectionEnd()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1875,7 +1875,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelectionEnd(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionEnd, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionEnd, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1883,7 +1883,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::PrintMagnification()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetPrintMagnification, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrintMagnification, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1891,7 +1891,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PrintMagnification(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPrintMagnification, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPrintMagnification, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1899,7 +1899,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::PrintOption Editor::PrintColourMode()
 	{
-		return static_cast<MicaEditor::PrintOption>(_editor->PublicWndProc(Scintilla::Message::GetPrintColourMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::PrintOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrintColourMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1907,7 +1907,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PrintColourMode(MicaEditor::PrintOption const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPrintColourMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPrintColourMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1915,7 +1915,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::ChangeHistoryOption Editor::ChangeHistory()
 	{
-		return static_cast<MicaEditor::ChangeHistoryOption>(_editor->PublicWndProc(Scintilla::Message::GetChangeHistory, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::ChangeHistoryOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetChangeHistory, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1923,7 +1923,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ChangeHistory(MicaEditor::ChangeHistoryOption const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetChangeHistory, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetChangeHistory, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1931,7 +1931,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::FirstVisibleLine()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetFirstVisibleLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetFirstVisibleLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1939,7 +1939,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FirstVisibleLine(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFirstVisibleLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFirstVisibleLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -1947,7 +1947,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::LineCount()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLineCount, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineCount, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1955,7 +1955,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarginLeft()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMarginLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1963,7 +1963,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginLeft(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(value));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(value));
 	}
 
 	/*
@@ -1971,7 +1971,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarginRight()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMarginRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -1979,7 +1979,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginRight(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(value));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(value));
 	}
 
 	/*
@@ -1987,12 +1987,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::Modify()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetModify, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetModify, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	bool Editor::SelectionHidden()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetSelectionHidden, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionHidden, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2000,7 +2000,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::TextLength()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTextLength, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTextLength, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2008,7 +2008,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::DirectFunction()
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::GetDirectFunction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetDirectFunction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2016,7 +2016,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::DirectStatusFunction()
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::GetDirectStatusFunction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetDirectStatusFunction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2025,7 +2025,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::DirectPointer()
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::GetDirectPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetDirectPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2033,7 +2033,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::Overtype()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetOvertype, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetOvertype, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2041,7 +2041,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Overtype(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetOvertype, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetOvertype, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2049,7 +2049,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::CaretWidth()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCaretWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2057,7 +2057,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretWidth(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2065,7 +2065,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::TargetStart()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTargetStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTargetStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2074,7 +2074,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TargetStart(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTargetStart, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTargetStart, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2082,7 +2082,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::TargetStartVirtualSpace()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTargetStartVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTargetStartVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2090,7 +2090,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TargetStartVirtualSpace(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTargetStartVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTargetStartVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2098,7 +2098,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::TargetEnd()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTargetEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTargetEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2107,7 +2107,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TargetEnd(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTargetEnd, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTargetEnd, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2115,7 +2115,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::TargetEndVirtualSpace()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTargetEndVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTargetEndVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2123,7 +2123,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TargetEndVirtualSpace(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTargetEndVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTargetEndVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2131,7 +2131,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::FindOption Editor::SearchFlags()
 	{
-		return static_cast<MicaEditor::FindOption>(_editor->PublicWndProc(Scintilla::Message::GetSearchFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::FindOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetSearchFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2139,7 +2139,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SearchFlags(MicaEditor::FindOption const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSearchFlags, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSearchFlags, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2147,7 +2147,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AllLinesVisible()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetAllLinesVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetAllLinesVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2155,7 +2155,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::FoldDisplayTextStyle Editor::FoldDisplayTextStyle()
 	{
-		return static_cast<MicaEditor::FoldDisplayTextStyle>(_editor->PublicWndProc(Scintilla::Message::FoldDisplayTextGetStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::FoldDisplayTextStyle>(_editor.get()->PublicWndProc(Scintilla::Message::FoldDisplayTextGetStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2163,7 +2163,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FoldDisplayTextStyle(MicaEditor::FoldDisplayTextStyle const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::FoldDisplayTextSetStyle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::FoldDisplayTextSetStyle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2171,7 +2171,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::AutomaticFold Editor::AutomaticFold()
 	{
-		return static_cast<MicaEditor::AutomaticFold>(_editor->PublicWndProc(Scintilla::Message::GetAutomaticFold, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::AutomaticFold>(_editor.get()->PublicWndProc(Scintilla::Message::GetAutomaticFold, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2179,7 +2179,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutomaticFold(MicaEditor::AutomaticFold const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAutomaticFold, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAutomaticFold, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2187,7 +2187,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::TabIndents()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetTabIndents, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetTabIndents, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2195,7 +2195,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TabIndents(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTabIndents, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTabIndents, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2203,7 +2203,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::BackSpaceUnIndents()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetBackSpaceUnIndents, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetBackSpaceUnIndents, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2211,7 +2211,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BackSpaceUnIndents(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetBackSpaceUnIndents, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetBackSpaceUnIndents, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2219,7 +2219,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MouseDwellTime()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMouseDwellTime, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMouseDwellTime, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2227,7 +2227,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MouseDwellTime(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMouseDwellTime, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMouseDwellTime, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2235,7 +2235,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::IdleStyling Editor::IdleStyling()
 	{
-		return static_cast<MicaEditor::IdleStyling>(_editor->PublicWndProc(Scintilla::Message::GetIdleStyling, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::IdleStyling>(_editor.get()->PublicWndProc(Scintilla::Message::GetIdleStyling, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2243,7 +2243,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IdleStyling(MicaEditor::IdleStyling const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIdleStyling, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIdleStyling, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2251,7 +2251,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Wrap Editor::WrapMode()
 	{
-		return static_cast<MicaEditor::Wrap>(_editor->PublicWndProc(Scintilla::Message::GetWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Wrap>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2259,7 +2259,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WrapMode(MicaEditor::Wrap const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWrapMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2267,7 +2267,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::WrapVisualFlag Editor::WrapVisualFlags()
 	{
-		return static_cast<MicaEditor::WrapVisualFlag>(_editor->PublicWndProc(Scintilla::Message::GetWrapVisualFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::WrapVisualFlag>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapVisualFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2275,7 +2275,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WrapVisualFlags(MicaEditor::WrapVisualFlag const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWrapVisualFlags, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapVisualFlags, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2283,7 +2283,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::WrapVisualLocation Editor::WrapVisualFlagsLocation()
 	{
-		return static_cast<MicaEditor::WrapVisualLocation>(_editor->PublicWndProc(Scintilla::Message::GetWrapVisualFlagsLocation, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::WrapVisualLocation>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapVisualFlagsLocation, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2291,7 +2291,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WrapVisualFlagsLocation(MicaEditor::WrapVisualLocation const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWrapVisualFlagsLocation, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapVisualFlagsLocation, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2299,7 +2299,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::WrapStartIndent()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetWrapStartIndent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapStartIndent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2307,7 +2307,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WrapStartIndent(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWrapStartIndent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapStartIndent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2315,7 +2315,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::WrapIndentMode Editor::WrapIndentMode()
 	{
-		return static_cast<MicaEditor::WrapIndentMode>(_editor->PublicWndProc(Scintilla::Message::GetWrapIndentMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::WrapIndentMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapIndentMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2323,7 +2323,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WrapIndentMode(MicaEditor::WrapIndentMode const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWrapIndentMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapIndentMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2331,7 +2331,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::LineCache Editor::LayoutCache()
 	{
-		return static_cast<MicaEditor::LineCache>(_editor->PublicWndProc(Scintilla::Message::GetLayoutCache, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::LineCache>(_editor.get()->PublicWndProc(Scintilla::Message::GetLayoutCache, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2339,7 +2339,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LayoutCache(MicaEditor::LineCache const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetLayoutCache, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetLayoutCache, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2347,7 +2347,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::ScrollWidth()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetScrollWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetScrollWidth, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2355,7 +2355,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ScrollWidth(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetScrollWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetScrollWidth, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2363,7 +2363,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::ScrollWidthTracking()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetScrollWidthTracking, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetScrollWidthTracking, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2371,7 +2371,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ScrollWidthTracking(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetScrollWidthTracking, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetScrollWidthTracking, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2380,7 +2380,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::EndAtLastLine()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetEndAtLastLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetEndAtLastLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2390,7 +2390,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EndAtLastLine(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetEndAtLastLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetEndAtLastLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2398,7 +2398,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::VScrollBar()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetVScrollBar, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetVScrollBar, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2406,7 +2406,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VScrollBar(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetVScrollBar, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetVScrollBar, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2414,7 +2414,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::PhasesDraw Editor::PhasesDraw()
 	{
-		return static_cast<MicaEditor::PhasesDraw>(_editor->PublicWndProc(Scintilla::Message::GetPhasesDraw, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::PhasesDraw>(_editor.get()->PublicWndProc(Scintilla::Message::GetPhasesDraw, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2425,7 +2425,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PhasesDraw(MicaEditor::PhasesDraw const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPhasesDraw, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPhasesDraw, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2433,7 +2433,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::FontQuality Editor::FontQuality()
 	{
-		return static_cast<MicaEditor::FontQuality>(_editor->PublicWndProc(Scintilla::Message::GetFontQuality, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::FontQuality>(_editor.get()->PublicWndProc(Scintilla::Message::GetFontQuality, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2441,7 +2441,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FontQuality(MicaEditor::FontQuality const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFontQuality, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFontQuality, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2449,7 +2449,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::MultiPaste Editor::MultiPaste()
 	{
-		return static_cast<MicaEditor::MultiPaste>(_editor->PublicWndProc(Scintilla::Message::GetMultiPaste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::MultiPaste>(_editor.get()->PublicWndProc(Scintilla::Message::GetMultiPaste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2457,7 +2457,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MultiPaste(MicaEditor::MultiPaste const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMultiPaste, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMultiPaste, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2465,7 +2465,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Accessibility Editor::Accessibility()
 	{
-		return static_cast<MicaEditor::Accessibility>(_editor->PublicWndProc(Scintilla::Message::GetAccessibility, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Accessibility>(_editor.get()->PublicWndProc(Scintilla::Message::GetAccessibility, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2473,7 +2473,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Accessibility(MicaEditor::Accessibility const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAccessibility, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAccessibility, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2481,7 +2481,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::ViewEOL()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetViewEOL, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetViewEOL, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2489,7 +2489,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ViewEOL(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetViewEOL, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetViewEOL, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2497,7 +2497,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::DocPointer()
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::GetDocPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetDocPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2505,7 +2505,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DocPointer(uint64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetDocPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(value));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetDocPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(value));
 	}
 
 	/*
@@ -2513,7 +2513,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::EdgeColumn()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetEdgeColumn, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetEdgeColumn, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2522,7 +2522,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EdgeColumn(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetEdgeColumn, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetEdgeColumn, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2530,7 +2530,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::EdgeVisualStyle Editor::EdgeMode()
 	{
-		return static_cast<MicaEditor::EdgeVisualStyle>(_editor->PublicWndProc(Scintilla::Message::GetEdgeMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::EdgeVisualStyle>(_editor.get()->PublicWndProc(Scintilla::Message::GetEdgeMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2539,7 +2539,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EdgeMode(MicaEditor::EdgeVisualStyle const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetEdgeMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetEdgeMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2547,7 +2547,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::EdgeColour()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetEdgeColour, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetEdgeColour, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2555,7 +2555,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EdgeColour(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetEdgeColour, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetEdgeColour, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2563,7 +2563,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::LinesOnScreen()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::LinesOnScreen, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::LinesOnScreen, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2571,7 +2571,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::SelectionIsRectangle()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::SelectionIsRectangle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::SelectionIsRectangle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2579,7 +2579,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::Zoom()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetZoom, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetZoom, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2588,7 +2588,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Zoom(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetZoom, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetZoom, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2596,7 +2596,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::DocumentOption Editor::DocumentOptions()
 	{
-		return static_cast<MicaEditor::DocumentOption>(_editor->PublicWndProc(Scintilla::Message::GetDocumentOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::DocumentOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetDocumentOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2604,7 +2604,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::ModificationFlags Editor::ModEventMask()
 	{
-		return static_cast<MicaEditor::ModificationFlags>(_editor->PublicWndProc(Scintilla::Message::GetModEventMask, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::ModificationFlags>(_editor.get()->PublicWndProc(Scintilla::Message::GetModEventMask, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2612,7 +2612,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ModEventMask(MicaEditor::ModificationFlags const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetModEventMask, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetModEventMask, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2620,7 +2620,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CommandEvents()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetCommandEvents, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetCommandEvents, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2628,7 +2628,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CommandEvents(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCommandEvents, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCommandEvents, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2636,7 +2636,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::Focus()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetFocus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetFocus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2644,7 +2644,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Focus(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFocus, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFocus, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2652,7 +2652,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Status Editor::Status()
 	{
-		return static_cast<MicaEditor::Status>(_editor->PublicWndProc(Scintilla::Message::GetStatus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Status>(_editor.get()->PublicWndProc(Scintilla::Message::GetStatus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2660,7 +2660,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Status(MicaEditor::Status const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetStatus, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetStatus, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2668,7 +2668,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::MouseDownCaptures()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetMouseDownCaptures, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetMouseDownCaptures, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2676,7 +2676,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MouseDownCaptures(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMouseDownCaptures, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMouseDownCaptures, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2684,7 +2684,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::MouseWheelCaptures()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetMouseWheelCaptures, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetMouseWheelCaptures, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2692,7 +2692,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MouseWheelCaptures(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMouseWheelCaptures, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMouseWheelCaptures, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2700,7 +2700,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::CursorShape Editor::Cursor()
 	{
-		return static_cast<MicaEditor::CursorShape>(_editor->PublicWndProc(Scintilla::Message::GetCursor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::CursorShape>(_editor.get()->PublicWndProc(Scintilla::Message::GetCursor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2708,7 +2708,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Cursor(MicaEditor::CursorShape const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCursor, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCursor, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2716,7 +2716,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::ControlCharSymbol()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetControlCharSymbol, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetControlCharSymbol, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2725,7 +2725,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ControlCharSymbol(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetControlCharSymbol, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetControlCharSymbol, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2733,7 +2733,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::XOffset()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetXOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetXOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2741,7 +2741,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::XOffset(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetXOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetXOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2749,7 +2749,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Wrap Editor::PrintWrapMode()
 	{
-		return static_cast<MicaEditor::Wrap>(_editor->PublicWndProc(Scintilla::Message::GetPrintWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Wrap>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrintWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2757,7 +2757,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PrintWrapMode(MicaEditor::Wrap const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPrintWrapMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPrintWrapMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2765,7 +2765,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::HotspotActiveUnderline()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetHotspotActiveUnderline, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetHotspotActiveUnderline, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2773,7 +2773,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HotspotActiveUnderline(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetHotspotActiveUnderline, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetHotspotActiveUnderline, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2781,7 +2781,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::HotspotSingleLine()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetHotspotSingleLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetHotspotSingleLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2789,7 +2789,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HotspotSingleLine(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetHotspotSingleLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetHotspotSingleLine, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2797,7 +2797,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::SelectionMode Editor::SelectionMode()
 	{
-		return static_cast<MicaEditor::SelectionMode>(_editor->PublicWndProc(Scintilla::Message::GetSelectionMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::SelectionMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2806,7 +2806,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelectionMode(MicaEditor::SelectionMode const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2814,7 +2814,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::MoveExtendsSelection()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetMoveExtendsSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetMoveExtendsSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2822,7 +2822,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AutoCCurrent()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AutoCGetCurrent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCurrent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2830,7 +2830,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::CaseInsensitiveBehaviour Editor::AutoCCaseInsensitiveBehaviour()
 	{
-		return static_cast<MicaEditor::CaseInsensitiveBehaviour>(_editor->PublicWndProc(Scintilla::Message::AutoCGetCaseInsensitiveBehaviour, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::CaseInsensitiveBehaviour>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCaseInsensitiveBehaviour, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2838,7 +2838,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCCaseInsensitiveBehaviour(MicaEditor::CaseInsensitiveBehaviour const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetCaseInsensitiveBehaviour, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetCaseInsensitiveBehaviour, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2846,7 +2846,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::MultiAutoComplete Editor::AutoCMulti()
 	{
-		return static_cast<MicaEditor::MultiAutoComplete>(_editor->PublicWndProc(Scintilla::Message::AutoCGetMulti, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::MultiAutoComplete>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetMulti, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2854,7 +2854,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCMulti(MicaEditor::MultiAutoComplete const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetMulti, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetMulti, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2862,7 +2862,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Ordering Editor::AutoCOrder()
 	{
-		return static_cast<MicaEditor::Ordering>(_editor->PublicWndProc(Scintilla::Message::AutoCGetOrder, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Ordering>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetOrder, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2870,7 +2870,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCOrder(MicaEditor::Ordering const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetOrder, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetOrder, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2878,7 +2878,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::CaretSticky Editor::CaretSticky()
 	{
-		return static_cast<MicaEditor::CaretSticky>(_editor->PublicWndProc(Scintilla::Message::GetCaretSticky, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::CaretSticky>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretSticky, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2886,7 +2886,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretSticky(MicaEditor::CaretSticky const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretSticky, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretSticky, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2894,7 +2894,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::PasteConvertEndings()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetPasteConvertEndings, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetPasteConvertEndings, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2902,7 +2902,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PasteConvertEndings(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPasteConvertEndings, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPasteConvertEndings, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2910,7 +2910,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Alpha Editor::CaretLineBackAlpha()
 	{
-		return static_cast<MicaEditor::Alpha>(_editor->PublicWndProc(Scintilla::Message::GetCaretLineBackAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineBackAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2918,7 +2918,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretLineBackAlpha(MicaEditor::Alpha const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineBackAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineBackAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2926,7 +2926,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::CaretStyle Editor::CaretStyle()
 	{
-		return static_cast<MicaEditor::CaretStyle>(_editor->PublicWndProc(Scintilla::Message::GetCaretStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::CaretStyle>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2934,7 +2934,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretStyle(MicaEditor::CaretStyle const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretStyle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretStyle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2942,7 +2942,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::IndicatorCurrent()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetIndicatorCurrent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetIndicatorCurrent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2950,7 +2950,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicatorCurrent(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIndicatorCurrent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIndicatorCurrent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2958,7 +2958,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::IndicatorValue()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetIndicatorValue, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetIndicatorValue, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2966,7 +2966,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicatorValue(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIndicatorValue, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIndicatorValue, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2974,7 +2974,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::PositionCache()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetPositionCache, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPositionCache, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2982,7 +2982,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PositionCache(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPositionCache, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPositionCache, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -2990,7 +2990,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::LayoutThreads()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetLayoutThreads, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLayoutThreads, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -2998,7 +2998,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LayoutThreads(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetLayoutThreads, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetLayoutThreads, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3007,7 +3007,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::CharacterPointer()
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::GetCharacterPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCharacterPointer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3016,7 +3016,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GapPosition()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetGapPosition, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetGapPosition, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3024,7 +3024,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::ExtraAscent()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetExtraAscent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetExtraAscent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3032,7 +3032,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ExtraAscent(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetExtraAscent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetExtraAscent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3040,7 +3040,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::ExtraDescent()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetExtraDescent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetExtraDescent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3048,7 +3048,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ExtraDescent(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetExtraDescent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetExtraDescent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3056,7 +3056,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarginStyleOffset()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarginGetStyleOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarginGetStyleOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3064,7 +3064,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginStyleOffset(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarginSetStyleOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarginSetStyleOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3072,7 +3072,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::MarginOption Editor::MarginOptions()
 	{
-		return static_cast<MicaEditor::MarginOption>(_editor->PublicWndProc(Scintilla::Message::GetMarginOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::MarginOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3080,7 +3080,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginOptions(MicaEditor::MarginOption const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3088,7 +3088,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::AnnotationVisible Editor::AnnotationVisible()
 	{
-		return static_cast<MicaEditor::AnnotationVisible>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::AnnotationVisible>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3096,7 +3096,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AnnotationVisible(MicaEditor::AnnotationVisible const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationSetVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3104,7 +3104,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AnnotationStyleOffset()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetStyleOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetStyleOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3112,7 +3112,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AnnotationStyleOffset(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationSetStyleOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetStyleOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3120,7 +3120,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::MouseSelectionRectangularSwitch()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetMouseSelectionRectangularSwitch, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetMouseSelectionRectangularSwitch, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3128,7 +3128,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MouseSelectionRectangularSwitch(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMouseSelectionRectangularSwitch, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMouseSelectionRectangularSwitch, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3136,7 +3136,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::MultipleSelection()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetMultipleSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetMultipleSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3144,7 +3144,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MultipleSelection(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMultipleSelection, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMultipleSelection, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3152,7 +3152,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AdditionalSelectionTyping()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetAdditionalSelectionTyping, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetAdditionalSelectionTyping, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3160,7 +3160,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AdditionalSelectionTyping(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalSelectionTyping, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalSelectionTyping, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3168,7 +3168,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AdditionalCaretsBlink()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetAdditionalCaretsBlink, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetAdditionalCaretsBlink, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3176,7 +3176,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AdditionalCaretsBlink(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalCaretsBlink, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalCaretsBlink, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3184,7 +3184,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AdditionalCaretsVisible()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetAdditionalCaretsVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetAdditionalCaretsVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3192,7 +3192,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AdditionalCaretsVisible(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalCaretsVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalCaretsVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3200,7 +3200,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::Selections()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetSelections, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelections, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3208,7 +3208,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::SelectionEmpty()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetSelectionEmpty, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionEmpty, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3216,7 +3216,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MainSelection()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMainSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMainSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3224,7 +3224,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MainSelection(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMainSelection, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMainSelection, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3232,7 +3232,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::RectangularSelectionCaret()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetRectangularSelectionCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRectangularSelectionCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3240,7 +3240,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RectangularSelectionCaret(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRectangularSelectionCaret, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRectangularSelectionCaret, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3248,7 +3248,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::RectangularSelectionAnchor()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetRectangularSelectionAnchor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRectangularSelectionAnchor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3256,7 +3256,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RectangularSelectionAnchor(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRectangularSelectionAnchor, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRectangularSelectionAnchor, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3264,7 +3264,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::RectangularSelectionCaretVirtualSpace()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetRectangularSelectionCaretVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRectangularSelectionCaretVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3272,7 +3272,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RectangularSelectionCaretVirtualSpace(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRectangularSelectionCaretVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRectangularSelectionCaretVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3280,7 +3280,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::RectangularSelectionAnchorVirtualSpace()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetRectangularSelectionAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRectangularSelectionAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3288,7 +3288,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RectangularSelectionAnchorVirtualSpace(int64_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRectangularSelectionAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRectangularSelectionAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3296,7 +3296,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::VirtualSpace Editor::VirtualSpaceOptions()
 	{
-		return static_cast<MicaEditor::VirtualSpace>(_editor->PublicWndProc(Scintilla::Message::GetVirtualSpaceOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::VirtualSpace>(_editor.get()->PublicWndProc(Scintilla::Message::GetVirtualSpaceOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3304,7 +3304,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VirtualSpaceOptions(MicaEditor::VirtualSpace const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetVirtualSpaceOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetVirtualSpaceOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3312,12 +3312,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::RectangularSelectionModifier()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetRectangularSelectionModifier, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRectangularSelectionModifier, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	void Editor::RectangularSelectionModifier(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRectangularSelectionModifier, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRectangularSelectionModifier, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3325,7 +3325,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Alpha Editor::AdditionalSelAlpha()
 	{
-		return static_cast<MicaEditor::Alpha>(_editor->PublicWndProc(Scintilla::Message::GetAdditionalSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetAdditionalSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3333,7 +3333,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AdditionalSelAlpha(MicaEditor::Alpha const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalSelAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalSelAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3341,7 +3341,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AdditionalCaretFore()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetAdditionalCaretFore, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetAdditionalCaretFore, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3349,7 +3349,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AdditionalCaretFore(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalCaretFore, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalCaretFore, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3357,7 +3357,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::Identifier()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetIdentifier, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetIdentifier, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3365,7 +3365,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Identifier(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIdentifier, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIdentifier, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3373,7 +3373,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Technology Editor::Technology()
 	{
-		return static_cast<MicaEditor::Technology>(_editor->PublicWndProc(Scintilla::Message::GetTechnology, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Technology>(_editor.get()->PublicWndProc(Scintilla::Message::GetTechnology, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3381,7 +3381,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Technology(MicaEditor::Technology const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTechnology, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTechnology, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3389,7 +3389,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CaretLineVisibleAlways()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetCaretLineVisibleAlways, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineVisibleAlways, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3397,7 +3397,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CaretLineVisibleAlways(bool value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineVisibleAlways, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineVisibleAlways, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3405,7 +3405,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::LineEndType Editor::LineEndTypesAllowed()
 	{
-		return static_cast<MicaEditor::LineEndType>(_editor->PublicWndProc(Scintilla::Message::GetLineEndTypesAllowed, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesAllowed, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3413,7 +3413,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEndTypesAllowed(MicaEditor::LineEndType const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetLineEndTypesAllowed, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetLineEndTypesAllowed, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3421,7 +3421,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::LineEndType Editor::LineEndTypesActive()
 	{
-		return static_cast<MicaEditor::LineEndType>(_editor->PublicWndProc(Scintilla::Message::GetLineEndTypesActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3429,7 +3429,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::EOLAnnotationVisible Editor::EOLAnnotationVisible()
 	{
-		return static_cast<MicaEditor::EOLAnnotationVisible>(_editor->PublicWndProc(Scintilla::Message::EOLAnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::EOLAnnotationVisible>(_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3437,7 +3437,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EOLAnnotationVisible(MicaEditor::EOLAnnotationVisible const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::EOLAnnotationSetVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationSetVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3445,7 +3445,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::EOLAnnotationStyleOffset()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::EOLAnnotationGetStyleOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetStyleOffset, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3453,7 +3453,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EOLAnnotationStyleOffset(int32_t value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::EOLAnnotationSetStyleOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationSetStyleOffset, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3461,7 +3461,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::LineCharacterIndexType Editor::LineCharacterIndex()
 	{
-		return static_cast<MicaEditor::LineCharacterIndexType>(_editor->PublicWndProc(Scintilla::Message::GetLineCharacterIndex, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::LineCharacterIndexType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineCharacterIndex, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3469,7 +3469,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::Lexer()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetLexer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLexer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3478,7 +3478,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::LineEndType Editor::LineEndTypesSupported()
 	{
-		return static_cast<MicaEditor::LineEndType>(_editor->PublicWndProc(Scintilla::Message::GetLineEndTypesSupported, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesSupported, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3487,7 +3487,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::DistanceToSecondaryStyles()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::DistanceToSecondaryStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::DistanceToSecondaryStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3495,7 +3495,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::NamedStyles()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetNamedStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetNamedStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3503,7 +3503,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Bidirectional Editor::Bidirectional()
 	{
-		return static_cast<MicaEditor::Bidirectional>(_editor->PublicWndProc(Scintilla::Message::GetBidirectional, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Bidirectional>(_editor.get()->PublicWndProc(Scintilla::Message::GetBidirectional, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3511,7 +3511,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Bidirectional(MicaEditor::Bidirectional const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetBidirectional, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetBidirectional, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3519,12 +3519,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AddTextFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AddText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AddText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::AddText(int64_t length, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AddText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AddText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -3532,7 +3532,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AddStyledText(int64_t length, array_view<uint8_t const> c)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AddStyledText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(c.data()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AddStyledText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(c.data()));
 	}
 
 	/*
@@ -3540,12 +3540,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::InsertTextFromBuffer(int64_t pos, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::InsertText, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::InsertText, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::InsertText(int64_t pos, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::InsertText, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::InsertText, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -3553,12 +3553,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ChangeInsertionFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ChangeInsertion, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::ChangeInsertion, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::ChangeInsertion(int64_t length, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ChangeInsertion, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::ChangeInsertion, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -3566,7 +3566,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearAll()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3574,7 +3574,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DeleteRange(int64_t start, int64_t lengthDelete)
 	{
-		_editor->PublicWndProc(Scintilla::Message::DeleteRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthDelete));
+		_editor.get()->PublicWndProc(Scintilla::Message::DeleteRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthDelete));
 	}
 
 	/*
@@ -3582,7 +3582,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearDocumentStyle()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearDocumentStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearDocumentStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3590,7 +3590,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Redo()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Redo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Redo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3598,7 +3598,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelectAll()
 	{
-		_editor->PublicWndProc(Scintilla::Message::SelectAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SelectAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3607,7 +3607,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSavePoint()
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSavePoint, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSavePoint, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3616,7 +3616,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetStyledText(uint64_t tr)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetStyledText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetStyledText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
 	}
 
 	/*
@@ -3625,7 +3625,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetStyledTextFull(uint64_t tr)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetStyledTextFull, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetStyledTextFull, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
 	}
 
 	/*
@@ -3633,7 +3633,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CanRedo()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::CanRedo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::CanRedo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3641,7 +3641,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::MarkerLineFromHandle(int32_t markerHandle)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::MarkerLineFromHandle, static_cast<Scintilla::uptr_t>(markerHandle), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerLineFromHandle, static_cast<Scintilla::uptr_t>(markerHandle), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3649,7 +3649,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerDeleteHandle(int32_t markerHandle)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDeleteHandle, static_cast<Scintilla::uptr_t>(markerHandle), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDeleteHandle, static_cast<Scintilla::uptr_t>(markerHandle), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3657,7 +3657,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarkerHandleFromLine(int64_t line, int32_t which)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarkerHandleFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(which)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerHandleFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(which)));
 	}
 
 	/*
@@ -3665,7 +3665,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarkerNumberFromLine(int64_t line, int32_t which)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarkerNumberFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(which)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerNumberFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(which)));
 	}
 
 	/*
@@ -3673,7 +3673,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::PositionFromPoint(int32_t x, int32_t y)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::PositionFromPoint, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PositionFromPoint, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
 	}
 
 	/*
@@ -3682,7 +3682,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::PositionFromPointClose(int32_t x, int32_t y)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::PositionFromPointClose, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PositionFromPointClose, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
 	}
 
 	/*
@@ -3690,7 +3690,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::GotoLine(int64_t line)
 	{
-		_editor->PublicWndProc(Scintilla::Message::GotoLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::GotoLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3698,7 +3698,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::GotoPos(int64_t caret)
 	{
-		_editor->PublicWndProc(Scintilla::Message::GotoPos, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::GotoPos, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3708,17 +3708,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetCurLineWriteBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetCurLine, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCurLine, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::GetCurLine(int64_t length)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(length) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetCurLine, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCurLine, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetCurLine, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetCurLine, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -3732,7 +3732,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ConvertEOLs(MicaEditor::EndOfLine const &eolMode)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ConvertEOLs, static_cast<Scintilla::uptr_t>(eolMode), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ConvertEOLs, static_cast<Scintilla::uptr_t>(eolMode), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3741,7 +3741,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StartStyling(int64_t start, int32_t unused)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StartStyling, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(unused));
+		_editor.get()->PublicWndProc(Scintilla::Message::StartStyling, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(unused));
 	}
 
 	/*
@@ -3750,7 +3750,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetStyling(int64_t length, int32_t style)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetStyling, static_cast<Scintilla::uptr_t>(length), static_cast<Scintilla::sptr_t>(style));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetStyling, static_cast<Scintilla::uptr_t>(length), static_cast<Scintilla::sptr_t>(style));
 	}
 
 	/*
@@ -3758,7 +3758,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearTabStops(int64_t line)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearTabStops, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearTabStops, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3766,7 +3766,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AddTabStop(int64_t line, int32_t x)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AddTabStop, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(x));
+		_editor.get()->PublicWndProc(Scintilla::Message::AddTabStop, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(x));
 	}
 
 	/*
@@ -3774,7 +3774,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetNextTabStop(int64_t line, int32_t x)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetNextTabStop, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(x)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetNextTabStop, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(x)));
 	}
 
 	/*
@@ -3782,7 +3782,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerDefine(int32_t markerNumber, MicaEditor::MarkerSymbol const &markerSymbol)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDefine, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(markerSymbol));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDefine, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(markerSymbol));
 	}
 
 	/*
@@ -3790,7 +3790,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerEnableHighlight(bool enabled)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerEnableHighlight, static_cast<Scintilla::uptr_t>(enabled), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerEnableHighlight, static_cast<Scintilla::uptr_t>(enabled), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3798,7 +3798,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarkerAdd(int64_t line, int32_t markerNumber)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarkerAdd, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(markerNumber)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerAdd, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(markerNumber)));
 	}
 
 	/*
@@ -3806,7 +3806,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerDelete(int64_t line, int32_t markerNumber)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDelete, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(markerNumber));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDelete, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(markerNumber));
 	}
 
 	/*
@@ -3814,7 +3814,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerDeleteAll(int32_t markerNumber)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDeleteAll, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDeleteAll, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3822,7 +3822,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarkerGet(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarkerGet, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerGet, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -3831,7 +3831,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::MarkerNext(int64_t lineStart, int32_t markerMask)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::MarkerNext, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(markerMask)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerNext, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(markerMask)));
 	}
 
 	/*
@@ -3839,7 +3839,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::MarkerPrevious(int64_t lineStart, int32_t markerMask)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::MarkerPrevious, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(markerMask)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerPrevious, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(markerMask)));
 	}
 
 	/*
@@ -3847,12 +3847,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerDefinePixmapFromBuffer(int32_t markerNumber, Windows::Storage::Streams::IBuffer const &pixmap)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDefinePixmap, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(pixmap ? pixmap.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDefinePixmap, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(pixmap ? pixmap.data() : nullptr));
 	}
 
 	void Editor::MarkerDefinePixmap(int32_t markerNumber, hstring const &pixmap)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDefinePixmap, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(to_string(pixmap).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDefinePixmap, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(to_string(pixmap).c_str()));
 	}
 
 	/*
@@ -3860,7 +3860,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerAddSet(int64_t line, int32_t markerSet)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerAddSet, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(markerSet));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerAddSet, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(markerSet));
 	}
 
 	/*
@@ -3868,7 +3868,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleClearAll()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3876,7 +3876,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleResetDefault()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleResetDefault, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleResetDefault, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3884,7 +3884,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ResetElementColour(MicaEditor::Element const &element)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ResetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ResetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3892,7 +3892,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelFore(bool useSetting, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelFore, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelFore, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -3900,7 +3900,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelBack(bool useSetting, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelBack, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelBack, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -3908,7 +3908,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AssignCmdKey(int32_t keyDefinition, int32_t sciCommand)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AssignCmdKey, static_cast<Scintilla::uptr_t>(keyDefinition), static_cast<Scintilla::sptr_t>(sciCommand));
+		_editor.get()->PublicWndProc(Scintilla::Message::AssignCmdKey, static_cast<Scintilla::uptr_t>(keyDefinition), static_cast<Scintilla::sptr_t>(sciCommand));
 	}
 
 	/*
@@ -3916,7 +3916,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearCmdKey(int32_t keyDefinition)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearCmdKey, static_cast<Scintilla::uptr_t>(keyDefinition), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearCmdKey, static_cast<Scintilla::uptr_t>(keyDefinition), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3924,7 +3924,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearAllCmdKeys()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearAllCmdKeys, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearAllCmdKeys, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3932,12 +3932,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetStylingExFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &styles)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetStylingEx, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetStylingEx, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr));
 	}
 
 	void Editor::SetStylingEx(int64_t length, hstring const &styles)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetStylingEx, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(styles).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetStylingEx, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(styles).c_str()));
 	}
 
 	/*
@@ -3946,7 +3946,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BeginUndoAction()
 	{
-		_editor->PublicWndProc(Scintilla::Message::BeginUndoAction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::BeginUndoAction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3954,7 +3954,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EndUndoAction()
 	{
-		_editor->PublicWndProc(Scintilla::Message::EndUndoAction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EndUndoAction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -3962,7 +3962,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetWhitespaceFore(bool useSetting, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWhitespaceFore, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWhitespaceFore, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -3970,7 +3970,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetWhitespaceBack(bool useSetting, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWhitespaceBack, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWhitespaceBack, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -3980,12 +3980,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCShowFromBuffer(int64_t lengthEntered, Windows::Storage::Streams::IBuffer const &itemList)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCShow, static_cast<Scintilla::uptr_t>(lengthEntered), reinterpret_cast<Scintilla::sptr_t>(itemList ? itemList.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCShow, static_cast<Scintilla::uptr_t>(lengthEntered), reinterpret_cast<Scintilla::sptr_t>(itemList ? itemList.data() : nullptr));
 	}
 
 	void Editor::AutoCShow(int64_t lengthEntered, hstring const &itemList)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCShow, static_cast<Scintilla::uptr_t>(lengthEntered), reinterpret_cast<Scintilla::sptr_t>(to_string(itemList).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCShow, static_cast<Scintilla::uptr_t>(lengthEntered), reinterpret_cast<Scintilla::sptr_t>(to_string(itemList).c_str()));
 	}
 
 	/*
@@ -3993,7 +3993,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCCancel()
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCCancel, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCCancel, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4001,7 +4001,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::AutoCActive()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::AutoCActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4009,7 +4009,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::AutoCPosStart()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::AutoCPosStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCPosStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4017,7 +4017,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCComplete()
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCComplete, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCComplete, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4025,12 +4025,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCStopsFromBuffer(Windows::Storage::Streams::IBuffer const &characterSet)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCStops, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characterSet ? characterSet.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCStops, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characterSet ? characterSet.data() : nullptr));
 	}
 
 	void Editor::AutoCStops(hstring const &characterSet)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCStops, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characterSet).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCStops, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characterSet).c_str()));
 	}
 
 	/*
@@ -4038,12 +4038,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCSelectFromBuffer(Windows::Storage::Streams::IBuffer const &select)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSelect, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(select ? select.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSelect, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(select ? select.data() : nullptr));
 	}
 
 	void Editor::AutoCSelect(hstring const &select)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSelect, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(select).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSelect, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(select).c_str()));
 	}
 
 	/*
@@ -4051,12 +4051,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::UserListShowFromBuffer(int32_t listType, Windows::Storage::Streams::IBuffer const &itemList)
 	{
-		_editor->PublicWndProc(Scintilla::Message::UserListShow, static_cast<Scintilla::uptr_t>(listType), reinterpret_cast<Scintilla::sptr_t>(itemList ? itemList.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::UserListShow, static_cast<Scintilla::uptr_t>(listType), reinterpret_cast<Scintilla::sptr_t>(itemList ? itemList.data() : nullptr));
 	}
 
 	void Editor::UserListShow(int32_t listType, hstring const &itemList)
 	{
-		_editor->PublicWndProc(Scintilla::Message::UserListShow, static_cast<Scintilla::uptr_t>(listType), reinterpret_cast<Scintilla::sptr_t>(to_string(itemList).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::UserListShow, static_cast<Scintilla::uptr_t>(listType), reinterpret_cast<Scintilla::sptr_t>(to_string(itemList).c_str()));
 	}
 
 	/*
@@ -4064,12 +4064,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RegisterImageFromBuffer(int32_t type, Windows::Storage::Streams::IBuffer const &xpmData)
 	{
-		_editor->PublicWndProc(Scintilla::Message::RegisterImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(xpmData ? xpmData.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::RegisterImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(xpmData ? xpmData.data() : nullptr));
 	}
 
 	void Editor::RegisterImage(int32_t type, hstring const &xpmData)
 	{
-		_editor->PublicWndProc(Scintilla::Message::RegisterImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(to_string(xpmData).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::RegisterImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(to_string(xpmData).c_str()));
 	}
 
 	/*
@@ -4077,7 +4077,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearRegisteredImages()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearRegisteredImages, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearRegisteredImages, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4085,7 +4085,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::CountCharacters(int64_t start, int64_t end)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::CountCharacters, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CountCharacters, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
 	}
 
 	/*
@@ -4093,7 +4093,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::CountCodeUnits(int64_t start, int64_t end)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::CountCodeUnits, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CountCodeUnits, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
 	}
 
 	/*
@@ -4101,7 +4101,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetEmptySelection(int64_t caret)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetEmptySelection, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetEmptySelection, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4109,7 +4109,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::FindText(MicaEditor::FindOption const &searchFlags, uint64_t ft)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::FindText, static_cast<Scintilla::uptr_t>(searchFlags), static_cast<Scintilla::sptr_t>(ft)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::FindText, static_cast<Scintilla::uptr_t>(searchFlags), static_cast<Scintilla::sptr_t>(ft)));
 	}
 
 	/*
@@ -4117,7 +4117,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::FindTextFull(MicaEditor::FindOption const &searchFlags, uint64_t ft)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::FindTextFull, static_cast<Scintilla::uptr_t>(searchFlags), static_cast<Scintilla::sptr_t>(ft)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::FindTextFull, static_cast<Scintilla::uptr_t>(searchFlags), static_cast<Scintilla::sptr_t>(ft)));
 	}
 
 	/*
@@ -4125,7 +4125,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::FormatRange(bool draw, uint64_t fr)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::FormatRange, static_cast<Scintilla::uptr_t>(draw), static_cast<Scintilla::sptr_t>(fr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::FormatRange, static_cast<Scintilla::uptr_t>(draw), static_cast<Scintilla::sptr_t>(fr)));
 	}
 
 	/*
@@ -4133,7 +4133,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::FormatRangeFull(bool draw, uint64_t fr)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::FormatRangeFull, static_cast<Scintilla::uptr_t>(draw), static_cast<Scintilla::sptr_t>(fr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::FormatRangeFull, static_cast<Scintilla::uptr_t>(draw), static_cast<Scintilla::sptr_t>(fr)));
 	}
 
 	/*
@@ -4142,17 +4142,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetLineWriteBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLine, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLine, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::GetLine(int64_t line)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(line) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetLine, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLine, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetLine, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetLine, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -4166,7 +4166,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSel(int64_t anchor, int64_t caret)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSel, static_cast<Scintilla::uptr_t>(anchor), static_cast<Scintilla::sptr_t>(caret));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSel, static_cast<Scintilla::uptr_t>(anchor), static_cast<Scintilla::sptr_t>(caret));
 	}
 
 	/*
@@ -4176,16 +4176,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelTextWriteBuffer(Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::GetSelText()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetSelText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetSelText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetSelText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -4200,7 +4200,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetTextRange(uint64_t tr)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTextRange, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTextRange, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
 	}
 
 	/*
@@ -4209,7 +4209,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetTextRangeFull(uint64_t tr)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTextRangeFull, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTextRangeFull, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(tr)));
 	}
 
 	/*
@@ -4217,7 +4217,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HideSelection(bool hide)
 	{
-		_editor->PublicWndProc(Scintilla::Message::HideSelection, static_cast<Scintilla::uptr_t>(hide), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::HideSelection, static_cast<Scintilla::uptr_t>(hide), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4225,7 +4225,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::PointXFromPosition(int64_t pos)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::PointXFromPosition, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(pos)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::PointXFromPosition, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(pos)));
 	}
 
 	/*
@@ -4233,7 +4233,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::PointYFromPosition(int64_t pos)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::PointYFromPosition, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(pos)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::PointYFromPosition, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(pos)));
 	}
 
 	/*
@@ -4241,7 +4241,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::LineFromPosition(int64_t pos)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::LineFromPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::LineFromPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4249,7 +4249,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::PositionFromLine(int64_t line)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::PositionFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PositionFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4257,7 +4257,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineScroll(int64_t columns, int64_t lines)
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineScroll, static_cast<Scintilla::uptr_t>(columns), static_cast<Scintilla::sptr_t>(lines));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineScroll, static_cast<Scintilla::uptr_t>(columns), static_cast<Scintilla::sptr_t>(lines));
 	}
 
 	/*
@@ -4265,7 +4265,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ScrollCaret()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ScrollCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ScrollCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4275,7 +4275,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ScrollRange(int64_t secondary, int64_t primary)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ScrollRange, static_cast<Scintilla::uptr_t>(secondary), static_cast<Scintilla::sptr_t>(primary));
+		_editor.get()->PublicWndProc(Scintilla::Message::ScrollRange, static_cast<Scintilla::uptr_t>(secondary), static_cast<Scintilla::sptr_t>(primary));
 	}
 
 	/*
@@ -4283,12 +4283,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ReplaceSelFromBuffer(Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ReplaceSel, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::ReplaceSel, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::ReplaceSel(hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ReplaceSel, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::ReplaceSel, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -4296,7 +4296,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Null()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Null, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Null, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4304,7 +4304,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CanPaste()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::CanPaste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::CanPaste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4312,7 +4312,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CanUndo()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::CanUndo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::CanUndo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4320,7 +4320,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EmptyUndoBuffer()
 	{
-		_editor->PublicWndProc(Scintilla::Message::EmptyUndoBuffer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EmptyUndoBuffer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4328,7 +4328,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Undo()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Undo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Undo, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4336,7 +4336,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Cut()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Cut, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Cut, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4344,7 +4344,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Copy()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Copy, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Copy, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4352,7 +4352,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Paste()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Paste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Paste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4360,7 +4360,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Clear()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Clear, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Clear, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4368,12 +4368,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetTextFromBuffer(Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::SetText(hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -4383,17 +4383,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetTextWriteBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::GetText(int64_t length)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(length) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -4407,7 +4407,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetTargetRange(int64_t start, int64_t end)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetTargetRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetTargetRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
 	}
 
 	/*
@@ -4415,7 +4415,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TargetFromSelection()
 	{
-		_editor->PublicWndProc(Scintilla::Message::TargetFromSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::TargetFromSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4423,7 +4423,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::TargetWholeDocument()
 	{
-		_editor->PublicWndProc(Scintilla::Message::TargetWholeDocument, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::TargetWholeDocument, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4433,12 +4433,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::ReplaceTargetFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::ReplaceTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::ReplaceTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	int64_t Editor::ReplaceTarget(int64_t length, hstring const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::ReplaceTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::ReplaceTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
 
 	/*
@@ -4451,12 +4451,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::ReplaceTargetREFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::ReplaceTargetRE, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::ReplaceTargetRE, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	int64_t Editor::ReplaceTargetRE(int64_t length, hstring const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::ReplaceTargetRE, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::ReplaceTargetRE, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
 
 	/*
@@ -4465,12 +4465,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::ReplaceTargetMinimalFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::ReplaceTargetMinimal, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::ReplaceTargetMinimal, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	int64_t Editor::ReplaceTargetMinimal(int64_t length, hstring const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::ReplaceTargetMinimal, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::ReplaceTargetMinimal, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
 
 	/*
@@ -4480,12 +4480,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::SearchInTargetFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::SearchInTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchInTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	int64_t Editor::SearchInTarget(int64_t length, hstring const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::SearchInTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchInTarget, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
 
 	/*
@@ -4493,12 +4493,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipShowFromBuffer(int64_t pos, Windows::Storage::Streams::IBuffer const &definition)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipShow, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(definition ? definition.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipShow, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(definition ? definition.data() : nullptr));
 	}
 
 	void Editor::CallTipShow(int64_t pos, hstring const &definition)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipShow, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(to_string(definition).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipShow, static_cast<Scintilla::uptr_t>(pos), reinterpret_cast<Scintilla::sptr_t>(to_string(definition).c_str()));
 	}
 
 	/*
@@ -4506,7 +4506,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipCancel()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipCancel, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipCancel, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4514,7 +4514,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::CallTipActive()
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::CallTipActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::CallTipActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4522,7 +4522,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::CallTipPosStart()
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::CallTipPosStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CallTipPosStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4530,7 +4530,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipSetHlt(int64_t highlightStart, int64_t highlightEnd)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipSetHlt, static_cast<Scintilla::uptr_t>(highlightStart), static_cast<Scintilla::sptr_t>(highlightEnd));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipSetHlt, static_cast<Scintilla::uptr_t>(highlightStart), static_cast<Scintilla::sptr_t>(highlightEnd));
 	}
 
 	/*
@@ -4538,7 +4538,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::VisibleFromDocLine(int64_t docLine)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::VisibleFromDocLine, static_cast<Scintilla::uptr_t>(docLine), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::VisibleFromDocLine, static_cast<Scintilla::uptr_t>(docLine), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4546,7 +4546,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::DocLineFromVisible(int64_t displayLine)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::DocLineFromVisible, static_cast<Scintilla::uptr_t>(displayLine), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::DocLineFromVisible, static_cast<Scintilla::uptr_t>(displayLine), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4554,7 +4554,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::WrapCount(int64_t docLine)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::WrapCount, static_cast<Scintilla::uptr_t>(docLine), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::WrapCount, static_cast<Scintilla::uptr_t>(docLine), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4562,7 +4562,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ShowLines(int64_t lineStart, int64_t lineEnd)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ShowLines, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(lineEnd));
+		_editor.get()->PublicWndProc(Scintilla::Message::ShowLines, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(lineEnd));
 	}
 
 	/*
@@ -4570,7 +4570,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HideLines(int64_t lineStart, int64_t lineEnd)
 	{
-		_editor->PublicWndProc(Scintilla::Message::HideLines, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(lineEnd));
+		_editor.get()->PublicWndProc(Scintilla::Message::HideLines, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(lineEnd));
 	}
 
 	/*
@@ -4578,7 +4578,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ToggleFold(int64_t line)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ToggleFold, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ToggleFold, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4586,12 +4586,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ToggleFoldShowTextFromBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ToggleFoldShowText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::ToggleFoldShowText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::ToggleFoldShowText(int64_t line, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ToggleFoldShowText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::ToggleFoldShowText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -4599,12 +4599,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetDefaultFoldDisplayTextFromBuffer(Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::SetDefaultFoldDisplayText(hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -4612,16 +4612,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetDefaultFoldDisplayTextWriteBuffer(Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::GetDefaultFoldDisplayText()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetDefaultFoldDisplayText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -4635,7 +4635,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FoldLine(int64_t line, MicaEditor::FoldAction const &action)
 	{
-		_editor->PublicWndProc(Scintilla::Message::FoldLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(action));
+		_editor.get()->PublicWndProc(Scintilla::Message::FoldLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(action));
 	}
 
 	/*
@@ -4643,7 +4643,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FoldChildren(int64_t line, MicaEditor::FoldAction const &action)
 	{
-		_editor->PublicWndProc(Scintilla::Message::FoldChildren, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(action));
+		_editor.get()->PublicWndProc(Scintilla::Message::FoldChildren, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(action));
 	}
 
 	/*
@@ -4651,7 +4651,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ExpandChildren(int64_t line, MicaEditor::FoldLevel const &level)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ExpandChildren, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level));
+		_editor.get()->PublicWndProc(Scintilla::Message::ExpandChildren, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level));
 	}
 
 	/*
@@ -4659,7 +4659,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FoldAll(MicaEditor::FoldAction const &action)
 	{
-		_editor->PublicWndProc(Scintilla::Message::FoldAll, static_cast<Scintilla::uptr_t>(action), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::FoldAll, static_cast<Scintilla::uptr_t>(action), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4667,7 +4667,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EnsureVisible(int64_t line)
 	{
-		_editor->PublicWndProc(Scintilla::Message::EnsureVisible, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EnsureVisible, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4676,7 +4676,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EnsureVisibleEnforcePolicy(int64_t line)
 	{
-		_editor->PublicWndProc(Scintilla::Message::EnsureVisibleEnforcePolicy, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EnsureVisibleEnforcePolicy, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4684,7 +4684,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::WordStartPosition(int64_t pos, bool onlyWordCharacters)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::WordStartPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(onlyWordCharacters)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::WordStartPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(onlyWordCharacters)));
 	}
 
 	/*
@@ -4692,7 +4692,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::WordEndPosition(int64_t pos, bool onlyWordCharacters)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::WordEndPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(onlyWordCharacters)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::WordEndPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(onlyWordCharacters)));
 	}
 
 	/*
@@ -4700,7 +4700,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::IsRangeWord(int64_t start, int64_t end)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::IsRangeWord, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::IsRangeWord, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
 	}
 
 	/*
@@ -4710,12 +4710,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::TextWidthFromBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::TextWidth, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::TextWidth, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	int32_t Editor::TextWidth(int32_t style, hstring const &text)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::TextWidth, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::TextWidth, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
 
 	/*
@@ -4723,7 +4723,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::TextHeight(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::TextHeight, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::TextHeight, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -4731,12 +4731,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AppendTextFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AppendText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AppendText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::AppendText(int64_t length, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AppendText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AppendText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -4744,7 +4744,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LinesJoin()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LinesJoin, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LinesJoin, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4753,7 +4753,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LinesSplit(int32_t pixelWidth)
 	{
-		_editor->PublicWndProc(Scintilla::Message::LinesSplit, static_cast<Scintilla::uptr_t>(pixelWidth), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LinesSplit, static_cast<Scintilla::uptr_t>(pixelWidth), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4761,7 +4761,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetFoldMarginColour(bool useSetting, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFoldMarginColour, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFoldMarginColour, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -4769,7 +4769,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetFoldMarginHiColour(bool useSetting, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFoldMarginHiColour, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFoldMarginHiColour, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -4777,7 +4777,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineDown()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4785,7 +4785,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineDownExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4793,7 +4793,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineUp()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4801,7 +4801,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineUpExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4809,7 +4809,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CharLeft()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CharLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CharLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4817,7 +4817,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CharLeftExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CharLeftExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CharLeftExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4825,7 +4825,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CharRight()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CharRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CharRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4833,7 +4833,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CharRightExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CharRightExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CharRightExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4841,7 +4841,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordLeft()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4849,7 +4849,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordLeftExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordLeftExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordLeftExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4857,7 +4857,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordRight()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4865,7 +4865,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordRightExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordRightExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordRightExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4873,7 +4873,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Home()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Home, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Home, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4881,7 +4881,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HomeExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::HomeExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::HomeExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4889,7 +4889,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEnd()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4897,7 +4897,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEndExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4905,7 +4905,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DocumentStart()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DocumentStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DocumentStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4913,7 +4913,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DocumentStartExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DocumentStartExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DocumentStartExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4921,7 +4921,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DocumentEnd()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DocumentEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DocumentEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4929,7 +4929,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DocumentEndExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DocumentEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DocumentEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4937,7 +4937,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PageUp()
 	{
-		_editor->PublicWndProc(Scintilla::Message::PageUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::PageUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4945,7 +4945,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PageUpExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::PageUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::PageUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4953,7 +4953,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PageDown()
 	{
-		_editor->PublicWndProc(Scintilla::Message::PageDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::PageDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4961,7 +4961,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PageDownExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::PageDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::PageDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4969,7 +4969,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EditToggleOvertype()
 	{
-		_editor->PublicWndProc(Scintilla::Message::EditToggleOvertype, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EditToggleOvertype, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4977,7 +4977,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Cancel()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Cancel, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Cancel, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4985,7 +4985,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DeleteBack()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DeleteBack, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DeleteBack, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -4994,7 +4994,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Tab()
 	{
-		_editor->PublicWndProc(Scintilla::Message::Tab, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Tab, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5002,7 +5002,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BackTab()
 	{
-		_editor->PublicWndProc(Scintilla::Message::BackTab, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::BackTab, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5010,7 +5010,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::NewLine()
 	{
-		_editor->PublicWndProc(Scintilla::Message::NewLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::NewLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5018,7 +5018,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FormFeed()
 	{
-		_editor->PublicWndProc(Scintilla::Message::FormFeed, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::FormFeed, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5027,7 +5027,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VCHome()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VCHome, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VCHome, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5035,7 +5035,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VCHomeExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VCHomeExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VCHomeExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5043,7 +5043,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ZoomIn()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ZoomIn, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ZoomIn, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5051,7 +5051,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ZoomOut()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ZoomOut, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ZoomOut, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5059,7 +5059,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DelWordLeft()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DelWordLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DelWordLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5067,7 +5067,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DelWordRight()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DelWordRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DelWordRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5075,7 +5075,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DelWordRightEnd()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DelWordRightEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DelWordRightEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5083,7 +5083,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineCut()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineCut, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineCut, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5091,7 +5091,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineDelete()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineDelete, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineDelete, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5099,7 +5099,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineTranspose()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineTranspose, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineTranspose, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5107,7 +5107,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineReverse()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineReverse, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineReverse, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5115,7 +5115,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineDuplicate()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineDuplicate, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineDuplicate, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5123,7 +5123,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LowerCase()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LowerCase, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LowerCase, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5131,7 +5131,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::UpperCase()
 	{
-		_editor->PublicWndProc(Scintilla::Message::UpperCase, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::UpperCase, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5139,7 +5139,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineScrollDown()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineScrollDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineScrollDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5147,7 +5147,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineScrollUp()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineScrollUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineScrollUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5156,7 +5156,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DeleteBackNotLine()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DeleteBackNotLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DeleteBackNotLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5164,7 +5164,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HomeDisplay()
 	{
-		_editor->PublicWndProc(Scintilla::Message::HomeDisplay, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::HomeDisplay, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5173,7 +5173,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HomeDisplayExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::HomeDisplayExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::HomeDisplayExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5181,7 +5181,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEndDisplay()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineEndDisplay, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineEndDisplay, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5190,7 +5190,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEndDisplayExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineEndDisplayExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineEndDisplayExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5199,7 +5199,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HomeWrap()
 	{
-		_editor->PublicWndProc(Scintilla::Message::HomeWrap, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::HomeWrap, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5208,7 +5208,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HomeWrapExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::HomeWrapExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::HomeWrapExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5217,7 +5217,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEndWrap()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineEndWrap, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineEndWrap, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5226,7 +5226,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEndWrapExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineEndWrapExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineEndWrapExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5235,7 +5235,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VCHomeWrap()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VCHomeWrap, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VCHomeWrap, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5244,7 +5244,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VCHomeWrapExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VCHomeWrapExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VCHomeWrapExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5252,7 +5252,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineCopy()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineCopy, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineCopy, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5260,7 +5260,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MoveCaretInsideView()
 	{
-		_editor->PublicWndProc(Scintilla::Message::MoveCaretInsideView, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MoveCaretInsideView, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5268,7 +5268,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::LineLength(int64_t line)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::LineLength, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::LineLength, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5276,7 +5276,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BraceHighlight(int64_t posA, int64_t posB)
 	{
-		_editor->PublicWndProc(Scintilla::Message::BraceHighlight, static_cast<Scintilla::uptr_t>(posA), static_cast<Scintilla::sptr_t>(posB));
+		_editor.get()->PublicWndProc(Scintilla::Message::BraceHighlight, static_cast<Scintilla::uptr_t>(posA), static_cast<Scintilla::sptr_t>(posB));
 	}
 
 	/*
@@ -5284,7 +5284,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BraceHighlightIndicator(bool useSetting, int32_t indicator)
 	{
-		_editor->PublicWndProc(Scintilla::Message::BraceHighlightIndicator, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(indicator));
+		_editor.get()->PublicWndProc(Scintilla::Message::BraceHighlightIndicator, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(indicator));
 	}
 
 	/*
@@ -5292,7 +5292,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BraceBadLight(int64_t pos)
 	{
-		_editor->PublicWndProc(Scintilla::Message::BraceBadLight, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::BraceBadLight, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5300,7 +5300,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::BraceBadLightIndicator(bool useSetting, int32_t indicator)
 	{
-		_editor->PublicWndProc(Scintilla::Message::BraceBadLightIndicator, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(indicator));
+		_editor.get()->PublicWndProc(Scintilla::Message::BraceBadLightIndicator, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(indicator));
 	}
 
 	/*
@@ -5309,7 +5309,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::BraceMatch(int64_t pos, int32_t maxReStyle)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::BraceMatch, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(maxReStyle)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::BraceMatch, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(maxReStyle)));
 	}
 
 	/*
@@ -5317,7 +5317,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::BraceMatchNext(int64_t pos, int64_t startPos)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::BraceMatchNext, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(startPos)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::BraceMatchNext, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(startPos)));
 	}
 
 	/*
@@ -5325,7 +5325,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MultiEdgeAddLine(int64_t column, int32_t edgeColour)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MultiEdgeAddLine, static_cast<Scintilla::uptr_t>(column), static_cast<Scintilla::sptr_t>(edgeColour));
+		_editor.get()->PublicWndProc(Scintilla::Message::MultiEdgeAddLine, static_cast<Scintilla::uptr_t>(column), static_cast<Scintilla::sptr_t>(edgeColour));
 	}
 
 	/*
@@ -5333,7 +5333,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MultiEdgeClearAll()
 	{
-		_editor->PublicWndProc(Scintilla::Message::MultiEdgeClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MultiEdgeClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5341,7 +5341,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SearchAnchor()
 	{
-		_editor->PublicWndProc(Scintilla::Message::SearchAnchor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SearchAnchor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5350,12 +5350,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::SearchNextFromBuffer(MicaEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::SearchNext, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchNext, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	int64_t Editor::SearchNext(MicaEditor::FindOption const &searchFlags, hstring const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::SearchNext, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchNext, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
 
 	/*
@@ -5364,12 +5364,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::SearchPrevFromBuffer(MicaEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::SearchPrev, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchPrev, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	int64_t Editor::SearchPrev(MicaEditor::FindOption const &searchFlags, hstring const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::SearchPrev, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchPrev, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
 
 	/*
@@ -5378,7 +5378,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::UsePopUp(MicaEditor::PopUp const &popUpMode)
 	{
-		_editor->PublicWndProc(Scintilla::Message::UsePopUp, static_cast<Scintilla::uptr_t>(popUpMode), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::UsePopUp, static_cast<Scintilla::uptr_t>(popUpMode), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5387,7 +5387,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::CreateDocument(int64_t bytes, MicaEditor::DocumentOption const &documentOptions)
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::CreateDocument, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(documentOptions)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CreateDocument, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(documentOptions)));
 	}
 
 	/*
@@ -5395,7 +5395,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AddRefDocument(uint64_t doc)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AddRefDocument, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(doc));
+		_editor.get()->PublicWndProc(Scintilla::Message::AddRefDocument, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(doc));
 	}
 
 	/*
@@ -5403,7 +5403,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ReleaseDocument(uint64_t doc)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ReleaseDocument, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(doc));
+		_editor.get()->PublicWndProc(Scintilla::Message::ReleaseDocument, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(doc));
 	}
 
 	/*
@@ -5411,7 +5411,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordPartLeft()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordPartLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordPartLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5420,7 +5420,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordPartLeftExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordPartLeftExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordPartLeftExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5428,7 +5428,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordPartRight()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordPartRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordPartRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5437,7 +5437,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordPartRightExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordPartRightExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordPartRightExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5446,7 +5446,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetVisiblePolicy(MicaEditor::VisiblePolicy const &visiblePolicy, int32_t visibleSlop)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetVisiblePolicy, static_cast<Scintilla::uptr_t>(visiblePolicy), static_cast<Scintilla::sptr_t>(visibleSlop));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetVisiblePolicy, static_cast<Scintilla::uptr_t>(visiblePolicy), static_cast<Scintilla::sptr_t>(visibleSlop));
 	}
 
 	/*
@@ -5454,7 +5454,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DelLineLeft()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DelLineLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DelLineLeft, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5462,7 +5462,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DelLineRight()
 	{
-		_editor->PublicWndProc(Scintilla::Message::DelLineRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DelLineRight, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5470,7 +5470,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ChooseCaretX()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ChooseCaretX, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ChooseCaretX, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5478,7 +5478,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::GrabFocus()
 	{
-		_editor->PublicWndProc(Scintilla::Message::GrabFocus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::GrabFocus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5487,7 +5487,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetXCaretPolicy(MicaEditor::CaretPolicy const &caretPolicy, int32_t caretSlop)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetXCaretPolicy, static_cast<Scintilla::uptr_t>(caretPolicy), static_cast<Scintilla::sptr_t>(caretSlop));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetXCaretPolicy, static_cast<Scintilla::uptr_t>(caretPolicy), static_cast<Scintilla::sptr_t>(caretSlop));
 	}
 
 	/*
@@ -5496,7 +5496,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetYCaretPolicy(MicaEditor::CaretPolicy const &caretPolicy, int32_t caretSlop)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetYCaretPolicy, static_cast<Scintilla::uptr_t>(caretPolicy), static_cast<Scintilla::sptr_t>(caretSlop));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetYCaretPolicy, static_cast<Scintilla::uptr_t>(caretPolicy), static_cast<Scintilla::sptr_t>(caretSlop));
 	}
 
 	/*
@@ -5504,7 +5504,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ParaDown()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ParaDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ParaDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5512,7 +5512,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ParaDownExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ParaDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ParaDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5520,7 +5520,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ParaUp()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ParaUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ParaUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5528,7 +5528,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ParaUpExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ParaUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ParaUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5537,7 +5537,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::PositionBefore(int64_t pos)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::PositionBefore, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PositionBefore, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5546,7 +5546,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::PositionAfter(int64_t pos)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::PositionAfter, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PositionAfter, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5555,7 +5555,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::PositionRelative(int64_t pos, int64_t relative)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::PositionRelative, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(relative)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PositionRelative, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(relative)));
 	}
 
 	/*
@@ -5565,7 +5565,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::PositionRelativeCodeUnits(int64_t pos, int64_t relative)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::PositionRelativeCodeUnits, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(relative)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PositionRelativeCodeUnits, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(relative)));
 	}
 
 	/*
@@ -5573,7 +5573,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CopyRange(int64_t start, int64_t end)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CopyRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
+		_editor.get()->PublicWndProc(Scintilla::Message::CopyRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
 	}
 
 	/*
@@ -5581,12 +5581,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CopyTextFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CopyText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::CopyText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::CopyText(int64_t length, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CopyText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::CopyText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -5594,7 +5594,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetLineSelStartPosition(int64_t line)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLineSelStartPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineSelStartPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5602,7 +5602,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetLineSelEndPosition(int64_t line)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLineSelEndPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineSelEndPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5610,7 +5610,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineDownRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineDownRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineDownRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5618,7 +5618,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineUpRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineUpRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineUpRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5626,7 +5626,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CharLeftRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CharLeftRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CharLeftRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5634,7 +5634,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CharRightRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CharRightRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CharRightRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5642,7 +5642,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::HomeRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::HomeRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::HomeRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5652,7 +5652,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VCHomeRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VCHomeRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VCHomeRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5660,7 +5660,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::LineEndRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::LineEndRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::LineEndRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5668,7 +5668,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PageUpRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::PageUpRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::PageUpRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5676,7 +5676,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::PageDownRectExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::PageDownRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::PageDownRectExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5684,7 +5684,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StutteredPageUp()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StutteredPageUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StutteredPageUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5692,7 +5692,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StutteredPageUpExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StutteredPageUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StutteredPageUpExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5700,7 +5700,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StutteredPageDown()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StutteredPageDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StutteredPageDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5708,7 +5708,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StutteredPageDownExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StutteredPageDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StutteredPageDownExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5716,7 +5716,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordLeftEnd()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordLeftEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordLeftEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5724,7 +5724,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordLeftEndExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordLeftEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordLeftEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5732,7 +5732,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordRightEnd()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordRightEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordRightEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5740,7 +5740,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::WordRightEndExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::WordRightEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::WordRightEndExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5748,7 +5748,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetCharsDefault()
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetCharsDefault, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetCharsDefault, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5756,7 +5756,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Allocate(int64_t bytes)
 	{
-		_editor->PublicWndProc(Scintilla::Message::Allocate, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::Allocate, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5765,16 +5765,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::TargetAsUTF8WriteBuffer(Windows::Storage::Streams::IBuffer const &s)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::TargetAsUTF8, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(s ? s.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::TargetAsUTF8, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(s ? s.data() : nullptr)));
 	}
 
 	hstring Editor::TargetAsUTF8()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::TargetAsUTF8, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::TargetAsUTF8, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::TargetAsUTF8, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::TargetAsUTF8, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -5789,7 +5789,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetLengthForEncode(int64_t bytes)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetLengthForEncode, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetLengthForEncode, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5799,17 +5799,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::EncodedFromUTF8WriteBuffer(Windows::Storage::Streams::IBuffer const &utf8, Windows::Storage::Streams::IBuffer const &encoded)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::EncodedFromUTF8, reinterpret_cast<Scintilla::uptr_t>(utf8 ? utf8.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(encoded ? encoded.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::EncodedFromUTF8, reinterpret_cast<Scintilla::uptr_t>(utf8 ? utf8.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(encoded ? encoded.data() : nullptr)));
 	}
 
 	hstring Editor::EncodedFromUTF8(hstring const &utf8)
 	{
 		const auto wParam{ reinterpret_cast<Scintilla::uptr_t>(to_string(utf8).c_str()) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::EncodedFromUTF8, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::EncodedFromUTF8, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::EncodedFromUTF8, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::EncodedFromUTF8, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -5824,7 +5824,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::FindColumn(int64_t line, int64_t column)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::FindColumn, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(column)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::FindColumn, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(column)));
 	}
 
 	/*
@@ -5832,7 +5832,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ToggleCaretSticky()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ToggleCaretSticky, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ToggleCaretSticky, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5840,12 +5840,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ReplaceRectangularFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ReplaceRectangular, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::ReplaceRectangular, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::ReplaceRectangular(int64_t length, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ReplaceRectangular, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::ReplaceRectangular, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -5853,7 +5853,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SelectionDuplicate()
 	{
-		_editor->PublicWndProc(Scintilla::Message::SelectionDuplicate, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SelectionDuplicate, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5861,7 +5861,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicatorFillRange(int64_t start, int64_t lengthFill)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicatorFillRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthFill));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicatorFillRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthFill));
 	}
 
 	/*
@@ -5869,7 +5869,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicatorClearRange(int64_t start, int64_t lengthClear)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicatorClearRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthClear));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicatorClearRange, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthClear));
 	}
 
 	/*
@@ -5877,7 +5877,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::IndicatorAllOnFor(int64_t pos)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::IndicatorAllOnFor, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndicatorAllOnFor, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5885,7 +5885,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::IndicatorValueAt(int32_t indicator, int64_t pos)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::IndicatorValueAt, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(pos)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndicatorValueAt, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(pos)));
 	}
 
 	/*
@@ -5893,7 +5893,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::IndicatorStart(int32_t indicator, int64_t pos)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::IndicatorStart, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(pos)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndicatorStart, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(pos)));
 	}
 
 	/*
@@ -5901,7 +5901,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::IndicatorEnd(int32_t indicator, int64_t pos)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::IndicatorEnd, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(pos)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndicatorEnd, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(pos)));
 	}
 
 	/*
@@ -5909,7 +5909,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CopyAllowLine()
 	{
-		_editor->PublicWndProc(Scintilla::Message::CopyAllowLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CopyAllowLine, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5917,7 +5917,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarkerSymbolDefined(int32_t markerNumber)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarkerSymbolDefined, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerSymbolDefined, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5925,7 +5925,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginTextClearAll()
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarginTextClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarginTextClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5933,7 +5933,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AnnotationClearAll()
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5941,7 +5941,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ReleaseAllExtendedStyles()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ReleaseAllExtendedStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ReleaseAllExtendedStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5949,7 +5949,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AllocateExtendedStyles(int32_t numberStyles)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AllocateExtendedStyles, static_cast<Scintilla::uptr_t>(numberStyles), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AllocateExtendedStyles, static_cast<Scintilla::uptr_t>(numberStyles), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -5957,7 +5957,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AddUndoAction(int32_t token, MicaEditor::UndoFlags const &flags)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AddUndoAction, static_cast<Scintilla::uptr_t>(token), static_cast<Scintilla::sptr_t>(flags));
+		_editor.get()->PublicWndProc(Scintilla::Message::AddUndoAction, static_cast<Scintilla::uptr_t>(token), static_cast<Scintilla::sptr_t>(flags));
 	}
 
 	/*
@@ -5965,7 +5965,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::CharPositionFromPoint(int32_t x, int32_t y)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::CharPositionFromPoint, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CharPositionFromPoint, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
 	}
 
 	/*
@@ -5974,7 +5974,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::CharPositionFromPointClose(int32_t x, int32_t y)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::CharPositionFromPointClose, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CharPositionFromPointClose, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
 	}
 
 	/*
@@ -5982,7 +5982,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearSelections()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearSelections, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearSelections, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -5990,7 +5990,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelection(int64_t caret, int64_t anchor)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelection, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(anchor));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelection, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(anchor));
 	}
 
 	/*
@@ -5998,7 +5998,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AddSelection(int64_t caret, int64_t anchor)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AddSelection, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(anchor));
+		_editor.get()->PublicWndProc(Scintilla::Message::AddSelection, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(anchor));
 	}
 
 	/*
@@ -6006,7 +6006,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::DropSelectionN(int32_t selection)
 	{
-		_editor->PublicWndProc(Scintilla::Message::DropSelectionN, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::DropSelectionN, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6014,7 +6014,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RotateSelection()
 	{
-		_editor->PublicWndProc(Scintilla::Message::RotateSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::RotateSelection, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6022,7 +6022,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SwapMainAnchorCaret()
 	{
-		_editor->PublicWndProc(Scintilla::Message::SwapMainAnchorCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SwapMainAnchorCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6031,7 +6031,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MultipleSelectAddNext()
 	{
-		_editor->PublicWndProc(Scintilla::Message::MultipleSelectAddNext, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MultipleSelectAddNext, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6040,7 +6040,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MultipleSelectAddEach()
 	{
-		_editor->PublicWndProc(Scintilla::Message::MultipleSelectAddEach, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MultipleSelectAddEach, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6049,7 +6049,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::ChangeLexerState(int64_t start, int64_t end)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::ChangeLexerState, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::ChangeLexerState, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end)));
 	}
 
 	/*
@@ -6058,7 +6058,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::ContractedFoldNext(int64_t lineStart)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::ContractedFoldNext, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::ContractedFoldNext, static_cast<Scintilla::uptr_t>(lineStart), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6066,7 +6066,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VerticalCentreCaret()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VerticalCentreCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VerticalCentreCaret, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6074,7 +6074,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MoveSelectedLinesUp()
 	{
-		_editor->PublicWndProc(Scintilla::Message::MoveSelectedLinesUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MoveSelectedLinesUp, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6082,7 +6082,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MoveSelectedLinesDown()
 	{
-		_editor->PublicWndProc(Scintilla::Message::MoveSelectedLinesDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::MoveSelectedLinesDown, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6091,12 +6091,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerDefineRGBAImageFromBuffer(int32_t markerNumber, Windows::Storage::Streams::IBuffer const &pixels)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDefineRGBAImage, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(pixels ? pixels.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDefineRGBAImage, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(pixels ? pixels.data() : nullptr));
 	}
 
 	void Editor::MarkerDefineRGBAImage(int32_t markerNumber, hstring const &pixels)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerDefineRGBAImage, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(to_string(pixels).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDefineRGBAImage, static_cast<Scintilla::uptr_t>(markerNumber), reinterpret_cast<Scintilla::sptr_t>(to_string(pixels).c_str()));
 	}
 
 	/*
@@ -6105,12 +6105,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RegisterRGBAImageFromBuffer(int32_t type, Windows::Storage::Streams::IBuffer const &pixels)
 	{
-		_editor->PublicWndProc(Scintilla::Message::RegisterRGBAImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(pixels ? pixels.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::RegisterRGBAImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(pixels ? pixels.data() : nullptr));
 	}
 
 	void Editor::RegisterRGBAImage(int32_t type, hstring const &pixels)
 	{
-		_editor->PublicWndProc(Scintilla::Message::RegisterRGBAImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(to_string(pixels).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::RegisterRGBAImage, static_cast<Scintilla::uptr_t>(type), reinterpret_cast<Scintilla::sptr_t>(to_string(pixels).c_str()));
 	}
 
 	/*
@@ -6118,7 +6118,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ScrollToStart()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ScrollToStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ScrollToStart, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6126,7 +6126,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ScrollToEnd()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ScrollToEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ScrollToEnd, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6134,7 +6134,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::CreateLoader(int64_t bytes, MicaEditor::DocumentOption const &documentOptions)
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::CreateLoader, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(documentOptions)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CreateLoader, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(documentOptions)));
 	}
 
 	/*
@@ -6142,7 +6142,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FindIndicatorShow(int64_t start, int64_t end)
 	{
-		_editor->PublicWndProc(Scintilla::Message::FindIndicatorShow, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
+		_editor.get()->PublicWndProc(Scintilla::Message::FindIndicatorShow, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
 	}
 
 	/*
@@ -6150,7 +6150,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FindIndicatorFlash(int64_t start, int64_t end)
 	{
-		_editor->PublicWndProc(Scintilla::Message::FindIndicatorFlash, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
+		_editor.get()->PublicWndProc(Scintilla::Message::FindIndicatorFlash, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
 	}
 
 	/*
@@ -6158,7 +6158,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FindIndicatorHide()
 	{
-		_editor->PublicWndProc(Scintilla::Message::FindIndicatorHide, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::FindIndicatorHide, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6167,7 +6167,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VCHomeDisplay()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VCHomeDisplay, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VCHomeDisplay, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6175,7 +6175,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::VCHomeDisplayExtend()
 	{
-		_editor->PublicWndProc(Scintilla::Message::VCHomeDisplayExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::VCHomeDisplayExtend, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6183,12 +6183,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearRepresentationFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearRepresentation, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearRepresentation, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	void Editor::ClearRepresentation(hstring const &encodedCharacter)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearRepresentation, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearRepresentation, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6196,7 +6196,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ClearAllRepresentations()
 	{
-		_editor->PublicWndProc(Scintilla::Message::ClearAllRepresentations, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ClearAllRepresentations, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6204,7 +6204,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EOLAnnotationClearAll()
 	{
-		_editor->PublicWndProc(Scintilla::Message::EOLAnnotationClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationClearAll, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6212,7 +6212,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AllocateLineCharacterIndex(MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AllocateLineCharacterIndex, static_cast<Scintilla::uptr_t>(lineCharacterIndex), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AllocateLineCharacterIndex, static_cast<Scintilla::uptr_t>(lineCharacterIndex), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6220,7 +6220,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::ReleaseLineCharacterIndex(MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
-		_editor->PublicWndProc(Scintilla::Message::ReleaseLineCharacterIndex, static_cast<Scintilla::uptr_t>(lineCharacterIndex), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::ReleaseLineCharacterIndex, static_cast<Scintilla::uptr_t>(lineCharacterIndex), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6228,7 +6228,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::LineFromIndexPosition(int64_t pos, MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::LineFromIndexPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(lineCharacterIndex)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::LineFromIndexPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(lineCharacterIndex)));
 	}
 
 	/*
@@ -6236,7 +6236,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::IndexPositionFromLine(int64_t line, MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::IndexPositionFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(lineCharacterIndex)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndexPositionFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(lineCharacterIndex)));
 	}
 
 	/*
@@ -6244,7 +6244,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StartRecord()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StartRecord, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StartRecord, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6252,7 +6252,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StopRecord()
 	{
-		_editor->PublicWndProc(Scintilla::Message::StopRecord, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::StopRecord, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6260,7 +6260,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::Colourise(int64_t start, int64_t end)
 	{
-		_editor->PublicWndProc(Scintilla::Message::Colourise, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
+		_editor.get()->PublicWndProc(Scintilla::Message::Colourise, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(end));
 	}
 
 	/*
@@ -6268,7 +6268,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::PrivateLexerCall(int32_t operation, uint64_t pointer)
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::PrivateLexerCall, static_cast<Scintilla::uptr_t>(operation), static_cast<Scintilla::sptr_t>(pointer)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::PrivateLexerCall, static_cast<Scintilla::uptr_t>(operation), static_cast<Scintilla::sptr_t>(pointer)));
 	}
 
 	/*
@@ -6277,16 +6277,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::PropertyNamesWriteBuffer(Windows::Storage::Streams::IBuffer const &names)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::PropertyNames, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(names ? names.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyNames, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(names ? names.data() : nullptr)));
 	}
 
 	hstring Editor::PropertyNames()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::PropertyNames, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyNames, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::PropertyNames, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::PropertyNames, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6300,12 +6300,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::TypeProperty Editor::PropertyTypeFromBuffer(Windows::Storage::Streams::IBuffer const &name)
 	{
-		return static_cast<MicaEditor::TypeProperty>(_editor->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(name ? name.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::TypeProperty>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(name ? name.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	MicaEditor::TypeProperty Editor::PropertyType(hstring const &name)
 	{
-		return static_cast<MicaEditor::TypeProperty>(_editor->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(to_string(name).c_str()), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::TypeProperty>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(to_string(name).c_str()), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6314,17 +6314,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::DescribePropertyWriteBuffer(Windows::Storage::Streams::IBuffer const &name, Windows::Storage::Streams::IBuffer const &description)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::DescribeProperty, reinterpret_cast<Scintilla::uptr_t>(name ? name.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(description ? description.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::DescribeProperty, reinterpret_cast<Scintilla::uptr_t>(name ? name.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(description ? description.data() : nullptr)));
 	}
 
 	hstring Editor::DescribeProperty(hstring const &name)
 	{
 		const auto wParam{ reinterpret_cast<Scintilla::uptr_t>(to_string(name).c_str()) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::DescribeProperty, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::DescribeProperty, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::DescribeProperty, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::DescribeProperty, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6339,16 +6339,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::DescribeKeyWordSetsWriteBuffer(Windows::Storage::Streams::IBuffer const &descriptions)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::DescribeKeyWordSets, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(descriptions ? descriptions.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::DescribeKeyWordSets, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(descriptions ? descriptions.data() : nullptr)));
 	}
 
 	hstring Editor::DescribeKeyWordSets()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::DescribeKeyWordSets, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::DescribeKeyWordSets, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::DescribeKeyWordSets, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::DescribeKeyWordSets, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6362,7 +6362,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AllocateSubStyles(int32_t styleBase, int32_t numberStyles)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AllocateSubStyles, static_cast<Scintilla::uptr_t>(styleBase), static_cast<Scintilla::sptr_t>(numberStyles)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AllocateSubStyles, static_cast<Scintilla::uptr_t>(styleBase), static_cast<Scintilla::sptr_t>(numberStyles)));
 	}
 
 	/*
@@ -6370,7 +6370,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::FreeSubStyles()
 	{
-		_editor->PublicWndProc(Scintilla::Message::FreeSubStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::FreeSubStyles, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -6379,17 +6379,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::NameOfStyleWriteBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &name)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::NameOfStyle, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(name ? name.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::NameOfStyle, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(name ? name.data() : nullptr)));
 	}
 
 	hstring Editor::NameOfStyle(int32_t style)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(style) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::NameOfStyle, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::NameOfStyle, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::NameOfStyle, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::NameOfStyle, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6404,17 +6404,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::TagsOfStyleWriteBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &tags)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::TagsOfStyle, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(tags ? tags.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::TagsOfStyle, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(tags ? tags.data() : nullptr)));
 	}
 
 	hstring Editor::TagsOfStyle(int32_t style)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(style) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::TagsOfStyle, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::TagsOfStyle, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::TagsOfStyle, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::TagsOfStyle, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6429,17 +6429,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::DescriptionOfStyleWriteBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &description)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::DescriptionOfStyle, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(description ? description.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::DescriptionOfStyle, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(description ? description.data() : nullptr)));
 	}
 
 	hstring Editor::DescriptionOfStyle(int32_t style)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(style) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::DescriptionOfStyle, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::DescriptionOfStyle, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::DescriptionOfStyle, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::DescriptionOfStyle, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6453,7 +6453,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetCharAt(int64_t pos)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetCharAt, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetCharAt, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6461,7 +6461,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetStyleAt(int64_t pos)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetStyleAt, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetStyleAt, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6469,7 +6469,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetStyleIndexAt(int64_t pos)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetStyleIndexAt, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetStyleIndexAt, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6477,16 +6477,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetFontLocaleWriteBuffer(Windows::Storage::Streams::IBuffer const &localeName)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(localeName ? localeName.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(localeName ? localeName.data() : nullptr)));
 	}
 
 	hstring Editor::GetFontLocale()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetFontLocale, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetFontLocale, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6500,7 +6500,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Layer Editor::MarkerGetLayer(int32_t markerNumber)
 	{
-		return static_cast<MicaEditor::Layer>(_editor->PublicWndProc(Scintilla::Message::MarkerGetLayer, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerGetLayer, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6508,7 +6508,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::MarginType Editor::GetMarginTypeN(int32_t margin)
 	{
-		return static_cast<MicaEditor::MarginType>(_editor->PublicWndProc(Scintilla::Message::GetMarginTypeN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::MarginType>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginTypeN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6516,7 +6516,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetMarginWidthN(int32_t margin)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMarginWidthN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginWidthN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6524,7 +6524,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetMarginMaskN(int32_t margin)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMarginMaskN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginMaskN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6532,7 +6532,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::GetMarginSensitiveN(int32_t margin)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetMarginSensitiveN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginSensitiveN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6540,7 +6540,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::CursorShape Editor::GetMarginCursorN(int32_t margin)
 	{
-		return static_cast<MicaEditor::CursorShape>(_editor->PublicWndProc(Scintilla::Message::GetMarginCursorN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::CursorShape>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginCursorN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6548,7 +6548,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetMarginBackN(int32_t margin)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetMarginBackN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginBackN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6556,7 +6556,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::StyleGetFore(int32_t style)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetFore, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetFore, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6564,7 +6564,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::StyleGetBack(int32_t style)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetBack, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetBack, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6572,7 +6572,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetBold(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetBold, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetBold, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6580,7 +6580,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetItalic(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetItalic, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetItalic, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6588,7 +6588,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::StyleGetSize(int32_t style)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetSize, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetSize, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6598,17 +6598,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::StyleGetFontWriteBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &fontName)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetFont, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(fontName ? fontName.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetFont, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(fontName ? fontName.data() : nullptr)));
 	}
 
 	hstring Editor::StyleGetFont(int32_t style)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(style) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetFont, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetFont, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::StyleGetFont, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::StyleGetFont, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6622,7 +6622,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetEOLFilled(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetEOLFilled, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetEOLFilled, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6630,7 +6630,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetUnderline(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetUnderline, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetUnderline, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6638,7 +6638,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::CaseVisible Editor::StyleGetCase(int32_t style)
 	{
-		return static_cast<MicaEditor::CaseVisible>(_editor->PublicWndProc(Scintilla::Message::StyleGetCase, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::CaseVisible>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetCase, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6646,7 +6646,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::CharacterSet Editor::StyleGetCharacterSet(int32_t style)
 	{
-		return static_cast<MicaEditor::CharacterSet>(_editor->PublicWndProc(Scintilla::Message::StyleGetCharacterSet, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::CharacterSet>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetCharacterSet, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6654,7 +6654,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetVisible(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetVisible, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetVisible, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6663,7 +6663,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetChangeable(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetChangeable, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetChangeable, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6671,7 +6671,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetHotSpot(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetHotSpot, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetHotSpot, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6679,7 +6679,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::StyleGetSizeFractional(int32_t style)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetSizeFractional, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetSizeFractional, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6687,7 +6687,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::FontWeight Editor::StyleGetWeight(int32_t style)
 	{
-		return static_cast<MicaEditor::FontWeight>(_editor->PublicWndProc(Scintilla::Message::StyleGetWeight, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::FontWeight>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetWeight, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6695,7 +6695,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::StyleGetCheckMonospaced(int32_t style)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::StyleGetCheckMonospaced, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetCheckMonospaced, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6703,17 +6703,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::StyleGetInvisibleRepresentationWriteBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &representation)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetInvisibleRepresentation, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetInvisibleRepresentation, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr)));
 	}
 
 	hstring Editor::StyleGetInvisibleRepresentation(int32_t style)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(style) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::StyleGetInvisibleRepresentation, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetInvisibleRepresentation, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::StyleGetInvisibleRepresentation, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::StyleGetInvisibleRepresentation, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6727,7 +6727,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetElementColour(MicaEditor::Element const &element)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6736,7 +6736,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::GetElementIsSet(MicaEditor::Element const &element)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetElementIsSet, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementIsSet, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6744,7 +6744,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::GetElementAllowsTranslucent(MicaEditor::Element const &element)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetElementAllowsTranslucent, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementAllowsTranslucent, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6752,7 +6752,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetElementBaseColour(MicaEditor::Element const &element)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetElementBaseColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementBaseColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6761,16 +6761,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetWordCharsWriteBuffer(Windows::Storage::Streams::IBuffer const &characters)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr)));
 	}
 
 	hstring Editor::GetWordChars()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetWordChars, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetWordChars, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6784,7 +6784,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::IndicatorStyle Editor::IndicGetStyle(int32_t indicator)
 	{
-		return static_cast<MicaEditor::IndicatorStyle>(_editor->PublicWndProc(Scintilla::Message::IndicGetStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::IndicatorStyle>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6792,7 +6792,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::IndicGetFore(int32_t indicator)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::IndicGetFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6800,7 +6800,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::IndicGetUnder(int32_t indicator)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::IndicGetUnder, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetUnder, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6808,7 +6808,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::IndicatorStyle Editor::IndicGetHoverStyle(int32_t indicator)
 	{
-		return static_cast<MicaEditor::IndicatorStyle>(_editor->PublicWndProc(Scintilla::Message::IndicGetHoverStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::IndicatorStyle>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetHoverStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6816,7 +6816,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::IndicGetHoverFore(int32_t indicator)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::IndicGetHoverFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetHoverFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6824,7 +6824,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::IndicFlag Editor::IndicGetFlags(int32_t indicator)
 	{
-		return static_cast<MicaEditor::IndicFlag>(_editor->PublicWndProc(Scintilla::Message::IndicGetFlags, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::IndicFlag>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetFlags, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6832,7 +6832,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::IndicGetStrokeWidth(int32_t indicator)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::IndicGetStrokeWidth, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetStrokeWidth, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6840,7 +6840,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetLineState(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetLineState, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineState, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6848,7 +6848,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetLineIndentation(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetLineIndentation, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineIndentation, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6856,7 +6856,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetLineIndentPosition(int64_t line)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLineIndentPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineIndentPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6864,7 +6864,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetColumn(int64_t pos)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetColumn, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetColumn, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6872,7 +6872,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetLineEndPosition(int64_t line)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLineEndPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndPosition, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6880,16 +6880,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetTargetTextWriteBuffer(Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetTargetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTargetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::GetTargetText()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetTargetText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTargetText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetTargetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetTargetText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6903,7 +6903,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::FoldLevel Editor::GetFoldLevel(int64_t line)
 	{
-		return static_cast<MicaEditor::FoldLevel>(_editor->PublicWndProc(Scintilla::Message::GetFoldLevel, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::FoldLevel>(_editor.get()->PublicWndProc(Scintilla::Message::GetFoldLevel, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6911,7 +6911,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetLastChild(int64_t line, MicaEditor::FoldLevel const &level)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetLastChild, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLastChild, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level)));
 	}
 
 	/*
@@ -6919,7 +6919,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetFoldParent(int64_t line)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetFoldParent, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetFoldParent, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6927,7 +6927,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::GetLineVisible(int64_t line)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetLineVisible, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineVisible, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6935,7 +6935,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::GetFoldExpanded(int64_t line)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::GetFoldExpanded, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetFoldExpanded, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6944,17 +6944,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetTagWriteBuffer(int32_t tagNumber, Windows::Storage::Streams::IBuffer const &tagValue)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetTag, static_cast<Scintilla::uptr_t>(tagNumber), reinterpret_cast<Scintilla::sptr_t>(tagValue ? tagValue.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTag, static_cast<Scintilla::uptr_t>(tagNumber), reinterpret_cast<Scintilla::sptr_t>(tagValue ? tagValue.data() : nullptr)));
 	}
 
 	hstring Editor::GetTag(int32_t tagNumber)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(tagNumber) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetTag, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetTag, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetTag, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetTag, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -6968,7 +6968,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetMultiEdgeColumn(int32_t which)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetMultiEdgeColumn, static_cast<Scintilla::uptr_t>(which), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetMultiEdgeColumn, static_cast<Scintilla::uptr_t>(which), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6976,7 +6976,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetHotspotActiveFore()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetHotspotActiveFore, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetHotspotActiveFore, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6984,7 +6984,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetHotspotActiveBack()
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetHotspotActiveBack, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetHotspotActiveBack, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -6992,16 +6992,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetWhitespaceCharsWriteBuffer(Windows::Storage::Streams::IBuffer const &characters)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr)));
 	}
 
 	hstring Editor::GetWhitespaceChars()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7015,16 +7015,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetPunctuationCharsWriteBuffer(Windows::Storage::Streams::IBuffer const &characters)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr)));
 	}
 
 	hstring Editor::GetPunctuationChars()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetPunctuationChars, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPunctuationChars, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7040,16 +7040,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AutoCGetCurrentTextWriteBuffer(Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AutoCGetCurrentText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCurrentText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::AutoCGetCurrentText()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::AutoCGetCurrentText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCurrentText, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::AutoCGetCurrentText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCurrentText, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7065,7 +7065,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	uint64_t Editor::GetRangePointer(int64_t start, int64_t lengthRange)
 	{
-		return static_cast<uint64_t>(_editor->PublicWndProc(Scintilla::Message::GetRangePointer, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthRange)));
+		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRangePointer, static_cast<Scintilla::uptr_t>(start), static_cast<Scintilla::sptr_t>(lengthRange)));
 	}
 
 	/*
@@ -7073,7 +7073,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Alpha Editor::IndicGetAlpha(int32_t indicator)
 	{
-		return static_cast<MicaEditor::Alpha>(_editor->PublicWndProc(Scintilla::Message::IndicGetAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7081,7 +7081,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::Alpha Editor::IndicGetOutlineAlpha(int32_t indicator)
 	{
-		return static_cast<MicaEditor::Alpha>(_editor->PublicWndProc(Scintilla::Message::IndicGetOutlineAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetOutlineAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7089,17 +7089,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarginGetTextWriteBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarginGetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarginGetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::MarginGetText(int64_t line)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(line) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::MarginGetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarginGetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::MarginGetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::MarginGetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7113,7 +7113,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarginGetStyle(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarginGetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarginGetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7121,17 +7121,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::MarginGetStylesWriteBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &styles)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::MarginGetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarginGetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr)));
 	}
 
 	hstring Editor::MarginGetStyles(int64_t line)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(line) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::MarginGetStyles, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarginGetStyles, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::MarginGetStyles, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::MarginGetStyles, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7145,17 +7145,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AnnotationGetTextWriteBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::AnnotationGetText(int64_t line)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(line) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::AnnotationGetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7169,7 +7169,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AnnotationGetStyle(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7177,17 +7177,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AnnotationGetStylesWriteBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &styles)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr)));
 	}
 
 	hstring Editor::AnnotationGetStyles(int64_t line)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(line) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetStyles, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetStyles, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::AnnotationGetStyles, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetStyles, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7201,7 +7201,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::AnnotationGetLines(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::AnnotationGetLines, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetLines, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7209,7 +7209,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNCaret(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNCaret, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNCaret, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7217,7 +7217,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNAnchor(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNAnchor, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNAnchor, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7225,7 +7225,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNCaretVirtualSpace(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNCaretVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNCaretVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7233,7 +7233,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNAnchorVirtualSpace(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7241,7 +7241,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNStart(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNStart, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNStart, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7249,7 +7249,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNStartVirtualSpace(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNStartVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNStartVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7257,7 +7257,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNEndVirtualSpace(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNEndVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNEndVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7265,7 +7265,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int64_t Editor::GetSelectionNEnd(int32_t selection)
 	{
-		return static_cast<int64_t>(_editor->PublicWndProc(Scintilla::Message::GetSelectionNEnd, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionNEnd, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7274,17 +7274,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetRepresentationWriteBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, Windows::Storage::Streams::IBuffer const &representation)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetRepresentation, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentation, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr)));
 	}
 
 	hstring Editor::GetRepresentation(hstring const &encodedCharacter)
 	{
 		const auto wParam{ reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetRepresentation, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentation, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetRepresentation, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentation, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7298,12 +7298,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	MicaEditor::RepresentationAppearance Editor::GetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter)
 	{
-		return static_cast<MicaEditor::RepresentationAppearance>(_editor->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::RepresentationAppearance>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	MicaEditor::RepresentationAppearance Editor::GetRepresentationAppearance(hstring const &encodedCharacter)
 	{
-		return static_cast<MicaEditor::RepresentationAppearance>(_editor->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<MicaEditor::RepresentationAppearance>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7311,12 +7311,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetRepresentationColourFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	int32_t Editor::GetRepresentationColour(hstring const &encodedCharacter)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7324,17 +7324,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::EOLAnnotationGetTextWriteBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::EOLAnnotationGetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
 	hstring Editor::EOLAnnotationGetText(int64_t line)
 	{
 		const auto wParam{ static_cast<Scintilla::uptr_t>(line) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::EOLAnnotationGetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetText, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::EOLAnnotationGetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7348,7 +7348,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::EOLAnnotationGetStyle(int64_t line)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::EOLAnnotationGetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7356,7 +7356,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	bool Editor::SupportsFeature(MicaEditor::Supports const &feature)
 	{
-		return static_cast<bool>(_editor->PublicWndProc(Scintilla::Message::SupportsFeature, static_cast<Scintilla::uptr_t>(feature), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::SupportsFeature, static_cast<Scintilla::uptr_t>(feature), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7365,17 +7365,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetPropertyWriteBuffer(Windows::Storage::Streams::IBuffer const &key, Windows::Storage::Streams::IBuffer const &value)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetProperty, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(value ? value.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetProperty, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(value ? value.data() : nullptr)));
 	}
 
 	hstring Editor::GetProperty(hstring const &key)
 	{
 		const auto wParam{ reinterpret_cast<Scintilla::uptr_t>(to_string(key).c_str()) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetProperty, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetProperty, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetProperty, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetProperty, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7391,17 +7391,17 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetPropertyExpandedWriteBuffer(Windows::Storage::Streams::IBuffer const &key, Windows::Storage::Streams::IBuffer const &value)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetPropertyExpanded, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(value ? value.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPropertyExpanded, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(value ? value.data() : nullptr)));
 	}
 
 	hstring Editor::GetPropertyExpanded(hstring const &key)
 	{
 		const auto wParam{ reinterpret_cast<Scintilla::uptr_t>(to_string(key).c_str()) };
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetPropertyExpanded, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPropertyExpanded, wParam, static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetPropertyExpanded, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetPropertyExpanded, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7416,12 +7416,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetPropertyIntFromBuffer(Windows::Storage::Streams::IBuffer const &key, int32_t defaultValue)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetPropertyInt, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), static_cast<Scintilla::sptr_t>(defaultValue)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPropertyInt, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), static_cast<Scintilla::sptr_t>(defaultValue)));
 	}
 
 	int32_t Editor::GetPropertyInt(hstring const &key, int32_t defaultValue)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetPropertyInt, reinterpret_cast<Scintilla::uptr_t>(to_string(key).c_str()), static_cast<Scintilla::sptr_t>(defaultValue)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPropertyInt, reinterpret_cast<Scintilla::uptr_t>(to_string(key).c_str()), static_cast<Scintilla::sptr_t>(defaultValue)));
 	}
 
 	/*
@@ -7431,16 +7431,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetLexerLanguageWriteBuffer(Windows::Storage::Streams::IBuffer const &language)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetLexerLanguage, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(language ? language.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLexerLanguage, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(language ? language.data() : nullptr)));
 	}
 
 	hstring Editor::GetLexerLanguage()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetLexerLanguage, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLexerLanguage, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetLexerLanguage, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetLexerLanguage, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7454,7 +7454,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetSubStylesStart(int32_t styleBase)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetSubStylesStart, static_cast<Scintilla::uptr_t>(styleBase), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSubStylesStart, static_cast<Scintilla::uptr_t>(styleBase), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7462,7 +7462,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetSubStylesLength(int32_t styleBase)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetSubStylesLength, static_cast<Scintilla::uptr_t>(styleBase), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSubStylesLength, static_cast<Scintilla::uptr_t>(styleBase), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7470,7 +7470,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetStyleFromSubStyle(int32_t subStyle)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetStyleFromSubStyle, static_cast<Scintilla::uptr_t>(subStyle), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetStyleFromSubStyle, static_cast<Scintilla::uptr_t>(subStyle), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7478,7 +7478,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetPrimaryStyleFromStyle(int32_t style)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetPrimaryStyleFromStyle, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrimaryStyleFromStyle, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/*
@@ -7487,16 +7487,16 @@ namespace winrt::MicaEditor::implementation
 	 */
 	int32_t Editor::GetSubStyleBasesWriteBuffer(Windows::Storage::Streams::IBuffer const &styles)
 	{
-		return static_cast<int32_t>(_editor->PublicWndProc(Scintilla::Message::GetSubStyleBases, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr)));
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSubStyleBases, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr)));
 	}
 
 	hstring Editor::GetSubStyleBases()
 	{
-		const auto len{ static_cast<size_t>(_editor->PublicWndProc(Scintilla::Message::GetSubStyleBases, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetSubStyleBases, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0))) };
 		if (len)
 		{
 			std::string value(len, '\0');
-			_editor->PublicWndProc(Scintilla::Message::GetSubStyleBases, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			_editor.get()->PublicWndProc(Scintilla::Message::GetSubStyleBases, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else
@@ -7510,12 +7510,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetFontLocaleFromBuffer(Windows::Storage::Streams::IBuffer const &localeName)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(localeName ? localeName.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(localeName ? localeName.data() : nullptr));
 	}
 
 	void Editor::SetFontLocale(hstring const &localeName)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(localeName).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFontLocale, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(localeName).c_str()));
 	}
 
 	/*
@@ -7523,7 +7523,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetFore(int32_t markerNumber, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetFore, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetFore, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -7531,7 +7531,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetBack(int32_t markerNumber, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetBack, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetBack, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -7539,7 +7539,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetBackSelected(int32_t markerNumber, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetBackSelected, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetBackSelected, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -7547,7 +7547,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetForeTranslucent(int32_t markerNumber, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetForeTranslucent, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetForeTranslucent, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -7555,7 +7555,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetBackTranslucent(int32_t markerNumber, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetBackTranslucent, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetBackTranslucent, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -7563,7 +7563,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetBackSelectedTranslucent(int32_t markerNumber, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetBackSelectedTranslucent, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetBackSelectedTranslucent, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -7571,7 +7571,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetStrokeWidth(int32_t markerNumber, int32_t hundredths)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetStrokeWidth, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(hundredths));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetStrokeWidth, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(hundredths));
 	}
 
 	/*
@@ -7579,7 +7579,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetAlpha(int32_t markerNumber, MicaEditor::Alpha const &alpha)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetAlpha, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(alpha));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetAlpha, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(alpha));
 	}
 
 	/*
@@ -7587,7 +7587,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarkerSetLayer(int32_t markerNumber, MicaEditor::Layer const &layer)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarkerSetLayer, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(layer));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetLayer, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(layer));
 	}
 
 	/*
@@ -7595,7 +7595,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetMarginTypeN(int32_t margin, MicaEditor::MarginType const &marginType)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginTypeN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(marginType));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginTypeN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(marginType));
 	}
 
 	/*
@@ -7603,7 +7603,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetMarginWidthN(int32_t margin, int32_t pixelWidth)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginWidthN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(pixelWidth));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginWidthN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(pixelWidth));
 	}
 
 	/*
@@ -7611,7 +7611,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetMarginMaskN(int32_t margin, int32_t mask)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginMaskN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(mask));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginMaskN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(mask));
 	}
 
 	/*
@@ -7619,7 +7619,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetMarginSensitiveN(int32_t margin, bool sensitive)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginSensitiveN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(sensitive));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginSensitiveN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(sensitive));
 	}
 
 	/*
@@ -7627,7 +7627,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetMarginCursorN(int32_t margin, MicaEditor::CursorShape const &cursor)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginCursorN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(cursor));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginCursorN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(cursor));
 	}
 
 	/*
@@ -7635,7 +7635,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetMarginBackN(int32_t margin, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMarginBackN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginBackN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -7643,7 +7643,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetFore(int32_t style, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetFore, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetFore, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -7651,7 +7651,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetBack(int32_t style, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetBack, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetBack, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -7659,7 +7659,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetBold(int32_t style, bool bold)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetBold, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(bold));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetBold, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(bold));
 	}
 
 	/*
@@ -7667,7 +7667,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetItalic(int32_t style, bool italic)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetItalic, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(italic));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetItalic, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(italic));
 	}
 
 	/*
@@ -7675,7 +7675,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetSize(int32_t style, int32_t sizePoints)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetSize, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(sizePoints));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetSize, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(sizePoints));
 	}
 
 	/*
@@ -7683,12 +7683,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetFontFromBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &fontName)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetFont, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(fontName ? fontName.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetFont, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(fontName ? fontName.data() : nullptr));
 	}
 
 	void Editor::StyleSetFont(int32_t style, hstring const &fontName)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetFont, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(fontName).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetFont, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(fontName).c_str()));
 	}
 
 	/*
@@ -7696,7 +7696,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetEOLFilled(int32_t style, bool eolFilled)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetEOLFilled, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(eolFilled));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetEOLFilled, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(eolFilled));
 	}
 
 	/*
@@ -7704,7 +7704,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetUnderline(int32_t style, bool underline)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetUnderline, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(underline));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetUnderline, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(underline));
 	}
 
 	/*
@@ -7712,7 +7712,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetCase(int32_t style, MicaEditor::CaseVisible const &caseVisible)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetCase, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(caseVisible));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetCase, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(caseVisible));
 	}
 
 	/*
@@ -7720,7 +7720,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetSizeFractional(int32_t style, int32_t sizeHundredthPoints)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetSizeFractional, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(sizeHundredthPoints));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetSizeFractional, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(sizeHundredthPoints));
 	}
 
 	/*
@@ -7728,7 +7728,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetWeight(int32_t style, MicaEditor::FontWeight const &weight)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetWeight, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(weight));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetWeight, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(weight));
 	}
 
 	/*
@@ -7736,7 +7736,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetCharacterSet(int32_t style, MicaEditor::CharacterSet const &characterSet)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetCharacterSet, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(characterSet));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetCharacterSet, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(characterSet));
 	}
 
 	/*
@@ -7744,7 +7744,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetHotSpot(int32_t style, bool hotspot)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetHotSpot, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(hotspot));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetHotSpot, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(hotspot));
 	}
 
 	/*
@@ -7752,7 +7752,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetCheckMonospaced(int32_t style, bool checkMonospaced)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetCheckMonospaced, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(checkMonospaced));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetCheckMonospaced, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(checkMonospaced));
 	}
 
 	/*
@@ -7760,12 +7760,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetInvisibleRepresentationFromBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &representation)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetInvisibleRepresentation, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetInvisibleRepresentation, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr));
 	}
 
 	void Editor::StyleSetInvisibleRepresentation(int32_t style, hstring const &representation)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetInvisibleRepresentation, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(representation).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetInvisibleRepresentation, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(representation).c_str()));
 	}
 
 	/*
@@ -7774,7 +7774,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetElementColour(MicaEditor::Element const &element, int32_t colourElement)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(colourElement));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(colourElement));
 	}
 
 	/*
@@ -7782,7 +7782,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetVisible(int32_t style, bool visible)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetVisible, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(visible));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetVisible, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(visible));
 	}
 
 	/*
@@ -7791,12 +7791,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetWordCharsFromBuffer(Windows::Storage::Streams::IBuffer const &characters)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr));
 	}
 
 	void Editor::SetWordChars(hstring const &characters)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characters).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characters).c_str()));
 	}
 
 	/*
@@ -7804,7 +7804,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetStyle(int32_t indicator, MicaEditor::IndicatorStyle const &indicatorStyle)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(indicatorStyle));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(indicatorStyle));
 	}
 
 	/*
@@ -7812,7 +7812,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetFore(int32_t indicator, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -7820,7 +7820,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetUnder(int32_t indicator, bool under)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetUnder, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(under));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetUnder, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(under));
 	}
 
 	/*
@@ -7828,7 +7828,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetHoverStyle(int32_t indicator, MicaEditor::IndicatorStyle const &indicatorStyle)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetHoverStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(indicatorStyle));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetHoverStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(indicatorStyle));
 	}
 
 	/*
@@ -7836,7 +7836,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetHoverFore(int32_t indicator, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetHoverFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetHoverFore, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -7844,7 +7844,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetFlags(int32_t indicator, MicaEditor::IndicFlag const &flags)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetFlags, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(flags));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetFlags, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(flags));
 	}
 
 	/*
@@ -7852,7 +7852,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetStrokeWidth(int32_t indicator, int32_t hundredths)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetStrokeWidth, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(hundredths));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetStrokeWidth, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(hundredths));
 	}
 
 	/*
@@ -7860,7 +7860,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetLineState(int64_t line, int32_t state)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetLineState, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(state));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetLineState, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(state));
 	}
 
 	/*
@@ -7869,7 +7869,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::StyleSetChangeable(int32_t style, bool changeable)
 	{
-		_editor->PublicWndProc(Scintilla::Message::StyleSetChangeable, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(changeable));
+		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetChangeable, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(changeable));
 	}
 
 	/*
@@ -7878,12 +7878,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AutoCSetFillUpsFromBuffer(Windows::Storage::Streams::IBuffer const &characterSet)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetFillUps, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characterSet ? characterSet.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetFillUps, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characterSet ? characterSet.data() : nullptr));
 	}
 
 	void Editor::AutoCSetFillUps(hstring const &characterSet)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AutoCSetFillUps, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characterSet).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetFillUps, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characterSet).c_str()));
 	}
 
 	/*
@@ -7891,7 +7891,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetLineIndentation(int64_t line, int32_t indentation)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetLineIndentation, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(indentation));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetLineIndentation, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(indentation));
 	}
 
 	/*
@@ -7899,7 +7899,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AllocateLines(int64_t lines)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AllocateLines, static_cast<Scintilla::uptr_t>(lines), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::AllocateLines, static_cast<Scintilla::uptr_t>(lines), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7907,7 +7907,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipSetPosStart(int64_t posStart)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipSetPosStart, static_cast<Scintilla::uptr_t>(posStart), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipSetPosStart, static_cast<Scintilla::uptr_t>(posStart), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7915,7 +7915,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipSetBack(int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipSetBack, static_cast<Scintilla::uptr_t>(back), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipSetBack, static_cast<Scintilla::uptr_t>(back), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7923,7 +7923,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipSetFore(int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipSetFore, static_cast<Scintilla::uptr_t>(fore), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipSetFore, static_cast<Scintilla::uptr_t>(fore), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7931,7 +7931,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipSetForeHlt(int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipSetForeHlt, static_cast<Scintilla::uptr_t>(fore), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipSetForeHlt, static_cast<Scintilla::uptr_t>(fore), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7939,7 +7939,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipUseStyle(int32_t tabSize)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipUseStyle, static_cast<Scintilla::uptr_t>(tabSize), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipUseStyle, static_cast<Scintilla::uptr_t>(tabSize), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7947,7 +7947,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::CallTipSetPosition(bool above)
 	{
-		_editor->PublicWndProc(Scintilla::Message::CallTipSetPosition, static_cast<Scintilla::uptr_t>(above), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::CallTipSetPosition, static_cast<Scintilla::uptr_t>(above), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7957,7 +7957,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetFoldLevel(int64_t line, MicaEditor::FoldLevel const &level)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFoldLevel, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFoldLevel, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level));
 	}
 
 	/*
@@ -7965,7 +7965,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetFoldExpanded(int64_t line, bool expanded)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFoldExpanded, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(expanded));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFoldExpanded, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(expanded));
 	}
 
 	/*
@@ -7973,7 +7973,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetFoldFlags(MicaEditor::FoldFlag const &flags)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetFoldFlags, static_cast<Scintilla::uptr_t>(flags), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetFoldFlags, static_cast<Scintilla::uptr_t>(flags), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -7981,7 +7981,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetHotspotActiveFore(bool useSetting, int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetHotspotActiveFore, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetHotspotActiveFore, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(fore));
 	}
 
 	/*
@@ -7989,7 +7989,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetHotspotActiveBack(bool useSetting, int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetHotspotActiveBack, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetHotspotActiveBack, static_cast<Scintilla::uptr_t>(useSetting), static_cast<Scintilla::sptr_t>(back));
 	}
 
 	/*
@@ -7998,12 +7998,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetWhitespaceCharsFromBuffer(Windows::Storage::Streams::IBuffer const &characters)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr));
 	}
 
 	void Editor::SetWhitespaceChars(hstring const &characters)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characters).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetWhitespaceChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characters).c_str()));
 	}
 
 	/*
@@ -8012,12 +8012,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetPunctuationCharsFromBuffer(Windows::Storage::Streams::IBuffer const &characters)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(characters ? characters.data() : nullptr));
 	}
 
 	void Editor::SetPunctuationChars(hstring const &characters)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characters).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetPunctuationChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(to_string(characters).c_str()));
 	}
 
 	/*
@@ -8025,7 +8025,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetAlpha(int32_t indicator, MicaEditor::Alpha const &alpha)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(alpha));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(alpha));
 	}
 
 	/*
@@ -8033,7 +8033,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::IndicSetOutlineAlpha(int32_t indicator, MicaEditor::Alpha const &alpha)
 	{
-		_editor->PublicWndProc(Scintilla::Message::IndicSetOutlineAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(alpha));
+		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetOutlineAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(alpha));
 	}
 
 	/*
@@ -8041,12 +8041,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginSetTextFromBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarginSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarginSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::MarginSetText(int64_t line, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarginSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarginSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -8054,7 +8054,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginSetStyle(int64_t line, int32_t style)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarginSetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(style));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarginSetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(style));
 	}
 
 	/*
@@ -8062,12 +8062,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::MarginSetStylesFromBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &styles)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarginSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarginSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr));
 	}
 
 	void Editor::MarginSetStyles(int64_t line, hstring const &styles)
 	{
-		_editor->PublicWndProc(Scintilla::Message::MarginSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(styles).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::MarginSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(styles).c_str()));
 	}
 
 	/*
@@ -8075,12 +8075,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AnnotationSetTextFromBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::AnnotationSetText(int64_t line, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -8088,7 +8088,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AnnotationSetStyle(int64_t line, int32_t style)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationSetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(style));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(style));
 	}
 
 	/*
@@ -8096,12 +8096,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::AnnotationSetStylesFromBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &styles)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(styles ? styles.data() : nullptr));
 	}
 
 	void Editor::AnnotationSetStyles(int64_t line, hstring const &styles)
 	{
-		_editor->PublicWndProc(Scintilla::Message::AnnotationSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(styles).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetStyles, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(styles).c_str()));
 	}
 
 	/*
@@ -8109,7 +8109,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelectionNCaret(int32_t selection, int64_t caret)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionNCaret, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(caret));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionNCaret, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(caret));
 	}
 
 	/*
@@ -8117,7 +8117,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelectionNAnchor(int32_t selection, int64_t anchor)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionNAnchor, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(anchor));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionNAnchor, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(anchor));
 	}
 
 	/*
@@ -8125,7 +8125,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelectionNCaretVirtualSpace(int32_t selection, int64_t space)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionNCaretVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(space));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionNCaretVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(space));
 	}
 
 	/*
@@ -8133,7 +8133,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelectionNAnchorVirtualSpace(int32_t selection, int64_t space)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionNAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(space));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionNAnchorVirtualSpace, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(space));
 	}
 
 	/*
@@ -8141,7 +8141,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelectionNStart(int32_t selection, int64_t anchor)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionNStart, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(anchor));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionNStart, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(anchor));
 	}
 
 	/*
@@ -8149,7 +8149,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetSelectionNEnd(int32_t selection, int64_t caret)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionNEnd, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(caret));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionNEnd, static_cast<Scintilla::uptr_t>(selection), static_cast<Scintilla::sptr_t>(caret));
 	}
 
 	/*
@@ -8158,7 +8158,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetAdditionalSelFore(int32_t fore)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalSelFore, static_cast<Scintilla::uptr_t>(fore), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalSelFore, static_cast<Scintilla::uptr_t>(fore), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -8167,7 +8167,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetAdditionalSelBack(int32_t back)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalSelBack, static_cast<Scintilla::uptr_t>(back), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalSelBack, static_cast<Scintilla::uptr_t>(back), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -8175,7 +8175,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RGBAImageSetWidth(int32_t width)
 	{
-		_editor->PublicWndProc(Scintilla::Message::RGBAImageSetWidth, static_cast<Scintilla::uptr_t>(width), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::RGBAImageSetWidth, static_cast<Scintilla::uptr_t>(width), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -8183,7 +8183,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RGBAImageSetHeight(int32_t height)
 	{
-		_editor->PublicWndProc(Scintilla::Message::RGBAImageSetHeight, static_cast<Scintilla::uptr_t>(height), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::RGBAImageSetHeight, static_cast<Scintilla::uptr_t>(height), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -8191,7 +8191,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::RGBAImageSetScale(int32_t scalePercent)
 	{
-		_editor->PublicWndProc(Scintilla::Message::RGBAImageSetScale, static_cast<Scintilla::uptr_t>(scalePercent), static_cast<Scintilla::sptr_t>(0));
+		_editor.get()->PublicWndProc(Scintilla::Message::RGBAImageSetScale, static_cast<Scintilla::uptr_t>(scalePercent), static_cast<Scintilla::sptr_t>(0));
 	}
 
 	/*
@@ -8199,12 +8199,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetRepresentationFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, Windows::Storage::Streams::IBuffer const &representation)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRepresentation, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentation, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(representation ? representation.data() : nullptr));
 	}
 
 	void Editor::SetRepresentation(hstring const &encodedCharacter, hstring const &representation)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRepresentation, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), reinterpret_cast<Scintilla::sptr_t>(to_string(representation).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentation, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), reinterpret_cast<Scintilla::sptr_t>(to_string(representation).c_str()));
 	}
 
 	/*
@@ -8212,12 +8212,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, MicaEditor::RepresentationAppearance const &appearance)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(appearance));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(appearance));
 	}
 
 	void Editor::SetRepresentationAppearance(hstring const &encodedCharacter, MicaEditor::RepresentationAppearance const &appearance)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(appearance));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(appearance));
 	}
 
 	/*
@@ -8225,12 +8225,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetRepresentationColourFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, int32_t colour)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(colour));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(colour));
 	}
 
 	void Editor::SetRepresentationColour(hstring const &encodedCharacter, int32_t colour)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(colour));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentationColour, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(colour));
 	}
 
 	/*
@@ -8238,12 +8238,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EOLAnnotationSetTextFromBuffer(int64_t line, Windows::Storage::Streams::IBuffer const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::EOLAnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
 	}
 
 	void Editor::EOLAnnotationSetText(int64_t line, hstring const &text)
 	{
-		_editor->PublicWndProc(Scintilla::Message::EOLAnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationSetText, static_cast<Scintilla::uptr_t>(line), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/*
@@ -8251,7 +8251,7 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::EOLAnnotationSetStyle(int64_t line, int32_t style)
 	{
-		_editor->PublicWndProc(Scintilla::Message::EOLAnnotationSetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(style));
+		_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationSetStyle, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(style));
 	}
 
 	/*
@@ -8259,12 +8259,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetPropertyFromBuffer(Windows::Storage::Streams::IBuffer const &key, Windows::Storage::Streams::IBuffer const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetProperty, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(value ? value.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetProperty, reinterpret_cast<Scintilla::uptr_t>(key ? key.data() : nullptr), reinterpret_cast<Scintilla::sptr_t>(value ? value.data() : nullptr));
 	}
 
 	void Editor::SetProperty(hstring const &key, hstring const &value)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetProperty, reinterpret_cast<Scintilla::uptr_t>(to_string(key).c_str()), reinterpret_cast<Scintilla::sptr_t>(to_string(value).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetProperty, reinterpret_cast<Scintilla::uptr_t>(to_string(key).c_str()), reinterpret_cast<Scintilla::sptr_t>(to_string(value).c_str()));
 	}
 
 	/*
@@ -8272,12 +8272,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetKeyWordsFromBuffer(int32_t keyWordSet, Windows::Storage::Streams::IBuffer const &keyWords)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetKeyWords, static_cast<Scintilla::uptr_t>(keyWordSet), reinterpret_cast<Scintilla::sptr_t>(keyWords ? keyWords.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetKeyWords, static_cast<Scintilla::uptr_t>(keyWordSet), reinterpret_cast<Scintilla::sptr_t>(keyWords ? keyWords.data() : nullptr));
 	}
 
 	void Editor::SetKeyWords(int32_t keyWordSet, hstring const &keyWords)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetKeyWords, static_cast<Scintilla::uptr_t>(keyWordSet), reinterpret_cast<Scintilla::sptr_t>(to_string(keyWords).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetKeyWords, static_cast<Scintilla::uptr_t>(keyWordSet), reinterpret_cast<Scintilla::sptr_t>(to_string(keyWords).c_str()));
 	}
 
 	/*
@@ -8285,12 +8285,12 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetIdentifiersFromBuffer(int32_t style, Windows::Storage::Streams::IBuffer const &identifiers)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIdentifiers, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(identifiers ? identifiers.data() : nullptr));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIdentifiers, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(identifiers ? identifiers.data() : nullptr));
 	}
 
 	void Editor::SetIdentifiers(int32_t style, hstring const &identifiers)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetIdentifiers, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(identifiers).c_str()));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetIdentifiers, static_cast<Scintilla::uptr_t>(style), reinterpret_cast<Scintilla::sptr_t>(to_string(identifiers).c_str()));
 	}
 
 	/*
@@ -8298,6 +8298,6 @@ namespace winrt::MicaEditor::implementation
 	 */
 	void Editor::SetILexer(uint64_t ilexer)
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetILexer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(ilexer));
+		_editor.get()->PublicWndProc(Scintilla::Message::SetILexer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(ilexer));
 	}
 }

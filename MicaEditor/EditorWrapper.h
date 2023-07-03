@@ -4663,6 +4663,6 @@ namespace winrt::MicaEditor::implementation
 		event<MicaEditor::MarginRightClickHandler> _marginRightClickEvent;
 		event<MicaEditor::AutoCSelectionChangeHandler> _autoCSelectionChangeEvent;
 
-		com_ptr<MicaEditorControl> _editor{ nullptr };
+		weak_ref<MicaEditorControl> _editor{ nullptr };
 	};
 }
