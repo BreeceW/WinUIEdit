@@ -33,6 +33,9 @@ namespace winrt::MicaEditor::implementation
 
 		void StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color);
 
+		event_token DpiChanged(Windows::Foundation::EventHandler<double> const &handler);
+		void DpiChanged(event_token const &token) noexcept;
+
 	private:
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
@@ -47,6 +50,7 @@ namespace winrt::MicaEditor::implementation
 		MicaEditor::Editor _editorWrapper{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale;
+		event<Windows::Foundation::EventHandler<double>> _dpiChangedEvent;
 		DUXC::Image::SizeChanged_revoker _imageTargetSizeChangedRevoker{};
 		void ImageTarget_SizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
 		DUXC::Image::PointerWheelChanged_revoker _imageTargetPointerWheelChangedRevoker{};

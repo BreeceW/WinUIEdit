@@ -166,6 +166,7 @@ namespace winrt::MicaEditor::implementation
 			_wrapper->LogicalDpi(dpiScale * 96);
 			_dpiScale = dpiScale;
 			_scintilla->DpiChanged();
+			_dpiChangedEvent(*this, dpiScale);
 		}
 	}
 
@@ -605,6 +606,16 @@ namespace winrt::MicaEditor::implementation
 		}
 
 		return 0;
+	}
+
+	event_token MicaEditorControl::DpiChanged(EventHandler<double> const &handler)
+	{
+		return _dpiChangedEvent.add(handler);
+	}
+
+	void MicaEditorControl::DpiChanged(event_token const &token) noexcept
+	{
+		_dpiChangedEvent.remove(token);
 	}
 
 #ifndef WINUI3
