@@ -484,7 +484,7 @@ namespace Scintilla::Internal {
 			winrt::check_hresult(_tfThreadManager->CreateDocumentMgr(_tfDocumentManager.put()));
 			winrt::check_hresult(_tfDocumentManager->CreateContext(_tfClientId, 0, static_cast<ITextStoreACP2 *>(this), _tfContext.put(), &_tfEditCookie));
 			winrt::check_hresult(_tfDocumentManager->Push(_tfContext.get()));
-			// Todo: Some of this might have to be manually deinitialized. Namely, the Push part (Pop?)
+			// Todo: This is cleaned up in the Finalize method. Make sure everything is truly shut down
 		}
 
 		_caretTickRevoker = _caretTimer.Tick(winrt::auto_revoke, { this, &ScintillaWinUI::OnCaretTimerTick });
@@ -809,6 +809,20 @@ namespace Scintilla::Internal {
 		ScintillaBase::Finalise();
 		StopTimers();
 		SetIdle(false);
+		if (_vsisNative)
+		{
+			_vsisNative->RegisterForUpdatesNeeded(nullptr);
+		}
+		if (_tfDocumentManager)
+		{
+			_tfDocumentManager->Pop(TF_POPF_ALL);
+			_tfDocumentManager = nullptr;
+			_tfThreadManager->Deactivate();
+			_tfThreadManager = nullptr;
+			_tfContext = nullptr;
+			_sinkUnk = nullptr;
+			_tfTextStoreACPSink = nullptr;
+		}
 		//DropRenderTarget(); // WinUI Todo
 		/*::RevokeDragDrop(MainHWND());
 		if (SUCCEEDED(hrOle)) {
