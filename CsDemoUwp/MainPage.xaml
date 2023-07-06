@@ -10,5 +10,5 @@
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
 
-    <mica:MicaEditorControl x:Name="Mica" />
+    <mica:CodeEditorControl x:Name="Editor" />
 </Page>
