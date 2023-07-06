@@ -28,7 +28,9 @@ namespace winrt::MicaEditor::implementation
 		_editor->DpiChanged({ this, &CodeEditorControl::Editor_DpiChanged });
 		_editor->ScintillaNotification({ this, &CodeEditorControl::Editor_ScintillaNotification });
 
-		_gettingFocusRevoker = GettingFocus(auto_revoke, { this, &CodeEditorControl::OnGettingFocus });
+		Loaded({ this, &CodeEditorControl::OnLoaded });
+		Unloaded({ this, &CodeEditorControl::OnUnloaded });
+		GettingFocus({ this, &CodeEditorControl::OnGettingFocus });
 
 #ifndef WINUI3
 		if (_hasFcu)
@@ -44,10 +46,91 @@ namespace winrt::MicaEditor::implementation
 	{
 		__super::OnApplyTemplate();
 
+#ifndef WINUI3
+		if (_hasFcu)
+		{
+#endif
+			UpdateColors(ActualTheme());
+#ifndef WINUI3
+		}
+		else
+		{
+			UpdateColors(LegacyActualTheme());
+		}
+#endif
+
 		if (const auto presenter{ GetTemplateChild(L"EditorContainer").try_as<ContentPresenter>() })
 		{
 			presenter.Content(_editor.as<MicaEditor::MicaEditorControl>());
 		}
+	}
+
+	void CodeEditorControl::OnLoaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
+	{
+#ifndef WINUI3
+		_isLoaded = true;
+#endif
+
+		if (!IsLoadedCompat())
+		{
+			return;
+		}
+
+#ifndef WINUI3
+		if (_hasFcu)
+		{
+#endif
+			UpdateColors(ActualTheme());
+			_actualThemeChangedRevoker = ActualThemeChanged(auto_revoke, { this, &CodeEditorControl::OnActualThemeChanged });
+#ifndef WINUI3
+		}
+		else
+		{
+			UpdateColors(LegacyActualTheme());
+			// Todo: Add fallback for ActualThemeChanged
+		}
+#endif
+	}
+
+	void CodeEditorControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
+	{
+#ifndef WINUI3
+		_isLoaded = false;
+#endif
+
+		if (IsLoadedCompat())
+		{
+			return;
+		}
+
+#ifndef WINUI3
+		if (_hasFcu)
+		{
+#endif
+			_actualThemeChangedRevoker.revoke();
+#ifndef WINUI3
+		}
+		else
+		{
+			// Todo: Add fallback
+		}
+#endif
+	}
+
+	bool CodeEditorControl::IsLoadedCompat()
+	{
+#ifndef WINUI3
+		if (_hasIsLoaded)
+		{
+#endif
+			return IsLoaded();
+#ifndef WINUI3
+		}
+		else
+		{
+			return _isLoaded;
+		}
+#endif
 	}
 
 	void CodeEditorControl::OnGettingFocus(IInspectable const &sender, GettingFocusEventArgs const &e)
@@ -93,6 +176,11 @@ namespace winrt::MicaEditor::implementation
 		return _editor->Editor();
 	}
 
+	void CodeEditorControl::OnActualThemeChanged(IInspectable const &sender, IInspectable const &e)
+	{
+		UpdateColors(ActualTheme());
+	}
+
 	void CodeEditorControl::Editor_DpiChanged(IInspectable const &sender, double value)
 	{
 		_dpiScale = value;
@@ -109,6 +197,33 @@ namespace winrt::MicaEditor::implementation
 			|| (data->nmhdr.code == Scintilla::Notification::Modified && data->linesAdded))
 		{
 			UpdateZoom();
+		}
+	}
+
+	void CodeEditorControl::UpdateColors(DUX::ElementTheme theme)
+	{
+		// Todo: Support high contrast mode
+
+		if (_theme != theme)
+		{
+			_theme = theme;
+
+			switch (theme)
+			{
+			case ElementTheme::Dark:
+				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, 0, Scintilla::Internal::ColourRGBA{ 255, 255, 255 }.AsInteger());
+				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x85, 0x85, 0x85));
+				_editor->PublicWndProc(Scintilla::Message::SetCaretFore, RGB(0xAE, 0xAF, 0xAD), 0);
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
+				break;
+
+			case ElementTheme::Light:
+				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, 0, Scintilla::Internal::ColourRGBA{ 0, 0, 0 }.AsInteger());
+				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x23, 0x78, 0x93));
+				_editor->PublicWndProc(Scintilla::Message::SetCaretFore, RGB(0x00, 0x00, 0x00), 0);
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
+				break;
+			}
 		}
 	}
 
@@ -148,5 +263,27 @@ namespace winrt::MicaEditor::implementation
 		_editor->PublicWndProc(Scintilla::Message::SetAdditionalSelectionTyping, 1, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetMultiPaste, SC_MULTIPASTE_EACH, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetLayoutThreads, 16, 0); // Todo: Determine performance impact
+
+		_editor->StyleSetBackTransparent(0, Scintilla::Internal::ColourRGBA{});
+		_editor->StyleSetBackTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{});
+		_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
 	}
+
+#ifndef WINUI3
+	DUX::ElementTheme CodeEditorControl::LegacyActualTheme()
+	{
+		// Todo: Fully implement
+		const auto requestedTheme{ RequestedTheme() };
+		if (requestedTheme == ElementTheme::Default)
+		{
+			return Application::Current().RequestedTheme() == ApplicationTheme::Dark
+				? ElementTheme::Dark
+				: ElementTheme::Light;
+		}
+		else
+		{
+			return requestedTheme;
+		}
+	}
+#endif
 }

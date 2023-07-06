@@ -52,7 +52,7 @@ namespace winrt::MicaEditor::implementation
 		bool _isContextMenuOpen{ false };
 		MicaEditor::Editor _editorWrapper{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
-		float _dpiScale;
+		float _dpiScale{ 0 };
 		event<Windows::Foundation::EventHandler<double>> _dpiChangedEvent;
 		event<Windows::Foundation::EventHandler<uint64_t>> _scintillaNotificationEvent;
 		DUXC::Image::SizeChanged_revoker _imageTargetSizeChangedRevoker{};
