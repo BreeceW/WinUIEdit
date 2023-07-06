@@ -36,6 +36,9 @@ namespace winrt::MicaEditor::implementation
 		event_token DpiChanged(Windows::Foundation::EventHandler<double> const &handler);
 		void DpiChanged(event_token const &token) noexcept;
 
+		event_token ScintillaNotification(Windows::Foundation::EventHandler<uint64_t> const &handler);
+		void ScintillaNotification(event_token const &token) noexcept;
+
 	private:
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
@@ -51,6 +54,7 @@ namespace winrt::MicaEditor::implementation
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale;
 		event<Windows::Foundation::EventHandler<double>> _dpiChangedEvent;
+		event<Windows::Foundation::EventHandler<uint64_t>> _scintillaNotificationEvent;
 		DUXC::Image::SizeChanged_revoker _imageTargetSizeChangedRevoker{};
 		void ImageTarget_SizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
 		DUXC::Image::PointerWheelChanged_revoker _imageTargetPointerWheelChangedRevoker{};

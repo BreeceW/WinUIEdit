@@ -602,6 +602,7 @@ namespace winrt::MicaEditor::implementation
 		{
 			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
 			const auto sender{ tag.as<MicaEditorControl>() };
+			sender->_scintillaNotificationEvent(*sender, lParam);
 			sender->_editorWrapper.as<implementation::Editor>()->ProcessEvent(data);
 		}
 
@@ -616,6 +617,16 @@ namespace winrt::MicaEditor::implementation
 	void MicaEditorControl::DpiChanged(event_token const &token) noexcept
 	{
 		_dpiChangedEvent.remove(token);
+	}
+
+	event_token MicaEditorControl::ScintillaNotification(EventHandler<uint64_t> const &handler)
+	{
+		return _scintillaNotificationEvent.add(handler);
+	}
+
+	void MicaEditorControl::ScintillaNotification(event_token const &token) noexcept
+	{
+		_scintillaNotificationEvent.remove(token);
 	}
 
 #ifndef WINUI3

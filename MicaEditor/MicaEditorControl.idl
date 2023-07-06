@@ -9,5 +9,6 @@ namespace MicaEditor
 		UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
 		Editor Editor { get; };
 		event Windows.Foundation.EventHandler<Double> DpiChanged;
+		event Windows.Foundation.EventHandler<UInt64> ScintillaNotification;
 	}
 }
