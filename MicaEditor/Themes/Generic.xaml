@@ -52,12 +52,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:CodeEditorControl">
-                    <Grid
+                    <ContentPresenter
+                        x:Name="EditorContainer"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter x:Name="EditorContainer" />
-                    </Grid>
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
