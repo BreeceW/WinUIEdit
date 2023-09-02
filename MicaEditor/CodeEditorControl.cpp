@@ -185,18 +185,23 @@ namespace winrt::MicaEditor::implementation
 	{
 		_dpiScale = value;
 		_editor->PublicWndProc(Scintilla::Message::SetXCaretPolicy, CARET_SLOP | CARET_STRICT | CARET_EVEN, ConvertFromDipToPixelUnit(24, value));
-		// Todo: Replace placeholder 1 for caret width from UISettings
-		_editor->PublicWndProc(Scintilla::Message::SetCaretWidth, ConvertFromDipToPixelUnit(1, value), 0); // Todo: Needs to stop blinking after timeout and respect blink rate
 		UpdateZoom();
 	}
 
 	void CodeEditorControl::Editor_ScintillaNotification(IInspectable const &sender, uint64_t value)
 	{
 		const auto data{ reinterpret_cast<Scintilla::NotificationData *>(value) };
+		
 		if (data->nmhdr.code == Scintilla::Notification::Zoom
 			|| (data->nmhdr.code == Scintilla::Notification::Modified && data->linesAdded))
 		{
 			UpdateZoom();
+		}
+
+		if ((data->nmhdr.code == Scintilla::Notification::UpdateUI && Scintilla::FlagSet(data->updated, Scintilla::Update::Selection))
+			|| (data->nmhdr.code == Scintilla::Notification::Modified && Scintilla::FlagSet(data->modificationType, Scintilla::ModificationFlags::InsertText | Scintilla::ModificationFlags::DeleteText)))
+		{
+			UpdateCaretLineBackColors();
 		}
 	}
 
@@ -215,6 +220,8 @@ namespace winrt::MicaEditor::implementation
 				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x85, 0x85, 0x85));
 				_editor->PublicWndProc(Scintilla::Message::SetCaretFore, RGB(0xAE, 0xAF, 0xAD), 0);
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_ADDITIONAL_BACK, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_INACTIVE_BACK, Scintilla::Internal::ColourRGBA{ 0x3A, 0x3D, 0x41 }.AsInteger());
 				break;
 
 			case ElementTheme::Light:
@@ -222,7 +229,39 @@ namespace winrt::MicaEditor::implementation
 				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x23, 0x78, 0x93));
 				_editor->PublicWndProc(Scintilla::Message::SetCaretFore, RGB(0x00, 0x00, 0x00), 0);
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_ADDITIONAL_BACK, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_INACTIVE_BACK, Scintilla::Internal::ColourRGBA{ 0xE5, 0xEB, 0xF1 }.AsInteger());
 				break;
+			}
+
+			UpdateCaretLineBackColors(true);
+		}
+	}
+
+	void CodeEditorControl::UpdateCaretLineBackColors(bool colorsUpdated)
+	{
+		const auto hasEmptySelection = _editor->PublicWndProc(Scintilla::Message::GetSelectionEmpty, 0, 0);
+
+		if ((_hasEmptySelection != hasEmptySelection) || (hasEmptySelection && colorsUpdated))
+		{
+			_hasEmptySelection = hasEmptySelection;
+
+			if (hasEmptySelection)
+			{
+				switch (_theme)
+				{
+				case ElementTheme::Dark:
+					_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET_LINE_BACK, Scintilla::Internal::ColourRGBA{ 0xFF, 0xFF, 0xFF, 16 }.AsInteger());
+					break;
+
+				case ElementTheme::Light:
+					_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET_LINE_BACK, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00, 12 }.AsInteger());
+					break;
+				}
+			}
+			else
+			{
+				_editor->PublicWndProc(Scintilla::Message::ResetElementColour, SC_ELEMENT_CARET_LINE_BACK, 0);
 			}
 		}
 	}
@@ -238,6 +277,11 @@ namespace winrt::MicaEditor::implementation
 		const auto width{ 12 + 11 * std::max(3, static_cast<int>(std::floor(std::log10(line) + 1))) };
 		_editor->PublicWndProc(Scintilla::Message::SetMarginWidthN, 0, ConvertFromDipToPixelUnit(std::floorf(factor * width + 0.5f), _dpiScale));
 		_editor->PublicWndProc(Scintilla::Message::SetMarginLeft, 0, ConvertFromDipToPixelUnit(std::floorf(factor * 23 + 0.5f), _dpiScale));
+		// Todo: Set caret width to be at least the UISettings system caret width
+		const auto caretWidth{ std::max(1.0f, std::floorf(factor * 2 * _dpiScale)) };
+		_editor->PublicWndProc(Scintilla::Message::SetCaretWidth, caretWidth, 0); // Todo: Needs to stop blinking after timeout and respect blink rate
+		_editor->PublicWndProc(Scintilla::Message::SetCaretLineFrame, caretWidth, 0);
+		_editor->PublicWndProc(Scintilla::Message::SetExtraDescent, std::floorf(factor * 1.8 * _dpiScale), 0);
 	}
 
 	void CodeEditorControl::AddKeyboardShortcuts()
@@ -263,6 +307,9 @@ namespace winrt::MicaEditor::implementation
 		_editor->PublicWndProc(Scintilla::Message::SetAdditionalSelectionTyping, 1, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetMultiPaste, SC_MULTIPASTE_EACH, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetLayoutThreads, 16, 0); // Todo: Determine performance impact
+		_editor->PublicWndProc(Scintilla::Message::SetCaretLineVisibleAlways, true, 0);
+		_editor->PublicWndProc(Scintilla::Message::SetCaretLineLayer, SC_LAYER_UNDER_TEXT, 0);
+		_editor->PublicWndProc(Scintilla::Message::SetCaretLineHighlightSubLine, true, 0);
 
 		_editor->StyleSetBackTransparent(0, Scintilla::Internal::ColourRGBA{});
 		_editor->StyleSetBackTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{});

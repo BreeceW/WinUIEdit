@@ -28,6 +28,7 @@ namespace winrt::MicaEditor::implementation
 		bool _isLoaded{ false };
 #endif
 		double _dpiScale;
+		int8_t _hasEmptySelection{ -1 };
 		void OnLoaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		bool IsLoadedCompat();
@@ -37,6 +38,7 @@ namespace winrt::MicaEditor::implementation
 		void Editor_DpiChanged(Windows::Foundation::IInspectable const &sender, double value);
 		void Editor_ScintillaNotification(Windows::Foundation::IInspectable const &sender, uint64_t value);
 		void UpdateColors(DUX::ElementTheme theme);
+		void UpdateCaretLineBackColors(bool colorsUpdated = false);
 		void UpdateZoom();
 		void AddKeyboardShortcuts();
 		void ChangeDefaults();
