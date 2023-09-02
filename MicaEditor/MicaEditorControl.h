@@ -14,19 +14,13 @@ namespace winrt::MicaEditor::implementation
 
 		MicaEditor::Editor Editor();
 
-		void OnApplyTemplate(); // Should these have override?
+		void OnApplyTemplate();
 		void OnGotFocus(DUX::RoutedEventArgs const &e);
 		void OnLostFocus(DUX::RoutedEventArgs const &e);
-		void OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e);
-		void OnPointerMoved(DUX::Input::PointerRoutedEventArgs const &e);
-		void OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e);
-#ifndef WINUI3
-		void OnPointerCaptureLost(DUX::Input::PointerRoutedEventArgs const &e);
-		void OnPointerEntered(DUX::Input::PointerRoutedEventArgs const &e);
-		void OnPointerExited(DUX::Input::PointerRoutedEventArgs const &e);
-#endif
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnKeyUp(DUX::Input::KeyRoutedEventArgs const &e);
+		void OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e);
+		void OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e);
 
 		Scintilla::sptr_t PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam);
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
@@ -49,27 +43,36 @@ namespace winrt::MicaEditor::implementation
 		bool _isLoaded{ false };
 #endif
 		bool _isFocused{ false };
-		bool _isContextMenuOpen{ false };
 		MicaEditor::Editor _editorWrapper{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale{ 0 };
 		event<Windows::Foundation::EventHandler<double>> _dpiChangedEvent;
 		event<Windows::Foundation::EventHandler<uint64_t>> _scintillaNotificationEvent;
-		DUXC::Image::SizeChanged_revoker _imageTargetSizeChangedRevoker{};
+		DUX::FrameworkElement::SizeChanged_revoker _imageTargetSizeChangedRevoker{};
 		void ImageTarget_SizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
-		DUXC::Image::PointerWheelChanged_revoker _imageTargetPointerWheelChangedRevoker{};
+		DUX::UIElement::PointerMoved_revoker _imageTargetPointerMovedRevoker{};
+		void ImageTarget_PointerMoved(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
+#ifndef WINUI3
+		DUX::UIElement::PointerCaptureLost_revoker _imageTargetPointerCaptureLostRevoker{};
+		void ImageTarget_PointerCaptureLost(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
+		DUX::UIElement::PointerEntered_revoker _imageTargetPointerEnteredRevoker{};
+		void ImageTarget_PointerEntered(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
+		DUX::UIElement::PointerExited_revoker _imageTargetPointerExitedRevoker{};
+		void ImageTarget_PointerExited(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
+#endif
+		DUX::UIElement::PointerWheelChanged_revoker _imageTargetPointerWheelChangedRevoker{};
 		void ImageTarget_PointerWheelChanged(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
-		DUXC::Image::DragEnter_revoker _imageTargetDragEnterRevoker{};
+		DUX::UIElement::DragEnter_revoker _imageTargetDragEnterRevoker{};
 		void ImageTarget_DragEnter(Windows::Foundation::IInspectable const &sender, DUX::DragEventArgs const &e);
-		DUXC::Image::DragOver_revoker _imageTargetDragOverRevoker{};
+		DUX::UIElement::DragOver_revoker _imageTargetDragOverRevoker{};
 		void ImageTarget_DragOver(Windows::Foundation::IInspectable const &sender, DUX::DragEventArgs const &e);
-		DUXC::Image::DragLeave_revoker _imageTargetDragLeaveRevoker{};
+		DUX::UIElement::DragLeave_revoker _imageTargetDragLeaveRevoker{};
 		void ImageTarget_DragLeave(Windows::Foundation::IInspectable const &sender, DUX::DragEventArgs const &e);
-		DUXC::Image::Drop_revoker _imageTargetDropRevoker{};
+		DUX::UIElement::Drop_revoker _imageTargetDropRevoker{};
 		void ImageTarget_Drop(Windows::Foundation::IInspectable const &sender, DUX::DragEventArgs const &e);
-		DUXC::Image::DragStarting_revoker _imageTargetDragStartingRevoker{};
+		DUX::UIElement::DragStarting_revoker _imageTargetDragStartingRevoker{};
 		void ImageTarget_DragStarting(DUX::UIElement const &sender, DUX::DragStartingEventArgs const &e);
-		DUXC::Image::ContextRequested_revoker _imageTargetContextRequestedRevoker{};
+		DUX::UIElement::ContextRequested_revoker _imageTargetContextRequestedRevoker{};
 		void ImageTarget_ContextRequested(DUX::UIElement const &sender, DUX::Input::ContextRequestedEventArgs const &e);
 		void ContextMenuItem_Click(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &e);
 		DUXC::Primitives::ScrollBar::Scroll_revoker _horizontalScrollBarScrollRevoker{};

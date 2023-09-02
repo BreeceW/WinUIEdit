@@ -172,15 +172,6 @@ namespace winrt::MicaEditor::implementation
 
 	void MicaEditorControl::AddContextMenuItems(MenuFlyout const &menu)
 	{
-		menu.Opening([&](const auto &, const auto &)
-			{
-				_isContextMenuOpen = true;
-			});
-		menu.Closing([&](const auto &, const auto &)
-			{
-				_isContextMenuOpen = false;
-			});
-
 		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };
 		const auto selection{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetSelectionEmpty, 0, 0)) };
 
@@ -327,6 +318,12 @@ namespace winrt::MicaEditor::implementation
 		if (const auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Border>() })
 		{
 			_imageTargetSizeChangedRevoker = imageTarget.SizeChanged(auto_revoke, { this, &MicaEditorControl::ImageTarget_SizeChanged });
+			_imageTargetPointerMovedRevoker = imageTarget.PointerMoved(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerMoved });
+#ifndef WINUI3
+			_imageTargetPointerCaptureLostRevoker = imageTarget.PointerCaptureLost(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerCaptureLost });
+			_imageTargetPointerEnteredRevoker = imageTarget.PointerEntered(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerEntered });
+			_imageTargetPointerExitedRevoker = imageTarget.PointerExited(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerExited });
+#endif
 			_imageTargetPointerWheelChangedRevoker = imageTarget.PointerWheelChanged(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerWheelChanged });
 			_imageTargetDragEnterRevoker = imageTarget.DragEnter(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragEnter });
 			_imageTargetDragOverRevoker = imageTarget.DragOver(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragOver });
@@ -366,18 +363,18 @@ namespace winrt::MicaEditor::implementation
 
 		_isFocused = false;
 
-		if (!_isContextMenuOpen)
-		{
-			_scintilla->FocusChanged(false);
-		}
+		_scintilla->FocusChanged(false);
 	}
 
-	// Todo: Combine pointer events and use PointerPointProperties.PointerUpdateKind to determine which button and state
-	void MicaEditorControl::OnPointerPressed(PointerRoutedEventArgs const &e)
+	void MicaEditorControl::OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e)
 	{
 		__super::OnPointerPressed(e);
 
-		Focus(FocusState::Programmatic);
+		Focus(FocusState::Pointer);
+
+		// The focus state seems to get confused if the following code is placed in ImageTarget_PointerPressed.
+		// OnPointerReleased is the same for symmetry. ImageTarget_PointerMoved is there to show correct cursor
+		// when moving the cursor over the scrollbar (UWP).
 
 		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
 		{
@@ -396,37 +393,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::OnPointerMoved(PointerRoutedEventArgs const &e)
-	{
-		__super::OnPointerMoved(e);
-
-		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
-		{
-			auto point{ e.GetCurrentPoint(imageTarget) };
-			auto scaled{ point.Position() };
-			auto x{ scaled.X * _dpiScale };
-			auto y{ scaled.Y * _dpiScale };
-
-			_scintilla->PointerMoved(Point{ x, y }, point.Timestamp() / 1000ul, e.KeyModifiers(), point);
-
-			//auto cursor{ _scintilla->ContextCursor(Scintilla::Internal::Point{ x,y }) };
-			//switch (cursor)
-			//{
-			//case Scintilla::Internal::Window::SetCursor invalid:
-			//case text:
-			//case arrow:
-			//case up:
-			//case wait:
-			//case horizontal:
-			//case vertical:
-			//case reverseArrow:
-			//case hand:
-			//	break;
-			//}
-		}
-	}
-
-	void MicaEditorControl::OnPointerReleased(PointerRoutedEventArgs const &e)
+	void MicaEditorControl::OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e)
 	{
 		__super::OnPointerReleased(e);
 
@@ -447,8 +414,21 @@ namespace winrt::MicaEditor::implementation
 		// Alternate approach: call Focus in OnFocusLost
 	}
 
+	void MicaEditorControl::ImageTarget_PointerMoved(IInspectable const &sender, PointerRoutedEventArgs const &e)
+	{
+		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
+		{
+			auto point{ e.GetCurrentPoint(imageTarget) };
+			auto scaled{ point.Position() };
+			auto x{ scaled.X * _dpiScale };
+			auto y{ scaled.Y * _dpiScale };
+
+			_scintilla->PointerMoved(Point{ x, y }, point.Timestamp() / 1000ul, e.KeyModifiers(), point);
+		}
+	}
+
 #ifndef WINUI3
-	void MicaEditorControl::OnPointerCaptureLost(PointerRoutedEventArgs const &e)
+	void MicaEditorControl::ImageTarget_PointerCaptureLost(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		if (!_isPointerOver)
 		{
@@ -457,12 +437,12 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::OnPointerEntered(PointerRoutedEventArgs const &e)
+	void MicaEditorControl::ImageTarget_PointerEntered(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = true;
 	}
 
-	void MicaEditorControl::OnPointerExited(PointerRoutedEventArgs const &e)
+	void MicaEditorControl::ImageTarget_PointerExited(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = false;
 		if (!_wrapper->HaveMouseCapture())
