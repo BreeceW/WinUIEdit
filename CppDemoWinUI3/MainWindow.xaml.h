@@ -7,6 +7,8 @@ namespace winrt::CppDemoWinUI3::implementation
 	struct MainWindow : MainWindowT<MainWindow>
 	{
 		MainWindow();
+
+		void CodeEditorControl_Loaded(Windows::Foundation::IInspectable const &sender, Microsoft::UI::Xaml::RoutedEventArgs const &e);
 	};
 }
 

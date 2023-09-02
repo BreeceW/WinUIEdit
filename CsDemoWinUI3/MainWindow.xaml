@@ -8,5 +8,5 @@
     xmlns:mica="using:MicaEditor"
     mc:Ignorable="d">
 
-    <mica:CodeEditorControl x:Name="Editor" />
+    <mica:CodeEditorControl x:Name="Editor" Loaded="CodeEditorControl_Loaded" />
 </Window>
