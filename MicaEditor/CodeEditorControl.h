@@ -16,6 +16,7 @@ namespace winrt::MicaEditor::implementation
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
 		MicaEditor::Editor Editor();
 		void OnApplyTemplate();
+		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 
 	private:
 		com_ptr<MicaEditorControl> _editor{ nullptr };
@@ -45,6 +46,8 @@ namespace winrt::MicaEditor::implementation
 #ifndef WINUI3
 		DUX::ElementTheme LegacyActualTheme();
 #endif
+		void ChangeAllOccurrences();
+		std::string GetMainSelectedText(bool expandCaretToWord, Scintilla::sptr_t &start, Scintilla::sptr_t &end);
 	};
 }
 

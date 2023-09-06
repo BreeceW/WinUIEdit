@@ -65,6 +65,29 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
+	void CodeEditorControl::OnKeyDown(KeyRoutedEventArgs const &e)
+	{
+		__super::OnKeyDown(e);
+
+		const auto modifiers{ GetKeyModifiersForCurrentThread() }; // Todo: Can we avoid calling this every time?
+
+		if ((modifiers & VirtualKeyModifiers::Control) == VirtualKeyModifiers::Control)
+		{
+			switch (e.Key())
+			{
+			case VirtualKey::F2: // Todo: make customizable
+			{
+				if (_editor->PublicWndProc(Scintilla::Message::GetFocus, 0, 0))
+				{
+					ChangeAllOccurrences();
+					e.Handled(true);
+				}
+			}
+			break;
+			}
+		}
+	}
+
 	void CodeEditorControl::OnLoaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
 	{
 #ifndef WINUI3
@@ -191,7 +214,7 @@ namespace winrt::MicaEditor::implementation
 	void CodeEditorControl::Editor_ScintillaNotification(IInspectable const &sender, uint64_t value)
 	{
 		const auto data{ reinterpret_cast<Scintilla::NotificationData *>(value) };
-		
+
 		if (data->nmhdr.code == Scintilla::Notification::Zoom
 			|| (data->nmhdr.code == Scintilla::Notification::Modified && data->linesAdded))
 		{
@@ -333,4 +356,80 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 #endif
+
+	// Todo: This code needs to integrate with find and replace
+	// Todo: This code seems to struggle with rectangular selections and/or multiple carets already existing and/or multiple selections already existing
+	void CodeEditorControl::ChangeAllOccurrences()
+	{
+		Scintilla::sptr_t start;
+		Scintilla::sptr_t end;
+		const auto s{ GetMainSelectedText(true, start, end) };
+		if (s.length() == 0)
+		{
+			return;
+		}
+		const auto length{ end - start };
+
+		// Todo: Why are we setting these? Are these the best methods to use here if so?
+		_editor->PublicWndProc(Scintilla::Message::SetSelectionStart, start, 0);
+		_editor->PublicWndProc(Scintilla::Message::SetSelectionEnd, end, 0);
+
+		_editor->PublicWndProc(Scintilla::Message::TargetWholeDocument, 0, 0);
+		_editor->PublicWndProc(Scintilla::Message::SetSearchFlags, static_cast<Scintilla::uptr_t>(Scintilla::FindOption::MatchCase), 0);
+
+		const auto mainSelection{ _editor->PublicWndProc(Scintilla::Message::GetMainSelection, 0, 0) };
+		const auto bodyLength{ _editor->PublicWndProc(Scintilla::Message::GetLength, 0, 0) };
+
+		while (true)
+		{
+			const auto match{ _editor->PublicWndProc(Scintilla::Message::SearchInTarget, length, reinterpret_cast<sptr_t>(&s[0])) };
+
+			if (match == -1)
+			{
+				break;
+			}
+
+			const auto targetEnd{ _editor->PublicWndProc(Scintilla::Message::GetTargetEnd, 0, 0) };
+
+			if (match != start)
+			{
+				// Todo: Add maximum number of carets and notify user if exceeded (VS Code allows 10,000)
+				// Todo: This method calls a lot of redraws in a loop. You might need to use the lower level API to avoid that
+				_editor->PublicWndProc(Scintilla::Message::AddSelection, match + length, match);
+			}
+
+			_editor->PublicWndProc(Scintilla::Message::SetTargetStart, targetEnd, 0);
+			_editor->PublicWndProc(Scintilla::Message::SetTargetEnd, bodyLength, 0);
+		}
+
+		_editor->PublicWndProc(Scintilla::Message::SetMainSelection, mainSelection, 0);
+	}
+
+	std::string CodeEditorControl::GetMainSelectedText(bool expandCaretToWord, Scintilla::sptr_t &start, Scintilla::sptr_t &end)
+	{
+		// Todo: This code may be problematic for rectangular selections
+		start = _editor->PublicWndProc(Scintilla::Message::GetSelectionStart, 0, 0);
+		end = _editor->PublicWndProc(Scintilla::Message::GetSelectionEnd, 0, 0);
+		if (expandCaretToWord && start == end)
+		{
+			start = _editor->PublicWndProc(Scintilla::Message::WordStartPosition, start, true);
+			end = _editor->PublicWndProc(Scintilla::Message::WordEndPosition, start, true);
+
+			if (start == end)
+			{
+				return "";
+			}
+		}
+
+		const auto length{ end - start };
+		std::string s(length, '\0');
+		const Sci_TextRangeFull range
+		{
+			{ start, end, },
+			&s[0],
+		};
+		_editor->PublicWndProc(Scintilla::Message::GetTextRangeFull, 0, reinterpret_cast<sptr_t>(&range));
+
+		return s;
+	}
 }
