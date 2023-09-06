@@ -128,6 +128,8 @@ namespace Scintilla::Internal {
 		void ProcessQueues();
 		bool _shouldNotifyTsf{ true };
 		bool _fromNotifyQueue{ false };
+		Sci::Position _multiInsert{ 0 };
+		Sci::Position _multiCorrect{ 0 };
 
 		// WinUI Todo: These two values should be updated to use the Windows setting
 		unsigned int linesPerScroll{ 3 };	///< Intellimouse support

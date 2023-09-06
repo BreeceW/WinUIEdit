@@ -585,6 +585,13 @@ namespace Scintilla::Internal {
 	// Todo: wParam might not make sense here
 	void ScintillaWinUI::ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf, int utf16Length)
 	{
+		// Todo: Be more specific
+		// Todo: Should we make sure we are not sending a redundant message? When TSF sends SetSelection, is this getting called?
+		if (notificationData.nmhdr.code == Scintilla::Notification::UpdateUI && Scintilla::FlagSet(notificationData.updated, Scintilla::Update::Selection))
+		{
+			ClaimSelection();
+		}
+
 		SendMessage(WM_NOTIFY, GetCtrlID(), reinterpret_cast<LPARAM>(&notificationData));
 
 		if (!notifyTsf || !(_tsfCore || _tfTextStoreACPSink))
@@ -592,6 +599,7 @@ namespace Scintilla::Internal {
 			return;
 		}
 
+		// Todo: should this be done before SendMessage
 		if (notificationData.nmhdr.code == Scintilla::Notification::Modified)
 		{
 			bool fNotify(false);
@@ -750,17 +758,7 @@ namespace Scintilla::Internal {
 		if ((key == winrt::Windows::System::VirtualKey::Enter || key == winrt::Windows::System::VirtualKey::Tab)
 			&& (modifiers == winrt::Windows::System::VirtualKeyModifiers::None || modifiers == winrt::Windows::System::VirtualKeyModifiers::Shift))
 		{
-			if (_tsfCore)
-			{
-				_editContext.NotifySelectionChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
-			}
-			else
-			{
-				if (_tfTextStoreACPSink && _lock == NONE)
-				{
-					_tfTextStoreACPSink->OnSelectionChange();
-				}
-			}
+			ClaimSelection(); // Todo: May be redundant due to call in ProcessNotifyMessage
 		}
 
 		if (handled && !ret && !lastKeyDownConsumed)
@@ -893,7 +891,24 @@ namespace Scintilla::Internal {
 
 		TS_TEXTCHANGE chg;
 		const auto hr{ SetText(0, args.Range().StartCaretPosition, args.Range().EndCaretPosition, args.Text().c_str(), args.Text().size(), &chg) };
-		__super::SetSelection(AcpToDocPosition(args.NewSelection().StartCaretPosition), AcpToDocPosition(args.NewSelection().EndCaretPosition));
+		
+		auto start{ args.NewSelection().StartCaretPosition };
+		auto end{ args.NewSelection().EndCaretPosition };
+
+		if (start == _multiInsert)
+		{
+			start += _multiCorrect;
+			end += _multiCorrect;
+
+			_multiInsert = 0;
+			_multiCorrect = 0;
+
+			// Todo: Figure out which parts actually changed instead of doing the WHOLE document
+			// Notify selection instead does not work
+			sender.NotifyTextChanged({ 0, static_cast<int>(DocPositionToAcp(pdoc->Length())) }, 0, { start, end });
+		}
+		__super::SetSelection(AcpToDocPosition(start), AcpToDocPosition(end));
+
 		args.Result(SUCCEEDED(hr)
 			? winrt::Windows::UI::Text::Core::CoreTextTextUpdatingResult::Succeeded
 			: winrt::Windows::UI::Text::Core::CoreTextTextUpdatingResult::Failed);
@@ -1123,6 +1138,9 @@ namespace Scintilla::Internal {
 				_tfTextStoreACPSink->OnLockGranted(_lock);
 			}
 
+			_multiInsert = 0;
+			_multiCorrect = 0; // Todo: Should we update text if this is set? Arguably yes, based on how TSFCore does it. Check the log and see what GetText is called. Maybe not? Lots of queued notifications
+
 			ProcessQueues();
 
 			_lock = NONE;
@@ -1160,7 +1178,7 @@ namespace Scintilla::Internal {
 		{
 			return E_INVALIDARG;
 		}
-		pdcs->dwStaticFlags = 0; // Scintilla doesn't support regions, disjoint selections, etc. // Todo: TF_SS_DISJOINTSEL
+		pdcs->dwStaticFlags = multipleSelection ? TF_SS_DISJOINTSEL : 0; // Todo: if multipleSelection changes, will this be a problem because it is a static flag? // Scintilla doesn't support regions, disjoint selections, etc.
 		pdcs->dwDynamicFlags = pdoc->IsReadOnly() ? TS_SD_READONLY : 0; // Todo: TS_SS_TKBAUTOCORRECTENABLE, TS_SS_TKBPREDICTIONENABLE?
 		return S_OK;
 	}
@@ -1261,19 +1279,28 @@ namespace Scintilla::Internal {
 		// The version with NextPosition does not work with 4 byte UTF-16 chars!
 		// The CountUTF16 one does, but is insanely slow (think 10 minutes to insert in a file of this size)
 
+		auto start{ pSelection->acpStart };
+		auto end{ pSelection->acpEnd };
+
+		if (start == _multiInsert)
+		{
+			start += _multiCorrect;
+			end += _multiCorrect;
+		}
+
 		switch (pSelection->style.ase)
 		{
 		case TsActiveSelEnd::TS_AE_START:
-			__super::SetSelection(AcpToDocPosition(pSelection->acpStart), AcpToDocPosition(pSelection->acpEnd));
+			__super::SetSelection(AcpToDocPosition(start), AcpToDocPosition(end));
 			break;
 		case TsActiveSelEnd::TS_AE_NONE:
 			//DropCaret();
 			//[[fallthrough]];
 		case TsActiveSelEnd::TS_AE_END:
-			__super::SetSelection(AcpToDocPosition(pSelection->acpEnd), AcpToDocPosition(pSelection->acpStart));
+			__super::SetSelection(AcpToDocPosition(end), AcpToDocPosition(start));
 			break;
 		}
-		DebugOut(L"SetSelection, ACP: %d, Sci: %d; ACP: %d, Sci: %d; Mode: %d\n", pSelection->acpStart, AcpToDocPosition(pSelection->acpStart), pSelection->acpEnd, AcpToDocPosition(pSelection->acpEnd), pSelection->style.ase);
+		DebugOut(L"SetSelection, ACP: %d, Sci: %d; ACP: %d, Sci: %d; Mode: %d\n", start, AcpToDocPosition(start), end, AcpToDocPosition(end), pSelection->style.ase);
 		return S_OK;
 	}
 
@@ -1500,6 +1527,8 @@ namespace Scintilla::Internal {
 		const auto endPos{ AcpToDocPosition(acpEnd) };
 
 		const auto utf16Len{ pdoc->CountUTF16(startPos, endPos) };
+		LONG multiBefore{ 0 };
+		Scintilla::Position multiBeforeUtf8{ 0 };
 		if (cch == 0)
 		{
 			pdoc->DeleteChars(startPos, endPos - startPos);
@@ -1532,6 +1561,17 @@ namespace Scintilla::Internal {
 			}
 			szText[cchText] = '\0';
 
+			for (size_t r = 0; r < sel.Count(); r++)
+			{
+				// Todo: What if selections overlap?
+				const auto &range{ sel.Range(r) };
+				if (range.End().Position() < startPos)
+				{
+					// Todo: Try not to have to count both UTF-8 and UTF-16
+					multiBefore += cch - pdoc->CountUTF16(range.Start().Position(), range.End().Position());
+					multiBeforeUtf8 += cchText - range.Length();
+				}
+			}
 			__super::SetSelection(startPos, endPos); // Todo: Fix multi-caret support
 			try
 			{
@@ -1547,7 +1587,12 @@ namespace Scintilla::Internal {
 
 		if (pChange)
 		{
-			auto newAcpStart{ DocPositionToAcp(startPos) };
+			const auto newAcpStart{ DocPositionToAcp(startPos + multiBeforeUtf8) };
+			if (multiBefore)
+			{
+				_multiInsert = newAcpStart - multiBefore + cch;
+				_multiCorrect = multiBefore;
+			}
 			pChange->acpStart = newAcpStart;
 			pChange->acpOldEnd = newAcpStart + utf16Len;
 			pChange->acpNewEnd = newAcpStart + cch;
@@ -2016,8 +2061,15 @@ namespace Scintilla::Internal {
 		UndoGroup ug(pdoc);
 		ClearSelection(multiPasteMode == MultiPaste::Each);
 
+		const auto initialSel{ sel.RangeMain() }; // Intentional copy
+
 		auto str{ EncodeWString(paste) };
 		InsertPasteShape(str.data(), str.length(), PasteShape::stream);
+
+		if (multiPasteMode == MultiPaste::Each && !(initialSel == sel.RangeMain())) // No != override
+		{
+			ClaimSelection();
+		}
 
 		Redraw();
 	}
