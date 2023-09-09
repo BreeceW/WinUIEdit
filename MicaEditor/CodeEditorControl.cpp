@@ -277,8 +277,6 @@ namespace winrt::MicaEditor::implementation
 		{
 			_theme = theme;
 
-			UpdateStyles();
-
 			switch (theme)
 			{
 			case ElementTheme::Dark:
@@ -297,6 +295,8 @@ namespace winrt::MicaEditor::implementation
 			}
 
 			UpdateCaretLineBackColors(true);
+
+			UpdateStyles();
 		}
 	}
 
