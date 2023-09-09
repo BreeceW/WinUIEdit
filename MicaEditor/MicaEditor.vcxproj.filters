@@ -16,6 +16,7 @@
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="MicaEditorControl.cpp" />
     <ClCompile Include="CodeEditorControl.cpp" />
+    <ClCompile Include="CodeEditorControl.SyntaxHighlighting.cpp" />
     <ClCompile Include="DummyPage.cpp" />
     <ClCompile Include="Wrapper.cpp" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />

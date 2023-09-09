@@ -18,8 +18,12 @@ namespace winrt::MicaEditor::implementation
 		void OnApplyTemplate();
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 
+		hstring HighlightingLanguage();
+		void HighlightingLanguage(hstring const &value);
+
 	private:
 		com_ptr<MicaEditorControl> _editor{ nullptr };
+		hstring _highlightingLanguage;
 		DUD::DispatcherQueue _dispatcherQueue{ nullptr };
 		DUX::ElementTheme _theme{ DUX::ElementTheme::Default };
 #ifndef WINUI3
@@ -39,6 +43,7 @@ namespace winrt::MicaEditor::implementation
 		void Editor_DpiChanged(Windows::Foundation::IInspectable const &sender, double value);
 		void Editor_ScintillaNotification(Windows::Foundation::IInspectable const &sender, uint64_t value);
 		void UpdateColors(DUX::ElementTheme theme);
+		void UpdateStyles();
 		void UpdateCaretLineBackColors(bool colorsUpdated = false);
 		void UpdateZoom();
 		void AddKeyboardShortcuts();
@@ -48,6 +53,8 @@ namespace winrt::MicaEditor::implementation
 #endif
 		void ChangeAllOccurrences();
 		std::string GetMainSelectedText(bool expandCaretToWord, Scintilla::sptr_t &start, Scintilla::sptr_t &end);
+		void SetLexer();
+		void UpdateLanguageStyles();
 	};
 }
 

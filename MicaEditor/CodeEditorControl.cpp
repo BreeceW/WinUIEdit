@@ -228,6 +228,27 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
+	hstring CodeEditorControl::HighlightingLanguage()
+	{
+		return _highlightingLanguage;
+	}
+
+	void CodeEditorControl::HighlightingLanguage(hstring const &value)
+	{
+		if (_highlightingLanguage == value)
+		{
+			return;
+		}
+
+		_highlightingLanguage = value;
+
+		_editor->PublicWndProc(Scintilla::Message::ClearDocumentStyle, 0, 0);
+
+		SetLexer();
+
+		UpdateStyles();
+	}
+
 	void CodeEditorControl::UpdateColors(DUX::ElementTheme theme)
 	{
 		// Todo: Support high contrast mode
@@ -236,21 +257,19 @@ namespace winrt::MicaEditor::implementation
 		{
 			_theme = theme;
 
+			UpdateStyles();
+
 			switch (theme)
 			{
 			case ElementTheme::Dark:
-				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, 0, Scintilla::Internal::ColourRGBA{ 255, 255, 255 }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x85, 0x85, 0x85));
-				_editor->PublicWndProc(Scintilla::Message::SetCaretFore, RGB(0xAE, 0xAF, 0xAD), 0);
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET, Scintilla::Internal::ColourRGBA{ 0xAE, 0xAF, 0xAD }.AsInteger());
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_ADDITIONAL_BACK, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_INACTIVE_BACK, Scintilla::Internal::ColourRGBA{ 0x3A, 0x3D, 0x41 }.AsInteger());
 				break;
 
 			case ElementTheme::Light:
-				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, 0, Scintilla::Internal::ColourRGBA{ 0, 0, 0 }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::StyleSetFore, STYLE_LINENUMBER, RGB(0x23, 0x78, 0x93));
-				_editor->PublicWndProc(Scintilla::Message::SetCaretFore, RGB(0x00, 0x00, 0x00), 0);
+				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00 }.AsInteger());
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_ADDITIONAL_BACK, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
 				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_INACTIVE_BACK, Scintilla::Internal::ColourRGBA{ 0xE5, 0xEB, 0xF1 }.AsInteger());
@@ -259,6 +278,26 @@ namespace winrt::MicaEditor::implementation
 
 			UpdateCaretLineBackColors(true);
 		}
+	}
+
+	void CodeEditorControl::UpdateStyles()
+	{
+		UpdateLanguageStyles();
+
+		switch (_theme)
+		{
+		case ElementTheme::Dark:
+			_editor->StyleSetForeTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{ 0x85, 0x85, 0x85 });
+			_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
+			break;
+
+		case ElementTheme::Light:
+			_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
+			_editor->StyleSetForeTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{ 0x23, 0x78, 0x93 });
+			break;
+		}
+
+		_editor->InvalidateStyleRedraw();
 	}
 
 	void CodeEditorControl::UpdateCaretLineBackColors(bool colorsUpdated)
@@ -333,10 +372,6 @@ namespace winrt::MicaEditor::implementation
 		_editor->PublicWndProc(Scintilla::Message::SetCaretLineVisibleAlways, true, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetCaretLineLayer, SC_LAYER_UNDER_TEXT, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetCaretLineHighlightSubLine, true, 0);
-
-		_editor->StyleSetBackTransparent(0, Scintilla::Internal::ColourRGBA{});
-		_editor->StyleSetBackTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{});
-		_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
 	}
 
 #ifndef WINUI3

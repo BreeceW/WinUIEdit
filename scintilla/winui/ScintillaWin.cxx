@@ -2709,10 +2709,22 @@ namespace Scintilla::Internal {
 		return 1;
 	}
 
+	// Replacement for the public Scintilla API StyleSetFore that does not ignore the alpha component
+	void ScintillaWinUI::StyleSetForeTransparent(int style, ColourRGBA color)
+	{
+		vs.styles[style].fore = color;
+	}
+
 	// Replacement for the public Scintilla API StyleSetBack that does not ignore the alpha component
 	void ScintillaWinUI::StyleSetBackTransparent(int style, ColourRGBA color)
 	{
 		vs.styles[style].back = color;
+	}
+
+	// Call after StyleSet*Transparent methods
+	void ScintillaWinUI::PublicInvalidateStyleRedraw()
+	{
+		InvalidateStyleRedraw();
 	}
 
 	void ScintillaWinUI::SetWndProc(std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> wndProc)

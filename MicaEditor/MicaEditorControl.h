@@ -25,7 +25,9 @@ namespace winrt::MicaEditor::implementation
 		Scintilla::sptr_t PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam);
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
 
+		void StyleSetForeTransparent(int style, Scintilla::Internal::ColourRGBA color);
 		void StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color);
+		void InvalidateStyleRedraw();
 
 		event_token DpiChanged(Windows::Foundation::EventHandler<double> const &handler);
 		void DpiChanged(event_token const &token) noexcept;

@@ -7,7 +7,8 @@ namespace MicaEditor
     runtimeclass CodeEditorControl : DUX.Controls.Control
     {
         CodeEditorControl();
-        Editor Editor{ get; };
+        Editor Editor { get; };
         UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
+        String HighlightingLanguage { get; set; };
     }
 }
