@@ -10,5 +10,7 @@ namespace MicaEditor
         Editor Editor { get; };
         UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
         String HighlightingLanguage { get; set; };
+        event Windows.Foundation.EventHandler<DUX.ElementTheme> DefaultColorsChanged;
+        event Windows.Foundation.EventHandler<DUX.ElementTheme> SyntaxHighlightingApplied;
     }
 }

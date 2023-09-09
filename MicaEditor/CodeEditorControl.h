@@ -21,9 +21,17 @@ namespace winrt::MicaEditor::implementation
 		hstring HighlightingLanguage();
 		void HighlightingLanguage(hstring const &value);
 
+		event_token DefaultColorsChanged(Windows::Foundation::EventHandler<DUX::ElementTheme> const &handler);
+		void DefaultColorsChanged(event_token const &token) noexcept;
+		
+		event_token SyntaxHighlightingApplied(Windows::Foundation::EventHandler<DUX::ElementTheme> const &handler);
+		void SyntaxHighlightingApplied(event_token const &token) noexcept;
+
 	private:
 		com_ptr<MicaEditorControl> _editor{ nullptr };
 		hstring _highlightingLanguage;
+		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _defaultColorsChangedEvent;
+		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _syntaxHighlightingAppliedEvent;
 		DUD::DispatcherQueue _dispatcherQueue{ nullptr };
 		DUX::ElementTheme _theme{ DUX::ElementTheme::Default };
 #ifndef WINUI3

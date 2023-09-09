@@ -249,6 +249,26 @@ namespace winrt::MicaEditor::implementation
 		UpdateStyles();
 	}
 
+	event_token CodeEditorControl::DefaultColorsChanged(EventHandler<ElementTheme> const &handler)
+	{
+		return _defaultColorsChangedEvent.add(handler);
+	}
+
+	void CodeEditorControl::DefaultColorsChanged(event_token const &token) noexcept
+	{
+		_defaultColorsChangedEvent.remove(token);
+	}
+
+	event_token CodeEditorControl::SyntaxHighlightingApplied(EventHandler<ElementTheme> const &handler)
+	{
+		return _syntaxHighlightingAppliedEvent.add(handler);
+	}
+
+	void CodeEditorControl::SyntaxHighlightingApplied(event_token const &token) noexcept
+	{
+		_syntaxHighlightingAppliedEvent.remove(token);
+	}
+
 	void CodeEditorControl::UpdateColors(DUX::ElementTheme theme)
 	{
 		// Todo: Support high contrast mode
@@ -301,7 +321,11 @@ namespace winrt::MicaEditor::implementation
 			break;
 		}
 
+		_defaultColorsChangedEvent(*this, _theme);
+
 		UpdateLanguageStyles();
+
+		_syntaxHighlightingAppliedEvent(*this, _theme);
 
 		_editor->InvalidateStyleRedraw();
 	}
