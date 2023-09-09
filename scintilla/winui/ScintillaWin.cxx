@@ -2727,6 +2727,18 @@ namespace Scintilla::Internal {
 		InvalidateStyleRedraw();
 	}
 
+	void ScintillaWinUI::StyleClearCustom()
+	{
+		// Reset all styles to be like the default style except the predefined styles
+		for (size_t i = 0; i < vs.styles.size(); i++)
+		{
+			if (i < StyleDefault || i > STYLE_LASTPREDEFINED)
+			{
+				vs.styles[i] = vs.styles[StyleDefault];
+			}
+		}
+	}
+
 	void ScintillaWinUI::SetWndProc(std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> wndProc)
 	{
 		_wndProc = wndProc;

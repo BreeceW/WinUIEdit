@@ -68,9 +68,8 @@ namespace winrt::MicaEditor::implementation
 			switch (_theme)
 			{
 			case ElementTheme::Dark:
-				_editor->StyleSetBackTransparent(STYLE_DEFAULT, ColourRGBA{});
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0xD4, 0xD4, 0xD4 });
-				_editor->PublicWndProc(Message::StyleClearAll, 0, 0);
+				_editor->StyleClearCustom();
 
 				//_editor->StyleSetForeTransparent(SCE_C_IDENTIFIER, ColourRGBA{ 0x9C, 0xDC, 0xFE });
 				_editor->StyleSetForeTransparent(SCE_C_ESCAPESEQUENCE, ColourRGBA{ 0xD7, 0xBA, 0x7D });
@@ -85,9 +84,8 @@ namespace winrt::MicaEditor::implementation
 				break;
 
 			case ElementTheme::Light:
-				_editor->StyleSetBackTransparent(STYLE_DEFAULT, ColourRGBA{});
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0, 0, 0 });
-				_editor->PublicWndProc(Message::StyleClearAll, 0, 0);
+				_editor->StyleClearCustom();
 
 				//_editor->StyleSetForeTransparent(SCE_C_IDENTIFIER, ColourRGBA{ 0x00, 0x10, 0x80 });
 				_editor->StyleSetForeTransparent(SCE_C_ESCAPESEQUENCE, ColourRGBA{ 0xEE, 0x00, 0x00 });
@@ -107,9 +105,8 @@ namespace winrt::MicaEditor::implementation
 			switch (_theme)
 			{
 			case ElementTheme::Dark:
-				_editor->StyleSetBackTransparent(STYLE_DEFAULT, ColourRGBA{});
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0xD4, 0xD4, 0xD4 });
-				_editor->PublicWndProc(Message::StyleClearAll, 0, 0);
+				_editor->StyleClearCustom();
 
 				_editor->StyleSetForeTransparent(SCE_JSON_PROPERTYNAME, ColourRGBA{ 0x9C, 0xDC, 0xFE });
 				_editor->StyleSetForeTransparent(SCE_JSON_ESCAPESEQUENCE, ColourRGBA{ 0xD7, 0xBA, 0x7D });
@@ -125,9 +122,8 @@ namespace winrt::MicaEditor::implementation
 				break;
 
 			case ElementTheme::Light:
-				_editor->StyleSetBackTransparent(STYLE_DEFAULT, ColourRGBA{});
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0, 0, 0 });
-				_editor->PublicWndProc(Message::StyleClearAll, 0, 0);
+				_editor->StyleClearCustom();
 
 				_editor->StyleSetForeTransparent(SCE_JSON_PROPERTYNAME, ColourRGBA{ 0x04, 0x51, 0xa5 });
 				_editor->StyleSetForeTransparent(SCE_JSON_ESCAPESEQUENCE, ColourRGBA{ 0xEE, 0x00, 0x00 });
@@ -145,20 +141,7 @@ namespace winrt::MicaEditor::implementation
 		}
 		else
 		{
-			switch (_theme)
-			{
-			case ElementTheme::Dark:
-				_editor->StyleSetBackTransparent(STYLE_DEFAULT, ColourRGBA{});
-				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 255, 255, 255 });
-				_editor->PublicWndProc(Message::StyleClearAll, 0, 0);
-				break;
-
-			case ElementTheme::Light:
-				_editor->StyleSetBackTransparent(STYLE_DEFAULT, ColourRGBA{});
-				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0, 0, 0 });
-				_editor->PublicWndProc(Message::StyleClearAll, 0, 0);
-				break;
-			}
+			_editor->StyleClearCustom();
 		}
 	}
 }

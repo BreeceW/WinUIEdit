@@ -282,20 +282,26 @@ namespace winrt::MicaEditor::implementation
 
 	void CodeEditorControl::UpdateStyles()
 	{
-		UpdateLanguageStyles();
-
 		switch (_theme)
 		{
 		case ElementTheme::Dark:
 			_editor->StyleSetForeTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{ 0x85, 0x85, 0x85 });
 			_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
+
+			_editor->StyleSetForeTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{ 255, 255, 255 });
+			_editor->StyleSetBackTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{});
 			break;
 
 		case ElementTheme::Light:
 			_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
 			_editor->StyleSetForeTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{ 0x23, 0x78, 0x93 });
+
+			_editor->StyleSetForeTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{ 0, 0, 0 });
+			_editor->StyleSetBackTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{});
 			break;
 		}
+
+		UpdateLanguageStyles();
 
 		_editor->InvalidateStyleRedraw();
 	}

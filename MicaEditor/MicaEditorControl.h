@@ -28,6 +28,7 @@ namespace winrt::MicaEditor::implementation
 		void StyleSetForeTransparent(int style, Scintilla::Internal::ColourRGBA color);
 		void StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color);
 		void InvalidateStyleRedraw();
+		void StyleClearCustom();
 
 		event_token DpiChanged(Windows::Foundation::EventHandler<double> const &handler);
 		void DpiChanged(event_token const &token) noexcept;

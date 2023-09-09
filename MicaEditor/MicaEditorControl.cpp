@@ -285,6 +285,11 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->PublicInvalidateStyleRedraw();
 	}
 
+	void MicaEditorControl::StyleClearCustom()
+	{
+		_scintilla->StyleClearCustom();
+	}
+
 	void MicaEditorControl::OnApplyTemplate()
 	{
 		__super::OnApplyTemplate();
