@@ -280,6 +280,7 @@ namespace winrt::CppDemoUwp::implementation
 		GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, DATE_SHORTDATE, &time, nullptr, dateBuffer, MAX_PATH, nullptr);
 		const auto formatted{ format(L"{} {}", timeBuffer, dateBuffer) };
 		Editor().Editor().AddText(formatted.size(), formatted);
+		Editor().Editor().ScrollCaret();
 	}
 
 	void MainPage::CommandMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
@@ -287,6 +288,20 @@ namespace winrt::CppDemoUwp::implementation
 		FocusEditor();
 
 		Editor().Scintilla(unbox_value<ScintillaMessage>(sender.as<FrameworkElement>().Tag()), 0, 0);
+	}
+
+	void MainPage::HighlightingLanguageButton_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FlyoutBase::ShowAttachedFlyout(sender.as<FrameworkElement>());
+	}
+
+	void MainPage::HighlightingLanguageItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	{
+		FocusEditor();
+
+		const auto item{ sender.as<MenuFlyoutItem>() };
+		Editor().HighlightingLanguage(unbox_value<hstring>(item.Tag()));
+		HighlightingLanguageButton().Content(box_value(item.Text()));
 	}
 
 	void MainPage::OnNavigatedTo(NavigationEventArgs const &e)

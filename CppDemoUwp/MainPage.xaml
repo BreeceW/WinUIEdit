@@ -471,11 +471,47 @@
                     Width="1"
                     Height="16"
                     Fill="{ThemeResource SeparatorLineBrush}" />
-                <TextBlock
-                    Margin="12,0,0,0"
+                <HyperlinkButton
+                    x:Name="HighlightingLanguageButton"
+                    Margin="4,-2,0,-3"
+                    Padding="8,2,8,3"
+                    AccessKey="L"
+                    BorderThickness="0"
+                    Click="HighlightingLanguageButton_Click"
+                    Content="Plain text"
+                    FontSize="{StaticResource CaptionTextBlockFontSize}"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Style="{StaticResource CaptionTextBlockStyle}"
+                    IsAccessKeyScope="True">
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <muxc:RadioMenuFlyoutItem
+                                AccessKey="P"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                IsChecked="True"
+                                Tag=""
+                                Text="Plain text" />
+                            <muxc:RadioMenuFlyoutItem
+                                AccessKey="C"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                Tag="cpp"
                     Text="C++" />
+                            <muxc:RadioMenuFlyoutItem
+                                AccessKey="S"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                Tag="csharp"
+                                Text="C#" />
+                            <muxc:RadioMenuFlyoutItem
+                                AccessKey="J"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                Tag="json"
+                                Text="JSON" />
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+                </HyperlinkButton>
             </StackPanel>
         </Grid>
     </Grid>
