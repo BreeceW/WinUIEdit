@@ -1822,61 +1822,104 @@ void Window::InvalidateRectangle(PRectangle rc) {
 	}
 }
 
-namespace {
-
-void FlipBitmap(HBITMAP bitmap, int width, int height) noexcept {
-	/*HDC hdc = ::CreateCompatibleDC({});
-	if (hdc) {
-		HBITMAP prevBmp = SelectBitmap(hdc, bitmap);
-		::StretchBlt(hdc, width - 1, 0, -width, height, hdc, 0, 0, width, height, SRCCOPY);
-		SelectBitmap(hdc, prevBmp);
-		::DeleteDC(hdc);
-	}*/
-	// WinUI Todo
-}
-
-}
-
-HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept {
-	/*HCURSOR reverseArrowCursor{};
-
-	bool created = false;
-	HCURSOR cursor = ::LoadCursor({}, IDC_ARROW);
-
-	if (dpi != uSystemDPI) {
-		const int width = SystemMetricsForDpi(SM_CXCURSOR, dpi);
-		const int height = SystemMetricsForDpi(SM_CYCURSOR, dpi);
-		HCURSOR copy = static_cast<HCURSOR>(::CopyImage(cursor, IMAGE_CURSOR, width, height, LR_COPYFROMRESOURCE | LR_COPYRETURNORG));
-		if (copy) {
-			created = copy != cursor;
-			cursor = copy;
+/*HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept {
+	class CursorHelper {
+	public:
+		ICONINFO info{};
+		BITMAP bmp{};
+		bool HasBitmap() const noexcept {
+			return bmp.bmWidth > 0;
 		}
-	}
 
-	ICONINFO info;
-	if (::GetIconInfo(cursor, &info)) {
-		BITMAP bmp {};
-		if (::GetObject(info.hbmMask, sizeof(bmp), &bmp)) {
-			FlipBitmap(info.hbmMask, bmp.bmWidth, bmp.bmHeight);
+		CursorHelper(const HCURSOR cursor) noexcept {
+			Init(cursor);
+		}
+		~CursorHelper() {
+			CleanUp();
+		}
+
+		CursorHelper &operator=(const HCURSOR cursor) noexcept {
+			CleanUp();
+			Init(cursor);
+			return *this;
+		}
+
+		bool MatchesSize(const int width, const int height) noexcept {
+			return bmp.bmWidth == width && bmp.bmHeight == height;
+		}
+
+		HCURSOR CreateFlippedCursor() noexcept {
+			if (info.hbmMask)
+				FlipBitmap(info.hbmMask, bmp.bmWidth, bmp.bmHeight);
 			if (info.hbmColor)
 				FlipBitmap(info.hbmColor, bmp.bmWidth, bmp.bmHeight);
 			info.xHotspot = bmp.bmWidth - 1 - info.xHotspot;
 
-			reverseArrowCursor = ::CreateIconIndirect(&info);
+			return ::CreateIconIndirect(&info);
 		}
 
-		::DeleteObject(info.hbmMask);
-		if (info.hbmColor)
-			::DeleteObject(info.hbmColor);
+	private:
+		void Init(const HCURSOR &cursor) noexcept {
+			if (::GetIconInfo(cursor, &info)) {
+				::GetObject(info.hbmMask, sizeof(bmp), &bmp);
+				PLATFORM_ASSERT(HasBitmap());
+			}
+		}
+
+		void CleanUp() noexcept {
+			if (info.hbmMask)
+				::DeleteObject(info.hbmMask);
+			if (info.hbmColor)
+				::DeleteObject(info.hbmColor);
+			info = {};
+			bmp = {};
+		}
+
+		static void FlipBitmap(const HBITMAP bitmap, const int width, const int height) noexcept {
+			HDC hdc = ::CreateCompatibleDC({});
+			if (hdc) {
+				HBITMAP prevBmp = SelectBitmap(hdc, bitmap);
+				::StretchBlt(hdc, width - 1, 0, -width, height, hdc, 0, 0, width, height, SRCCOPY);
+				SelectBitmap(hdc, prevBmp);
+				::DeleteDC(hdc);
+			}
+		}
+	};
+
+	HCURSOR reverseArrowCursor {};
+
+	const int width = SystemMetricsForDpi(SM_CXCURSOR, dpi);
+	const int height = SystemMetricsForDpi(SM_CYCURSOR, dpi);
+
+	DPI_AWARENESS_CONTEXT oldContext = nullptr;
+	if (fnAreDpiAwarenessContextsEqual && fnAreDpiAwarenessContextsEqual(fnGetThreadDpiAwarenessContext(), DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED)) {
+		oldContext = fnSetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+		PLATFORM_ASSERT(oldContext != nullptr);
 	}
 
-	if (created) {
-		::DestroyCursor(cursor);
+	const HCURSOR cursor = static_cast<HCURSOR>(::LoadImage({}, IDC_ARROW, IMAGE_CURSOR, width, height, LR_SHARED));
+	if (cursor) {
+		CursorHelper cursorHelper(cursor);
+
+		if (cursorHelper.HasBitmap() && !cursorHelper.MatchesSize(width, height)) {
+			const HCURSOR copy = static_cast<HCURSOR>(::CopyImage(cursor, IMAGE_CURSOR, width, height, LR_COPYFROMRESOURCE | LR_COPYRETURNORG));
+			if (copy) {
+				cursorHelper = copy;
+				::DestroyCursor(copy);
+			}
+		}
+
+		if (cursorHelper.HasBitmap()) {
+			reverseArrowCursor = cursorHelper.CreateFlippedCursor();
+		}
 	}
-	return reverseArrowCursor;*/
-	// WinUI Todo
-	return nullptr;
-}
+
+	if (oldContext) {
+		fnSetThreadDpiAwarenessContext(oldContext);
+	}
+
+	return reverseArrowCursor;
+}*/
 
 void Window::SetCursor(Cursor curs) {
 	if (auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) })
