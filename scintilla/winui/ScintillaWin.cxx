@@ -2517,6 +2517,12 @@ namespace Scintilla::Internal {
 		}
 	}
 
+	constexpr bool RECTContains(RECT rect, PRectangle rc) noexcept
+	{
+		return (rc.left >= rect.left) && (rc.right <= rect.right) &&
+			(rc.top >= rect.top) && (rc.bottom <= rect.bottom);
+	}
+
 	IFACEMETHODIMP ScintillaWinUI::UpdatesNeeded()
 	{
 		ULONG drawingBoundsCount = 0;
@@ -2542,7 +2548,23 @@ namespace Scintilla::Internal {
 		// without significant impact on presentation frame rate.
 		for (ULONG i = 0; i < drawingBoundsCount; i++)
 		{
+			paintingAllText = RECTContains(drawingBounds[i], GetTextRectangle());
 			DrawBit(drawingBounds[i]);
+
+			if (paintState == PaintState::abandoned)
+			{
+				break;
+			}
+		}
+
+		if (paintState == PaintState::abandoned)
+		{
+			// Painting area was insufficient to cover new styling or brace highlight positions
+
+			paintState = PaintState::painting;
+			paintingAllText = true;
+			// Todo: This is in contradiction with the above paragraph about drawing size. But invalidation results in flickering
+			DrawBit(RECT{ 0, 0, _wrapper->Width(), _wrapper->Height() });
 		}
 
 		paintState = PaintState::notPainting;
@@ -2612,7 +2634,6 @@ namespace Scintilla::Internal {
 			//surf->SetDBCSMode(0);  // Todo: Figure out what to make this
 			surf->SetMode(SurfaceMode{ 65001, false }); // Todo: Ensure these values are good
 			rcPaint = Scintilla::Internal::PRectangle(drawingBounds.left, drawingBounds.top, drawingBounds.right, drawingBounds.bottom);
-			paintingAllText = true;
 			Paint(surf.get(), rcPaint);
 
 			surf->Release();
