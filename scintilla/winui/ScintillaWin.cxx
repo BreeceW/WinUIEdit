@@ -445,6 +445,8 @@ namespace Scintilla::Internal {
 
 	ScintillaWinUI::ScintillaWinUI()
 	{
+		view.bufferedDraw = false;
+
 		pdoc->AllocateLineCharacterIndex(Scintilla::LineCharacterIndexType::Utf16);
 
 		// Todo: Note that Windows Terminal repo may be able to help find a way to use TSF instead of WM_CHAR.
