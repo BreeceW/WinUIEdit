@@ -27,6 +27,11 @@ namespace winrt::MicaEditor::implementation
 				"virtual void volatile wchar_t xor xor_eq"));
 			_editor->PublicWndProc(Scintilla::Message::SetKeyWords, 1, reinterpret_cast<Scintilla::uptr_t>(
 				"break case catch co_await co_return co_yield continue do else for goto if return switch throw try while"));
+			SetLanguageIndentMode(
+				SCE_C_WORD2, { "case", "default", "do", "else", "for", "if", "while", },
+				SCE_C_OPERATOR, { ";", },
+				SCE_C_OPERATOR, { "{", },
+				SCE_C_OPERATOR, { "}", });
 		}
 		else if (_highlightingLanguage == L"csharp")
 		{
@@ -43,6 +48,11 @@ namespace winrt::MicaEditor::implementation
 				"unchecked unsafe ushort var virtual void volatile where "));
 			_editor->PublicWndProc(Scintilla::Message::SetKeyWords, 1, reinterpret_cast<Scintilla::uptr_t>(
 				"break case catch continue do else finally for foreach goto if return switch throw try using while yield "));
+			SetLanguageIndentMode(
+				SCE_C_WORD2, { "case", "default", "do", "else", "for", "foreach", "if", "using", "while", },
+				SCE_C_OPERATOR, { ";", },
+				SCE_C_OPERATOR, { "{", },
+				SCE_C_OPERATOR, { "}", });
 		}
 		else if (_highlightingLanguage == L"json")
 		{
@@ -54,10 +64,16 @@ namespace winrt::MicaEditor::implementation
 			_editor->PublicWndProc(Scintilla::Message::SetKeyWords, 0, reinterpret_cast<Scintilla::uptr_t>("false true null"));
 			_editor->PublicWndProc(Scintilla::Message::SetKeyWords, 1, reinterpret_cast<Scintilla::uptr_t>(
 				"@id @context @type @value @language @container @list @set @reverse @index @base @vocab @graph"));
+			SetLanguageIndentMode(
+				0, { },
+				0, { },
+				SCE_JSON_OPERATOR, { "{", "[", },
+				SCE_JSON_OPERATOR, { "}", "]", });
 		}
 		else
 		{
 			_editor->PublicWndProc(Scintilla::Message::SetILexer, 0, 0);
+			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
 		}
 	}
 
@@ -70,6 +86,8 @@ namespace winrt::MicaEditor::implementation
 			case ElementTheme::Dark:
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0xD4, 0xD4, 0xD4 });
 				_editor->StyleClearCustom();
+
+				_editor->StyleSetForeTransparent(STYLE_BRACELIGHT, ColourRGBA{ 0xD4, 0xD4, 0xD4 });
 
 				//_editor->StyleSetForeTransparent(SCE_C_IDENTIFIER, ColourRGBA{ 0x9C, 0xDC, 0xFE });
 				_editor->StyleSetForeTransparent(SCE_C_ESCAPESEQUENCE, ColourRGBA{ 0xD7, 0xBA, 0x7D });
@@ -86,6 +104,8 @@ namespace winrt::MicaEditor::implementation
 			case ElementTheme::Light:
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0, 0, 0 });
 				_editor->StyleClearCustom();
+
+				_editor->StyleSetForeTransparent(STYLE_BRACELIGHT, ColourRGBA{ 0x00, 0x00, 0x00 });
 
 				//_editor->StyleSetForeTransparent(SCE_C_IDENTIFIER, ColourRGBA{ 0x00, 0x10, 0x80 });
 				_editor->StyleSetForeTransparent(SCE_C_ESCAPESEQUENCE, ColourRGBA{ 0xEE, 0x00, 0x00 });
@@ -108,6 +128,8 @@ namespace winrt::MicaEditor::implementation
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0xD4, 0xD4, 0xD4 });
 				_editor->StyleClearCustom();
 
+				_editor->StyleSetForeTransparent(STYLE_BRACELIGHT, ColourRGBA{ 0xD4, 0xD4, 0xD4 });
+
 				_editor->StyleSetForeTransparent(SCE_JSON_PROPERTYNAME, ColourRGBA{ 0x9C, 0xDC, 0xFE });
 				_editor->StyleSetForeTransparent(SCE_JSON_ESCAPESEQUENCE, ColourRGBA{ 0xD7, 0xBA, 0x7D });
 				_editor->StyleSetForeTransparent(SCE_JSON_NUMBER, ColourRGBA{ 0xB5, 0xCE, 0xA8 });
@@ -124,6 +146,8 @@ namespace winrt::MicaEditor::implementation
 			case ElementTheme::Light:
 				_editor->StyleSetForeTransparent(STYLE_DEFAULT, ColourRGBA{ 0, 0, 0 });
 				_editor->StyleClearCustom();
+
+				_editor->StyleSetForeTransparent(STYLE_BRACELIGHT, ColourRGBA{ 0x00, 0x00, 0x00 });
 
 				_editor->StyleSetForeTransparent(SCE_JSON_PROPERTYNAME, ColourRGBA{ 0x04, 0x51, 0xa5 });
 				_editor->StyleSetForeTransparent(SCE_JSON_ESCAPESEQUENCE, ColourRGBA{ 0xEE, 0x00, 0x00 });

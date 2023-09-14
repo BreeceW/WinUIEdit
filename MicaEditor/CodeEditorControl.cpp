@@ -221,10 +221,34 @@ namespace winrt::MicaEditor::implementation
 			UpdateZoom();
 		}
 
-		if ((data->nmhdr.code == Scintilla::Notification::UpdateUI && Scintilla::FlagSet(data->updated, Scintilla::Update::Selection))
-			|| (data->nmhdr.code == Scintilla::Notification::Modified && Scintilla::FlagSet(data->modificationType, Scintilla::ModificationFlags::InsertText | Scintilla::ModificationFlags::DeleteText)))
+		if (data->nmhdr.code == Scintilla::Notification::UpdateUI && Scintilla::FlagSet(data->updated, Scintilla::Update::Content | Scintilla::Update::Selection))
 		{
 			UpdateCaretLineBackColors();
+			if (Call().Focus())
+			{
+				UpdateBraceMatch();
+			}
+		}
+
+		if (data->nmhdr.code == Scintilla::Notification::FocusOut)
+		{
+			Call().BraceBadLight(-1);
+		}
+		else if (data->nmhdr.code == Scintilla::Notification::FocusIn)
+		{
+			UpdateBraceMatch();
+		}
+
+		if (data->nmhdr.code == Scintilla::Notification::CharAdded && data->ch <= 0xFF)
+		{
+			const auto sel{ Call().SelectionSpan() };
+
+			if (sel.start == sel.end && sel.start > 0
+				&& !Call().CallTipActive()
+				&& !Call().AutoCActive())
+			{
+				AutoIndent(data->ch);
+			}
 		}
 	}
 
@@ -308,16 +332,32 @@ namespace winrt::MicaEditor::implementation
 			_editor->StyleSetForeTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{ 0x85, 0x85, 0x85 });
 			_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
 
-			_editor->StyleSetForeTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{ 255, 255, 255 });
+			_editor->StyleSetForeTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{ 0xFF, 0xFF, 0xFF });
 			_editor->StyleSetBackTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{});
+
+			_editor->StyleSetForeTransparent(STYLE_BRACELIGHT, Scintilla::Internal::ColourRGBA{ 0xFF, 0xFF, 0xFF });
+			_editor->StyleSetBackTransparent(STYLE_BRACELIGHT, Scintilla::Internal::ColourRGBA{ 0x11, 0x3D, 0x6F });
+			_editor->StyleSetForeTransparent(STYLE_BRACEBAD, Scintilla::Internal::ColourRGBA{ 0xcd, 0x31, 0x31 });
+			_editor->StyleSetBackTransparent(STYLE_BRACEBAD, Scintilla::Internal::ColourRGBA{});
+
+			_editor->StyleSetForeTransparent(STYLE_INDENTGUIDE, Scintilla::Internal::ColourRGBA{ 0xFF, 0xFF, 0xFF, 48 });
+			_editor->StyleSetBackTransparent(STYLE_INDENTGUIDE, Scintilla::Internal::ColourRGBA{});
 			break;
 
 		case ElementTheme::Light:
 			_editor->StyleSetBackTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{});
 			_editor->StyleSetForeTransparent(STYLE_LINENUMBER, Scintilla::Internal::ColourRGBA{ 0x23, 0x78, 0x93 });
 
-			_editor->StyleSetForeTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{ 0, 0, 0 });
+			_editor->StyleSetForeTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00 });
 			_editor->StyleSetBackTransparent(STYLE_DEFAULT, Scintilla::Internal::ColourRGBA{});
+
+			_editor->StyleSetForeTransparent(STYLE_BRACELIGHT, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00 });
+			_editor->StyleSetBackTransparent(STYLE_BRACELIGHT, Scintilla::Internal::ColourRGBA{ 0xE2, 0xE6, 0xD6 });
+			_editor->StyleSetForeTransparent(STYLE_BRACEBAD, Scintilla::Internal::ColourRGBA{ 0xcd, 0x31, 0x31 });
+			_editor->StyleSetBackTransparent(STYLE_BRACEBAD, Scintilla::Internal::ColourRGBA{});
+
+			_editor->StyleSetForeTransparent(STYLE_INDENTGUIDE, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00, 64 });
+			_editor->StyleSetBackTransparent(STYLE_INDENTGUIDE, Scintilla::Internal::ColourRGBA{});
 			break;
 		}
 
@@ -358,6 +398,28 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
+	void CodeEditorControl::UpdateBraceMatch()
+	{
+		SciBraceMatch();
+	}
+
+	void CodeEditorControl::AutoIndent(char ch)
+	{
+		SciAutomaticIndentation(ch);
+	}
+
+	void CodeEditorControl::SetLanguageIndentMode(
+		int indentKeywordStyle, const std::set<std::string> &indentKeywords,
+		int lineEndStyle, const std::set<std::string> &lineEndWords,
+		int blockStartStyle, const std::set<std::string> &blockStartWords,
+		int blockEndStyle, const std::set<std::string> &blockEndWords)
+	{
+		_sciStatementIndent = { indentKeywordStyle, { indentKeywords, } }; // Todo: customize. also note using WORD2 for these
+		_sciStatementEnd = { lineEndStyle, { lineEndWords, } };
+		_sciBlockStart = { blockStartStyle, { blockStartWords, } };
+		_sciBlockEnd = { blockEndStyle, { blockEndWords, } };
+	}
+
 	void CodeEditorControl::UpdateZoom()
 	{
 		const auto size{ _editor->PublicWndProc(Scintilla::Message::StyleGetSizeFractional, static_cast<Scintilla::uptr_t>(Scintilla::StylesCommon::Default), 0) };
@@ -393,6 +455,7 @@ namespace winrt::MicaEditor::implementation
 		_editor->PublicWndProc(Scintilla::Message::SetHScrollBar, true, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetEndAtLastLine, false, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetTabWidth, 4, 0);
+		_editor->PublicWndProc(Scintilla::Message::SetIndent, 4, 0); // Brace matching and autoindent relies on this
 		_editor->PublicWndProc(Scintilla::Message::SetMarginWidthN, 1, 0);
 		_editor->PublicWndProc(Scintilla::Message::StyleSetFont, STYLE_DEFAULT, reinterpret_cast<Scintilla::sptr_t>("Cascadia Code"));
 		_editor->PublicWndProc(Scintilla::Message::StyleSetSizeFractional, STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
@@ -402,6 +465,7 @@ namespace winrt::MicaEditor::implementation
 		_editor->PublicWndProc(Scintilla::Message::SetCaretLineVisibleAlways, true, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetCaretLineLayer, SC_LAYER_UNDER_TEXT, 0);
 		_editor->PublicWndProc(Scintilla::Message::SetCaretLineHighlightSubLine, true, 0);
+		_editor->PublicWndProc(Scintilla::Message::SetIndentationGuides, static_cast<Scintilla::uptr_t>(Scintilla::IndentView::LookBoth), 0);
 	}
 
 #ifndef WINUI3

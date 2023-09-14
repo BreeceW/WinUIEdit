@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CodeEditorControl.SciEdit.h" />
     <ClInclude Include="ControlIncludes.h" />
     <ClInclude Include="DummyPage.h" Condition="'$(UseDummyPage)' == 'true'">
       <DependentUpon>DummyPage.xaml</DependentUpon>
@@ -153,6 +154,7 @@
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CodeEditorControl.SciEdit.cpp" />
     <ClCompile Include="DummyPage.cpp" Condition="'$(UseDummyPage)' == 'true'">
       <DependentUpon>DummyPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -173,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="..\scintilla\src\*.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\scintilla\call\ScintillaCall.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexers\*.cxx">

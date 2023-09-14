@@ -25,6 +25,8 @@
     <ClCompile Include="..\lexilla\lexers\*.cxx" />
     <ClCompile Include="..\lexilla\lexlib\*.cxx" />
     <ClCompile Include="..\lexilla\src\Lexilla.cxx" />
+    <ClCompile Include="CodeEditorControl.SciEdit.cpp" />
+    <ClCompile Include="..\scintilla\call\ScintillaCall.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -40,6 +42,7 @@
     <ClInclude Include="..\scintilla\src\*.h" />
     <ClInclude Include="..\lexilla\lexlib\*.h" />
     <ClInclude Include="..\lexilla\include\SciLexer.h" />
+    <ClInclude Include="CodeEditorControl.SciEdit.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MicaEditor.def" />

@@ -3,6 +3,7 @@
 #include "CodeEditorControl.g.h"
 
 #include "MicaEditorControl.h"
+#include "CodeEditorControl.SciEdit.h"
 
 namespace winrt::MicaEditor::implementation
 {
@@ -23,7 +24,7 @@ namespace winrt::MicaEditor::implementation
 
 		event_token DefaultColorsChanged(Windows::Foundation::EventHandler<DUX::ElementTheme> const &handler);
 		void DefaultColorsChanged(event_token const &token) noexcept;
-		
+
 		event_token SyntaxHighlightingApplied(Windows::Foundation::EventHandler<DUX::ElementTheme> const &handler);
 		void SyntaxHighlightingApplied(event_token const &token) noexcept;
 
@@ -55,6 +56,8 @@ namespace winrt::MicaEditor::implementation
 		void UpdateColors(DUX::ElementTheme theme);
 		void UpdateStyles();
 		void UpdateCaretLineBackColors(bool colorsUpdated = false);
+		void UpdateBraceMatch();
+		void AutoIndent(char ch);
 		void UpdateZoom();
 		void AddKeyboardShortcuts();
 		void ChangeDefaults();
@@ -65,6 +68,33 @@ namespace winrt::MicaEditor::implementation
 		std::string GetMainSelectedText(bool expandCaretToWord, Scintilla::sptr_t &start, Scintilla::sptr_t &end);
 		void SetLexer();
 		void UpdateLanguageStyles();
+		void SetLanguageIndentMode(
+			int indentKeywordStyle, const std::set<std::string> &indentKeywords,
+			int lineEndStyle, const std::set<std::string> &lineEndWords,
+			int blockStartStyle, const std::set<std::string> &blockStartWords,
+			int blockEndStyle, const std::set<std::string> &blockEndWords
+		);
+
+		static constexpr bool _sciIndentOpening{ false };
+		static constexpr bool _sciIndentClosing{ false };
+		static constexpr int _sciStatementLookback{ 20 };
+		StyleAndWords _sciStatementIndent;
+		StyleAndWords _sciStatementEnd;
+		StyleAndWords _sciBlockStart;
+		StyleAndWords _sciBlockEnd;
+		bool SciFindMatchingBracePosition(Scintilla::Position &braceAtCaret, Scintilla::Position &braceOpposite, bool sloppy);
+		void SciBraceMatch();
+		Scintilla::Line SciGetCurrentLineNumber();
+		int SciIndentOfBlock(Scintilla::Line line);
+		int SciGetLineIndentation(Scintilla::Line line);
+		Scintilla::Position SciGetLineIndentPosition(Scintilla::Line line);
+		void SciSetLineIndentation(Scintilla::Line line, int indent);
+		Scintilla::Span SciGetSelection();
+		std::vector<std::string> SciGetLinePartsInStyle(Scintilla::Line line, const StyleAndWords &saw);
+		void SciSetSelection(Scintilla::Position anchor, Scintilla::Position currentPos);
+		bool SciRangeIsAllWhitespace(Scintilla::Position start, Scintilla::Position end);
+		IndentationStatus SciGetIndentState(Scintilla::Line line);
+		void SciAutomaticIndentation(char ch);
 	};
 }
 
