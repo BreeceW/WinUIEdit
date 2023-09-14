@@ -29,6 +29,8 @@ namespace winrt::MicaEditor::implementation
 
 	private:
 		com_ptr<MicaEditorControl> _editor{ nullptr };
+		constexpr Scintilla::ScintillaCall &Call() noexcept { return _editor->Call(); }
+
 		hstring _highlightingLanguage;
 		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _defaultColorsChangedEvent;
 		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _syntaxHighlightingAppliedEvent;

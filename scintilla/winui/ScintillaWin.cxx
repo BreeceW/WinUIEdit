@@ -2930,13 +2930,28 @@ namespace Scintilla::Internal {
 		return _wndProc && _wndProcTag ? _wndProc(_wndProcTag.get(), msg, wParam, lParam) : 0;
 	}
 
+	sptr_t ScintillaWinUI::DirectFunction(
+		sptr_t ptr, UINT iMessage, uptr_t wParam, sptr_t lParam)
+	{
+		ScintillaWinUI *sci = reinterpret_cast<ScintillaWinUI *>(ptr);
+		//PLATFORM_ASSERT(::GetCurrentThreadId() == ::GetWindowThreadProcessId(sci->MainHWND(), nullptr));
+		return sci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
+	}
+
+	sptr_t ScintillaWinUI::DirectStatusFunction(
+		sptr_t ptr, UINT iMessage, uptr_t wParam, sptr_t lParam, int *pStatus)
+	{
+		ScintillaWinUI *sci = reinterpret_cast<ScintillaWinUI *>(ptr);
+		//PLATFORM_ASSERT(::GetCurrentThreadId() == ::GetWindowThreadProcessId(sci->MainHWND(), nullptr));
+		const sptr_t returnValue = sci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
+		*pStatus = static_cast<int>(sci->errorStatus);
+		return returnValue;
+	}
+
 	sptr_t ScintillaWinUI::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam)
 	{
 		// Todo: Consider implementing these
 		/*
-		case Message::GetDirectFunction:
-		case Message::GetDirectStatusFunction:
-		case Message::GetDirectPointer:
 		case Message::GrabFocus:
 		case Message::SetTechnology:
 		case Message::SetBidirectional:
@@ -2946,6 +2961,15 @@ namespace Scintilla::Internal {
 
 		switch (iMessage)
 		{
+		case Message::GetDirectFunction:
+			return reinterpret_cast<sptr_t>(DirectFunction);
+
+		case Message::GetDirectStatusFunction:
+			return reinterpret_cast<sptr_t>(DirectStatusFunction);
+
+		case Message::GetDirectPointer:
+			return reinterpret_cast<sptr_t>(this);
+
 		case Scintilla::Message::SetBidirectional:
 		{
 			if (static_cast<Bidirectional>(wParam) <= Bidirectional::R2L)
