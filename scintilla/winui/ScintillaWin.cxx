@@ -445,6 +445,10 @@ namespace Scintilla::Internal {
 
 	ScintillaWinUI::ScintillaWinUI()
 	{
+		// This is a legacy Scintilla feature that is recommended to be disabled (though not deprecated)
+		// It is not currently supported in MicaEditorControl because it is a performance hit and is redundant
+		commandEvents = false;
+
 		view.bufferedDraw = false;
 
 		pdoc->AllocateLineCharacterIndex(Scintilla::LineCharacterIndexType::Utf16);
@@ -2104,12 +2108,13 @@ namespace Scintilla::Internal {
 	void ScintillaWinUI::NotifyFocus(bool focus)
 	{
 		// Todo: notifyq
-		if (commandEvents)
+		// NOTE: Removed feature
+		/*if (commandEvents)
 		{
 			SendMessage(WM_COMMAND,
 				MAKEWPARAM(GetCtrlID(), focus ? FocusChange::Setfocus : FocusChange::Killfocus),
 				reinterpret_cast<LPARAM>(nullptr));
-		}
+		}*/
 		if (_tsfCore)
 		{
 			if (focus) // Todo: should this be inside if (commandEvents)?
