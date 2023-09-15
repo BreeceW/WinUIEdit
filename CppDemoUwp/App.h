@@ -12,7 +12,7 @@ namespace winrt::CppDemoUwp::implementation
 		void OnNavigationFailed(IInspectable const &, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs const &e);
 		Windows::Foundation::IAsyncAction NewWindowAsync();
 		void GoToSettingsPage();
-		void GoBack();
+		bool GoBack();
 		Windows::UI::Xaml::ElementTheme Theme();
 		void Theme(Windows::UI::Xaml::ElementTheme theme);
 

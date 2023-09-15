@@ -90,7 +90,10 @@ int32_t App::NewWindow(IStorageItem const &file)
 
 void App::OnSystemBackRequested(IInspectable const &sender, BackRequestedEventArgs const &e)
 {
-	GoBack();
+	if (GoBack())
+	{
+		e.Handled(true);
+	}
 }
 
 IAsyncAction App::NewWindowAsync()
@@ -113,16 +116,21 @@ void App::GoToSettingsPage()
 	UpdateTitleBarBackButton(frame);
 }
 
-void App::GoBack()
+bool App::GoBack()
 {
+	auto ret{ false };
+
 	const auto frame{ Window::Current().Content().as<Frame>() };
 
 	if (frame.CanGoBack())
 	{
 		frame.GoBack();
+		ret = true;
 	}
 
 	UpdateTitleBarBackButton(frame);
+
+	return ret;
 }
 
 ElementTheme App::Theme()
