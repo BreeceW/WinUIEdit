@@ -78,7 +78,7 @@ namespace winrt::MicaEditor::implementation
 			{
 			case VirtualKey::F2: // Todo: make customizable
 			{
-				if (_editor->PublicWndProc(Scintilla::Message::GetFocus, 0, 0))
+				if (Call().Focus())
 				{
 					ChangeAllOccurrences();
 					e.Handled(true);
@@ -208,7 +208,7 @@ namespace winrt::MicaEditor::implementation
 	void CodeEditorControl::Editor_DpiChanged(IInspectable const &sender, double value)
 	{
 		_dpiScale = value;
-		_editor->PublicWndProc(Scintilla::Message::SetXCaretPolicy, CARET_SLOP | CARET_STRICT | CARET_EVEN, ConvertFromDipToPixelUnit(24, value));
+		Call().SetXCaretPolicy(Scintilla::CaretPolicy::Slop | Scintilla::CaretPolicy::Strict | Scintilla::CaretPolicy::Even, ConvertFromDipToPixelUnit(24, value));
 		UpdateZoom();
 	}
 
@@ -267,7 +267,7 @@ namespace winrt::MicaEditor::implementation
 
 		_highlightingLanguage = value;
 
-		_editor->PublicWndProc(Scintilla::Message::ClearDocumentStyle, 0, 0);
+		Call().ClearDocumentStyle();
 
 		SetLexer();
 
@@ -305,17 +305,17 @@ namespace winrt::MicaEditor::implementation
 			switch (theme)
 			{
 			case ElementTheme::Dark:
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET, Scintilla::Internal::ColourRGBA{ 0xAE, 0xAF, 0xAD }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_ADDITIONAL_BACK, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_INACTIVE_BACK, Scintilla::Internal::ColourRGBA{ 0x3A, 0x3D, 0x41 }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::Caret, Scintilla::Internal::ColourRGBA{ 0xAE, 0xAF, 0xAD }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::SelectionBack, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::SelectionAdditionalText, Scintilla::Internal::ColourRGBA{ 0x26, 0x4F, 0x78 }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::SelectionInactiveBack, Scintilla::Internal::ColourRGBA{ 0x3A, 0x3D, 0x41 }.AsInteger());
 				break;
 
 			case ElementTheme::Light:
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00 }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_BACK, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_ADDITIONAL_BACK, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
-				_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_SELECTION_INACTIVE_BACK, Scintilla::Internal::ColourRGBA{ 0xE5, 0xEB, 0xF1 }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::Caret, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00 }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::SelectionBack, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::SelectionAdditionalBack, Scintilla::Internal::ColourRGBA{ 0xAD, 0xD6, 0xFF }.AsInteger());
+				Call().SetElementColour(Scintilla::Element::SelectionInactiveBack, Scintilla::Internal::ColourRGBA{ 0xE5, 0xEB, 0xF1 }.AsInteger());
 				break;
 			}
 
@@ -373,7 +373,7 @@ namespace winrt::MicaEditor::implementation
 
 	void CodeEditorControl::UpdateCaretLineBackColors(bool colorsUpdated)
 	{
-		const auto hasEmptySelection = _editor->PublicWndProc(Scintilla::Message::GetSelectionEmpty, 0, 0);
+		const auto hasEmptySelection = Call().SelectionEmpty();
 
 		if ((_hasEmptySelection != hasEmptySelection) || (hasEmptySelection && colorsUpdated))
 		{
@@ -384,17 +384,17 @@ namespace winrt::MicaEditor::implementation
 				switch (_theme)
 				{
 				case ElementTheme::Dark:
-					_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET_LINE_BACK, Scintilla::Internal::ColourRGBA{ 0xFF, 0xFF, 0xFF, 16 }.AsInteger());
+					Call().SetElementColour(Scintilla::Element::CaretLineBack, Scintilla::Internal::ColourRGBA{ 0xFF, 0xFF, 0xFF, 16 }.AsInteger());
 					break;
 
 				case ElementTheme::Light:
-					_editor->PublicWndProc(Scintilla::Message::SetElementColour, SC_ELEMENT_CARET_LINE_BACK, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00, 12 }.AsInteger());
+					Call().SetElementColour(Scintilla::Element::CaretLineBack, Scintilla::Internal::ColourRGBA{ 0x00, 0x00, 0x00, 12 }.AsInteger());
 					break;
 				}
 			}
 			else
 			{
-				_editor->PublicWndProc(Scintilla::Message::ResetElementColour, SC_ELEMENT_CARET_LINE_BACK, 0);
+				Call().ResetElementColour(Scintilla::Element::CaretLineBack);
 			}
 		}
 	}
@@ -423,50 +423,50 @@ namespace winrt::MicaEditor::implementation
 
 	void CodeEditorControl::UpdateZoom()
 	{
-		const auto size{ _editor->PublicWndProc(Scintilla::Message::StyleGetSizeFractional, static_cast<Scintilla::uptr_t>(Scintilla::StylesCommon::Default), 0) };
-		const auto zoom{ static_cast<int>(_editor->PublicWndProc(Scintilla::Message::GetZoom, 0, 0)) };
+		const auto size{ Call().StyleGetSizeFractional(STYLE_DEFAULT) };
+		const auto zoom{ static_cast<int>(Call().Zoom()) };
 		const auto factor{ static_cast<float>((size + zoom * 100)) / size };
 		// Todo: Width 11 hard coded for a digit. Use below for real value:
-		// _editor->PublicWndProc(Scintilla::Message::TextWidth, static_cast<Scintilla::uptr_t>(Scintilla::StylesCommon::LineNumber), reinterpret_cast<Scintilla::sptr_t>("9"))
-		const auto line{ _editor->PublicWndProc(Scintilla::Message::GetLineCount, 0, 0) };
+		// Call().TextWidth, static_cast<Scintilla::uptr_t>(Scintilla::StylesCommon::LineNumber), reinterpret_cast<Scintilla::sptr_t>("9"))
+		const auto line{ Call().LineCount() };
 		const auto width{ 12 + 11 * std::max(3, static_cast<int>(std::floor(std::log10(line) + 1))) };
-		_editor->PublicWndProc(Scintilla::Message::SetMarginWidthN, 0, ConvertFromDipToPixelUnit(std::floorf(factor * width + 0.5f), _dpiScale));
-		_editor->PublicWndProc(Scintilla::Message::SetMarginLeft, 0, ConvertFromDipToPixelUnit(std::floorf(factor * 23 + 0.5f), _dpiScale));
+		Call().SetMarginWidthN(0, ConvertFromDipToPixelUnit(std::floorf(factor * width + 0.5f), _dpiScale));
+		Call().SetMarginLeft(ConvertFromDipToPixelUnit(std::floorf(factor * 23 + 0.5f), _dpiScale));
 		// Todo: Set caret width to be at least the UISettings system caret width
 		const auto caretWidth{ std::max(1.0f, std::floorf(factor * 2 * _dpiScale)) };
-		_editor->PublicWndProc(Scintilla::Message::SetCaretWidth, caretWidth, 0); // Todo: Needs to stop blinking after timeout and respect blink rate
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineFrame, caretWidth, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetExtraDescent, std::floorf(factor * 1.8 * _dpiScale), 0);
+		Call().SetCaretWidth(caretWidth); // Todo: Needs to stop blinking after timeout and respect blink rate
+		Call().SetCaretLineFrame(caretWidth);
+		Call().SetExtraDescent(std::floorf(factor * 1.8 * _dpiScale));
 	}
 
 	void CodeEditorControl::AddKeyboardShortcuts()
 	{
-		_editor->PublicWndProc(Scintilla::Message::AssignCmdKey, 187 + (SCMOD_CTRL << 16), SCI_ZOOMIN); // Ctrl+Plus
-		_editor->PublicWndProc(Scintilla::Message::AssignCmdKey, 189 + (SCMOD_CTRL << 16), SCI_ZOOMOUT); // Ctrl+Minus
-		_editor->PublicWndProc(Scintilla::Message::AssignCmdKey, 48 + (SCMOD_CTRL << 16), SCI_SETZOOM); // Ctrl+0
+		Call().AssignCmdKey(187 + (SCMOD_CTRL << 16), SCI_ZOOMIN); // Ctrl+Plus
+		Call().AssignCmdKey(189 + (SCMOD_CTRL << 16), SCI_ZOOMOUT); // Ctrl+Minus
+		Call().AssignCmdKey(48 + (SCMOD_CTRL << 16), SCI_SETZOOM); // Ctrl+0
 	}
 
 	void CodeEditorControl::ChangeDefaults()
 	{
-		_editor->PublicWndProc(Scintilla::Message::SetMultipleSelection, true, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetScrollWidth, 2000, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetScrollWidthTracking, true, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetYCaretPolicy, CARET_SLOP | CARET_STRICT | CARET_EVEN, 1);
-		_editor->PublicWndProc(Scintilla::Message::SetVisiblePolicy, VISIBLE_SLOP, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetHScrollBar, true, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetEndAtLastLine, false, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetTabWidth, 4, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetIndent, 4, 0); // Brace matching and autoindent relies on this
-		_editor->PublicWndProc(Scintilla::Message::SetMarginWidthN, 1, 0);
-		_editor->PublicWndProc(Scintilla::Message::StyleSetFont, STYLE_DEFAULT, reinterpret_cast<Scintilla::sptr_t>("Cascadia Code"));
-		_editor->PublicWndProc(Scintilla::Message::StyleSetSizeFractional, STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
-		_editor->PublicWndProc(Scintilla::Message::SetAdditionalSelectionTyping, 1, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetMultiPaste, SC_MULTIPASTE_EACH, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetLayoutThreads, 16, 0); // Todo: Determine performance impact
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineVisibleAlways, true, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineLayer, SC_LAYER_UNDER_TEXT, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetCaretLineHighlightSubLine, true, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetIndentationGuides, static_cast<Scintilla::uptr_t>(Scintilla::IndentView::LookBoth), 0);
+		Call().SetMultipleSelection(true);
+		Call().SetScrollWidth(2000);
+		Call().SetScrollWidthTracking(true);
+		Call().SetYCaretPolicy(Scintilla::CaretPolicy::Slop | Scintilla::CaretPolicy::Strict | Scintilla::CaretPolicy::Even, 1);
+		Call().SetVisiblePolicy(Scintilla::VisiblePolicy::Slop, 0);
+		Call().SetHScrollBar(true);
+		Call().SetEndAtLastLine(false);
+		Call().SetTabWidth(4);
+		Call().SetIndent(4); // Brace matching and autoindent relies on this
+		Call().SetMarginWidthN(1, 0);
+		Call().StyleSetFont(STYLE_DEFAULT, "Cascadia Code");
+		Call().StyleSetSizeFractional(STYLE_DEFAULT, 11 * SC_FONT_SIZE_MULTIPLIER);
+		Call().SetAdditionalSelectionTyping(true);
+		Call().SetMultiPaste(Scintilla::MultiPaste::Each);
+		Call().SetLayoutThreads(16); // Todo: Determine performance impact
+		Call().SetCaretLineVisibleAlways(true);
+		Call().SetCaretLineLayer(Scintilla::Layer::UnderText);
+		Call().SetCaretLineHighlightSubLine(true);
+		Call().SetIndentationGuides(Scintilla::IndentView::LookBoth);
 	}
 
 #ifndef WINUI3
@@ -501,49 +501,49 @@ namespace winrt::MicaEditor::implementation
 		const auto length{ end - start };
 
 		// Todo: Why are we setting these? Are these the best methods to use here if so?
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionStart, start, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetSelectionEnd, end, 0);
+		Call().SetSelectionStart(start);
+		Call().SetSelectionEnd(end);
 
-		_editor->PublicWndProc(Scintilla::Message::TargetWholeDocument, 0, 0);
-		_editor->PublicWndProc(Scintilla::Message::SetSearchFlags, static_cast<Scintilla::uptr_t>(Scintilla::FindOption::MatchCase), 0);
+		Call().TargetWholeDocument();
+		Call().SetSearchFlags(Scintilla::FindOption::MatchCase);
 
-		const auto mainSelection{ _editor->PublicWndProc(Scintilla::Message::GetMainSelection, 0, 0) };
-		const auto bodyLength{ _editor->PublicWndProc(Scintilla::Message::GetLength, 0, 0) };
+		const auto mainSelection{ Call().MainSelection() };
+		const auto bodyLength{ Call().Length() };
 
 		while (true)
 		{
-			const auto match{ _editor->PublicWndProc(Scintilla::Message::SearchInTarget, length, reinterpret_cast<sptr_t>(&s[0])) };
+			const auto match{ Call().SearchInTarget(length, &s[0]) };
 
 			if (match == -1)
 			{
 				break;
 			}
 
-			const auto targetEnd{ _editor->PublicWndProc(Scintilla::Message::GetTargetEnd, 0, 0) };
+			const auto targetEnd{ Call().TargetEnd() };
 
 			if (match != start)
 			{
 				// Todo: Add maximum number of carets and notify user if exceeded (VS Code allows 10,000)
 				// Todo: This method calls a lot of redraws in a loop. You might need to use the lower level API to avoid that
-				_editor->PublicWndProc(Scintilla::Message::AddSelection, match + length, match);
+				Call().AddSelection(match + length, match);
 			}
 
-			_editor->PublicWndProc(Scintilla::Message::SetTargetStart, targetEnd, 0);
-			_editor->PublicWndProc(Scintilla::Message::SetTargetEnd, bodyLength, 0);
+			Call().SetTargetStart(targetEnd);
+			Call().SetTargetEnd(bodyLength);
 		}
 
-		_editor->PublicWndProc(Scintilla::Message::SetMainSelection, mainSelection, 0);
+		Call().SetMainSelection(mainSelection);
 	}
 
 	std::string CodeEditorControl::GetMainSelectedText(bool expandCaretToWord, Scintilla::sptr_t &start, Scintilla::sptr_t &end)
 	{
 		// Todo: This code may be problematic for rectangular selections
-		start = _editor->PublicWndProc(Scintilla::Message::GetSelectionStart, 0, 0);
-		end = _editor->PublicWndProc(Scintilla::Message::GetSelectionEnd, 0, 0);
+		start = Call().SelectionStart();
+		end = Call().SelectionEnd();
 		if (expandCaretToWord && start == end)
 		{
-			start = _editor->PublicWndProc(Scintilla::Message::WordStartPosition, start, true);
-			end = _editor->PublicWndProc(Scintilla::Message::WordEndPosition, start, true);
+			start = Call().WordStartPosition(start, true);
+			end = Call().WordEndPosition(start, true);
 
 			if (start == end)
 			{
@@ -553,12 +553,12 @@ namespace winrt::MicaEditor::implementation
 
 		const auto length{ end - start };
 		std::string s(length, '\0');
-		const Sci_TextRangeFull range
+		Scintilla::TextRangeFull range
 		{
 			{ start, end, },
 			&s[0],
 		};
-		_editor->PublicWndProc(Scintilla::Message::GetTextRangeFull, 0, reinterpret_cast<sptr_t>(&range));
+		Call().GetTextRangeFull(&range);
 
 		return s;
 	}
