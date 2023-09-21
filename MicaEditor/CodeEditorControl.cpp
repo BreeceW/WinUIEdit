@@ -9,6 +9,7 @@ using namespace ::MicaEditor;
 using namespace winrt;
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
+using namespace Windows::System;
 using namespace DUD;
 using namespace DUX;
 using namespace DUX::Controls;
