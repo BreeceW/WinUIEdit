@@ -1,4 +1,4 @@
-// This file includes code derived from SciTEBase.cxx
+// This file includes code derived from SciTEBase.cxx and StyleWriter.cxx
 // Copyright 1998-2011 by Neil Hodgson <neilh@scintilla.org>
 // The scintilla\License.txt file describes the conditions under which this software may be distributed.
 
@@ -6,16 +6,18 @@
 // Modifications to StyleAndWords:
 // - Added constructor that is not string-based
 // - Changed functions (IsSingleChar, IsCharacter, Includes) to support multiple characters for indent blocks
+// Modifications to TextReader
+// - Removed InternalIsLeadByte
+// - Removed IsLeadByte (header)
 
-#include "pch.h"
-#include "CodeEditorControl.h"
+#include "CodeEditorHandler.h"
+#include <stdexcept>
+#include "SciLexer.h"
 
-using namespace winrt;
-using namespace DUX;
+using namespace MicaEditor::Internal;
 using namespace Scintilla;
-using namespace Scintilla::Internal;
 
-namespace winrt::MicaEditor::implementation
+namespace MicaEditor
 {
 	static constexpr bool IsBrace(char ch) noexcept
 	{
@@ -175,16 +177,6 @@ namespace winrt::MicaEditor::implementation
 		buf[0] = 0;
 	}
 
-	bool TextReader::InternalIsLeadByte(char ch) const
-	{
-		if (Scintilla::CpUtf8 == codePage)
-			// For lexing, all characters >= 0x80 are treated the
-			// same so none is considered a lead byte.
-			return false;
-		else
-			return ::IsDBCSLeadByteEx(codePage, ch) != 0;
-	}
-
 	void TextReader::Fill(Position position)
 	{
 		if (lenDoc == -1)
@@ -227,7 +219,7 @@ namespace winrt::MicaEditor::implementation
 		return sc.LineStart(line);
 	}
 
-	Scintilla::FoldLevel TextReader::LevelAt(Line line)
+	FoldLevel TextReader::LevelAt(Line line)
 	{
 		return sc.FoldLevel(line);
 	}
@@ -249,30 +241,30 @@ namespace winrt::MicaEditor::implementation
 	 * after caret. If brace found also find its matching brace.
 	 * @return @c true if inside a bracket pair.
 	 */
-	bool CodeEditorControl::SciFindMatchingBracePosition(Scintilla::Position &braceAtCaret, Scintilla::Position &braceOpposite, bool sloppy)
+	bool CodeEditorHandler::SciFindMatchingBracePosition(Position &braceAtCaret, Position &braceOpposite, bool sloppy)
 	{
 		// Config
 		const auto bracesStyle{ 0 };
-		const int lexLanguage{ Call().Lexer() };
+		const int lexLanguage{ _call->Lexer() };
 
 		bool isInside = false;
 
-		const int mainSel = Call().MainSelection();
-		if (Call().SelectionNCaretVirtualSpace(mainSel) > 0)
+		const int mainSel = _call->MainSelection();
+		if (_call->SelectionNCaretVirtualSpace(mainSel) > 0)
 			return false;
 
 		const int bracesStyleCheck = bracesStyle;
-		Scintilla::Position caretPos = Call().CurrentPos();
+		Position caretPos = _call->CurrentPos();
 		braceAtCaret = -1;
 		braceOpposite = -1;
 		char charBefore = '\0';
 		int styleBefore = 0;
-		const Scintilla::Position lengthDoc = Call().Length();
-		TextReader acc(Call());
+		const Position lengthDoc = _call->Length();
+		TextReader acc(*_call);
 		if ((lengthDoc > 0) && (caretPos > 0))
 		{
 			// Check to ensure not matching brace that is part of a multibyte character
-			if (Call().PositionBefore(caretPos) == (caretPos - 1))
+			if (_call->PositionBefore(caretPos) == (caretPos - 1))
 			{
 				charBefore = acc[caretPos - 1];
 				styleBefore = acc.StyleAt(caretPos - 1);
@@ -296,7 +288,7 @@ namespace winrt::MicaEditor::implementation
 		{
 			// No brace found so check other side
 			// Check to ensure not matching brace that is part of a multibyte character
-			if (Call().PositionAfter(caretPos) == (caretPos + 1))
+			if (_call->PositionAfter(caretPos) == (caretPos + 1))
 			{
 				const char charAfter = acc[caretPos];
 				const int styleAfter = acc.StyleAt(caretPos);
@@ -317,13 +309,13 @@ namespace winrt::MicaEditor::implementation
 		{
 			if (colonMode)
 			{
-				const Scintilla::Line lineStart = Call().LineFromPosition(braceAtCaret);
-				const Scintilla::Line lineMaxSubord = Call().LastChild(lineStart, static_cast<Scintilla::FoldLevel>(-1));
-				braceOpposite = Call().LineEnd(lineMaxSubord);
+				const Line lineStart = _call->LineFromPosition(braceAtCaret);
+				const Line lineMaxSubord = _call->LastChild(lineStart, static_cast<FoldLevel>(-1));
+				braceOpposite = _call->LineEnd(lineMaxSubord);
 			}
 			else
 			{
-				braceOpposite = Call().BraceMatch(braceAtCaret, 0);
+				braceOpposite = _call->BraceMatch(braceAtCaret, 0);
 			}
 			if (braceOpposite > braceAtCaret)
 			{
@@ -337,7 +329,7 @@ namespace winrt::MicaEditor::implementation
 		return isInside;
 	}
 
-	void CodeEditorControl::SciBraceMatch()
+	void CodeEditorHandler::SciBraceMatch()
 	{
 		// Config
 		const auto bracesCheck{ true };
@@ -345,31 +337,31 @@ namespace winrt::MicaEditor::implementation
 
 		if (!bracesCheck)
 			return;
-		Scintilla::Position braceAtCaret = -1;
-		Scintilla::Position braceOpposite = -1;
+		Position braceAtCaret = -1;
+		Position braceOpposite = -1;
 		SciFindMatchingBracePosition(braceAtCaret, braceOpposite, bracesSloppy);
 		if ((braceAtCaret != -1) && (braceOpposite == -1))
 		{
-			//Call().BraceBadLight(braceAtCaret);
-			Call().BraceBadLight(-1);
-			Call().SetHighlightGuide(0);
+			//_call->BraceBadLight(braceAtCaret);
+			_call->BraceBadLight(-1);
+			_call->SetHighlightGuide(0);
 		}
 		else
 		{
 			char chBrace = 0;
 			if (braceAtCaret >= 0)
-				chBrace = Call().CharacterAt(braceAtCaret);
-			Call().BraceHighlight(braceAtCaret, braceOpposite);
-			Scintilla::Position columnAtCaret = Call().Column(braceAtCaret);
-			Scintilla::Position columnOpposite = Call().Column(braceOpposite);
+				chBrace = _call->CharacterAt(braceAtCaret);
+			_call->BraceHighlight(braceAtCaret, braceOpposite);
+			Position columnAtCaret = _call->Column(braceAtCaret);
+			Position columnOpposite = _call->Column(braceOpposite);
 			if (chBrace == ':')
 			{
-				const Scintilla::Line lineStart = Call().LineFromPosition(braceAtCaret);
-				const Scintilla::Position indentPos = Call().LineIndentPosition(lineStart);
-				const Scintilla::Position indentPosNext = Call().LineIndentPosition(lineStart + 1);
-				columnAtCaret = Call().Column(indentPos);
-				const Scintilla::Position columnAtCaretNext = Call().Column(indentPosNext);
-				const int indentSize = Call().Indent();
+				const Line lineStart = _call->LineFromPosition(braceAtCaret);
+				const Position indentPos = _call->LineIndentPosition(lineStart);
+				const Position indentPosNext = _call->LineIndentPosition(lineStart + 1);
+				columnAtCaret = _call->Column(indentPos);
+				const Position columnAtCaretNext = _call->Column(indentPosNext);
+				const int indentSize = _call->Indent();
 				if (columnAtCaretNext - indentSize > 1)
 					columnAtCaret = columnAtCaretNext - indentSize;
 				if (columnOpposite == 0)	// If the final line of the structure is empty
@@ -377,7 +369,7 @@ namespace winrt::MicaEditor::implementation
 			}
 			else
 			{
-				if (Call().LineFromPosition(braceAtCaret) == Call().LineFromPosition(braceOpposite))
+				if (_call->LineFromPosition(braceAtCaret) == _call->LineFromPosition(braceOpposite))
 				{
 					// Avoid attempting to draw a highlight guide
 					columnAtCaret = 0;
@@ -387,34 +379,34 @@ namespace winrt::MicaEditor::implementation
 
 			// Todo: has rendering issues
 			//if (props.GetInt("highlight.indentation.guides"))
-				//Call().SetHighlightGuide(std::min(columnAtCaret, columnOpposite));
+				//_call->SetHighlightGuide(std::min(columnAtCaret, columnOpposite));
 		}
 	}
 
-	Line CodeEditorControl::SciGetCurrentLineNumber()
+	Line CodeEditorHandler::SciGetCurrentLineNumber()
 	{
-		return Call().LineFromPosition(
-			Call().CurrentPos());
+		return _call->LineFromPosition(
+			_call->CurrentPos());
 	}
 
-	int CodeEditorControl::SciGetLineIndentation(Line line)
+	int CodeEditorHandler::SciGetLineIndentation(Line line)
 	{
-		return Call().LineIndentation(line);
+		return _call->LineIndentation(line);
 	}
 
-	Position CodeEditorControl::SciGetLineIndentPosition(Line line)
+	Position CodeEditorHandler::SciGetLineIndentPosition(Line line)
 	{
-		return Call().LineIndentPosition(line);
+		return _call->LineIndentPosition(line);
 	}
 
-	std::vector<std::string> CodeEditorControl::SciGetLinePartsInStyle(Line line, const StyleAndWords &saw)
+	std::vector<std::string> CodeEditorHandler::SciGetLinePartsInStyle(Line line, const StyleAndWords &saw)
 	{
 		std::vector<std::string> sv;
-		TextReader acc(Call());
+		TextReader acc(*_call);
 		std::string s;
 		const bool separateCharacters = saw.IsSingleChar();
-		const Position thisLineStart = Call().LineStart(line);
-		const Position nextLineStart = Call().LineStart(line + 1);
+		const Position thisLineStart = _call->LineStart(line);
+		const Position nextLineStart = _call->LineStart(line + 1);
 		for (Position pos = thisLineStart; pos < nextLineStart; pos++)
 		{
 			if (acc.StyleAt(pos) == saw.Style())
@@ -443,7 +435,7 @@ namespace winrt::MicaEditor::implementation
 		return sv;
 	}
 
-	IndentationStatus CodeEditorControl::SciGetIndentState(Line line)
+	IndentationStatus CodeEditorHandler::SciGetIndentState(Line line)
 	{
 		// C like language indentation defined by braces and keywords
 		IndentationStatus indentState = IndentationStatus::none;
@@ -471,11 +463,11 @@ namespace winrt::MicaEditor::implementation
 		return indentState;
 	}
 
-	int CodeEditorControl::SciIndentOfBlock(Line line)
+	int CodeEditorHandler::SciIndentOfBlock(Line line)
 	{
 		if (line < 0)
 			return 0;
-		const int indentSize = Call().Indent();
+		const int indentSize = _call->Indent();
 		int indentBlock = SciGetLineIndentation(line);
 		Line backLine = line;
 		IndentationStatus indentState = IndentationStatus::none;
@@ -511,24 +503,24 @@ namespace winrt::MicaEditor::implementation
 		return indentBlock;
 	}
 
-	Span CodeEditorControl::SciGetSelection()
+	Span CodeEditorHandler::SciGetSelection()
 	{
-		return Call().SelectionSpan();
+		return _call->SelectionSpan();
 	}
 
-	void CodeEditorControl::SciSetSelection(Position anchor, Position currentPos)
+	void CodeEditorHandler::SciSetSelection(Position anchor, Position currentPos)
 	{
-		Call().SetSel(anchor, currentPos);
+		_call->SetSel(anchor, currentPos);
 	}
 
-	void CodeEditorControl::SciSetLineIndentation(Line line, int indent)
+	void CodeEditorHandler::SciSetLineIndentation(Line line, int indent)
 	{
 		if (indent < 0)
 			return;
 		const Span rangeStart = SciGetSelection();
 		Span range = rangeStart;
 		const Position posBefore = SciGetLineIndentPosition(line);
-		Call().SetLineIndentation(line, indent);
+		_call->SetLineIndentation(line, indent);
 		const Position posAfter = SciGetLineIndentPosition(line);
 		const Position posDifference = posAfter - posBefore;
 		if (posAfter > posBefore)
@@ -567,9 +559,9 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	bool CodeEditorControl::SciRangeIsAllWhitespace(Position start, Position end)
+	bool CodeEditorHandler::SciRangeIsAllWhitespace(Position start, Position end)
 	{
-		TextReader acc(Call());
+		TextReader acc(*_call);
 		for (Position i = start; i < end; i++)
 		{
 			if ((acc[i] != ' ') && (acc[i] != '\t'))
@@ -578,22 +570,22 @@ namespace winrt::MicaEditor::implementation
 		return true;
 	}
 
-	void CodeEditorControl::SciAutomaticIndentation(char ch)
+	void CodeEditorHandler::SciAutomaticIndentation(char ch)
 	{
-		const Span range = Call().SelectionSpan();
+		const Span range = _call->SelectionSpan();
 		const Position selStart = range.start;
 		const Line curLine = SciGetCurrentLineNumber();
-		const Position thisLineStart = Call().LineStart(curLine);
-		const int indentSize = Call().Indent();
+		const Position thisLineStart = _call->LineStart(curLine);
+		const int indentSize = _call->Indent();
 		int indentBlock = SciIndentOfBlock(curLine - 1);
 
-		if ((Call().Lexer() == SCLEX_PYTHON) &&
+		if ((_call->Lexer() == SCLEX_PYTHON) &&
 			/*(props.GetInt("indent.python.colon") == 1)*/ true)
 		{
-			const Scintilla::EndOfLine eolMode = Call().EOLMode();
-			const int eolChar = (eolMode == Scintilla::EndOfLine::Cr ? '\r' : '\n');
-			const int eolChars = (eolMode == Scintilla::EndOfLine::CrLf ? 2 : 1);
-			const Position prevLineStart = Call().LineStart(curLine - 1);
+			const EndOfLine eolMode = _call->EOLMode();
+			const int eolChar = (eolMode == EndOfLine::Cr ? '\r' : '\n');
+			const int eolChars = (eolMode == EndOfLine::CrLf ? 2 : 1);
+			const Position prevLineStart = _call->LineStart(curLine - 1);
 			const Position prevIndentPos = SciGetLineIndentPosition(curLine - 1);
 			const int indentExisting = SciGetLineIndentation(curLine);
 
@@ -604,11 +596,11 @@ namespace winrt::MicaEditor::implementation
 				int style = 0;
 				for (Position p = selStart - eolChars - 1; p > prevLineStart; p--)
 				{
-					style = Call().UnsignedStyleAt(p);
+					style = _call->UnsignedStyleAt(p);
 					if (style != SCE_P_DEFAULT && style != SCE_P_COMMENTLINE &&
 						style != SCE_P_COMMENTBLOCK)
 					{
-						character = Call().CharacterAt(p);
+						character = _call->CharacterAt(p);
 						break;
 					}
 				}

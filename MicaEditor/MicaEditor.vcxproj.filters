@@ -16,7 +16,7 @@
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="MicaEditorControl.cpp" />
     <ClCompile Include="CodeEditorControl.cpp" />
-    <ClCompile Include="CodeEditorControl.SyntaxHighlighting.cpp" />
+    <ClCompile Include="CodeEditorHandler.SyntaxHighlighting.cpp" />
     <ClCompile Include="DummyPage.cpp" />
     <ClCompile Include="Wrapper.cpp" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
@@ -25,8 +25,9 @@
     <ClCompile Include="..\lexilla\lexers\*.cxx" />
     <ClCompile Include="..\lexilla\lexlib\*.cxx" />
     <ClCompile Include="..\lexilla\src\Lexilla.cxx" />
-    <ClCompile Include="CodeEditorControl.SciEdit.cpp" />
+    <ClCompile Include="CodeEditorHandler.SciEdit.cpp" />
     <ClCompile Include="..\scintilla\call\ScintillaCall.cxx" />
+    <ClCompile Include="CodeEditorHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -42,7 +43,8 @@
     <ClInclude Include="..\scintilla\src\*.h" />
     <ClInclude Include="..\lexilla\lexlib\*.h" />
     <ClInclude Include="..\lexilla\include\SciLexer.h" />
-    <ClInclude Include="CodeEditorControl.SciEdit.h" />
+    <ClInclude Include="CodeEditorHandler.SciEdit.h" />
+    <ClInclude Include="CodeEditorHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MicaEditor.def" />

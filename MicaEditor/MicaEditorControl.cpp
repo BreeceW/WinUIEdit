@@ -42,7 +42,8 @@ namespace winrt::MicaEditor::implementation
 #endif
 
 		_scintilla = make_self<Scintilla::Internal::ScintillaWinUI>();
-		_call.SetFnPtr(reinterpret_cast<SciFnDirectStatus>(_scintilla->WndProc(Scintilla::Message::GetDirectStatusFunction, 0, 0)), _scintilla->WndProc(Scintilla::Message::GetDirectPointer, 0, 0));
+		_call = std::make_shared<Scintilla::ScintillaCall>();
+		_call->SetFnPtr(reinterpret_cast<SciFnDirectStatus>(_scintilla->WndProc(Scintilla::Message::GetDirectStatusFunction, 0, 0)), _scintilla->WndProc(Scintilla::Message::GetDirectPointer, 0, 0));
 
 		_editorWrapper = make<implementation::Editor>(get_strong());
 

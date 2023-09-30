@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace winrt::MicaEditor::implementation
+namespace MicaEditor::Internal
 {
 	enum class IndentationStatus
 	{
@@ -48,7 +48,6 @@ namespace winrt::MicaEditor::implementation
 		Scintilla::ScintillaCall &sc;
 		Scintilla::Position lenDoc;
 
-		bool InternalIsLeadByte(char ch) const;
 		void Fill(Scintilla::Position position);
 	public:
 		explicit TextReader(Scintilla::ScintillaCall &sc_) noexcept;
@@ -76,10 +75,6 @@ namespace winrt::MicaEditor::implementation
 				}
 			}
 			return buf[position - startPos];
-		}
-		bool IsLeadByte(char ch) const
-		{
-			return codePage && InternalIsLeadByte(ch);
 		}
 		void SetCodePage(int codePage_) noexcept
 		{

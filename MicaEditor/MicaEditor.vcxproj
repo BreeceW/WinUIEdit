@@ -126,7 +126,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CodeEditorControl.SciEdit.h" />
+    <ClInclude Include="CodeEditorHandler.SciEdit.h" />
+    <ClInclude Include="CodeEditorHandler.h" />
     <ClInclude Include="ControlIncludes.h" />
     <ClInclude Include="DummyPage.h" Condition="'$(UseDummyPage)' == 'true'">
       <DependentUpon>DummyPage.xaml</DependentUpon>
@@ -154,7 +155,12 @@
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CodeEditorControl.SciEdit.cpp" />
+    <ClCompile Include="CodeEditorHandler.SciEdit.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CodeEditorHandler.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="DummyPage.cpp" Condition="'$(UseDummyPage)' == 'true'">
       <DependentUpon>DummyPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -169,7 +175,9 @@
     <ClCompile Include="CodeEditorControl.cpp">
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="CodeEditorControl.SyntaxHighlighting.cpp" />
+    <ClCompile Include="CodeEditorHandler.SyntaxHighlighting.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

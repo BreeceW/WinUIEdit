@@ -14,7 +14,7 @@ namespace winrt::MicaEditor::implementation
 		~MicaEditorControl();
 
 		MicaEditor::Editor Editor();
-		constexpr Scintilla::ScintillaCall &Call() noexcept { return _call; }
+		std::shared_ptr<Scintilla::ScintillaCall> Call() noexcept { return _call; }
 
 		void OnApplyTemplate();
 		void OnGotFocus(DUX::RoutedEventArgs const &e);
@@ -49,7 +49,7 @@ namespace winrt::MicaEditor::implementation
 #endif
 		bool _isFocused{ false };
 		MicaEditor::Editor _editorWrapper{ nullptr };
-		Scintilla::ScintillaCall _call{};
+		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale{ 0 };
 		event<Windows::Foundation::EventHandler<double>> _dpiChangedEvent;
