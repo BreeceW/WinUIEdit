@@ -35,7 +35,7 @@ namespace MicaEditor
 			case CodeEditorTheme::Dark:
 				_call->SetElementColour(Element::Caret, IntRGBA(0xAE, 0xAF, 0xAD));
 				_call->SetElementColour(Element::SelectionBack, IntRGBA(0x26, 0x4F, 0x78));
-				_call->SetElementColour(Element::SelectionAdditionalText, IntRGBA(0x26, 0x4F, 0x78));
+				_call->SetElementColour(Element::SelectionAdditionalBack, IntRGBA(0x26, 0x4F, 0x78));
 				_call->SetElementColour(Element::SelectionInactiveBack, IntRGBA(0x3A, 0x3D, 0x41));
 				break;
 
