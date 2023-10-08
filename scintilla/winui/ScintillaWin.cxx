@@ -274,34 +274,34 @@ namespace Scintilla::Internal {
 		int _utf16Length;
 
 	public:
-		NotifyMessage::NotifyMessage(uptr_t wParam, NotificationData notificationData, bool notifyTsf, int utf16Length)
+		NotifyMessage(uptr_t wParam, NotificationData notificationData, bool notifyTsf, int utf16Length)
 		{
 			_wParam = wParam;
 			_notificationData = notificationData;
 			_notifyTsf = notifyTsf;
 		}
 
-		uint8_t NotifyMessage::Type() const override
+		uint8_t Type() const override
 		{
 			return NotifyMessageId;
 		}
 
-		uptr_t NotifyMessage::WParam() const
+		uptr_t WParam() const
 		{
 			return _wParam;
 		}
 
-		bool NotifyMessage::NotifyTsf() const
+		bool NotifyTsf() const
 		{
 			return _notifyTsf;
 		}
 
-		int NotifyMessage::Utf16Length() const
+		int Utf16Length() const
 		{
 			return _utf16Length;
 		}
 
-		NotificationData const &NotifyMessage::NotificationData() const
+		NotificationData const &NotificationData() const
 		{
 			return _notificationData;
 		}
@@ -324,7 +324,7 @@ namespace Scintilla::Internal {
 		bool _isExtendedKey;
 
 	public:
-		KeyMessage::KeyMessage(KeyEventType keyEvent, winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey)
+		KeyMessage(KeyEventType keyEvent, winrt::Windows::System::VirtualKey key, winrt::Windows::System::VirtualKeyModifiers modifiers, bool const isExtendedKey)
 		{
 			_keyEvent = keyEvent;
 			_key = key;
@@ -332,12 +332,12 @@ namespace Scintilla::Internal {
 			_isExtendedKey = isExtendedKey;
 		}
 
-		uint8_t KeyMessage::Type() const override
+		uint8_t Type() const override
 		{
 			return KeyMessageId;
 		}
 
-		KeyEventType KeyMessage::KeyEvent() const
+		KeyEventType KeyEvent() const
 		{
 			return _keyEvent;
 		}
@@ -379,7 +379,7 @@ namespace Scintilla::Internal {
 		winrt::DUI::PointerPoint _pointerPoint{ nullptr };
 
 	public:
-		PointerMessage::PointerMessage(PointerEventType pointerEvent, winrt::Windows::Foundation::Point point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers, winrt::DUI::PointerPoint const &pointerPoint = nullptr)
+		PointerMessage(PointerEventType pointerEvent, winrt::Windows::Foundation::Point point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers, winrt::DUI::PointerPoint const &pointerPoint = nullptr)
 		{
 			_pointerEvent = pointerEvent;
 			_point = point;
@@ -388,12 +388,12 @@ namespace Scintilla::Internal {
 			_pointerPoint = pointerPoint;
 		}
 
-		uint8_t PointerMessage::Type() const override
+		uint8_t Type() const override
 		{
 			return PointerMessageId;
 		}
 
-		PointerEventType PointerMessage::PointerEvent() const
+		PointerEventType PointerEvent() const
 		{
 			return _pointerEvent;
 		}
@@ -432,7 +432,7 @@ namespace Scintilla::Internal {
 			_character = character;
 		}
 
-		uint8_t CharacterReceivedMessage::Type() const override
+		uint8_t Type() const override
 		{
 			return CharacterReceivedMessageId;
 		}
