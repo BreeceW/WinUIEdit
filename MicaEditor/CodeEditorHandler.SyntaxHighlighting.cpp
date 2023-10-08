@@ -54,6 +54,26 @@ namespace MicaEditor
 				SCE_C_OPERATOR, { "{", },
 				SCE_C_OPERATOR, { "}", });
 		}
+		else if (_highlightingLanguage == L"js")
+		{
+			_call->SetILexer(_createLexer("cpp"));
+			// This list of keywords from MDN https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#keywords
+			// Note additional words like undefined
+			_call->SetKeyWords(0,
+				"class const debugger delete export extends false function in instanceof "
+				"new null super this true typeof var void let static enum implements "
+				"interface private protected public arguments async get of set Infinity NaN undefined");
+			_call->SetKeyWords(1,
+				"break case catch continue default do else finally for if import return "
+				"switch throw try while with yield await package as from");
+			_call->SetKeyWords(2,
+				"flow");
+			SetLanguageIndentMode(
+				SCE_C_WORD2, { "case", "default", "do", "else", "for", "if", "while", },
+				SCE_C_OPERATOR, { ";", },
+				SCE_C_OPERATOR, { "{", "[" },
+				SCE_C_OPERATOR, { "}", "]" });
+		}
 		else if (_highlightingLanguage == L"json")
 		{
 			const auto lexer{ _createLexer("json") };
@@ -79,7 +99,7 @@ namespace MicaEditor
 
 	void CodeEditorHandler::UpdateLanguageStyles()
 	{
-		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp")
+		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"js")
 		{
 			switch (_theme)
 			{
@@ -102,7 +122,7 @@ namespace MicaEditor
 				StyleSetFore(SCE_C_COMMENTLINEDOC, IntRGBA(0x6A, 0x99, 0x55));
 				StyleSetFore(SCE_C_COMMENTDOC, IntRGBA(0x6A, 0x99, 0x55));
 				StyleSetFore(SCE_C_COMMENTDOCKEYWORD, IntRGBA(0x56, 0x9C, 0xD6));
-				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, IntRGBA(0xcd, 0x31, 0x31));
+				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, IntRGBA(0x6A, 0x99, 0x55));
 				break;
 
 			case CodeEditorTheme::Light:
@@ -124,7 +144,7 @@ namespace MicaEditor
 				StyleSetFore(SCE_C_COMMENTLINEDOC, IntRGBA(0x00, 0x80, 0x00));
 				StyleSetFore(SCE_C_COMMENTDOC, IntRGBA(0x00, 0x80, 0x00));
 				StyleSetFore(SCE_C_COMMENTDOCKEYWORD, IntRGBA(0x80, 0x00, 0x00));
-				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, IntRGBA(0xcd, 0x31, 0x31));
+				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, IntRGBA(0x00, 0x80, 0x00));
 				break;
 			}
 		}
