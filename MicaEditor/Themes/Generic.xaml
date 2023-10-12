@@ -9,6 +9,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="local:MicaEditorControl">
                     <Grid
+                        Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -54,6 +55,7 @@
                 <ControlTemplate TargetType="local:CodeEditorControl">
                     <ContentPresenter
                         x:Name="EditorContainer"
+                        Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
