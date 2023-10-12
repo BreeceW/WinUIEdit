@@ -19,6 +19,10 @@
         "Interface Generator Tool": {
             "commandName": "Project",
             "commandLineArgs": "Interface"
+        },
+        "Project File Generator Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "Vcxproj"
         }
     }
 }

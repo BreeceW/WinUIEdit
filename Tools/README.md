@@ -1,6 +1,6 @@
 # Tools
 
-This directory contains a couple of tools to help keep this editor up-to-date with Scintilla.
+This directory contains a few tools to help keep this editor up-to-date with Scintilla.
 These tools only run on Windows and require the .NET 7 SDK to be installed.
 
 ## Update
@@ -16,6 +16,8 @@ Run the Update tool like this:
 `Update lexilla x.y.z`
 
 where x.y.z is the version number. Find the latest version number here: https://www.scintilla.org/ScintillaDownload.html
+
+The Interface and Vcxproj tools should be run after updating.
 
 ## Compare
 This tool automatically generates easy to view diffs of what has changed in the Windows (win32) version
@@ -53,5 +55,30 @@ Run the WinUI3 tool like this:
 
 `WinUI3`
 
+## Vcxproj
+This tool generates the MicaEditor.vcxproj and MicaEditor.vcxproj.filters files.
+It adds support for wildcards to vcxproj files and filters them according to predefined folders.
+Filters in the MicaEditor project must be modified by changing the Vcxproj tool, not in Visual Studio.
+
+Run the Vcxproj tool like this:
+
+`Vcxproj`
+
+Wildcard includes in vcxproj files are comments that look like this:
+
+```xml
+<!--<WildcardClInclude Include="path\*.h">-->
+...auto generated includes go here...
+<!--</WildcardClInclude>-->
+```
+
+or this:
+
+```xml
+<!--<WildcardClCompile Include="path\*.cpp" PrecompiledHeader="NotUsing">-->
+...auto generated includes go here...
+<!--</WildcardClCompile>-->
+```
+
 ----
-**Note:** At this time, the tools do not have any error handling. If something goes wrong, you might have to run the tools in Visual Studio to debug them.
+**Note:** At this time, the tools do not have any error handling. They also do not have highly maintainable code. If something goes wrong, you might have to run the tools in Visual Studio to debug them.

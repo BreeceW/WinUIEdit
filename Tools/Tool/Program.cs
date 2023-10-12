@@ -10,10 +10,13 @@ ITool tool = toolName switch
     "Uwp" => new ToggleTool(false),
     "WinUI3" => new ToggleTool(true),
     "Interface" => new InterfaceGeneratorTool(),
+    "Vcxproj" => new VcxprojTool(),
     _ => throw new InvalidOperationException("Not a valid tool"),
 };
 
 var dllPath = Assembly.GetEntryAssembly().Location;
 var path = dllPath[..(dllPath.LastIndexOf("\\Tools") + 6)];
 
+Console.WriteLine($"Running {toolName} tool...");
 await tool.RunAsync(path, args[1..]);
+Console.WriteLine($"{toolName} tool finished");
