@@ -5,10 +5,12 @@
 #endif
 #include "EditorWrapper.h"
 #include "Helpers.h"
+#include "MicaEditorControlAutomationPeer.h"
 
 using namespace ::MicaEditor;
 using namespace winrt;
 using namespace DUX;
+using namespace DUX::Automation::Peers;
 using namespace DUX::Controls;
 using namespace DUX::Controls::Primitives;
 using namespace DUX::Input;
@@ -58,7 +60,7 @@ namespace winrt::MicaEditor::implementation
 			// but is required to get text in classic windows (XAML Islands and WinUI 3)
 			// Todo: Find more ideal way to do this
 			// Tried using _tfThreadManager->GetActiveFlags but TF_TMF_IMMERSIVEMODE flag was not accurate
-			if (IsClassicWindow())
+			//if (IsClassicWindow())
 			{
 				CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
 			}
@@ -431,6 +433,11 @@ namespace winrt::MicaEditor::implementation
 		// Alternate approach: call Focus in OnFocusLost
 	}
 
+	AutomationPeer MicaEditorControl::OnCreateAutomationPeer()
+	{
+		return make<MicaEditorControlAutomationPeer>(*this);
+	}
+
 	void MicaEditorControl::ImageTarget_PointerMoved(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
@@ -624,6 +631,11 @@ namespace winrt::MicaEditor::implementation
 	void MicaEditorControl::ScintillaNotification(event_token const &token) noexcept
 	{
 		_scintillaNotificationEvent.remove(token);
+	}
+
+	float MicaEditorControl::DpiScale()
+	{
+		return _dpiScale;
 	}
 
 #ifndef WINUI3

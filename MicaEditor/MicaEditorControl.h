@@ -23,6 +23,7 @@ namespace winrt::MicaEditor::implementation
 		void OnKeyUp(DUX::Input::KeyRoutedEventArgs const &e);
 		void OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e);
 		void OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e);
+		DUX::Automation::Peers::AutomationPeer OnCreateAutomationPeer();
 
 		Scintilla::sptr_t PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam);
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
@@ -37,6 +38,7 @@ namespace winrt::MicaEditor::implementation
 
 		event_token ScintillaNotification(Windows::Foundation::EventHandler<uint64_t> const &handler);
 		void ScintillaNotification(event_token const &token) noexcept;
+		float DpiScale();
 
 	private:
 #ifndef WINUI3
