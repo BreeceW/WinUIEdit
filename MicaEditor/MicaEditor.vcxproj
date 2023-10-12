@@ -129,6 +129,7 @@
     <ClInclude Include="CodeEditorHandler.SciEdit.h" />
     <ClInclude Include="CodeEditorHandler.h" />
     <ClInclude Include="ControlIncludes.h" />
+    <ClInclude Include="DarkPlus.h" />
     <ClInclude Include="DummyPage.h" Condition="'$(UseDummyPage)' == 'true'">
       <DependentUpon>DummyPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -138,6 +139,7 @@
       <DependentUpon>EditorWrapper.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="LightPlus.h" />
     <ClInclude Include="MicaEditorControl.h">
       <DependentUpon>MicaEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
@@ -154,7 +156,7 @@
     <ClInclude Include="..\scintilla\winui\PlatWin.h" />
     <ClInclude Include="..\scintilla\winui\ScintillaWin.h" />
     <ClInclude Include="..\scintilla\winui\WinTypes.h" />
-    <ClInclude Include="..\lexilla\include\SciLexer.h" />
+    <ClInclude Include="TextMateScope.h" />
     <ClInclude Include="TextRangeProvider.h" />
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>

@@ -11,6 +11,7 @@ ITool tool = toolName switch
     "WinUI3" => new ToggleTool(true),
     "Interface" => new InterfaceGeneratorTool(),
     "Vcxproj" => new VcxprojTool(),
+    "Theme" => new ThemeTool(),
     _ => throw new InvalidOperationException("Not a valid tool"),
 };
 

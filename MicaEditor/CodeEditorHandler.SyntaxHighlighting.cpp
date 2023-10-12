@@ -1,5 +1,8 @@
 #include "CodeEditorHandler.h"
 #include "SciLexer.h"
+#include "TextMateScope.h"
+#include "DarkPlus.h"
+#include "LightPlus.h"
 
 using namespace Scintilla;
 
@@ -95,6 +98,10 @@ namespace MicaEditor
 			_call->SetILexer(nullptr);
 			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
 		}
+		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"js" || _highlightingLanguage == L"json")
+		{
+			_call->SetKeyWords(5, "todo toDo Todo ToDo TODO fixme fixMe Fixme FixMe FIXME");
+		}
 	}
 
 	void CodeEditorHandler::UpdateLanguageStyles()
@@ -104,47 +111,77 @@ namespace MicaEditor
 			switch (_theme)
 			{
 			case CodeEditorTheme::Dark:
-				StyleSetFore(static_cast<int>(StylesCommon::Default), IntRGBA(0xD4, 0xD4, 0xD4));
+				StyleSetFore(static_cast<int>(StylesCommon::Default), DarkPlusEditorForeground);
 				StyleClearCustom();
 
-				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), IntRGBA(0xD4, 0xD4, 0xD4));
+				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), DarkPlusEditorForeground);
 
-				//StyleSetFore(SCE_C_IDENTIFIER, IntRGBA(0x9C, 0xDC, 0xFE));
-				StyleSetFore(SCE_C_ESCAPESEQUENCE, IntRGBA(0xD7, 0xBA, 0x7D));
-				StyleSetFore(SCE_C_NUMBER, IntRGBA(0xB5, 0xCE, 0xA8));
-				StyleSetFore(SCE_C_WORD, IntRGBA(0x56, 0x9C, 0xD6));
-				StyleSetFore(SCE_C_WORD2, IntRGBA(0xC5, 0x86, 0xC0));
-				StyleSetFore(SCE_C_STRING, IntRGBA(0xCE, 0x91, 0x78));
-				StyleSetFore(SCE_C_OPERATOR, IntRGBA(0xD4, 0xD4, 0xD4));
-				StyleSetFore(SCE_C_PREPROCESSOR, IntRGBA(0x9B, 0x9B, 0x9B));
-				StyleSetFore(SCE_C_COMMENT, IntRGBA(0x6A, 0x99, 0x55));
-				StyleSetFore(SCE_C_COMMENTLINE, IntRGBA(0x6A, 0x99, 0x55));
-				StyleSetFore(SCE_C_COMMENTLINEDOC, IntRGBA(0x6A, 0x99, 0x55));
-				StyleSetFore(SCE_C_COMMENTDOC, IntRGBA(0x6A, 0x99, 0x55));
-				StyleSetFore(SCE_C_COMMENTDOCKEYWORD, IntRGBA(0x56, 0x9C, 0xD6));
-				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, IntRGBA(0x6A, 0x99, 0x55));
+				StyleSetFore(SCE_C_COMMENT, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_COMMENTLINE, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_COMMENTDOC, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_NUMBER, DarkPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_C_WORD, DarkPlus2(Scope::Keyword));
+				StyleSetFore(SCE_C_STRING, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_C_CHARACTER, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_C_UUID, DarkPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_C_PREPROCESSOR, DarkPlus2(Scope::MetaPreprocessor));
+				StyleSetFore(SCE_C_OPERATOR, DarkPlus2(Scope::KeywordOperator));
+				//StyleSetFore(SCE_C_IDENTIFIER, DarkPlus2(Scope::));
+				StyleSetFore(SCE_C_STRINGEOL, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_C_VERBATIM, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_C_REGEX, DarkPlus2(Scope::StringRegexp));
+				StyleSetFore(SCE_C_COMMENTLINEDOC, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_WORD2, DarkPlus2(Scope::KeywordControl));
+				StyleSetFore(SCE_C_COMMENTDOCKEYWORD, DarkPlus2(Scope::Keyword));
+				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_GLOBALCLASS, DarkPlus2(Scope::EntityNameType));
+				StyleSetFore(SCE_C_STRINGRAW, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_C_TRIPLEVERBATIM, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_C_HASHQUOTEDSTRING, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_C_PREPROCESSORCOMMENT, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_PREPROCESSORCOMMENTDOC, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_USERLITERAL, DarkPlus2(Scope::KeywordOtherUnit));
+				StyleSetFore(SCE_C_TASKMARKER, DarkPlus2(Scope::Comment));
+				_call->StyleSetItalic(SCE_C_TASKMARKER, true);
+				_call->StyleSetBold(SCE_C_TASKMARKER, true);
+				StyleSetFore(SCE_C_ESCAPESEQUENCE, DarkPlus2(Scope::ConstantCharacterEscape));
 				break;
 
 			case CodeEditorTheme::Light:
-				StyleSetFore(static_cast<int>(StylesCommon::Default), IntRGBA(0, 0, 0));
+				StyleSetFore(static_cast<int>(StylesCommon::Default), LightPlusEditorForeground);
 				StyleClearCustom();
 
-				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), IntRGBA(0x00, 0x00, 0x00));
+				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), LightPlusEditorForeground);
 
-				//StyleSetFore(SCE_C_IDENTIFIER, IntRGBA(0x00, 0x10, 0x80));
-				StyleSetFore(SCE_C_ESCAPESEQUENCE, IntRGBA(0xEE, 0x00, 0x00));
-				StyleSetFore(SCE_C_NUMBER, IntRGBA(0x09, 0x86, 0x58));
-				StyleSetFore(SCE_C_WORD, IntRGBA(0x00, 0x00, 0xFF));
-				StyleSetFore(SCE_C_WORD2, IntRGBA(0xaf, 0x00, 0xdb));
-				StyleSetFore(SCE_C_STRING, IntRGBA(0xa3, 0x15, 0x15));
-				StyleSetFore(SCE_C_OPERATOR, IntRGBA(0x00, 0x00, 0x00));
-				StyleSetFore(SCE_C_PREPROCESSOR, IntRGBA(0x80, 0x80, 0x80));
-				StyleSetFore(SCE_C_COMMENT, IntRGBA(0x00, 0x80, 0x00));
-				StyleSetFore(SCE_C_COMMENTLINE, IntRGBA(0x00, 0x80, 0x00));
-				StyleSetFore(SCE_C_COMMENTLINEDOC, IntRGBA(0x00, 0x80, 0x00));
-				StyleSetFore(SCE_C_COMMENTDOC, IntRGBA(0x00, 0x80, 0x00));
-				StyleSetFore(SCE_C_COMMENTDOCKEYWORD, IntRGBA(0x80, 0x00, 0x00));
-				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, IntRGBA(0x00, 0x80, 0x00));
+				StyleSetFore(SCE_C_COMMENT, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_COMMENTLINE, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_COMMENTDOC, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_NUMBER, LightPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_C_WORD, LightPlus2(Scope::Keyword));
+				StyleSetFore(SCE_C_STRING, LightPlus2(Scope::String));
+				StyleSetFore(SCE_C_CHARACTER, LightPlus2(Scope::String));
+				StyleSetFore(SCE_C_UUID, LightPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_C_PREPROCESSOR, LightPlus2(Scope::MetaPreprocessor));
+				StyleSetFore(SCE_C_OPERATOR, LightPlus2(Scope::KeywordOperator));
+				//StyleSetFore(SCE_C_IDENTIFIER, LightPlus2(Scope::));
+				StyleSetFore(SCE_C_STRINGEOL, LightPlus2(Scope::String));
+				StyleSetFore(SCE_C_VERBATIM, LightPlus2(Scope::String));
+				StyleSetFore(SCE_C_REGEX, LightPlus2(Scope::StringRegexp));
+				StyleSetFore(SCE_C_COMMENTLINEDOC, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_WORD2, LightPlus2(Scope::KeywordControl));
+				StyleSetFore(SCE_C_COMMENTDOCKEYWORD, LightPlus2(Scope::Keyword));
+				StyleSetFore(SCE_C_COMMENTDOCKEYWORDERROR, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_GLOBALCLASS, LightPlus2(Scope::EntityNameType));
+				StyleSetFore(SCE_C_STRINGRAW, LightPlus2(Scope::String));
+				StyleSetFore(SCE_C_TRIPLEVERBATIM, LightPlus2(Scope::String));
+				StyleSetFore(SCE_C_HASHQUOTEDSTRING, LightPlus2(Scope::String));
+				StyleSetFore(SCE_C_PREPROCESSORCOMMENT, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_PREPROCESSORCOMMENTDOC, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_C_USERLITERAL, LightPlus2(Scope::KeywordOtherUnit));
+				StyleSetFore(SCE_C_TASKMARKER, LightPlus2(Scope::Comment));
+				_call->StyleSetItalic(SCE_C_TASKMARKER, true);
+				_call->StyleSetBold(SCE_C_TASKMARKER, true);
+				StyleSetFore(SCE_C_ESCAPESEQUENCE, LightPlus2(Scope::ConstantCharacterEscape));
 				break;
 			}
 		}
@@ -153,41 +190,47 @@ namespace MicaEditor
 			switch (_theme)
 			{
 			case CodeEditorTheme::Dark:
-				StyleSetFore(static_cast<int>(StylesCommon::Default), IntRGBA(0xD4, 0xD4, 0xD4));
+				StyleSetFore(static_cast<int>(StylesCommon::Default), DarkPlusEditorForeground);
 				StyleClearCustom();
 
-				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), IntRGBA(0xD4, 0xD4, 0xD4));
+				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), DarkPlusEditorForeground);
 
-				StyleSetFore(SCE_JSON_PROPERTYNAME, IntRGBA(0x9C, 0xDC, 0xFE));
-				StyleSetFore(SCE_JSON_ESCAPESEQUENCE, IntRGBA(0xD7, 0xBA, 0x7D));
-				StyleSetFore(SCE_JSON_NUMBER, IntRGBA(0xB5, 0xCE, 0xA8));
-				StyleSetFore(SCE_JSON_KEYWORD, IntRGBA(0x56, 0x9C, 0xD6));
-				StyleSetFore(SCE_JSON_LDKEYWORD, IntRGBA(0xC5, 0x86, 0xC0));
-				StyleSetFore(SCE_JSON_STRING, IntRGBA(0xCE, 0x91, 0x78));
-				StyleSetFore(SCE_JSON_STRINGEOL, IntRGBA(0xCE, 0x91, 0x78));
-				StyleSetFore(SCE_JSON_OPERATOR, IntRGBA(0xD4, 0xD4, 0xD4));
-				StyleSetFore(SCE_JSON_ERROR, IntRGBA(0xcd, 0x31, 0x31));
-				StyleSetFore(SCE_JSON_BLOCKCOMMENT, IntRGBA(0x6A, 0x99, 0x55));
-				StyleSetFore(SCE_JSON_LINECOMMENT, IntRGBA(0x6A, 0x99, 0x55));
+				StyleSetFore(SCE_JSON_NUMBER, DarkPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_JSON_STRING, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_JSON_STRINGEOL, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_JSON_PROPERTYNAME, DarkPlus2(Scope::SupportTypeProperty_NameJson));
+				StyleSetFore(SCE_JSON_ESCAPESEQUENCE, DarkPlus2(Scope::ConstantCharacterEscape));
+				StyleSetFore(SCE_JSON_LINECOMMENT, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_JSON_BLOCKCOMMENT, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_JSON_OPERATOR, DarkPlus2(Scope::KeywordOperator));
+				StyleSetFore(SCE_JSON_URI, DarkPlus2(Scope::String));
+				_call->StyleSetUnderline(SCE_JSON_URI, true);
+				StyleSetFore(SCE_JSON_COMPACTIRI, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_JSON_KEYWORD, DarkPlus2(Scope::ConstantLanguage));
+				StyleSetFore(SCE_JSON_LDKEYWORD, DarkPlus2(Scope::KeywordControl));
+				StyleSetFore(SCE_JSON_ERROR, DarkPlus2(Scope::Invalid));
 				break;
 
 			case CodeEditorTheme::Light:
-				StyleSetFore(static_cast<int>(StylesCommon::Default), IntRGBA(0, 0, 0));
+				StyleSetFore(static_cast<int>(StylesCommon::Default), LightPlusEditorForeground);
 				StyleClearCustom();
 
-				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), IntRGBA(0x00, 0x00, 0x00));
+				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), LightPlusEditorForeground);
 
-				StyleSetFore(SCE_JSON_PROPERTYNAME, IntRGBA(0x04, 0x51, 0xa5));
-				StyleSetFore(SCE_JSON_ESCAPESEQUENCE, IntRGBA(0xEE, 0x00, 0x00));
-				StyleSetFore(SCE_JSON_NUMBER, IntRGBA(0x09, 0x86, 0x58));
-				StyleSetFore(SCE_JSON_KEYWORD, IntRGBA(0x00, 0x00, 0xFF));
-				StyleSetFore(SCE_JSON_LDKEYWORD, IntRGBA(0xaf, 0x00, 0xdb));
-				StyleSetFore(SCE_JSON_STRING, IntRGBA(0xa3, 0x15, 0x15));
-				StyleSetFore(SCE_JSON_STRINGEOL, IntRGBA(0xa3, 0x15, 0x15));
-				StyleSetFore(SCE_JSON_OPERATOR, IntRGBA(0x00, 0x00, 0x00));
-				StyleSetFore(SCE_JSON_ERROR, IntRGBA(0xcd, 0x31, 0x31));
-				StyleSetFore(SCE_JSON_BLOCKCOMMENT, IntRGBA(0x00, 0x80, 0x00));
-				StyleSetFore(SCE_JSON_LINECOMMENT, IntRGBA(0x00, 0x80, 0x00));
+				StyleSetFore(SCE_JSON_NUMBER, LightPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_JSON_STRING, LightPlus2(Scope::String));
+				StyleSetFore(SCE_JSON_STRINGEOL, LightPlus2(Scope::String));
+				StyleSetFore(SCE_JSON_PROPERTYNAME, LightPlus2(Scope::SupportTypeProperty_NameJson));
+				StyleSetFore(SCE_JSON_ESCAPESEQUENCE, LightPlus2(Scope::ConstantCharacterEscape));
+				StyleSetFore(SCE_JSON_LINECOMMENT, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_JSON_BLOCKCOMMENT, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_JSON_OPERATOR, LightPlus2(Scope::KeywordOperator));
+				StyleSetFore(SCE_JSON_URI, LightPlus2(Scope::String));
+				_call->StyleSetUnderline(SCE_JSON_URI, true);
+				StyleSetFore(SCE_JSON_COMPACTIRI, LightPlus2(Scope::String));
+				StyleSetFore(SCE_JSON_KEYWORD, LightPlus2(Scope::ConstantLanguage));
+				StyleSetFore(SCE_JSON_LDKEYWORD, LightPlus2(Scope::KeywordControl));
+				StyleSetFore(SCE_JSON_ERROR, LightPlus2(Scope::Invalid));
 				break;
 			}
 		}

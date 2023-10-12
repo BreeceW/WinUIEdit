@@ -23,6 +23,10 @@
         "Project File Generator Tool": {
             "commandName": "Project",
             "commandLineArgs": "Vcxproj"
+        },
+        "Theme Generator Tool": {
+            "commandName": "Project",
+            "commandLineArgs": "Theme https://raw.githubusercontent.com/microsoft/vscode/main/extensions/theme-defaults/themes/dark_plus.json"
         }
     }
 }

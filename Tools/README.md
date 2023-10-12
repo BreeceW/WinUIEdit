@@ -37,6 +37,15 @@ Run the Interface tool like this:
 
 `Interface`
 
+## Theme
+This tool extracts the colors and TextMate scopes from a Visual Studio Code theme.
+It is used to generate C++ theme files that are temporarily used until a proper theme
+system is developed. The theme file must be passed as a web URL.
+
+Run the Theme tool like this:
+
+`Theme https://raw.githubusercontent.com/microsoft/vscode/main/extensions/theme-defaults/themes/dark_plus.json`
+
 ## Uwp
 This tool switches the configuration of the editor project to build the UWP
 version of the control. If you have Visual Studio open and the configuration is
