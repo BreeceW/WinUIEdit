@@ -3,6 +3,7 @@
 namespace MicaEditor
 {
     [default_interface]
+    [webhosthidden]
     runtimeclass DummyPage : DUX.Controls.Page
     {
         DummyPage();

@@ -4502,11 +4502,13 @@ namespace MicaEditor
 		GdNodepath = 16,
 	};
 
+	[default_interface]
 	runtimeclass StyleNeededEventArgs
 	{
 		Int32 Position { get; };
 	}
 
+	[default_interface]
 	runtimeclass CharAddedEventArgs
 	{
 		Int32 Ch { get; };
@@ -4528,12 +4530,14 @@ namespace MicaEditor
 	{
 	}
 
+	[default_interface]
 	runtimeclass KeyEventArgs
 	{
 		Int32 Ch { get; };
 		Int32 Modifiers { get; };
 	}
 
+	[default_interface]
 	runtimeclass DoubleClickEventArgs
 	{
 		Int32 Modifiers { get; };
@@ -4541,11 +4545,13 @@ namespace MicaEditor
 		Int32 Line { get; };
 	}
 
+	[default_interface]
 	runtimeclass UpdateUIEventArgs
 	{
 		Int32 Updated { get; };
 	}
 
+	[default_interface]
 	runtimeclass ModifiedEventArgs
 	{
 		Int32 Position { get; };
@@ -4561,6 +4567,7 @@ namespace MicaEditor
 		Int32 AnnotationLinesAdded { get; };
 	}
 
+	[default_interface]
 	runtimeclass MacroRecordEventArgs
 	{
 		Int32 Message { get; };
@@ -4568,6 +4575,7 @@ namespace MicaEditor
 		Int32 LParam { get; };
 	}
 
+	[default_interface]
 	runtimeclass MarginClickEventArgs
 	{
 		Int32 Modifiers { get; };
@@ -4575,6 +4583,7 @@ namespace MicaEditor
 		Int32 Margin { get; };
 	}
 
+	[default_interface]
 	runtimeclass NeedShownEventArgs
 	{
 		Int32 Position { get; };
@@ -4586,6 +4595,7 @@ namespace MicaEditor
 	{
 	}
 
+	[default_interface]
 	runtimeclass UserListSelectionEventArgs
 	{
 		Int32 ListType { get; };
@@ -4596,12 +4606,14 @@ namespace MicaEditor
 		CompletionMethods ListCompletionMethod { get; };
 	}
 
+	[default_interface]
 	runtimeclass URIDroppedEventArgs
 	{
 		Windows.Storage.Streams.IBuffer TextAsBuffer { get; };
 		String Text { get; };
 	}
 
+	[default_interface]
 	runtimeclass DwellStartEventArgs
 	{
 		Int32 Position { get; };
@@ -4609,6 +4621,7 @@ namespace MicaEditor
 		Int32 Y { get; };
 	}
 
+	[default_interface]
 	runtimeclass DwellEndEventArgs
 	{
 		Int32 Position { get; };
@@ -4621,23 +4634,27 @@ namespace MicaEditor
 	{
 	}
 
+	[default_interface]
 	runtimeclass HotSpotClickEventArgs
 	{
 		Int32 Modifiers { get; };
 		Int32 Position { get; };
 	}
 
+	[default_interface]
 	runtimeclass HotSpotDoubleClickEventArgs
 	{
 		Int32 Modifiers { get; };
 		Int32 Position { get; };
 	}
 
+	[default_interface]
 	runtimeclass CallTipClickEventArgs
 	{
 		Int32 Position { get; };
 	}
 
+	[default_interface]
 	runtimeclass AutoCSelectionEventArgs
 	{
 		Windows.Storage.Streams.IBuffer TextAsBuffer { get; };
@@ -4647,12 +4664,14 @@ namespace MicaEditor
 		CompletionMethods ListCompletionMethod { get; };
 	}
 
+	[default_interface]
 	runtimeclass IndicatorClickEventArgs
 	{
 		Int32 Modifiers { get; };
 		Int32 Position { get; };
 	}
 
+	[default_interface]
 	runtimeclass IndicatorReleaseEventArgs
 	{
 		Int32 Modifiers { get; };
@@ -4669,6 +4688,7 @@ namespace MicaEditor
 	{
 	}
 
+	[default_interface]
 	runtimeclass HotSpotReleaseClickEventArgs
 	{
 		Int32 Modifiers { get; };
@@ -4685,6 +4705,7 @@ namespace MicaEditor
 	{
 	}
 
+	[default_interface]
 	runtimeclass AutoCCompletedEventArgs
 	{
 		Windows.Storage.Streams.IBuffer TextAsBuffer { get; };
@@ -4694,6 +4715,7 @@ namespace MicaEditor
 		CompletionMethods ListCompletionMethod { get; };
 	}
 
+	[default_interface]
 	runtimeclass MarginRightClickEventArgs
 	{
 		Int32 Modifiers { get; };
@@ -4701,6 +4723,7 @@ namespace MicaEditor
 		Int32 Margin { get; };
 	}
 
+	[default_interface]
 	runtimeclass AutoCSelectionChangeEventArgs
 	{
 		Int32 ListType { get; };
@@ -4742,6 +4765,7 @@ namespace MicaEditor
 	delegate void MarginRightClickHandler(Editor sender, MarginRightClickEventArgs args);
 	delegate void AutoCSelectionChangeHandler(Editor sender, AutoCSelectionChangeEventArgs args);
 
+	[default_interface]
 	runtimeclass Editor
 	{
 		event StyleNeededHandler StyleNeeded;

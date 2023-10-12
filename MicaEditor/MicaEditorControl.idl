@@ -3,6 +3,8 @@ import "EditorWrapper.idl";
 
 namespace MicaEditor
 {
+	[default_interface]
+	[webhosthidden]
 	runtimeclass MicaEditorControl : DUX.Controls.Control
 	{
 		MicaEditorControl();

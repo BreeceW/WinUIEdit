@@ -254,7 +254,7 @@ namespace Tool
                 idlSB.Append(End);
             }
 
-            idlSB.Append(In + "runtimeclass Editor" + End + In + "{" + End);
+            idlSB.Append(In + "[default_interface]" + End + In + "runtimeclass Editor" + End + In + "{" + End);
 
             foreach (var evt in evts)
             {
@@ -878,10 +878,7 @@ namespace Tool
 
         private static void WriteIdlEventArgs(StringBuilder sb, Event evt)
         {
-            if (evt.Params.Count == 0)
-            {
-                sb.Append(In).Append("[default_interface]").Append(End);
-            }
+            sb.Append(In).Append("[default_interface]").Append(End);
 
             sb.Append(In).Append("runtimeclass ").Append(evt.Name).Append("EventArgs").Append(End)
                 .Append(In).Append('{').Append(End);

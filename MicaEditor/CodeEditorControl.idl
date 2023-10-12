@@ -4,6 +4,7 @@ import "EditorWrapper.idl";
 namespace MicaEditor
 {
     [default_interface]
+    [webhosthidden]
     runtimeclass CodeEditorControl : DUX.Controls.Control
     {
         CodeEditorControl();
