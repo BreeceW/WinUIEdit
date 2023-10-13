@@ -279,6 +279,7 @@ namespace Scintilla::Internal {
 			_wParam = wParam;
 			_notificationData = notificationData;
 			_notifyTsf = notifyTsf;
+			_utf16Length = utf16Length;
 		}
 
 		uint8_t Type() const override
