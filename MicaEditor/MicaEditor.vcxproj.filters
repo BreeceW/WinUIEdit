@@ -743,55 +743,10 @@
     <ClInclude Include="..\lexilla\lexlib\WordList.h">
       <Filter>Lexilla</Filter>
     </ClInclude>
-    <ClInclude Include="..\lexilla\include\Accessor.h">
+    <ClInclude Include="..\lexilla\include\Lexilla.h">
       <Filter>Lexilla</Filter>
     </ClInclude>
-    <ClInclude Include="..\lexilla\include\CatalogueModules.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\CharacterCategory.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\CharacterSet.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\DefaultLexer.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\LexAccessor.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\LexerBase.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\LexerModule.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\LexerNoExceptions.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\LexerSimple.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\OptionSet.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\PropSetSimple.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\SparseState.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\StringCopy.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\StyleContext.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\SubStyles.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\include\WordList.h">
+    <ClInclude Include="..\lexilla\include\SciLexer.h">
       <Filter>Lexilla</Filter>
     </ClInclude>
   </ItemGroup>

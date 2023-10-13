@@ -27,7 +27,7 @@ namespace Tool
             var call = await root.GetFolderAsync("scintilla\\call");
             var lexillaSrc = await root.GetFolderAsync("lexilla\\src");
             var lexlib = await root.GetFolderAsync("lexilla\\lexlib");
-            var lexillaInclude = await root.GetFolderAsync("lexilla\\lexlib");
+            var lexillaInclude = await root.GetFolderAsync("lexilla\\include");
             var lexers = await root.GetFolderAsync("lexilla\\lexers");
 
             var doc = new XmlDocument();
