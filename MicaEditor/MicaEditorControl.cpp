@@ -60,7 +60,7 @@ namespace winrt::MicaEditor::implementation
 			// but is required to get text in classic windows (XAML Islands and WinUI 3)
 			// Todo: Find more ideal way to do this
 			// Tried using _tfThreadManager->GetActiveFlags but TF_TMF_IMMERSIVEMODE flag was not accurate
-			//if (IsClassicWindow())
+			if (IsClassicWindow())
 			{
 				CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
 			}
