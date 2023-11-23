@@ -290,9 +290,8 @@ namespace MicaEditor
 		}
 		const auto length{ end - start };
 
-		// Todo: Why are we setting these? Are these the best methods to use here if so?
-		_call->SetSelectionStart(start);
-		_call->SetSelectionEnd(end);
+		// Drop additional selections and ensure caret is at end of selection
+		_call->SetSelection(end, start);
 
 		_call->TargetWholeDocument();
 		_call->SetSearchFlags(FindOption::MatchCase);
