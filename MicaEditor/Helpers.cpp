@@ -10,7 +10,7 @@ namespace MicaEditor
 		return static_cast<int>(rounded ? floorf(pixelVal + 0.5f) : pixelVal); // Todo: Test if this is ever necessary
 	}
 
-	typedef LONG(*AppPolicyGetWindowingModelPtr)(HANDLE processToken, AppPolicyWindowingModel *policy);
+	typedef LONG(WINAPI *AppPolicyGetWindowingModelPtr)(HANDLE processToken, AppPolicyWindowingModel *policy);
 	static AppPolicyGetWindowingModelPtr s_appPolicyGetWindowingModel;
 
 	bool IsClassicWindow()
