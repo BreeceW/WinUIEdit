@@ -5,9 +5,15 @@
 
 using namespace winrt;
 using namespace Windows::Foundation;
+using namespace Microsoft::UI::Content;
+using namespace Microsoft::UI::Dispatching;
+using namespace Microsoft::UI::Windowing;
 using namespace Microsoft::UI::Xaml;
 using namespace Microsoft::UI::Xaml::Controls;
+using namespace Microsoft::UI::Xaml::Hosting;
+using namespace Microsoft::UI::Xaml::Media;
 using namespace Microsoft::UI::Xaml::Navigation;
+using namespace MicaEditor;
 using namespace CppDemoWinUI3;
 using namespace CppDemoWinUI3::implementation;
 
@@ -41,6 +47,28 @@ App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched(LaunchActivatedEventArgs const&)
 {
-    window = make<MainWindow>();
-    window.Activate();
+    constexpr auto useIslands = false;
+
+    if constexpr (!useIslands)
+    {
+        window = make<MainWindow>();
+        window.Activate();
+    }
+    else
+    {
+        // This path exists to test the scenario where islands are used without a window
+        // Does not work currently. Seems to be issue with WinUI 3. Workaround not yet discovered
+        //window = Window{}; // Works with MUX.Window loaded
+        const auto appWindow{ AppWindow::Create() };
+        appWindow.Title(L"Demo WinUI 3 Islands (C++)");
+        const DesktopWindowXamlSource dwxs{};
+        dwxs.Initialize(appWindow.Id());
+        dwxs.SiteBridge().ResizePolicy(ContentSizePolicy::ResizeContentToParentWindow);
+        dwxs.SiteBridge().Show();
+        Border b{};
+        b.Child(CodeEditorControl{});
+        dwxs.Content(b);
+        dwxs.SystemBackdrop(MicaBackdrop{});
+        appWindow.Show();
+    }
 }
