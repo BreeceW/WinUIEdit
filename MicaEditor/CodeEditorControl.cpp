@@ -190,12 +190,10 @@ namespace winrt::MicaEditor::implementation
 			}
 			else
 			{
-#endif
 				Dispatcher().RunAsync(CoreDispatcherPriority::Normal, [this, focusState]()
 					{
 						_editor->Focus(focusState);
 					});
-#ifndef WINUI3
 			}
 #endif
 			e.Handled(true);
