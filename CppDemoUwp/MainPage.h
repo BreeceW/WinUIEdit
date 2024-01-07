@@ -6,15 +6,16 @@ namespace winrt::CppDemoUwp::implementation
 {
 	struct MainPage : MainPageT<MainPage>
 	{
-		MainPage();
+		void InitializeComponent();
+
 		void Editor_Loaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void SettingsButton_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction OpenMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction SaveMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction SaveAsMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		Windows::Foundation::IAsyncAction NewWindowMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
-		Windows::Foundation::IAsyncAction NewMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
-		Windows::Foundation::IAsyncAction ExitMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+		fire_and_forget NewMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+		fire_and_forget ExitMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void ZoomInMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void ZoomOutMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void ZoomRestoreMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
@@ -39,7 +40,7 @@ namespace winrt::CppDemoUwp::implementation
 		MicaEditor::Editor::SavePointReached_revoker _savePointReachedRevoker{};
 		MicaEditor::Editor::SavePointLeft_revoker _savePointLeftRevoker{};
 		Windows::UI::Core::Preview::SystemNavigationManagerPreview::CloseRequested_revoker _closeRequestedRevoker{};
-		Windows::Foundation::IAsyncAction OnCloseRequested(Windows::Foundation::IInspectable sender, Windows::UI::Core::Preview::SystemNavigationCloseRequestedPreviewEventArgs e);
+		fire_and_forget OnCloseRequested(Windows::Foundation::IInspectable sender, Windows::UI::Core::Preview::SystemNavigationCloseRequestedPreviewEventArgs e);
 		void OnActivated(Windows::UI::Core::CoreWindow const &sender, Windows::UI::Core::WindowActivatedEventArgs const &e);
 		Windows::UI::Core::CoreWindow::Activated_revoker _activatedRevoker{};
 		void Activated(bool active);
@@ -52,8 +53,6 @@ namespace winrt::CppDemoUwp::implementation
 		void SetTitle(bool modified);
 		void FocusEditor();
 		Windows::Foundation::IAsyncOperation<Windows::UI::Xaml::Controls::ContentDialogResult> PromptSaveAsync();
-		bool _loadingThemeSetting{ false };
-		Windows::UI::Xaml::Controls::FlyoutPresenter _settingsFlyoutPresenter{ nullptr };
 	};
 }
 

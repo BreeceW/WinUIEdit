@@ -8,19 +8,26 @@ using namespace Windows::ApplicationModel::Core;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
+using namespace Windows::UI::Xaml::Navigation;
 using namespace Microsoft::UI::Xaml::Controls;
 
 namespace winrt::CppDemoUwp::implementation
 {
-	SettingsPage::SettingsPage()
+	void SettingsPage::InitializeComponent()
 	{
-		InitializeComponent();
+		SettingsPageT::InitializeComponent();
 
 		_activatedRevoker = CoreWindow::GetForCurrentThread().Activated(auto_revoke, { this, &SettingsPage::OnActivated });
 
 		const auto titleBar{ CoreApplication::GetCurrentView().TitleBar() };
 		_titleBarLayoutMetricsChangedRevoker = titleBar.LayoutMetricsChanged(auto_revoke, { this, &SettingsPage::OnTitleBarChanged });
 		_isVisibleChangedRevoker = titleBar.IsVisibleChanged(auto_revoke, { this, &SettingsPage::OnTitleBarChanged });
+	}
+
+	void SettingsPage::OnNavigatingFrom(NavigatingCancelEventArgs const &e)
+	{
+		// This prevents the back button from snapping the icon position as it is clicked
+		_titleBarLayoutMetricsChangedRevoker.revoke();
 	}
 
 	void SettingsPage::ThemeSwitcher_Loaded(IInspectable const &sender, RoutedEventArgs const &e)

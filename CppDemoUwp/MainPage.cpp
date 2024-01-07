@@ -2,6 +2,7 @@
 #include "MainPage.h"
 #include "MainPage.g.cpp"
 #include "App.h"
+#include "Helpers.h"
 
 using namespace winrt;
 using namespace Windows::System;
@@ -25,9 +26,9 @@ using namespace MicaEditor;
 
 namespace winrt::CppDemoUwp::implementation
 {
-	MainPage::MainPage()
+	void MainPage::InitializeComponent()
 	{
-		InitializeComponent();
+		MainPageT::InitializeComponent();
 
 		_closeRequestedRevoker = SystemNavigationManagerPreview::GetForCurrentView().CloseRequested(auto_revoke, { this, &MainPage::OnCloseRequested });
 
@@ -46,7 +47,7 @@ namespace winrt::CppDemoUwp::implementation
 		}
 	}
 
-	IAsyncAction MainPage::OnCloseRequested(IInspectable sender, SystemNavigationCloseRequestedPreviewEventArgs e)
+	fire_and_forget MainPage::OnCloseRequested(IInspectable sender, SystemNavigationCloseRequestedPreviewEventArgs e)
 	{
 		if (Editor().Editor().Modify())
 		{
@@ -150,7 +151,7 @@ namespace winrt::CppDemoUwp::implementation
 		co_await Application::Current().as<App>()->NewWindowAsync();
 	}
 
-	IAsyncAction MainPage::NewMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	fire_and_forget MainPage::NewMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
 		if (Editor().Editor().Modify())
 		{
@@ -178,7 +179,7 @@ namespace winrt::CppDemoUwp::implementation
 		SetTitle(false);
 	}
 
-	IAsyncAction MainPage::ExitMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
+	fire_and_forget MainPage::ExitMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
 	{
 		if (Editor().Editor().Modify())
 		{
@@ -198,17 +199,7 @@ namespace winrt::CppDemoUwp::implementation
 			}
 		}
 
-		if (!co_await ApplicationView::GetForCurrentView().TryConsolidateAsync())
-		{
-			if (CoreApplication::Views().Size() > 1)
-			{
-				Window::Current().Close();
-			}
-			else
-			{
-				Application::Current().Exit();
-			}
-		}
+		co_await CloseCurrentWindowAsync();
 	}
 
 	void MainPage::ZoomInMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
@@ -312,22 +303,67 @@ namespace winrt::CppDemoUwp::implementation
 		}
 	}
 
+	class ILoader
+	{
+	public:
+		virtual int __stdcall Release() = 0;
+		// Returns a status code from SC_STATUS_*
+		virtual int __stdcall AddData(const char *data, ptrdiff_t length) = 0;
+		virtual void *__stdcall ConvertToDocument() = 0;
+	};
+
 	IAsyncAction MainPage::OpenAsync(StorageFile file)
 	{
+		// Todo: this needs to be aborted if the window is closed while trying to open a document
+		Editor().Editor().ReadOnly(true);
 		_activeFile = file;
 		const auto stream{ co_await file.OpenReadAsync() };
-		if (stream.Size() >= (std::numeric_limits<uint32_t>::max)())
+		auto options{ DocumentOption::Default };
+		const auto size{ stream.Size() };
+		const auto large{ size > 100000000 };
+		if (large)
 		{
-			co_return;
+			options = DocumentOption::TextLarge | DocumentOption::StylesNone;
+			FileLoadingBar().Value(0);
+			FileLoadingBar().Maximum(size);
+			RCIndicator().Visibility(Visibility::Collapsed);
+			FileLoadingBar().Visibility(Visibility::Visible);
 		}
-		const Buffer string{ static_cast<uint32_t>(stream.Size() + 1) };
-		co_await stream.ReadAsync(string, stream.Size(), InputStreamOptions::None);
-		string.data()[stream.Size()] = '\0';
+		const auto loader{ reinterpret_cast<ILoader *>(Editor().Editor().CreateLoader(size, options)) };
+		constexpr size_t blockSize{ 128 * 1024 };
+		const Buffer string{ blockSize };
+		auto i{ 0 };
+		uint64_t progress{ 0 };
+		do
+		{
+			co_await stream.ReadAsync(string, string.Capacity(), InputStreamOptions::None);
+			loader->AddData(reinterpret_cast<char *>(string.data()), string.Length());
+			if (large)
+			{
+				progress += string.Length();
+				// Updating the progress bar every block is too slow
+				if (i++ == 0) FileLoadingBar().Value(progress + string.Length());
+				else if (i == 128) i = 0;
+			}
+		} while (string.Length() > 0);
+		if (large)
+		{
+			FileLoadingBar().Value(progress);
+		}
 		stream.Close();
-		Editor().Editor().Allocate(string.Length() + 1000);
-		Editor().Editor().SetTextFromBuffer(string);
-		Editor().Editor().EmptyUndoBuffer();
+		Editor().Editor().DocPointer(reinterpret_cast<uint64_t>(loader->ConvertToDocument()));
+		const auto zoom{ Editor().Editor().Zoom() };
+		Editor().Editor().Zoom(zoom + 1); // Zoom in and out to force recalculation of number width
+		Editor().Editor().Zoom(zoom); // Todo: Remove hack
+		Editor().Editor().AllocateLineCharacterIndex(LineCharacterIndexType::Utf16); // Todo: Run on background thread
+		Editor().Editor().UndoCollection(true);
+		if (large)
+		{
+			FileLoadingBar().Visibility(Visibility::Collapsed);
+			RCIndicator().Visibility(Visibility::Visible);
+		}
 		SetTitle(false);
+		Editor().Editor().ReadOnly(false);
 	}
 
 	IAsyncOperation<bool> MainPage::SaveAsync()

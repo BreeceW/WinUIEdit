@@ -76,12 +76,12 @@ int32_t App::NewWindow(IStorageItem const &file)
 	}
 	window.Content(frame);
 
-	window.Activate();
-
 	CoreApplication::GetCurrentView().TitleBar().ExtendViewIntoTitleBar(true);
 	const auto &view{ ApplicationView::GetForCurrentView() };
 	view.SetPreferredMinSize(Size{ 308, 188 });
 	UpdateTitleBar(CurrentTheme(theme));
+
+	window.Activate();
 
 	SystemNavigationManager::GetForCurrentView().BackRequested({ this, &App::OnSystemBackRequested });
 

@@ -21,29 +21,29 @@
                     <SolidColorBrush
                         x:Key="DividerLineBrush"
                         Opacity="0.1"
-                        Color="Black" />
+                        Color="#000000" />
                     <SolidColorBrush
                         x:Key="SeparatorLineBrush"
                         Opacity="0.0837"
-                        Color="White" />
+                        Color="#FFFFFF" />
                     <SolidColorBrush
                         x:Key="StatusBarBrush"
                         Opacity="0.8"
-                        Color="#FF202020" />
+                        Color="#202020" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush
                         x:Key="DividerLineBrush"
                         Opacity="0.0578"
-                        Color="Black" />
+                        Color="#000000" />
                     <SolidColorBrush
                         x:Key="SeparatorLineBrush"
                         Opacity="0.08"
-                        Color="Black" />
+                        Color="#000000" />
                     <SolidColorBrush
                         x:Key="StatusBarBrush"
                         Opacity="0.65"
-                        Color="#FFF3F3F3" />
+                        Color="#F3F3F3" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <SolidColorBrush x:Key="DividerLineBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
@@ -132,11 +132,11 @@
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator />
                 <!--<MenuFlyoutItem AccessKey="U" Text="Page setup" />
-                <MenuFlyoutItem AccessKey="P" Text="Print">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="P" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>-->
+            <MenuFlyoutItem AccessKey="P" Text="Print">
+                <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="P" Modifiers="Control" />
+                </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>-->
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride=""
                     AccessKey="X"
@@ -189,31 +189,31 @@
                     Tag="{x:Bind mica:ScintillaMessage.Clear}"
                     Text="Delete" />
                 <!--<MenuFlyoutSeparator />
-                <MenuFlyoutItem AccessKey="F" Text="Find">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="N" Text="Find next">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F3" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="V" Text="Find previous">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F3" Modifiers="Shift" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="R" Text="Replace">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="H" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem AccessKey="G" Text="Go to">
-                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="G" Modifiers="Control" />
-                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>-->
+            <MenuFlyoutItem AccessKey="F" Text="Find">
+                <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F" Modifiers="Control" />
+                </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem AccessKey="N" Text="Find next">
+                <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F3" />
+                </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem AccessKey="V" Text="Find previous">
+                <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="F3" Modifiers="Shift" />
+                </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem AccessKey="R" Text="Replace">
+                <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="H" Modifiers="Control" />
+                </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>
+            <MenuFlyoutItem AccessKey="G" Text="Go to">
+                <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                    <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="G" Modifiers="Control" />
+                </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+            </MenuFlyoutItem>-->
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+A"
@@ -230,7 +230,7 @@
                     </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <!--<MenuFlyoutSeparator />
-                <MenuFlyoutItem AccessKey="O" Text="Font" />-->
+            <MenuFlyoutItem AccessKey="O" Text="Font" />-->
             </muxc:MenuBarItem>
 
             <muxc:MenuBarItem Title="View" AccessKey="V">
@@ -262,7 +262,11 @@
                 <ToggleMenuFlyoutItem
                     AccessKey="W"
                     Click="WordWrapMenuItem_Click"
-                    Text="Word wrap" />
+                    Text="Word wrap">
+                    <Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                        <Windows10FallCreatorsUpdate:KeyboardAccelerator Key="Z" Modifiers="Menu" />
+                    </Windows10FallCreatorsUpdate:MenuFlyoutItem.KeyboardAccelerators>
+                </ToggleMenuFlyoutItem>
                 <MenuFlyoutSeparator />
                 <MenuFlyoutSubItem
                     MinWidth="230"
@@ -346,7 +350,7 @@
                     </ResourceDictionary.ThemeDictionaries>
                 </ResourceDictionary>
             </Button.Resources>
-            <muxc:AnimatedIcon Width="16" Height="16">
+            <muxc:AnimatedIcon Width="16">
                 <muxc:AnimatedIcon.Source>
                     <animatedvisuals:AnimatedSettingsVisualSource />
                 </muxc:AnimatedIcon.Source>
@@ -398,23 +402,37 @@
                 Grid.ColumnSpan="5"
                 Height="1"
                 Fill="{ThemeResource DividerLineBrush}" />
-            <StackPanel
+            <Grid
                 Grid.Row="1"
                 Grid.Column="0"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
+                VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <Rectangle
+                    Grid.Column="0"
                     Width="1"
                     Height="16"
                     Margin="0,0,22,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     Fill="{ThemeResource SeparatorLineBrush}" />
                 <TextBlock
                     x:Name="RCIndicator"
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="Ln 1, Col 1"
                     Typography.NumeralAlignment="Tabular" />
-            </StackPanel>
+                <muxc:ProgressBar
+                    x:Name="FileLoadingBar"
+                    Grid.Column="1"
+                    Margin="0,0,21,0"
+                    HorizontalAlignment="Stretch"
+                    Visibility="Collapsed" />
+            </Grid>
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="1"
@@ -492,19 +510,25 @@
                                 Tag=""
                                 Text="Plain text" />
                             <muxc:RadioMenuFlyoutItem
-                                AccessKey="C"
+                                AccessKey="C1"
                                 Click="HighlightingLanguageItem_Click"
                                 GroupName="HighlightingLanguage"
                                 Tag="cpp"
-                    Text="C++" />
+                                Text="C++" />
                             <muxc:RadioMenuFlyoutItem
-                                AccessKey="S"
+                                AccessKey="C2"
                                 Click="HighlightingLanguageItem_Click"
                                 GroupName="HighlightingLanguage"
                                 Tag="csharp"
                                 Text="C#" />
                             <muxc:RadioMenuFlyoutItem
-                                AccessKey="J"
+                                AccessKey="J1"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                Tag="js"
+                                Text="JavaScript" />
+                            <muxc:RadioMenuFlyoutItem
+                                AccessKey="J2"
                                 Click="HighlightingLanguageItem_Click"
                                 GroupName="HighlightingLanguage"
                                 Tag="json"

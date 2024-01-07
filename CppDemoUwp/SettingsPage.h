@@ -6,8 +6,9 @@ namespace winrt::CppDemoUwp::implementation
 {
 	struct SettingsPage : SettingsPageT<SettingsPage>
 	{
-		SettingsPage();
+		void InitializeComponent();
 
+		void OnNavigatingFrom(Windows::UI::Xaml::Navigation::NavigatingCancelEventArgs const &e);
 		void ThemeSwitcher_Loaded(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void ThemeSwitcher_SelectionChanged(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::Controls::SelectionChangedEventArgs const &e);
 
