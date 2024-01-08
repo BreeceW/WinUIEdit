@@ -568,23 +568,30 @@ namespace Scintilla::Internal {
 				wclen = 2;
 			}
 
-			TS_TEXTCHANGE chg;
-			chg.acpStart = DocPositionToAcp(SelectionStart().Position());
-			chg.acpOldEnd = DocPositionToAcp(SelectionEnd().Position());
-			_shouldNotifyTsf = false;
-			AddWString(std::wstring_view(wcs, wclen), CharacterSource::DirectInput);
-			chg.acpNewEnd = chg.acpOldEnd + wclen;
-			_shouldNotifyTsf = true;
-			if (_tsfCore)
+			if (_tsfCore || _tfTextStoreACPSink)
 			{
-				_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpNewEnd - chg.acpStart, winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpNewEnd, chg.acpNewEnd });
-				//_editContext.NotifySelectionChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
+				TS_TEXTCHANGE chg;
+				chg.acpStart = DocPositionToAcp(SelectionStart().Position());
+				chg.acpOldEnd = DocPositionToAcp(SelectionEnd().Position());
+				_shouldNotifyTsf = false;
+				AddWString(std::wstring_view(wcs, wclen), CharacterSource::DirectInput);
+				chg.acpNewEnd = chg.acpOldEnd + wclen;
+				_shouldNotifyTsf = true;
+				if (_tsfCore)
+				{
+					_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpNewEnd - chg.acpStart, winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpNewEnd, chg.acpNewEnd });
+					//_editContext.NotifySelectionChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
+				}
+				else if (_tfTextStoreACPSink)
+				{
+					_tfTextStoreACPSink->OnTextChange(0, &chg);
+					// Todo: Figure out if adding OnSelectionChange here was ever needed
+					//_tfTextStoreACPSink->OnSelectionChange();
+				}
 			}
-			else if (_tfTextStoreACPSink)
+			else
 			{
-				_tfTextStoreACPSink->OnTextChange(0, &chg);
-				// Todo: Figure out if adding OnSelectionChange here was ever needed
-				//_tfTextStoreACPSink->OnSelectionChange();
+				AddWString(std::wstring_view(wcs, wclen), CharacterSource::DirectInput);
 			}
 		}
 	}
@@ -2914,7 +2921,9 @@ namespace Scintilla::Internal {
 
 	int ScintillaWinUI::CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength)
 	{
-		return notifyTsf
+		// Todo: This method fails somehow with large files
+		return (_tsfCore || _tfTextStoreACPSink)
+			&& notifyTsf
 			&& code == Scintilla::Notification::Modified
 			&& FlagSet(modFlags, Scintilla::ModificationFlags::InsertText | Scintilla::ModificationFlags::DeleteText)
 			? WideCharLenFromMultiByte(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage, std::string_view{ text, static_cast<size_t>(mbLength) })
