@@ -270,7 +270,7 @@ namespace winrt::CppDemoUwp::implementation
 		WCHAR dateBuffer[MAX_PATH];
 		GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, DATE_SHORTDATE, &time, nullptr, dateBuffer, MAX_PATH, nullptr);
 		const auto formatted{ format(L"{} {}", timeBuffer, dateBuffer) };
-		Editor().Editor().AddText(formatted.size(), formatted);
+		Editor().Editor().ReplaceSel(formatted);
 		Editor().Editor().ScrollCaret();
 	}
 
