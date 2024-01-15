@@ -477,7 +477,7 @@ namespace Tool
 
             if (comment.Count != 0)
             {
-                sb.Append(indent).Append("/*").Append(End);
+                sb.Append(indent).Append("/**").Append(End);
             }
             foreach (var line in comment)
             {
