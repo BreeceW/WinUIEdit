@@ -1,0 +1,5 @@
+<Project>
+	<PropertyGroup Condition="'$(MicaEditorUseWinUI3)' == ''">
+		<MicaEditorUseWinUI3>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)UseWinUI3.txt'))</MicaEditorUseWinUI3>
+	</PropertyGroup>
+</Project>

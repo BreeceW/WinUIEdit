@@ -1,7 +1,24 @@
 # Tools
 
-This directory contains a few tools to help keep this editor up-to-date with Scintilla.
-These tools only run on Windows and require the .NET 7 SDK to be installed.
+This directory contains a few tools to help with development and to keep this library up-to-date with Scintilla.
+These tools only run on Windows and require the .NET 7 SDK or newer to be installed.
+
+## Package
+This tool builds the library and its C#/WinRT projection and creates NuGet packages.
+
+Run the Package tool like this:
+
+`Package` builds WinUI 3 and UWP variants and does not change version
+
+`Package x.y.z` builds WinUI 3 and UWP variants and changes versions of both packages to x.y.z
+
+`Package winui3` builds the WinUI 3 variant and does not change version
+
+`Package uwp:x.y.z` builds the UWP variant and changes version to x.y.z
+
+`Package winui3:a.b.c uwp:x.y.z` builds WinUI 3 and UWP variants and changes version of the WinUI 3 package to a.b.c and the UWP package to x.y.z
+
+The resulting package(s) are located in the MicaEditorCsWinRT\nuget folder.
 
 ## Update
 This tool updates the version of Scintilla and Lexilla to the version specified.
@@ -48,8 +65,7 @@ Run the Theme tool like this:
 
 ## Uwp
 This tool switches the configuration of the editor project to build the UWP
-version of the control. If you have Visual Studio open and the configuration is
-changed, Visual Studio will ask you to reload the project, which you should.
+version of the control.
 
 Run the Uwp tool like this:
 
@@ -57,8 +73,7 @@ Run the Uwp tool like this:
 
 ## WinUI3
 This tool switches the configuration of the editor project to build the WinUI 3
-version of the control. If you have Visual Studio open and the configuration is
-changed, Visual Studio will ask you to reload the project, which you should.
+version of the control.
 
 Run the WinUI3 tool like this:
 

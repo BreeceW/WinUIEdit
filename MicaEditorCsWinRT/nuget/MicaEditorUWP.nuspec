@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+	<metadata>
+		<id>MicaEditor.Uwp</id>
+		<version>0.0.20-prerelease</version>
+		<authors>Breece Walker</authors>
+		<description>Code editor control for UWP based on Scintilla</description>
+		<readme>README.md</readme>
+		<license type="file">LICENSE</license>
+		<tags>winui code editor text edit scintilla uwp winrt</tags>
+		<repository type="git" url="https://github.com/BreeceW/WinUIEdit.git" />
+		<dependencies>
+			<group targetFramework=".NETCoreApp3.0" />
+			<group targetFramework="UAP10.0" />
+			<group targetFramework=".NETFramework4.6" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\..\_buildUwp\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\netcoreapp3.0" />
+		<file src="..\..\_buildUwp\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\uap10.0" />
+		<file src="..\..\_buildUwp\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\net46" />
+
+		<file src="MicaEditor.targets" target="build\native\MicaEditor.Uwp.targets" />
+
+		<file src="..\..\_buildUwp\ARM\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-arm\native" />
+		<file src="..\..\_buildUwp\ARM\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-arm\native" />
+		<file src="..\..\_buildUwp\ARM\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-arm\native" />
+
+		<file src="..\..\_buildUwp\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-arm64\native" />
+		<file src="..\..\_buildUwp\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-arm64\native" />
+		<file src="..\..\_buildUwp\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-arm64\native" />
+
+		<file src="..\..\_buildUwp\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-x64\native" />
+		<file src="..\..\_buildUwp\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-x64\native" />
+		<file src="..\..\_buildUwp\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-x64\native" />
+
+		<file src="..\..\_buildUwp\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-x86\native" />
+		<file src="..\..\_buildUwp\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-x86\native" />
+		<file src="..\..\_buildUwp\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-x86\native" />
+
+		<file src="MicaEditor.xml" target="lib\netcoreapp3.0" />
+		<file src="MicaEditor.xml" target="lib\uap10.0" />
+		<file src="MicaEditor.xml" target="lib\net46" />
+
+		<file src="..\..\MicaEditor\Themes\Generic.xaml" target="lib\uap10.0\MicaEditor\Themes" />
+
+		<file src="..\..\README.md" />
+		<file src="..\..\LICENSE" />
+	</files>
+</package>

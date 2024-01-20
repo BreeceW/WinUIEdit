@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <MicaEditorUseWinUI3>false</MicaEditorUseWinUI3>
-  </PropertyGroup>
+  <Import Project="..\ChangeBuild.props" />
   <Import Project="..\packages\Microsoft.WindowsAppSDK.1.4.231115000\build\native\Microsoft.WindowsAppSDK.props" Condition="$(MicaEditorUseWinUI3) And Exists('..\packages\Microsoft.WindowsAppSDK.1.4.231115000\build\native\Microsoft.WindowsAppSDK.props')" />
   <Import Project="..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.2428\build\Microsoft.Windows.SDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.2428\build\Microsoft.Windows.SDK.BuildTools.props')" />
   <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.230706.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.230706.1\build\native\Microsoft.Windows.CppWinRT.props')" />
@@ -25,8 +23,10 @@
     <UseWinUI Condition="$(MicaEditorUseWinUI3)">true</UseWinUI>
     <_NoWinAPIFamilyApp Condition="$(MicaEditorUseWinUI3)">true</_NoWinAPIFamilyApp>
     <_VC_Target_Library_Platform Condition="$(MicaEditorUseWinUI3)">Desktop</_VC_Target_Library_Platform>
+    <UseCrtSDKReference Condition="$(MicaEditorUseWinUI3)">false</UseCrtSDKReference>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="..\DualBuild.props" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
       <Configuration>Debug</Configuration>
@@ -113,16 +113,24 @@
   <ItemDefinitionGroup Condition="'$(Configuration)' == 'Debug'">
     <ClCompile>
       <PreprocessorDefinitions>USE_DUMMY_PAGE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary Condition="$(MicaEditorUseWinUI3)">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries Condition="$(MicaEditorUseWinUI3)">%(IgnoreSpecificDefaultLibraries);libucrtd.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions Condition="$(MicaEditorUseWinUI3)">%(AdditionalOptions) /defaultlib:ucrtd.lib</AdditionalOptions>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ControlFlowGuard>Guard</ControlFlowGuard>
+      <RuntimeLibrary Condition="$(MicaEditorUseWinUI3)">MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <IgnoreSpecificDefaultLibraries Condition="$(MicaEditorUseWinUI3)">%(IgnoreSpecificDefaultLibraries);libucrt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions Condition="$(MicaEditorUseWinUI3)">%(AdditionalOptions) /defaultlib:ucrt.lib</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

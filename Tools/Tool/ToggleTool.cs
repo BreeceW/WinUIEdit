@@ -15,13 +15,24 @@ namespace Tool
 
         public async Task RunAsync(string path, string[] args)
         {
-            var file = await (await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync()).GetFileAsync("MicaEditor\\MicaEditor.vcxproj");
+            await ToggleTxtAsync(path, "UseWinUI3.txt", _useWinUI3);
+        }
+
+        private static async Task ToggleTxtAsync(string path, string project, bool value)
+        {
+            var file = await (await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync()).GetFileAsync(project);
+            await FileIO.WriteTextAsync(file, BoolToString(value));
+        }
+
+        private static async Task ToggleXmlAsync(string path, string project, bool value)
+        {
+            var file = await (await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync()).GetFileAsync(project);
             var text = await FileIO.ReadTextAsync(file);
-            if (text.Contains($"<MicaEditorUseWinUI3>{BoolToString(_useWinUI3)}</MicaEditorUseWinUI3>"))
+            if (text.Contains($"<MicaEditorUseWinUI3>{BoolToString(value)}</MicaEditorUseWinUI3>"))
             {
                 return;
             }
-            text = text.Replace($"<MicaEditorUseWinUI3>{BoolToString(!_useWinUI3)}</MicaEditorUseWinUI3>", $"<MicaEditorUseWinUI3>{BoolToString(_useWinUI3)}</MicaEditorUseWinUI3>");
+            text = text.Replace($"<MicaEditorUseWinUI3>{BoolToString(!value)}</MicaEditorUseWinUI3>", $"<MicaEditorUseWinUI3>{BoolToString(value)}</MicaEditorUseWinUI3>");
             await FileIO.WriteTextAsync(file, text);
         }
 

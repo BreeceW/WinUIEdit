@@ -6,6 +6,8 @@
 # Custom tool generated files
 Tools/Diff/monaco/
 Tools/Diff *
+Tools/nuget.exe
+MicaEditorCsWinRT/nuget/*.zip
 
 # User-specific files
 *.rsuser

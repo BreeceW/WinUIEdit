@@ -34,6 +34,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinUI3", "WinUI3", "{23110D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "XamlIslands", "XamlIslands", "{2DADBE2B-A102-4DE2-A804-5ACE3834860D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicaEditorCsWinRT", "MicaEditorCsWinRT\MicaEditorCsWinRT.csproj", "{DEE6745F-56E7-4014-8983-8FA56D67A277}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6054949-A719-4BE0-9139-B1AC3280D966}"
+	ProjectSection(SolutionItems) = preProject
+		ChangeBuild.props = ChangeBuild.props
+		Directory.Build.props = Directory.Build.props
+		DualBuild.props = DualBuild.props
+		UseWinUI3.txt = UseWinUI3.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -288,6 +298,26 @@ Global
 		{71F33F8D-CB80-404A-AAD2-6E6E74F1AF0A}.Release|x64.Build.0 = Release|x64
 		{71F33F8D-CB80-404A-AAD2-6E6E74F1AF0A}.Release|x86.ActiveCfg = Release|Win32
 		{71F33F8D-CB80-404A-AAD2-6E6E74F1AF0A}.Release|x86.Build.0 = Release|Win32
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|ARM.Build.0 = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|arm64.Build.0 = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|x64.Build.0 = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Debug|x86.Build.0 = Debug|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|ARM.Build.0 = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|arm64.ActiveCfg = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|arm64.Build.0 = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|x64.ActiveCfg = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|x64.Build.0 = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|x86.ActiveCfg = Release|Any CPU
+		{DEE6745F-56E7-4014-8983-8FA56D67A277}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

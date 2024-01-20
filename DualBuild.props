@@ -1,0 +1,9 @@
+﻿<Project>
+	<PropertyGroup>
+		<BuildOutDir Condition="$(MicaEditorUseWinUI3)">$([MSBuild]::NormalizeDirectory('$(SolutionDir)', '_buildWinUI3', '$(Platform)', '$(Configuration)'))</BuildOutDir>
+		<BuildOutDir Condition="!$(MicaEditorUseWinUI3)">$([MSBuild]::NormalizeDirectory('$(SolutionDir)', '_buildUwp', '$(Platform)', '$(Configuration)'))</BuildOutDir>
+		<OutDir>$([MSBuild]::NormalizeDirectory('$(BuildOutDir)', '$(MSBuildProjectName)', 'bin'))</OutDir>
+		<IntDir>$([MSBuild]::NormalizeDirectory('$(BuildOutDir)', '$(MSBuildProjectName)', 'obj'))</IntDir>
+		<GeneratedFilesDir>$(IntDir)Generated Files\</GeneratedFilesDir>
+	</PropertyGroup>
+</Project>

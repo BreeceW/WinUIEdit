@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -312,6 +313,59 @@ namespace Tool
 
             var hFile = await parent.CreateFileAsync("MicaEditor\\EditorWrapper.h", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(hFile, hSB.ToString());
+
+            var xmlIntelliSenseFile = await parent.CreateFileAsync("MicaEditorCsWinRT\\nuget\\MicaEditor.xml", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(xmlIntelliSenseFile, GenerateIntelliSenseXml("MicaEditor", funs, properties, evts));
+            var xmlIntelliSenseForProjectionFile = await parent.CreateFileAsync("MicaEditorCsWinRT\\nuget\\MicaEditorCsWinRT.xml", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(xmlIntelliSenseForProjectionFile, GenerateIntelliSenseXml("MicaEditorCsWinRT", funs, properties, evts));
+        }
+
+        private string GenerateIntelliSenseXml(string assembly, List<Function> funs, List<Property> properties, List<Event> evts)
+        {
+            var sb = new StringBuilder($"<?xml version=\"1.0\" encoding=\"utf-8\"?>{End}<doc>{End}    <assembly>{End}        <name>");
+            sb.Append(assembly).Append($"</name>{End}    </assembly>{End}    <members>{End}");
+            
+            void Write(string type, string name, IList<string> comment)
+            {
+                sb.Append($"        <member name=\"").Append(type).Append(':').Append(name).Append('"');
+                if (comment.Count != 0)
+                {
+                    sb.Append($">{End}            <summary>").Append(SecurityElement.Escape(string.Join(End, comment))).Append($"</summary>{End}        </member>{End}");
+                }
+                else
+                {
+                    sb.Append($" />{End}");
+                }
+            }
+
+            foreach (var fun in funs)
+            {
+                var needsStringVersion = NeedsStringVersion(fun);
+                var usesStringReturn = UsesStringReturn(fun);
+
+                string Paren(string str) => string.IsNullOrEmpty(str) ? string.Empty : $"({str})";
+
+                Write("M", $"MicaEditor.Editor.{fun.Name}{(needsStringVersion ? (usesStringReturn ? "Write" : "From") + "Buffer" : string.Empty)}{Paren(string.Join(',', fun.Params.Select(p => ConvertToNetType(p.Type))))}", fun.Comment);
+
+                if (needsStringVersion)
+                {
+                    Write("M", $"MicaEditor.Editor.{fun.Name}{Paren(string.Join(',', fun.Params.Where(p => p.Type != "stringresult").Select(p => p.Type == "string" ? "System.String" : ConvertToNetType(p.Type))))}", fun.Comment);
+                }
+            }
+
+            foreach (var prop in properties)
+            {
+                Write("P", $"MicaEditor.Editor.{prop.Name}", prop.GetComment.Concat(prop.SetComment).ToList());
+            }
+
+            foreach (var evt in evts)
+            {
+                Write("E", $"MicaEditor.Editor.{evt.Name}", evt.Comment);
+            }
+
+            sb.Append($"    </members>{End}</doc>{End}");
+
+            return sb.ToString();
         }
 
         [GeneratedRegex("operator\\|\\((\\w+)")]
@@ -997,6 +1051,34 @@ namespace Tool
             {
                 sb.Append(End);
             }
+        }
+
+        private static string ConvertToNetType(string def)
+        {
+            return def switch
+            {
+                "_ForceByteArray" => "System.Byte[]",
+                "_ForceString" => "System.String",
+                "void" => "void",
+                "int" => "System.Int32",
+                "bool" => "System.Boolean",
+                "position" => "System.Int64",
+                "line" => "System.Int64",
+                "colour" => "System.Int32",
+                "colouralpha" => "System.Int32",
+                "string" => "Windows.Storage.Streams.IBuffer",
+                "stringresult" => "Windows.Storage.Streams.IBuffer",
+                "cells" => "System.Byte[]",
+                "pointer" => "System.UInt64",
+                "textrange" => "System.UInt64",
+                "textrangefull" => "System.UInt64",
+                "findtext" => "System.UInt64",
+                "findtextfull" => "System.UInt64",
+                "keymod" => "System.Int32",
+                "formatrange" => "System.UInt64",
+                "formatrangefull" => "System.UInt64",
+                _ => "MicaEditor." + def,
+            };
         }
 
         private static string ConvertToIdlType(string def)

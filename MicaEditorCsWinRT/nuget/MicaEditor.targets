@@ -1,0 +1,17 @@
+﻿<Project>
+	<PropertyGroup>
+		<MicaEditorPlatform Condition="'$(Platform)' == 'Win32'">x86</MicaEditorPlatform>
+		<MicaEditorPlatform Condition="'$(Platform)' != 'Win32'">$(Platform)</MicaEditorPlatform>
+		<MicaEditorFolder>$(MSBuildThisFileDirectory)..\..\runtimes\win10-$(MicaEditorPlatform)\native\</MicaEditorFolder>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Reference Include="$(MSBuildThisFileDirectory)..\..\lib\uap10.0\MicaEditor.winmd">
+			<Implementation>MicaEditor.dll</Implementation>
+		</Reference>
+
+		<ReferenceCopyLocalPaths Condition="Exists('$(MicaEditorFolder)MicaEditor.dll')" Include="$(MicaEditorFolder)MicaEditor.dll" />
+		<ReferenceCopyLocalPaths Condition="Exists('$(MicaEditorFolder)MicaEditor.pri')" Include="$(MicaEditorFolder)MicaEditor.pri" />
+		<ReferenceCopyLocalPaths Condition="Exists('$(MicaEditorFolder)MicaEditor.pdb')" Include="$(MicaEditorFolder)MicaEditor.pdb" />
+	</ItemGroup>
+</Project>

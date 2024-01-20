@@ -1,56 +1,54 @@
 # WinUIEdit
-This is an early work-in-progress code editor control for both UWP and WinUI 3. It is a port of the [Scintilla editor](https://www.scintilla.org). The goal is to be a performant code editor that feels like it belongs on Windows and has a familiar API for XAML developers. It is written in C++, but is just as easily usable from .NET as C++ (it should work with any language with a WinRT projection).
+[![WinUI 3 NuGet version](https://img.shields.io/nuget/v/MicaEditor.WinUI?label=nuget%20(WinUI%203))](https://www.nuget.org/packages/MicaEditor.WinUI)
+[![UWP NuGet version](https://img.shields.io/nuget/v/MicaEditor.Uwp?label=nuget%20(UWP))](https://www.nuget.org/packages/MicaEditor.Uwp)
+
+This is an early work-in-progress code editor control for both UWP and WinUI 3. It is a port of the [Scintilla editor component](https://www.scintilla.org). It is written in C++ and works with C#, C++, and any other WinRT-compatible language.
+
+[!NOTE]
+This control is currently not production ready. Breaking API changes are very likely at this stage.
+
+## Quick start
+Install either the [MicaEditor.WinUI](https://www.nuget.org/packages/MicaEditor.WinUI) or [MicaEditor.Uwp](https://www.nuget.org/packages/MicaEditor.Uwp) NuGet package depending on whether you are using WinUI 3 or UWP (WinUI 2).
+
+Add the namespace and code editor control to your page as shown below:
+
+```xml
+<Page
+    xmlns:editor="using:MicaEditor">
+    <editor:CodeEditorControl x:Name="MyEditor" HighlightingLanguage="csharp" />
+</Page>
+```
+
+Syntax highlighting is available through the `HighlightingLanguage` property. To control the editor, use the `Editor` property. For example, to set the editor text:
+```csharp
+MyEditor.Editor.SetText("Vintage tee, brand new phone");
+```
+See the [Scintilla documentation](https://www.scintilla.org/ScintillaDoc.html) for complete remarks on all methods.
+
+If using C++/WinRT, add `#include <winrt/MicaEditor.h>` to your `pch.h` file.
 
 ## Demo
-You can download a demo from Microsoft Store [here](https://www.microsoft.com/store/apps/9PGZBDP9PSPF). Expect some occasional glitches.
-
-### Current state of the control
-Mouse and keyboard input are supported. IME support is a major work in progress and is somewhat usable on desktop devices. The demo is a replica of the Windows 11 Notepad app.
+You can download a demo from Microsoft Store [here](https://apps.microsoft.com/detail/9PGZBDP9PSPF?cid=github&launch=true). Expect some occasional glitches.
 
 <img alt="Mica Editor: replica of Windows 11 Notepad with WinUIEdit control using syntax highlighting, line numbers, and mica, demoing C++ sample code" src="https://user-images.githubusercontent.com/18747724/213900470-3c57b252-3488-40d1-b708-f392a30aab2f.png" width="500" />
 
-## How to build
+## Advanced usage
+`CodeEditorControl` wraps `MicaEditorControl` and includes additional features and changes default settings and styles. `MicaEditorControl` can be used directly if only the original Scintilla control is desired. The Scintilla API is available through a WinRT wrapper exposed by the `Editor` property, as well as the original window message-based API via the `Scintilla` method.
+
+## Windows version support
+The WinUI 3 version of this control should work on Windows 10, version 1809 and later and support ARM64, x64, and x86. The UWP version of this control should work on Windows 10, version 1703 and later. It will run on ARM64, ARM32, x64, and x86.
+
+## Development
+
+### How to build
 Currently, to switch the build between UWP and WinUI 3, you will need to modify [MicaEditor.vcxproj](https://github.com/BreeceW/WinUIEdit/blob/main/MicaEditor/MicaEditor.vcxproj) to change `MicaEditorUseWinUI3` to `true` or `false`. To do this quickly, use the [WinUI3](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#winui3) and [Uwp](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#uwp) tools.
 Open WinUIEditor.sln in Visual Studio 2022. Then, set CsDemoUWP or CppDemoUWP as the startup project for UWP or CsDemoWinUI3 or CppDemoWinUI3 for WinUI 3. Now you can build and run the project.
 
-## Planned Windows version support
-The UWP version of this control should work on Windows 10, version 1703 and later. It is intended that the control will work equally well on all Windows platforms. It will run on ARM64, ARM32, x64, and x86. The WinUI 3 version of this control should work on Windows 10, version 1809 and later and support ARM64, x64, and x86.
-
-## Project file structure
-The project structure is very much not set in stone at this time.
-
+### Project file structure
 |Folder|Description|
 |-:|:-|
-|**MicaEditor**|XAML control that hosts the Scintilla port (Note: The C++ project in this folder is also responsible for compiling the scintilla folder code)|
-|**scintilla\winui**|Port of Scintilla to UWP/WinUI 3|
+|**MicaEditor**|XAML control that hosts the Scintilla port (the C++ project in this folder is also responsible for compiling the scintilla folder code)|
+|**scintilla\winui**|Scintilla platform code for UWP/WinUI 3|
 |scintilla|Unmodified Scintilla source code with new winui subfolder|
 |lexilla|Unmodified Lexilla source code|
-|CsDemoUwp|Test project for C# UWP|
-|CppDemoUwp|Test project for C++/WinRT UWP (Notepad replica)|
-|CsDemoWinUI3|Test project for C# WinUI 3|
-|CppDemoWinUI3|Test project for C++/WinRT WinUI 3|
-|WinFormsIslandsDemo|Test project for C# WinForms XAML Islands|
-|WpfIslandsDemo|Test project for C# WPF XAML Islands|
-|CsIslandsUwpDemoApp|Support project for C# XAML Islands apps|
-|CppIslandsDemo|Test project for C++ XAML Islands|
-|CppIslandsUwpDemoApp|Support project for C++ XAML Islands app|
-|Tools|A couple tools to keep the scintilla code up-to-date (see README in folder)|
-
-The most relevant code is in the MicaEditor and scintilla\winui folders. These folders may merge in the future. The control name is also not yet decided (MicaEditor is a placeholder).
-
-### What are UWP and WinUI 3?
-[UWP](https://docs.microsoft.com/en-us/windows/uwp/) and [WinUI 3](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/) are both modern ways of writing native apps for Windows 11 and 10. UWP includes a very performant and enjoyable XAML framework that was later developed into a new and somewhat source compatible UI framework that ships with the [Windows App SDK](https://docs.microsoft.com/en-us/windows/apps/windows-app-sdk/) called WinUI 3. As WinUI 3 is very new, it is not entirely equipped to replace UWP yet nor does it support older versions of Windows 10, so this control is being developed for both. This is fairly easy to do, as it mostly involves conditionally redefining namespaces. Separate packages will likely be published for the UWP and WinUI 3 versions of this control.
-
-#### WinUI 2?
-WinUI 2 is a controls and styles library for the UWP XAML framework, whereas WinUI 3 is an entire XAML framework.
-This control does not depend on WinUI 2, so you can use this control with or without WinUI 2 installed.
-
-#### XAML Islands?
-[XAML Islands](https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/xaml-islands) is a way to use the UWP XAML framework
-in an old-style Win32 app, like a WinForms, WPF (see below), or classic Win32 app written in C++. You can embed this control into a Win32 app using XAML Islands. If you are not using XAML, you may want to use the original Scintilla instead.
-Also note that WinUI 3 is planned to support its own form of XAML Islands in the future, allowing you to partially embed a WinUI 3 UI into an old app. Expect this control to support that scenario when it arrives.
-
-#### WPF?
-Please note that while WinUI 3 is conceptually similar to WPF, it is a completely different UI framework and thus incompatible with it.
-This control will work in WPF using XAML Islands.
-If you are using WPF, you may want to use this control, or you can embed the original Windows version of Scintilla.
+|Tools|Tools to keep the Scintilla code up-to-date and aid in development (see Tools\README)|

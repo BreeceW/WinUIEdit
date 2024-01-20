@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+	<metadata>
+		<id>MicaEditor.WinUI</id>
+		<version>0.0.20-prerelease</version>
+		<authors>Breece Walker</authors>
+		<description>Code editor control for WinUI 3 based on Scintilla</description>
+		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>
+		<readme>README.md</readme>
+		<license type="file">LICENSE</license>
+		<tags>winui code editor text edit scintilla winui3 winrt winappsdk windows app sdk</tags>
+		<repository type="git" url="https://github.com/BreeceW/WinUIEdit.git" />
+		<dependencies>
+			<group>
+				<dependency id="Microsoft.WindowsAppSDK" version="*" />
+			</group>
+			<group targetFramework="net6.0-windows10.0.17763" />
+			<group targetFramework=".NETCoreApp3.0" />
+			<group targetFramework="UAP10.0" />
+			<group targetFramework=".NETFramework4.6" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\..\_buildWinUI3\AnyCPU\Release\MicaEditorCsWinRT\bin\MicaEditorCsWinRT.dll" target="lib\net6.0-windows10.0.17763.0" />
+
+		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\netcoreapp3.0" />
+		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\uap10.0" />
+		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\net46" />
+
+		<file src="MicaEditor.targets" target="build\native\MicaEditor.WinUI.targets" />
+
+		<file src="..\..\_buildWinUI3\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-arm64\native" />
+		<file src="..\..\_buildWinUI3\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-arm64\native" />
+		<file src="..\..\_buildWinUI3\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-arm64\native" />
+
+		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-x64\native" />
+		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-x64\native" />
+		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-x64\native" />
+
+		<file src="..\..\_buildWinUI3\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-x86\native" />
+		<file src="..\..\_buildWinUI3\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-x86\native" />
+		<file src="..\..\_buildWinUI3\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-x86\native" />
+
+		<file src="MicaEditorCsWinRT.xml" target="lib\net6.0-windows10.0.17763.0" />
+		<file src="MicaEditor.xml" target="lib\netcoreapp3.0" />
+		<file src="MicaEditor.xml" target="lib\uap10.0" />
+		<file src="MicaEditor.xml" target="lib\net46" />
+		
+		<file src="..\..\MicaEditor\Themes\Generic.xaml" target="lib\uap10.0\MicaEditor\Themes" />
+		<file src="..\..\MicaEditor\Themes\Generic.xaml" target="lib\net6.0-windows10.0.17763.0\MicaEditor\Themes" />
+
+		<file src="..\..\README.md" />
+		<file src="..\..\LICENSE" />
+	</files>
+</package>

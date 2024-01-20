@@ -12,6 +12,7 @@ ITool tool = toolName switch
     "Interface" => new InterfaceGeneratorTool(),
     "Vcxproj" => new VcxprojTool(),
     "Theme" => new ThemeTool(),
+    "Package" => new PackageTool(),
     _ => throw new InvalidOperationException("Not a valid tool"),
 };
 
