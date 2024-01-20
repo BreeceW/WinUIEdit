@@ -1,15 +1,15 @@
 #include "Defines.idl"
-import "MicaEditorControl.idl";
+import "EditorBaseControl.idl";
 
 namespace MicaEditor
 {
     [default_interface]
     [webhosthidden]
-    runtimeclass MicaEditorControlAutomationPeer : DUX.Automation.Peers.FrameworkElementAutomationPeer,
+    runtimeclass EditorBaseControlAutomationPeer : DUX.Automation.Peers.FrameworkElementAutomationPeer,
         DUX.Automation.Provider.ITextEditProvider,
         DUX.Automation.Provider.ITextProvider2,
         DUX.Automation.Provider.IValueProvider
     {
-        MicaEditorControlAutomationPeer(MicaEditorControl owner);
+        EditorBaseControlAutomationPeer(EditorBaseControl owner);
     }
 }

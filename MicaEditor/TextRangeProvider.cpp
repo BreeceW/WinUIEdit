@@ -139,7 +139,7 @@ namespace winrt::MicaEditor::implementation
 			throw hresult_error{ E_POINTER };
 		}
 
-		// Todo: see MicaEditorControlAutomationPeer::GetVisibleRanges for caveats
+		// Todo: see EditorBaseControlAutomationPeer::GetVisibleRanges for caveats
 		// Todo: Does not account for horizontal scrolling
 		// Todo: Does not account for ranges that do not start and end at line starts/ends
 

@@ -1,4 +1,4 @@
 #pragma once
 
-#include "MicaEditorControl.h"
+#include "EditorBaseControl.h"
 #include "CodeEditorControl.h"

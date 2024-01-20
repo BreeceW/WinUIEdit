@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "MicaEditorControl.h"
+#include "EditorBaseControl.h"
 #include "EditorWrapper.h"
 #include "Editor.g.cpp"
 
@@ -577,7 +577,7 @@ namespace winrt::MicaEditor::implementation
 		return _position;
 	}
 
-	Editor::Editor(com_ptr<MicaEditorControl> const &editor)
+	Editor::Editor(com_ptr<EditorBaseControl> const &editor)
 		: _editor{ editor }
 	{
 	}

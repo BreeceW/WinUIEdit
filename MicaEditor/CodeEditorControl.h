@@ -3,7 +3,7 @@
 #include "CodeEditorControl.g.h"
 
 #include "CodeEditorHandler.h"
-#include "MicaEditorControl.h"
+#include "EditorBaseControl.h"
 
 namespace winrt::MicaEditor::implementation
 {
@@ -25,7 +25,7 @@ namespace winrt::MicaEditor::implementation
 		void SyntaxHighlightingApplied(event_token const &token) noexcept;
 
 	private:
-		com_ptr<MicaEditorControl> _editor{ nullptr };
+		com_ptr<EditorBaseControl> _editor{ nullptr };
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };
 
 		hstring _highlightingLanguage;

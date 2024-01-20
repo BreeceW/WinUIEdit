@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include "MicaEditorControlAutomationPeer.g.h"
+#include "EditorBaseControlAutomationPeer.g.h"
 
 namespace winrt::MicaEditor::implementation
 {
-    struct MicaEditorControlAutomationPeer : MicaEditorControlAutomationPeerT<MicaEditorControlAutomationPeer>
+    struct EditorBaseControlAutomationPeer : EditorBaseControlAutomationPeerT<EditorBaseControlAutomationPeer>
     {
-        MicaEditorControlAutomationPeer(MicaEditor::MicaEditorControl const &owner);
+        EditorBaseControlAutomationPeer(MicaEditor::EditorBaseControl const &owner);
 
         hstring GetLocalizedControlTypeCore();
         Windows::Foundation::IInspectable GetPatternCore(DUX::Automation::Peers::PatternInterface const &patternInterface);
@@ -37,7 +37,7 @@ namespace winrt::MicaEditor::implementation
 
 namespace winrt::MicaEditor::factory_implementation
 {
-    struct MicaEditorControlAutomationPeer : MicaEditorControlAutomationPeerT<MicaEditorControlAutomationPeer, implementation::MicaEditorControlAutomationPeer>
+    struct EditorBaseControlAutomationPeer : EditorBaseControlAutomationPeerT<EditorBaseControlAutomationPeer, implementation::EditorBaseControlAutomationPeer>
     {
     };
 }

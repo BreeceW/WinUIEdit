@@ -29,8 +29,8 @@
     <ClCompile Include="DummyPage.cpp" />
     <ClCompile Include="EditorWrapper.cpp" />
     <ClCompile Include="Helpers.cpp" />
-    <ClCompile Include="MicaEditorControl.cpp" />
-    <ClCompile Include="MicaEditorControlAutomationPeer.cpp" />
+    <ClCompile Include="EditorBaseControl.cpp" />
+    <ClCompile Include="EditorBaseControlAutomationPeer.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TextRangeProvider.cpp" />
     <ClCompile Include="Wrapper.cpp" />
@@ -539,8 +539,8 @@
     <ClInclude Include="EditorWrapper.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="LightPlus.h" />
-    <ClInclude Include="MicaEditorControl.h" />
-    <ClInclude Include="MicaEditorControlAutomationPeer.h" />
+    <ClInclude Include="EditorBaseControl.h" />
+    <ClInclude Include="EditorBaseControlAutomationPeer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TextMateScope.h" />
     <ClInclude Include="TextRangeProvider.h" />
@@ -766,7 +766,7 @@
     <Midl Include="CodeEditorControl.idl" />
     <Midl Include="DummyPage.idl" />
     <Midl Include="EditorWrapper.idl" />
-    <Midl Include="MicaEditorControl.idl" />
-    <Midl Include="MicaEditorControlAutomationPeer.idl" />
+    <Midl Include="EditorBaseControl.idl" />
+    <Midl Include="EditorBaseControlAutomationPeer.idl" />
   </ItemGroup>
 </Project>

@@ -148,16 +148,16 @@
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="LightPlus.h" />
-    <ClInclude Include="MicaEditorControl.h">
-      <DependentUpon>MicaEditorControl.cpp</DependentUpon>
+    <ClInclude Include="EditorBaseControl.h">
+      <DependentUpon>EditorBaseControl.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="CodeEditorControl.h">
       <DependentUpon>CodeEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
-    <ClInclude Include="MicaEditorControlAutomationPeer.h">
-      <DependentUpon>MicaEditorControlAutomationPeer.cpp</DependentUpon>
+    <ClInclude Include="EditorBaseControlAutomationPeer.h">
+      <DependentUpon>EditorBaseControlAutomationPeer.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="pch.h" />
@@ -183,7 +183,7 @@
     <ClCompile Include="EditorWrapper.cpp">
       <SubType>Code</SubType>
     </ClCompile>
-    <ClCompile Include="MicaEditorControl.cpp">
+    <ClCompile Include="EditorBaseControl.cpp">
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="CodeEditorControl.cpp">
@@ -192,7 +192,7 @@
     <ClCompile Include="CodeEditorHandler.SyntaxHighlighting.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="MicaEditorControlAutomationPeer.cpp">
+    <ClCompile Include="EditorBaseControlAutomationPeer.cpp">
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -221,16 +221,16 @@
       <DependentUpon>EditorWrapper.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="MicaEditorControl.idl">
-      <DependentUpon>MicaEditorControl.cpp</DependentUpon>
+    <Midl Include="EditorBaseControl.idl">
+      <DependentUpon>EditorBaseControl.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
     <Midl Include="CodeEditorControl.idl">
       <DependentUpon>CodeEditorControl.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
-    <Midl Include="MicaEditorControlAutomationPeer.idl">
-      <DependentUpon>MicaEditorControlAutomationPeer.cpp</DependentUpon>
+    <Midl Include="EditorBaseControlAutomationPeer.idl">
+      <DependentUpon>EditorBaseControlAutomationPeer.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
   </ItemGroup>

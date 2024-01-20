@@ -49,7 +49,7 @@
 		<Extension Category="windows.activatableClass.inProcessServer">
 			<InProcessServer>
 				<Path>MicaEditor.dll</Path>
-				<ActivatableClass ActivatableClassId="MicaEditor.MicaEditorControl" ThreadingModel="both" />
+				<ActivatableClass ActivatableClassId="MicaEditor.EditorBaseControl" ThreadingModel="both" />
 				<ActivatableClass ActivatableClassId="MicaEditor.XamlMetaDataProvider" ThreadingModel="both" />
 			</InProcessServer>
 		</Extension>

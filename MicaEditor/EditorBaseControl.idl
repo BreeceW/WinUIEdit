@@ -5,9 +5,9 @@ namespace MicaEditor
 {
 	[default_interface]
 	[webhosthidden]
-	runtimeclass MicaEditorControl : DUX.Controls.Control
+	runtimeclass EditorBaseControl : DUX.Controls.Control
 	{
-		MicaEditorControl();
+		EditorBaseControl();
 		UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
 		Editor Editor { get; };
 		event Windows.Foundation.EventHandler<Double> DpiChanged;

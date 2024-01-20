@@ -1,9 +1,9 @@
 ﻿#include "pch.h"
-#include "MicaEditorControlAutomationPeer.h"
-#include "MicaEditorControlAutomationPeer.g.cpp"
+#include "EditorBaseControlAutomationPeer.h"
+#include "EditorBaseControlAutomationPeer.g.cpp"
 #include "TextRangeProvider.h"
 #include "Helpers.h"
-#include "MicaEditorControl.h"
+#include "EditorBaseControl.h"
 
 using namespace ::MicaEditor;
 using namespace winrt;
@@ -15,12 +15,12 @@ using namespace DUX::Automation::Text;
 
 namespace winrt::MicaEditor::implementation
 {
-	MicaEditorControlAutomationPeer::MicaEditorControlAutomationPeer(MicaEditor::MicaEditorControl const &owner) : base_type(owner)
+	EditorBaseControlAutomationPeer::EditorBaseControlAutomationPeer(MicaEditor::EditorBaseControl const &owner) : base_type(owner)
 	{
-		_updateUIRevoker = owner.Editor().UpdateUI(auto_revoke, { this, &MicaEditorControlAutomationPeer::Editor_UpdateUI });
+		_updateUIRevoker = owner.Editor().UpdateUI(auto_revoke, { this, &EditorBaseControlAutomationPeer::Editor_UpdateUI });
 	}
 
-	void MicaEditorControlAutomationPeer::Editor_UpdateUI(Editor const &sender, UpdateUIEventArgs const &args)
+	void EditorBaseControlAutomationPeer::Editor_UpdateUI(Editor const &sender, UpdateUIEventArgs const &args)
 	{
 		// https://github.com/microsoft/terminal/blob/main/src/cascadia/TerminalControl/TermControlAutomationPeer.cpp#L133
 		// Todo: Maybe we should raise selection changed on Update::Content also
@@ -30,14 +30,14 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	hstring MicaEditorControlAutomationPeer::GetLocalizedControlTypeCore()
+	hstring EditorBaseControlAutomationPeer::GetLocalizedControlTypeCore()
 	{
 		// Todo: Localize
 		// Todo: Make sure this is a good name
 		return L"code editor";
 	}
 
-	IInspectable MicaEditorControlAutomationPeer::GetPatternCore(PatternInterface const &patternInterface)
+	IInspectable EditorBaseControlAutomationPeer::GetPatternCore(PatternInterface const &patternInterface)
 	{
 		// Todo: Should we forward scroll elements? https://learn.microsoft.com/en-us/windows/apps/design/accessibility/custom-automation-peers#forwarding-patterns-from-sub-elements
 		switch (patternInterface)
@@ -52,32 +52,32 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	hstring MicaEditorControlAutomationPeer::GetClassNameCore()
+	hstring EditorBaseControlAutomationPeer::GetClassNameCore()
 	{
-		return hstring{ name_of<MicaEditor::MicaEditorControl>() };
+		return hstring{ name_of<MicaEditor::EditorBaseControl>() };
 	}
 
-	AutomationControlType MicaEditorControlAutomationPeer::GetAutomationControlTypeCore()
+	AutomationControlType EditorBaseControlAutomationPeer::GetAutomationControlTypeCore()
 	{
 		return AutomationControlType::Edit;
 	}
 
-	ITextRangeProvider MicaEditorControlAutomationPeer::DocumentRange()
+	ITextRangeProvider EditorBaseControlAutomationPeer::DocumentRange()
 	{
 		// Todo: Look at how WinUI 2 handles GetImpl in automation peers
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 		return make<TextRangeProvider>(ProviderFromPeer(*this), editor, 0, editor.Length(), GetBoundingRectangle());
 	}
 
-	SupportedTextSelection MicaEditorControlAutomationPeer::SupportedTextSelection()
+	SupportedTextSelection EditorBaseControlAutomationPeer::SupportedTextSelection()
 	{
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 		return editor.MultipleSelection() ? SupportedTextSelection::Multiple : SupportedTextSelection::Single;
 	}
 
-	com_array<ITextRangeProvider> MicaEditorControlAutomationPeer::GetSelection()
+	com_array<ITextRangeProvider> EditorBaseControlAutomationPeer::GetSelection()
 	{
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 		const auto n{ static_cast<uint32_t>(editor.Selections()) };
 		com_array<ITextRangeProvider> arr(n, nullptr);
 		const auto topLeft{ GetBoundingRectangle() };
@@ -90,12 +90,12 @@ namespace winrt::MicaEditor::implementation
 		return arr; // Todo: Trying to retrieve the value of a selection n >= 1 crashes Accessibility Insights
 	}
 
-	com_array<ITextRangeProvider> MicaEditorControlAutomationPeer::GetVisibleRanges()
+	com_array<ITextRangeProvider> EditorBaseControlAutomationPeer::GetVisibleRanges()
 	{
 		// Visual Studio implements this line by line
 		// Todo: Consider folding and line visible messages
 		// Todo: Not sure if this is the best method for top line
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 
 		const auto firstVisibleLine{ editor.FirstVisibleLine() };
 		const auto maxLine{ editor.LineCount() - 1 };
@@ -116,20 +116,20 @@ namespace winrt::MicaEditor::implementation
 		return arr;
 	}
 
-	ITextRangeProvider MicaEditorControlAutomationPeer::RangeFromChild(IRawElementProviderSimple const &childElement)
+	ITextRangeProvider EditorBaseControlAutomationPeer::RangeFromChild(IRawElementProviderSimple const &childElement)
 	{
 		// Todo: Does this need to be implemented?
 		return nullptr;
 	}
 
-	ITextRangeProvider MicaEditorControlAutomationPeer::RangeFromPoint(Point const &screenLocation)
+	ITextRangeProvider EditorBaseControlAutomationPeer::RangeFromPoint(Point const &screenLocation)
 	{
 		const auto rect{ GetBoundingRectangle() };
 		const Point point{
 			screenLocation.X - rect.X,
 			screenLocation.Y - rect.Y };
 
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 		const auto pos{ editor.PositionFromPoint(point.X, point.Y) };
 		const auto line{ editor.LineFromPosition(pos) };
 		const auto start{ editor.PositionFromLine(line) };
@@ -138,27 +138,27 @@ namespace winrt::MicaEditor::implementation
 		return make<TextRangeProvider>(ProviderFromPeer(*this), editor, start, end, rect);
 	}
 
-	ITextRangeProvider MicaEditorControlAutomationPeer::GetActiveComposition()
+	ITextRangeProvider EditorBaseControlAutomationPeer::GetActiveComposition()
 	{
 		// Todo: implement
 		throw hresult_not_implemented{};
 	}
 
-	ITextRangeProvider MicaEditorControlAutomationPeer::GetConversionTarget()
+	ITextRangeProvider EditorBaseControlAutomationPeer::GetConversionTarget()
 	{
 		// Todo: implement
 		throw hresult_not_implemented{};
 	}
 
-	ITextRangeProvider MicaEditorControlAutomationPeer::RangeFromAnnotation(IRawElementProviderSimple const &annotationElement)
+	ITextRangeProvider EditorBaseControlAutomationPeer::RangeFromAnnotation(IRawElementProviderSimple const &annotationElement)
 	{
 		// Todo: implement
 		throw hresult_not_implemented{};
 	}
 
-	ITextRangeProvider MicaEditorControlAutomationPeer::GetCaretRange(bool &isActive)
+	ITextRangeProvider EditorBaseControlAutomationPeer::GetCaretRange(bool &isActive)
 	{
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 
 		isActive = editor.Focus();
 
@@ -167,24 +167,24 @@ namespace winrt::MicaEditor::implementation
 		return make<TextRangeProvider>(ProviderFromPeer(*this), editor, pos, pos, GetBoundingRectangle());
 	}
 
-	bool MicaEditorControlAutomationPeer::IsReadOnly()
+	bool EditorBaseControlAutomationPeer::IsReadOnly()
 	{
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 
 		return editor.ReadOnly();
 	}
 
-	hstring MicaEditorControlAutomationPeer::Value()
+	hstring EditorBaseControlAutomationPeer::Value()
 	{
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
 
 		return editor.GetText(editor.Length()); // Todo: this could potentially be gigabytes of data, so provide a maximum safeguard
 	}
 
-	void MicaEditorControlAutomationPeer::SetValue(hstring const &value)
+	void EditorBaseControlAutomationPeer::SetValue(hstring const &value)
 	{
-		const auto editor{ Owner().as<MicaEditor::MicaEditorControl>().Editor() };
-		
+		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+
 		editor.SetText(value);
 	}
 }

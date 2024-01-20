@@ -1,11 +1,11 @@
 ﻿#include "pch.h"
-#include "MicaEditorControl.h"
-#if __has_include("MicaEditorControl.g.cpp")
-#include "MicaEditorControl.g.cpp"
+#include "EditorBaseControl.h"
+#if __has_include("EditorBaseControl.g.cpp")
+#include "EditorBaseControl.g.cpp"
 #endif
 #include "EditorWrapper.h"
 #include "Helpers.h"
-#include "MicaEditorControlAutomationPeer.h"
+#include "EditorBaseControlAutomationPeer.h"
 
 using namespace ::MicaEditor;
 using namespace winrt;
@@ -27,14 +27,14 @@ namespace winrt::MicaEditor::implementation
 {
 	// Todo: Something about this control is keeping the WinUI 3 versions from closing.
 	// Note that making this into a blank control fixes the issue, so it is definitely something here.
-	MicaEditorControl::MicaEditorControl()
+	EditorBaseControl::EditorBaseControl()
 	{
-		DefaultStyleKey(winrt::box_value(L"MicaEditor.MicaEditorControl"));
+		DefaultStyleKey(winrt::box_value(L"MicaEditor.EditorBaseControl"));
 
 		_wrapper = std::make_shared<Wrapper>();
 
-		Loaded({ this, &MicaEditorControl::OnLoaded });
-		Unloaded({ this, &MicaEditorControl::OnUnloaded });
+		Loaded({ this, &EditorBaseControl::OnLoaded });
+		Unloaded({ this, &EditorBaseControl::OnUnloaded });
 
 #ifndef WINUI3
 		if (!_hasXamlRoot)
@@ -50,7 +50,7 @@ namespace winrt::MicaEditor::implementation
 		_editorWrapper = make<implementation::Editor>(get_strong());
 
 		_scintilla->SetWndProcTag(*this);
-		_scintilla->SetWndProc(&MicaEditorControl::WndProc);
+		_scintilla->SetWndProc(&EditorBaseControl::WndProc);
 
 #ifndef WINUI3
 		if (_hasFcu)
@@ -62,24 +62,24 @@ namespace winrt::MicaEditor::implementation
 			// Tried using _tfThreadManager->GetActiveFlags but TF_TMF_IMMERSIVEMODE flag was not accurate
 			if (IsClassicWindow())
 			{
-				CharacterReceived({ this, &MicaEditorControl::MicaEditorControl_CharacterReceived });
+				CharacterReceived({ this, &EditorBaseControl::EditorBaseControl_CharacterReceived });
 			}
 #ifndef WINUI3
 		}
 #endif
 	}
 
-	MicaEditorControl::~MicaEditorControl()
+	EditorBaseControl::~EditorBaseControl()
 	{
 		_scintilla->Finalize();
 	}
 
-	MicaEditor::Editor MicaEditorControl::Editor()
+	MicaEditor::Editor EditorBaseControl::Editor()
 	{
 		return _editorWrapper;
 	}
 
-	void MicaEditorControl::OnLoaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
+	void EditorBaseControl::OnLoaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
 	{
 		// Following pattern from https://github.com/microsoft/microsoft-ui-xaml/blob/a7183df20367bc0e2b8c825430597a5c1e6871b6/dev/WebView2/WebView2.cpp#L1556
 
@@ -97,18 +97,18 @@ namespace winrt::MicaEditor::implementation
 		{
 #endif
 			UpdateDpi(XamlRoot().RasterizationScale());
-			_xamlRootChangedRevoker = XamlRoot().Changed(auto_revoke, { this, &MicaEditorControl::XamlRoot_Changed });
+			_xamlRootChangedRevoker = XamlRoot().Changed(auto_revoke, { this, &EditorBaseControl::XamlRoot_Changed });
 #ifndef WINUI3
 		}
 		else
 		{
 			UpdateDpi(_displayInformation.RawPixelsPerViewPixel());
-			_dpiChangedRevoker = _displayInformation.DpiChanged(auto_revoke, { this, &MicaEditorControl::DisplayInformation_DpiChanged });
+			_dpiChangedRevoker = _displayInformation.DpiChanged(auto_revoke, { this, &EditorBaseControl::DisplayInformation_DpiChanged });
 		}
 #endif
 	}
 
-	void MicaEditorControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
+	void EditorBaseControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
 	{
 #ifndef WINUI3
 		_isLoaded = false;
@@ -135,7 +135,7 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->StopTimers();
 	}
 
-	bool MicaEditorControl::IsLoadedCompat()
+	bool EditorBaseControl::IsLoadedCompat()
 	{
 #ifndef WINUI3
 		if (_hasIsLoaded)
@@ -152,18 +152,18 @@ namespace winrt::MicaEditor::implementation
 	}
 
 #ifndef WINUI3
-	void MicaEditorControl::DisplayInformation_DpiChanged(DisplayInformation const &sender, IInspectable const &args)
+	void EditorBaseControl::DisplayInformation_DpiChanged(DisplayInformation const &sender, IInspectable const &args)
 	{
 		UpdateDpi(sender.RawPixelsPerViewPixel());
 	}
 #endif
 
-	void MicaEditorControl::XamlRoot_Changed(DUX::XamlRoot const &sender, XamlRootChangedEventArgs const &args)
+	void EditorBaseControl::XamlRoot_Changed(DUX::XamlRoot const &sender, XamlRootChangedEventArgs const &args)
 	{
 		UpdateDpi(sender.RasterizationScale());
 	}
 
-	void MicaEditorControl::UpdateDpi(float dpiScale)
+	void EditorBaseControl::UpdateDpi(float dpiScale)
 	{
 		if (_dpiScale != dpiScale)
 		{
@@ -174,7 +174,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::AddContextMenuItems(MenuFlyout const &menu)
+	void EditorBaseControl::AddContextMenuItems(MenuFlyout const &menu)
 	{
 		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };
 		const auto selection{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetSelectionEmpty, 0, 0)) };
@@ -184,7 +184,7 @@ namespace winrt::MicaEditor::implementation
 		undoItem.Icon(SymbolIcon{ Symbol::Undo });
 		undoItem.Tag(box_value(ScintillaMessage::Undo));
 		undoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanUndo, 0, 0));
-		undoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click }); // Todo: Revoke event handler?
+		undoItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click }); // Todo: Revoke event handler?
 		menu.Items().Append(undoItem);
 
 		const MenuFlyoutItem redoItem{};
@@ -192,7 +192,7 @@ namespace winrt::MicaEditor::implementation
 		redoItem.Icon(SymbolIcon{ Symbol::Redo });
 		redoItem.Tag(box_value(ScintillaMessage::Redo));
 		redoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanRedo, 0, 0));
-		redoItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		redoItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click });
 		menu.Items().Append(redoItem);
 
 		menu.Items().Append(MenuFlyoutSeparator{});
@@ -202,7 +202,7 @@ namespace winrt::MicaEditor::implementation
 		cutItem.Icon(SymbolIcon{ Symbol::Cut });
 		cutItem.Tag(box_value(ScintillaMessage::Cut));
 		cutItem.IsEnabled(writable && selection);
-		cutItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		cutItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click });
 		menu.Items().Append(cutItem);
 
 		const MenuFlyoutItem copyItem{};
@@ -210,7 +210,7 @@ namespace winrt::MicaEditor::implementation
 		copyItem.Icon(SymbolIcon{ Symbol::Copy });
 		copyItem.Tag(box_value(ScintillaMessage::Copy));
 		copyItem.IsEnabled(selection);
-		copyItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		copyItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click });
 		menu.Items().Append(copyItem);
 
 		const MenuFlyoutItem pasteItem{};
@@ -218,7 +218,7 @@ namespace winrt::MicaEditor::implementation
 		pasteItem.Icon(SymbolIcon{ Symbol::Paste });
 		pasteItem.Tag(box_value(ScintillaMessage::Paste));
 		pasteItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanPaste, 0, 0));
-		pasteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		pasteItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click });
 		menu.Items().Append(pasteItem);
 
 		const MenuFlyoutItem deleteItem{};
@@ -226,7 +226,7 @@ namespace winrt::MicaEditor::implementation
 		deleteItem.Icon(SymbolIcon{ Symbol::Delete });
 		deleteItem.Tag(box_value(ScintillaMessage::Clear));
 		deleteItem.IsEnabled(writable && selection);
-		deleteItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		deleteItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click });
 		menu.Items().Append(deleteItem);
 
 		menu.Items().Append(MenuFlyoutSeparator{});
@@ -235,11 +235,11 @@ namespace winrt::MicaEditor::implementation
 		selectAllItem.Text(L"Select all");
 		selectAllItem.Icon(SymbolIcon{ Symbol::SelectAll });
 		selectAllItem.Tag(box_value(ScintillaMessage::SelectAll));
-		selectAllItem.Click({ this, &MicaEditorControl::ContextMenuItem_Click });
+		selectAllItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click });
 		menu.Items().Append(selectAllItem);
 	}
 
-	bool MicaEditorControl::ShowContextMenu(UIElement const &targetElement, Point const &point)
+	bool EditorBaseControl::ShowContextMenu(UIElement const &targetElement, Point const &point)
 	{
 		if (_scintilla->ShouldShowContextMenu(Point{ point.X * _dpiScale, point.Y * _dpiScale }))
 		{
@@ -251,7 +251,7 @@ namespace winrt::MicaEditor::implementation
 		return false;
 	}
 
-	bool MicaEditorControl::ShowContextMenuAtCurrentPosition()
+	bool EditorBaseControl::ShowContextMenuAtCurrentPosition()
 	{
 		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
 		{
@@ -264,37 +264,37 @@ namespace winrt::MicaEditor::implementation
 		return false;
 	}
 
-	Scintilla::sptr_t MicaEditorControl::PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
+	Scintilla::sptr_t EditorBaseControl::PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam)
 	{
 		return _scintilla->WndProc(iMessage, wParam, lParam);
 	}
 
-	uint64_t MicaEditorControl::Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
+	uint64_t EditorBaseControl::Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
 	{
 		return PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
 
-	void MicaEditorControl::StyleSetForeTransparent(int style, Scintilla::Internal::ColourRGBA color)
+	void EditorBaseControl::StyleSetForeTransparent(int style, Scintilla::Internal::ColourRGBA color)
 	{
 		_scintilla->StyleSetForeTransparent(style, color);
 	}
 
-	void MicaEditorControl::StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color)
+	void EditorBaseControl::StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color)
 	{
 		_scintilla->StyleSetBackTransparent(style, color);
 	}
 
-	void MicaEditorControl::InvalidateStyleRedraw()
+	void EditorBaseControl::InvalidateStyleRedraw()
 	{
 		_scintilla->PublicInvalidateStyleRedraw();
 	}
 
-	void MicaEditorControl::StyleClearCustom()
+	void EditorBaseControl::StyleClearCustom()
 	{
 		_scintilla->StyleClearCustom();
 	}
 
-	void MicaEditorControl::OnApplyTemplate()
+	void EditorBaseControl::OnApplyTemplate()
 	{
 		__super::OnApplyTemplate();
 
@@ -326,33 +326,33 @@ namespace winrt::MicaEditor::implementation
 		const auto verticalScrollBar{ GetTemplateChild(L"VerticalScrollBar").try_as<ScrollBar>() };
 		if (horizontalScrollBar)
 		{
-			_horizontalScrollBarScrollRevoker = horizontalScrollBar.Scroll(auto_revoke, { this, &MicaEditorControl::HorizontalScrollBar_Scroll });
+			_horizontalScrollBarScrollRevoker = horizontalScrollBar.Scroll(auto_revoke, { this, &EditorBaseControl::HorizontalScrollBar_Scroll });
 		}
 		if (verticalScrollBar)
 		{
-			_verticalScrollBarScrollRevoker = verticalScrollBar.Scroll(auto_revoke, { this, &MicaEditorControl::VerticalScrollBar_Scroll });
+			_verticalScrollBarScrollRevoker = verticalScrollBar.Scroll(auto_revoke, { this, &EditorBaseControl::VerticalScrollBar_Scroll });
 		}
 		_wrapper->SetScrollBars(horizontalScrollBar, verticalScrollBar);
 
 		if (const auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<Border>() })
 		{
-			_imageTargetSizeChangedRevoker = imageTarget.SizeChanged(auto_revoke, { this, &MicaEditorControl::ImageTarget_SizeChanged });
-			_imageTargetPointerMovedRevoker = imageTarget.PointerMoved(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerMoved });
+			_imageTargetSizeChangedRevoker = imageTarget.SizeChanged(auto_revoke, { this, &EditorBaseControl::ImageTarget_SizeChanged });
+			_imageTargetPointerMovedRevoker = imageTarget.PointerMoved(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerMoved });
 #ifndef WINUI3
-			_imageTargetPointerCaptureLostRevoker = imageTarget.PointerCaptureLost(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerCaptureLost });
-			_imageTargetPointerEnteredRevoker = imageTarget.PointerEntered(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerEntered });
-			_imageTargetPointerExitedRevoker = imageTarget.PointerExited(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerExited });
+			_imageTargetPointerCaptureLostRevoker = imageTarget.PointerCaptureLost(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerCaptureLost });
+			_imageTargetPointerEnteredRevoker = imageTarget.PointerEntered(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerEntered });
+			_imageTargetPointerExitedRevoker = imageTarget.PointerExited(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerExited });
 #endif
-			_imageTargetPointerWheelChangedRevoker = imageTarget.PointerWheelChanged(auto_revoke, { this, &MicaEditorControl::ImageTarget_PointerWheelChanged });
-			_imageTargetDragEnterRevoker = imageTarget.DragEnter(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragEnter });
-			_imageTargetDragOverRevoker = imageTarget.DragOver(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragOver });
-			_imageTargetDragLeaveRevoker = imageTarget.DragLeave(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragLeave });
-			_imageTargetDropRevoker = imageTarget.Drop(auto_revoke, { this, &MicaEditorControl::ImageTarget_Drop });
+			_imageTargetPointerWheelChangedRevoker = imageTarget.PointerWheelChanged(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerWheelChanged });
+			_imageTargetDragEnterRevoker = imageTarget.DragEnter(auto_revoke, { this, &EditorBaseControl::ImageTarget_DragEnter });
+			_imageTargetDragOverRevoker = imageTarget.DragOver(auto_revoke, { this, &EditorBaseControl::ImageTarget_DragOver });
+			_imageTargetDragLeaveRevoker = imageTarget.DragLeave(auto_revoke, { this, &EditorBaseControl::ImageTarget_DragLeave });
+			_imageTargetDropRevoker = imageTarget.Drop(auto_revoke, { this, &EditorBaseControl::ImageTarget_Drop });
 
 			_wrapper->SetMouseCaptureElement(imageTarget);
-			_imageTargetDragStartingRevoker = imageTarget.DragStarting(auto_revoke, { this, &MicaEditorControl::ImageTarget_DragStarting });
+			_imageTargetDragStartingRevoker = imageTarget.DragStarting(auto_revoke, { this, &EditorBaseControl::ImageTarget_DragStarting });
 
-			_imageTargetContextRequestedRevoker = imageTarget.ContextRequested(auto_revoke, { this, &MicaEditorControl::ImageTarget_ContextRequested });
+			_imageTargetContextRequestedRevoker = imageTarget.ContextRequested(auto_revoke, { this, &EditorBaseControl::ImageTarget_ContextRequested });
 
 			const ImageBrush brush{};
 			brush.ImageSource(virtualSurfaceImageSource);
@@ -361,13 +361,13 @@ namespace winrt::MicaEditor::implementation
 
 #ifndef WINUI3
 		// Todo: Evaluate if this is an appropriate place to add this event (and other code in this method)
-		_suspendingRevoker = Application::Current().Suspending(auto_revoke, { this, &MicaEditorControl::Application_Suspending });
+		_suspendingRevoker = Application::Current().Suspending(auto_revoke, { this, &EditorBaseControl::Application_Suspending });
 #endif
 	}
 
 	// Todo: Focus bug: deactive window, click on control, press ctrl+a quickly. result: selection disappears
 
-	void MicaEditorControl::OnGotFocus(RoutedEventArgs const &e)
+	void EditorBaseControl::OnGotFocus(RoutedEventArgs const &e)
 	{
 		__super::OnGotFocus(e);
 
@@ -376,7 +376,7 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->FocusChanged(true);
 	}
 
-	void MicaEditorControl::OnLostFocus(RoutedEventArgs const &e)
+	void EditorBaseControl::OnLostFocus(RoutedEventArgs const &e)
 	{
 		__super::OnLostFocus(e);
 
@@ -385,7 +385,7 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->FocusChanged(false);
 	}
 
-	void MicaEditorControl::OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e)
+	void EditorBaseControl::OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e)
 	{
 		__super::OnPointerPressed(e);
 
@@ -412,7 +412,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e)
+	void EditorBaseControl::OnPointerReleased(DUX::Input::PointerRoutedEventArgs const &e)
 	{
 		__super::OnPointerReleased(e);
 
@@ -433,12 +433,12 @@ namespace winrt::MicaEditor::implementation
 		// Alternate approach: call Focus in OnFocusLost
 	}
 
-	AutomationPeer MicaEditorControl::OnCreateAutomationPeer()
+	AutomationPeer EditorBaseControl::OnCreateAutomationPeer()
 	{
-		return make<MicaEditorControlAutomationPeer>(*this);
+		return make<EditorBaseControlAutomationPeer>(*this);
 	}
 
-	void MicaEditorControl::ImageTarget_PointerMoved(IInspectable const &sender, PointerRoutedEventArgs const &e)
+	void EditorBaseControl::ImageTarget_PointerMoved(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		if (auto imageTarget{ GetTemplateChild(L"ImageTarget").try_as<UIElement>() }) // Todo: Store this
 		{
@@ -452,7 +452,7 @@ namespace winrt::MicaEditor::implementation
 	}
 
 #ifndef WINUI3
-	void MicaEditorControl::ImageTarget_PointerCaptureLost(IInspectable const &sender, PointerRoutedEventArgs const &e)
+	void EditorBaseControl::ImageTarget_PointerCaptureLost(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		if (!_isPointerOver)
 		{
@@ -461,12 +461,12 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::ImageTarget_PointerEntered(IInspectable const &sender, PointerRoutedEventArgs const &e)
+	void EditorBaseControl::ImageTarget_PointerEntered(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = true;
 	}
 
-	void MicaEditorControl::ImageTarget_PointerExited(IInspectable const &sender, PointerRoutedEventArgs const &e)
+	void EditorBaseControl::ImageTarget_PointerExited(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = false;
 		if (!_wrapper->HaveMouseCapture())
@@ -476,7 +476,7 @@ namespace winrt::MicaEditor::implementation
 	}
 #endif
 
-	void MicaEditorControl::OnKeyDown(KeyRoutedEventArgs const &e)
+	void EditorBaseControl::OnKeyDown(KeyRoutedEventArgs const &e)
 	{
 		__super::OnKeyDown(e);
 
@@ -495,7 +495,7 @@ namespace winrt::MicaEditor::implementation
 		e.Handled(handled);
 	}
 
-	void MicaEditorControl::OnKeyUp(KeyRoutedEventArgs const &e)
+	void EditorBaseControl::OnKeyUp(KeyRoutedEventArgs const &e)
 	{
 		if (e.Key() == VirtualKey::Application)
 		{
@@ -503,7 +503,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, CharacterReceivedRoutedEventArgs const &e)
+	void EditorBaseControl::EditorBaseControl_CharacterReceived(DUX::UIElement const &sender, CharacterReceivedRoutedEventArgs const &e)
 	{
 		if (_isFocused)
 		{
@@ -512,7 +512,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::ImageTarget_SizeChanged(IInspectable const &sender, SizeChangedEventArgs const &args)
+	void EditorBaseControl::ImageTarget_SizeChanged(IInspectable const &sender, SizeChangedEventArgs const &args)
 	{
 		if (_vsisNative)
 		{
@@ -525,13 +525,13 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::ImageTarget_PointerWheelChanged(IInspectable const &sender, PointerRoutedEventArgs const &e)
+	void EditorBaseControl::ImageTarget_PointerWheelChanged(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		auto properties{ e.GetCurrentPoint(sender.as<UIElement>()).Properties() };
 		_scintilla->PointerWheelChanged(properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), e.KeyModifiers());
 	}
 
-	void MicaEditorControl::ImageTarget_DragEnter(IInspectable const &sender, DragEventArgs const &e)
+	void EditorBaseControl::ImageTarget_DragEnter(IInspectable const &sender, DragEventArgs const &e)
 	{
 		DataPackageOperation op;
 		_scintilla->DragEnter(e.DataView(), e.AllowedOperations(), e.Modifiers(), op);
@@ -540,7 +540,7 @@ namespace winrt::MicaEditor::implementation
 		e.DragUIOverride().IsCaptionVisible(false);
 	}
 
-	void MicaEditorControl::ImageTarget_DragOver(IInspectable const &sender, DragEventArgs const &e)
+	void EditorBaseControl::ImageTarget_DragOver(IInspectable const &sender, DragEventArgs const &e)
 	{
 		auto point{ e.GetPosition(sender.as<UIElement>()) };
 		point.X *= _dpiScale;
@@ -550,12 +550,12 @@ namespace winrt::MicaEditor::implementation
 		e.AcceptedOperation(op);
 	}
 
-	void MicaEditorControl::ImageTarget_DragLeave(IInspectable const &sender, DragEventArgs const &e)
+	void EditorBaseControl::ImageTarget_DragLeave(IInspectable const &sender, DragEventArgs const &e)
 	{
 		_scintilla->DragLeave();
 	}
 
-	void MicaEditorControl::ImageTarget_Drop(IInspectable const &sender, DragEventArgs const &e)
+	void EditorBaseControl::ImageTarget_Drop(IInspectable const &sender, DragEventArgs const &e)
 	{
 		auto point{ e.GetPosition(sender.as<UIElement>()) };
 		point.X *= _dpiScale;
@@ -565,14 +565,14 @@ namespace winrt::MicaEditor::implementation
 		e.AcceptedOperation(op);
 	}
 
-	void MicaEditorControl::ImageTarget_DragStarting(UIElement const &sender, DragStartingEventArgs const &e)
+	void EditorBaseControl::ImageTarget_DragStarting(UIElement const &sender, DragStartingEventArgs const &e)
 	{
 		e.AllowedOperations(DataPackageOperation::Copy | DataPackageOperation::Move);
 		e.Data().SetText(winrt::to_hstring(_scintilla->GetDragData()));
 		e.DragUI().SetContentFromDataPackage();
 	}
 
-	void MicaEditorControl::ImageTarget_ContextRequested(UIElement const &sender, ContextRequestedEventArgs const &e)
+	void EditorBaseControl::ImageTarget_ContextRequested(UIElement const &sender, ContextRequestedEventArgs const &e)
 	{
 		Point point;
 		if (e.TryGetPosition(sender, point))
@@ -585,27 +585,27 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	void MicaEditorControl::ContextMenuItem_Click(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &e)
+	void EditorBaseControl::ContextMenuItem_Click(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &e)
 	{
 		_scintilla->WndProc(static_cast<Scintilla::Message>(unbox_value<ScintillaMessage>(sender.as<FrameworkElement>().Tag())), 0, 0);
 	}
 
-	void MicaEditorControl::HorizontalScrollBar_Scroll(IInspectable const &sender, ScrollEventArgs const &e)
+	void EditorBaseControl::HorizontalScrollBar_Scroll(IInspectable const &sender, ScrollEventArgs const &e)
 	{
 		_scintilla->HorizontalScroll(static_cast<Scintilla::Internal::ScrollEventType>(e.ScrollEventType()), static_cast<int>(e.NewValue()));
 	}
 
-	void MicaEditorControl::VerticalScrollBar_Scroll(IInspectable const &sender, ScrollEventArgs const &e)
+	void EditorBaseControl::VerticalScrollBar_Scroll(IInspectable const &sender, ScrollEventArgs const &e)
 	{
 		_scintilla->Scroll(static_cast<Scintilla::Internal::ScrollEventType>(e.ScrollEventType()), static_cast<int>(e.NewValue()));
 	}
 
-	LRESULT MicaEditorControl::WndProc(IInspectable const &tag, UINT msg, WPARAM wParam, LPARAM lParam)
+	LRESULT EditorBaseControl::WndProc(IInspectable const &tag, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		if (msg == WM_NOTIFY)
 		{
 			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
-			const auto sender{ tag.as<MicaEditorControl>() };
+			const auto sender{ tag.as<EditorBaseControl>() };
 			sender->_scintillaNotificationEvent(*sender, lParam);
 			sender->_editorWrapper.as<implementation::Editor>()->ProcessEvent(data);
 		}
@@ -613,33 +613,33 @@ namespace winrt::MicaEditor::implementation
 		return 0;
 	}
 
-	event_token MicaEditorControl::DpiChanged(EventHandler<double> const &handler)
+	event_token EditorBaseControl::DpiChanged(EventHandler<double> const &handler)
 	{
 		return _dpiChangedEvent.add(handler);
 	}
 
-	void MicaEditorControl::DpiChanged(event_token const &token) noexcept
+	void EditorBaseControl::DpiChanged(event_token const &token) noexcept
 	{
 		_dpiChangedEvent.remove(token);
 	}
 
-	event_token MicaEditorControl::ScintillaNotification(EventHandler<uint64_t> const &handler)
+	event_token EditorBaseControl::ScintillaNotification(EventHandler<uint64_t> const &handler)
 	{
 		return _scintillaNotificationEvent.add(handler);
 	}
 
-	void MicaEditorControl::ScintillaNotification(event_token const &token) noexcept
+	void EditorBaseControl::ScintillaNotification(event_token const &token) noexcept
 	{
 		_scintillaNotificationEvent.remove(token);
 	}
 
-	float MicaEditorControl::DpiScale()
+	float EditorBaseControl::DpiScale()
 	{
 		return _dpiScale;
 	}
 
 #ifndef WINUI3
-	void MicaEditorControl::Application_Suspending(IInspectable const &sender, SuspendingEventArgs const &args)
+	void EditorBaseControl::Application_Suspending(IInspectable const &sender, SuspendingEventArgs const &args)
 	{
 		// Required or crashes on resume
 		// https://learn.microsoft.com/en-us/windows/uwp/gaming/directx-and-xaml-interop

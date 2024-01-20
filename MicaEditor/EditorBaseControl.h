@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "MicaEditorControl.g.h"
+#include "EditorBaseControl.g.h"
 
 #include "ScintillaWin.h"
 #include "ScintillaCall.h"
@@ -8,10 +8,10 @@
 
 namespace winrt::MicaEditor::implementation
 {
-	struct MicaEditorControl : MicaEditorControlT<MicaEditorControl>
+	struct EditorBaseControl : EditorBaseControlT<EditorBaseControl>
 	{
-		MicaEditorControl();
-		~MicaEditorControl();
+		EditorBaseControl();
+		~EditorBaseControl();
 
 		MicaEditor::Editor Editor();
 		std::shared_ptr<Scintilla::ScintillaCall> Call() noexcept { return _call; }
@@ -87,7 +87,7 @@ namespace winrt::MicaEditor::implementation
 		void HorizontalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
 		DUXC::Primitives::ScrollBar::Scroll_revoker _verticalScrollBarScrollRevoker{};
 		void VerticalScrollBar_Scroll(Windows::Foundation::IInspectable const &sender, DUX::Controls::Primitives::ScrollEventArgs const &e);
-		void MicaEditorControl_CharacterReceived(DUX::UIElement const &sender, DUX::Input::CharacterReceivedRoutedEventArgs const &args);
+		void EditorBaseControl_CharacterReceived(DUX::UIElement const &sender, DUX::Input::CharacterReceivedRoutedEventArgs const &args);
 		void OnLoaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		void OnUnloaded(Windows::Foundation::IInspectable const &sender, DUX::RoutedEventArgs const &args);
 		bool IsLoadedCompat();
@@ -111,7 +111,7 @@ namespace winrt::MicaEditor::implementation
 
 namespace winrt::MicaEditor::factory_implementation
 {
-	struct MicaEditorControl : MicaEditorControlT<MicaEditorControl, implementation::MicaEditorControl>
+	struct EditorBaseControl : EditorBaseControlT<EditorBaseControl, implementation::EditorBaseControl>
 	{
 	};
 }

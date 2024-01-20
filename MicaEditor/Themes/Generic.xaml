@@ -4,10 +4,10 @@
     xmlns:local="using:MicaEditor">
 
     <!--  Todo: Apply corner radius to this. Remember conditional Setters do not work, so make a different style for each version. What happens with WinUI 3?  -->
-    <Style TargetType="local:MicaEditorControl">
+    <Style TargetType="local:EditorBaseControl">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:MicaEditorControl">
+                <ControlTemplate TargetType="local:EditorBaseControl">
                     <Grid
                         Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"

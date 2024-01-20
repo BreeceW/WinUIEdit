@@ -193,7 +193,7 @@ namespace Tool
 
             var idlSB = new StringBuilder("namespace MicaEditor" + End + "{" + End);
             var cppSB = new StringBuilder(
-                "#include \"pch.h\"" + End + "#include \"MicaEditorControl.h\"" + End + "#include \"EditorWrapper.h\"" + End + "#include \"Editor.g.cpp\"" + End
+                "#include \"pch.h\"" + End + "#include \"EditorBaseControl.h\"" + End + "#include \"EditorWrapper.h\"" + End + "#include \"Editor.g.cpp\"" + End
                 + End
                 + "namespace winrt::MicaEditor::implementation" + End
                 + "{" + End);
@@ -227,7 +227,7 @@ namespace Tool
                 WriteCppEventArgs(hSB, evt, true);
             }
 
-            cppSB.Append(In + "Editor::Editor(com_ptr<MicaEditorControl> const &editor)" + End
+            cppSB.Append(In + "Editor::Editor(com_ptr<EditorBaseControl> const &editor)" + End
                 + In + In + ": _editor{ editor }" + End
                 + In + "{" + End
                 + In + "}" + End + End
@@ -238,7 +238,7 @@ namespace Tool
 
             hSB.Append(In + "struct Editor : EditorT<Editor>" + End
                 + In + "{" + End
-                + In + In + "Editor(com_ptr<MicaEditorControl> const &editor);" + End + End
+                + In + In + "Editor(com_ptr<EditorBaseControl> const &editor);" + End + End
                 + In + In + "void ProcessEvent(Scintilla::NotificationData *data);" + End
                 + End);
 
@@ -303,7 +303,7 @@ namespace Tool
 
             idlSB.Append(In + "}" + End + "}" + End);
             cppSB.Append("}" + End);
-            hSB.Append(In + In + "weak_ref<MicaEditorControl> _editor{ nullptr };" + End + In + "};" + End + "}" + End);
+            hSB.Append(In + In + "weak_ref<EditorBaseControl> _editor{ nullptr };" + End + In + "};" + End + "}" + End);
 
             var idlFile = await parent.CreateFileAsync("MicaEditor\\EditorWrapper.idl", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(idlFile, idlSB.ToString());
@@ -324,7 +324,7 @@ namespace Tool
         {
             var sb = new StringBuilder($"<?xml version=\"1.0\" encoding=\"utf-8\"?>{End}<doc>{End}    <assembly>{End}        <name>");
             sb.Append(assembly).Append($"</name>{End}    </assembly>{End}    <members>{End}");
-            
+
             void Write(string type, string name, IList<string> comment)
             {
                 sb.Append($"        <member name=\"").Append(type).Append(':').Append(name).Append('"');

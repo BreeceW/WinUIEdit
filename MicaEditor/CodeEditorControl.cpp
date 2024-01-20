@@ -23,7 +23,7 @@ namespace winrt::MicaEditor::implementation
 	{
 		DefaultStyleKey(winrt::box_value(L"MicaEditor.CodeEditorControl"));
 
-		_editor = make_self<MicaEditorControl>();
+		_editor = make_self<EditorBaseControl>();
 		_call = _editor->Call();
 		SetScintilla(_call);
 		SetLexilla(CreateLexer);
@@ -74,7 +74,7 @@ namespace winrt::MicaEditor::implementation
 
 		if (const auto presenter{ GetTemplateChild(L"EditorContainer").try_as<ContentPresenter>() })
 		{
-			presenter.Content(_editor.as<MicaEditor::MicaEditorControl>());
+			presenter.Content(_editor.as<MicaEditor::EditorBaseControl>());
 		}
 	}
 

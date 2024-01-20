@@ -447,7 +447,7 @@ namespace Scintilla::Internal {
 	ScintillaWinUI::ScintillaWinUI()
 	{
 		// This is a legacy Scintilla feature that is recommended to be disabled (though not deprecated)
-		// It is not currently supported in MicaEditorControl because it is a performance hit and is redundant
+		// It is not currently supported in EditorBaseControl because it is a performance hit and is redundant
 		commandEvents = false;
 
 		view.bufferedDraw = false;
@@ -905,7 +905,7 @@ namespace Scintilla::Internal {
 
 		TS_TEXTCHANGE chg;
 		const auto hr{ SetText(0, args.Range().StartCaretPosition, args.Range().EndCaretPosition, args.Text().c_str(), args.Text().size(), &chg) };
-		
+
 		auto start{ args.NewSelection().StartCaretPosition };
 		auto end{ args.NewSelection().EndCaretPosition };
 
@@ -1027,8 +1027,8 @@ namespace Scintilla::Internal {
 		// Determine if the sink interface exists.
 		// Get the pointer to the IUnknown interface and check if the IUnknown
 		// pointer is the same as a pointer to an existing sink.
-		// If the sink exists, update the existing sink with the 
-		// dwMask parameters passed to this method.	
+		// If the sink exists, update the existing sink with the
+		// dwMask parameters passed to this method.
 		hr = punk->QueryInterface(IID_IUnknown, (LPVOID *)&punkID);
 
 		if (FAILED(hr))
@@ -1050,7 +1050,7 @@ namespace Scintilla::Internal {
 		// 1. Install a new sink.
 		// 2. Keep the pointer to the IUnknown interface to uniquely
 		//	  identify this advise sink.
-		// 3. Set the dwMask parameter of this new sink to the dwMask 
+		// 3. Set the dwMask parameter of this new sink to the dwMask
 		//    parameters passed to this method.
 
 		if (IsEqualIID(riid, IID_ITextStoreACPSink))

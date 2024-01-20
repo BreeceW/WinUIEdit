@@ -403,7 +403,7 @@ namespace winrt::MicaEditor::implementation
 
 	struct Editor : EditorT<Editor>
 	{
-		Editor(com_ptr<MicaEditorControl> const &editor);
+		Editor(com_ptr<EditorBaseControl> const &editor);
 
 		void ProcessEvent(Scintilla::NotificationData *data);
 
@@ -4663,6 +4663,6 @@ namespace winrt::MicaEditor::implementation
 		event<MicaEditor::MarginRightClickHandler> _marginRightClickEvent;
 		event<MicaEditor::AutoCSelectionChangeHandler> _autoCSelectionChangeEvent;
 
-		weak_ref<MicaEditorControl> _editor{ nullptr };
+		weak_ref<EditorBaseControl> _editor{ nullptr };
 	};
 }
