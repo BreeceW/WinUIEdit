@@ -2,13 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>MicaEditor.WinUI</id>
-		<version>0.0.20-prerelease</version>
+		<version>0.0.1-prerelease</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for WinUI 3 based on Scintilla</description>
 		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>
 		<readme>README.md</readme>
+		<copyright>Copyright (c) Breece Walker 2024</copyright>
 		<license type="file">LICENSE</license>
-		<tags>winui code editor text edit scintilla winui3 winrt winappsdk windows app sdk</tags>
+		<tags>winui code editor text edit scintilla winui3 winrt winappsdk windows app sdk winuiedit winuieditor</tags>
 		<repository type="git" url="https://github.com/BreeceW/WinUIEdit.git" />
 		<dependencies>
 			<group>
@@ -45,7 +46,7 @@
 		<file src="MicaEditor.xml" target="lib\netcoreapp3.0" />
 		<file src="MicaEditor.xml" target="lib\uap10.0" />
 		<file src="MicaEditor.xml" target="lib\net46" />
-		
+
 		<file src="..\..\MicaEditor\Themes\Generic.xaml" target="lib\uap10.0\MicaEditor\Themes" />
 		<file src="..\..\MicaEditor\Themes\Generic.xaml" target="lib\net6.0-windows10.0.17763.0\MicaEditor\Themes" />
 

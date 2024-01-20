@@ -2,12 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>MicaEditor.Uwp</id>
-		<version>0.0.20-prerelease</version>
+		<version>0.0.1-prerelease</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for UWP based on Scintilla</description>
+		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>
 		<readme>README.md</readme>
+		<copyright>Copyright (c) Breece Walker 2024</copyright>
 		<license type="file">LICENSE</license>
-		<tags>winui code editor text edit scintilla uwp winrt</tags>
+		<tags>winui code editor text edit scintilla uwp winrt winuiedit winuieditor</tags>
 		<repository type="git" url="https://github.com/BreeceW/WinUIEdit.git" />
 		<dependencies>
 			<group targetFramework=".NETCoreApp3.0" />
