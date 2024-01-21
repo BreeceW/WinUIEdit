@@ -233,6 +233,7 @@
       <DependentUpon>EditorBaseControlAutomationPeer.cpp</DependentUpon>
       <SubType>Code</SubType>
     </Midl>
+    <Midl Include="IEditorAccess.idl" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="DummyPage.xaml" Condition="'$(UseDummyPage)' == 'true'">

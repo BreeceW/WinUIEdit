@@ -269,7 +269,7 @@ namespace winrt::WinUIEditor::implementation
 		return _scintilla->WndProc(iMessage, wParam, lParam);
 	}
 
-	uint64_t EditorBaseControl::SendMessage(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
+	int64_t EditorBaseControl::SendMessage(ScintillaMessage const &message, uint64_t wParam, int64_t lParam)
 	{
 		return PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
@@ -623,7 +623,7 @@ namespace winrt::WinUIEditor::implementation
 		_dpiChangedEvent.remove(token);
 	}
 
-	event_token EditorBaseControl::NotifyMessageReceived(EventHandler<uint64_t> const &handler)
+	event_token EditorBaseControl::NotifyMessageReceived(EventHandler<int64_t> const &handler)
 	{
 		return _notifyMessageReceived.add(handler);
 	}

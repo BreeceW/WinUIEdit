@@ -1,14 +1,14 @@
 #include "Defines.idl"
 import "EditorWrapper.idl";
+import "IEditorAccess.idl";
 
 namespace WinUIEditor
 {
     [default_interface]
     [webhosthidden]
-    runtimeclass CodeEditorControl : DUX.Controls.Control
+    runtimeclass CodeEditorControl : DUX.Controls.Control, IEditorAccess
     {
         CodeEditorControl();
-        UInt64 SendMessage(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
         Editor Editor { get; };
         String HighlightingLanguage { get; set; };
         event Windows.Foundation.EventHandler<DUX.ElementTheme> DefaultColorsChanged;

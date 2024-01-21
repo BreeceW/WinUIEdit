@@ -27,10 +27,10 @@
     <ClCompile Include="CodeEditorHandler.SciEdit.cpp" />
     <ClCompile Include="CodeEditorHandler.SyntaxHighlighting.cpp" />
     <ClCompile Include="DummyPage.cpp" />
-    <ClCompile Include="EditorWrapper.cpp" />
-    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="EditorBaseControl.cpp" />
     <ClCompile Include="EditorBaseControlAutomationPeer.cpp" />
+    <ClCompile Include="EditorWrapper.cpp" />
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TextRangeProvider.cpp" />
     <ClCompile Include="Wrapper.cpp" />
@@ -536,11 +536,11 @@
     <ClInclude Include="ControlIncludes.h" />
     <ClInclude Include="DarkPlus.h" />
     <ClInclude Include="DummyPage.h" />
+    <ClInclude Include="EditorBaseControl.h" />
+    <ClInclude Include="EditorBaseControlAutomationPeer.h" />
     <ClInclude Include="EditorWrapper.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="LightPlus.h" />
-    <ClInclude Include="EditorBaseControl.h" />
-    <ClInclude Include="EditorBaseControlAutomationPeer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TextMateScope.h" />
     <ClInclude Include="TextRangeProvider.h" />
@@ -765,8 +765,9 @@
   <ItemGroup>
     <Midl Include="CodeEditorControl.idl" />
     <Midl Include="DummyPage.idl" />
-    <Midl Include="EditorWrapper.idl" />
     <Midl Include="EditorBaseControl.idl" />
     <Midl Include="EditorBaseControlAutomationPeer.idl" />
+    <Midl Include="EditorWrapper.idl" />
+    <Midl Include="IEditorAccess.idl" />
   </ItemGroup>
 </Project>

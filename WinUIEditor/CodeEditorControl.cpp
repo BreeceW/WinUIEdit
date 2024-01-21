@@ -200,7 +200,7 @@ namespace winrt::WinUIEditor::implementation
 		}
 	}
 
-	uint64_t CodeEditorControl::SendMessage(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
+	int64_t CodeEditorControl::SendMessage(ScintillaMessage const &message, uint64_t wParam, int64_t lParam)
 	{
 		return _editor->PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
@@ -220,7 +220,7 @@ namespace winrt::WinUIEditor::implementation
 		UpdateDpi(value);
 	}
 
-	void CodeEditorControl::Editor_NotifyMessageReceived(IInspectable const &sender, uint64_t value)
+	void CodeEditorControl::Editor_NotifyMessageReceived(IInspectable const &sender, int64_t value)
 	{
 		ProcessNotification(reinterpret_cast<Scintilla::NotificationData *>(value));
 	}
@@ -301,5 +301,15 @@ namespace winrt::WinUIEditor::implementation
 	void CodeEditorControl::SyntaxHighlightingApplied(CodeEditorTheme theme)
 	{
 		_syntaxHighlightingAppliedEvent(*this, CodeEditorToXamlTheme(theme));
+	}
+
+	event_token CodeEditorControl::NotifyMessageReceived(EventHandler<int64_t> const &handler)
+	{
+		return _editor->NotifyMessageReceived(handler);
+	}
+
+	void CodeEditorControl::NotifyMessageReceived(event_token const &token) noexcept
+	{
+		_editor->NotifyMessageReceived(token);
 	}
 }

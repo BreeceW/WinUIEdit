@@ -1,16 +1,15 @@
 #include "Defines.idl"
 import "EditorWrapper.idl";
+import "IEditorAccess.idl";
 
 namespace WinUIEditor
 {
 	[default_interface]
 	[webhosthidden]
-	runtimeclass EditorBaseControl : DUX.Controls.Control
+	runtimeclass EditorBaseControl : DUX.Controls.Control, IEditorAccess
 	{
 		EditorBaseControl();
-		UInt64 SendMessage(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
 		Editor Editor { get; };
-		event Windows.Foundation.EventHandler<UInt64> NotifyMessageReceived;
 		event Windows.Foundation.EventHandler<Double> DpiChanged;
 	}
 }
