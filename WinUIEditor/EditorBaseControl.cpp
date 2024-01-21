@@ -608,6 +608,7 @@ namespace winrt::WinUIEditor::implementation
 			const auto sender{ tag.as<EditorBaseControl>() };
 			sender->_notifyMessageReceived(*sender, lParam);
 			sender->_editorWrapper.as<implementation::Editor>()->ProcessEvent(data);
+			sender->InternalNotifyMessageReceived(*sender, lParam); // CodeEditorControl should receive the notification after user subscriptions
 		}
 
 		return 0;

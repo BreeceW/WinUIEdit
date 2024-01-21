@@ -40,6 +40,8 @@ namespace winrt::WinUIEditor::implementation
 		void NotifyMessageReceived(event_token const &token) noexcept;
 		float DpiScale();
 
+		event<Windows::Foundation::EventHandler<int64_t>> InternalNotifyMessageReceived;
+
 	private:
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static

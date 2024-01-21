@@ -30,6 +30,7 @@ namespace winrt::WinUIEditor::implementation
 	private:
 		com_ptr<EditorBaseControl> _editor{ nullptr };
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };
+		event<Windows::Foundation::EventHandler<int64_t>> _notifyMessageReceived;
 
 		hstring _highlightingLanguage;
 		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _defaultColorsChangedEvent;

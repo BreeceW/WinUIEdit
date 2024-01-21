@@ -29,7 +29,7 @@ namespace winrt::WinUIEditor::implementation
 		SetLexilla(CreateLexer);
 		Initialize();
 		_editor->DpiChanged({ this, &CodeEditorControl::Editor_DpiChanged });
-		_editor->NotifyMessageReceived({ this, &CodeEditorControl::Editor_NotifyMessageReceived });
+		_editor->InternalNotifyMessageReceived.add({ this, &CodeEditorControl::Editor_NotifyMessageReceived });
 
 		Loaded({ this, &CodeEditorControl::OnLoaded });
 		Unloaded({ this, &CodeEditorControl::OnUnloaded });
