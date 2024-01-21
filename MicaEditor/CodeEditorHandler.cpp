@@ -4,7 +4,7 @@
 
 using namespace Scintilla;
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	void CodeEditorHandler::SetScintilla(std::shared_ptr<ScintillaCall> call)
 	{

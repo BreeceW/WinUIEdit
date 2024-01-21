@@ -29,13 +29,13 @@
 			threadingModel="both"
 			xmlns="urn:schemas-microsoft-com:winrt.v1" />
 	</asmv3:file>
-	<asmv3:file name="MicaEditor.dll">
+	<asmv3:file name="WinUIEditor.dll">
 		<activatableClass
-			name="MicaEditor.XamlMetadataProvider"
+			name="WinUIEditor.XamlMetadataProvider"
 			threadingModel="both"
 			xmlns="urn:schemas-microsoft-com:winrt.v1" />
 		<activatableClass
-			name="MicaEditor.EditorBaseControl"
+			name="WinUIEditor.EditorBaseControl"
 			threadingModel="both"
 			xmlns="urn:schemas-microsoft-com:winrt.v1" />
 	</asmv3:file>-->

@@ -10,7 +10,7 @@
 		 xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
 		 IgnorableNamespaces="uap uap3 uap4 uap5 desktop4 iot2 mp rescap">
 	<Identity
-	  Name="3735BreeceWalker.MicaEditor"
+	  Name="3735BreeceWalker.WinUIEditor"
 	  Publisher="CN=90C29CE0-B07C-4318-A20E-CCD992FA5F1B"
 	  Version="0.5.2.0" />
 	<mp:PhoneIdentity PhoneProductId="c0e1c7ff-08c7-4035-bc77-2dc970e754b9" PhonePublisherId="00000000-0000-0000-0000-000000000000" />

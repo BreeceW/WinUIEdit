@@ -1,4 +1,4 @@
-namespace MicaEditor
+namespace WinUIEditor
 {
 	enum ScintillaMessage
 	{

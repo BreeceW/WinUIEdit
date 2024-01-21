@@ -29,7 +29,7 @@
 
 #pragma once
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	constexpr int LightPlusEditorForeground{ IntRGBA(0x00, 0x00, 0x00) };
 

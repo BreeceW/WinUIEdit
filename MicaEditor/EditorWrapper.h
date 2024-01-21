@@ -33,7 +33,7 @@
 #include "MarginRightClickEventArgs.g.h"
 #include "AutoCSelectionChangeEventArgs.g.h"
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
 	struct StyleNeededEventArgs : StyleNeededEventArgsT<StyleNeededEventArgs>
 	{
@@ -182,14 +182,14 @@ namespace winrt::MicaEditor::implementation
 
 	struct UserListSelectionEventArgs : UserListSelectionEventArgsT<UserListSelectionEventArgs>
 	{
-		UserListSelectionEventArgs(int32_t listType, const char *text, int32_t position, int32_t ch, MicaEditor::CompletionMethods const &listCompletionMethod);
+		UserListSelectionEventArgs(int32_t listType, const char *text, int32_t position, int32_t ch, WinUIEditor::CompletionMethods const &listCompletionMethod);
 
 		int32_t ListType();
 		Windows::Storage::Streams::IBuffer TextAsBuffer();
 		hstring Text();
 		int32_t Position();
 		int32_t Ch();
-		MicaEditor::CompletionMethods ListCompletionMethod();
+		WinUIEditor::CompletionMethods ListCompletionMethod();
 
 	private:
 		int32_t _listType;
@@ -198,7 +198,7 @@ namespace winrt::MicaEditor::implementation
 		const char *_textAsPointer;
 		int32_t _position;
 		int32_t _ch;
-		MicaEditor::CompletionMethods _listCompletionMethod;
+		WinUIEditor::CompletionMethods _listCompletionMethod;
 	};
 
 	struct URIDroppedEventArgs : URIDroppedEventArgsT<URIDroppedEventArgs>
@@ -282,13 +282,13 @@ namespace winrt::MicaEditor::implementation
 
 	struct AutoCSelectionEventArgs : AutoCSelectionEventArgsT<AutoCSelectionEventArgs>
 	{
-		AutoCSelectionEventArgs(const char *text, int32_t position, int32_t ch, MicaEditor::CompletionMethods const &listCompletionMethod);
+		AutoCSelectionEventArgs(const char *text, int32_t position, int32_t ch, WinUIEditor::CompletionMethods const &listCompletionMethod);
 
 		Windows::Storage::Streams::IBuffer TextAsBuffer();
 		hstring Text();
 		int32_t Position();
 		int32_t Ch();
-		MicaEditor::CompletionMethods ListCompletionMethod();
+		WinUIEditor::CompletionMethods ListCompletionMethod();
 
 	private:
 		Windows::Storage::Streams::IBuffer _textAsBuffer;
@@ -296,7 +296,7 @@ namespace winrt::MicaEditor::implementation
 		const char *_textAsPointer;
 		int32_t _position;
 		int32_t _ch;
-		MicaEditor::CompletionMethods _listCompletionMethod;
+		WinUIEditor::CompletionMethods _listCompletionMethod;
 	};
 
 	struct IndicatorClickEventArgs : IndicatorClickEventArgsT<IndicatorClickEventArgs>
@@ -353,13 +353,13 @@ namespace winrt::MicaEditor::implementation
 
 	struct AutoCCompletedEventArgs : AutoCCompletedEventArgsT<AutoCCompletedEventArgs>
 	{
-		AutoCCompletedEventArgs(const char *text, int32_t position, int32_t ch, MicaEditor::CompletionMethods const &listCompletionMethod);
+		AutoCCompletedEventArgs(const char *text, int32_t position, int32_t ch, WinUIEditor::CompletionMethods const &listCompletionMethod);
 
 		Windows::Storage::Streams::IBuffer TextAsBuffer();
 		hstring Text();
 		int32_t Position();
 		int32_t Ch();
-		MicaEditor::CompletionMethods ListCompletionMethod();
+		WinUIEditor::CompletionMethods ListCompletionMethod();
 
 	private:
 		Windows::Storage::Streams::IBuffer _textAsBuffer;
@@ -367,7 +367,7 @@ namespace winrt::MicaEditor::implementation
 		const char *_textAsPointer;
 		int32_t _position;
 		int32_t _ch;
-		MicaEditor::CompletionMethods _listCompletionMethod;
+		WinUIEditor::CompletionMethods _listCompletionMethod;
 	};
 
 	struct MarginRightClickEventArgs : MarginRightClickEventArgsT<MarginRightClickEventArgs>
@@ -407,100 +407,100 @@ namespace winrt::MicaEditor::implementation
 
 		void ProcessEvent(Scintilla::NotificationData *data);
 
-		event_token StyleNeeded(MicaEditor::StyleNeededHandler const &handler);
+		event_token StyleNeeded(WinUIEditor::StyleNeededHandler const &handler);
 		void StyleNeeded(event_token const &token);
 
-		event_token CharAdded(MicaEditor::CharAddedHandler const &handler);
+		event_token CharAdded(WinUIEditor::CharAddedHandler const &handler);
 		void CharAdded(event_token const &token);
 
-		event_token SavePointReached(MicaEditor::SavePointReachedHandler const &handler);
+		event_token SavePointReached(WinUIEditor::SavePointReachedHandler const &handler);
 		void SavePointReached(event_token const &token);
 
-		event_token SavePointLeft(MicaEditor::SavePointLeftHandler const &handler);
+		event_token SavePointLeft(WinUIEditor::SavePointLeftHandler const &handler);
 		void SavePointLeft(event_token const &token);
 
-		event_token ModifyAttemptRO(MicaEditor::ModifyAttemptROHandler const &handler);
+		event_token ModifyAttemptRO(WinUIEditor::ModifyAttemptROHandler const &handler);
 		void ModifyAttemptRO(event_token const &token);
 
-		event_token Key(MicaEditor::KeyHandler const &handler);
+		event_token Key(WinUIEditor::KeyHandler const &handler);
 		void Key(event_token const &token);
 
-		event_token DoubleClick(MicaEditor::DoubleClickHandler const &handler);
+		event_token DoubleClick(WinUIEditor::DoubleClickHandler const &handler);
 		void DoubleClick(event_token const &token);
 
-		event_token UpdateUI(MicaEditor::UpdateUIHandler const &handler);
+		event_token UpdateUI(WinUIEditor::UpdateUIHandler const &handler);
 		void UpdateUI(event_token const &token);
 
-		event_token Modified(MicaEditor::ModifiedHandler const &handler);
+		event_token Modified(WinUIEditor::ModifiedHandler const &handler);
 		void Modified(event_token const &token);
 
-		event_token MacroRecord(MicaEditor::MacroRecordHandler const &handler);
+		event_token MacroRecord(WinUIEditor::MacroRecordHandler const &handler);
 		void MacroRecord(event_token const &token);
 
-		event_token MarginClick(MicaEditor::MarginClickHandler const &handler);
+		event_token MarginClick(WinUIEditor::MarginClickHandler const &handler);
 		void MarginClick(event_token const &token);
 
-		event_token NeedShown(MicaEditor::NeedShownHandler const &handler);
+		event_token NeedShown(WinUIEditor::NeedShownHandler const &handler);
 		void NeedShown(event_token const &token);
 
-		event_token Painted(MicaEditor::PaintedHandler const &handler);
+		event_token Painted(WinUIEditor::PaintedHandler const &handler);
 		void Painted(event_token const &token);
 
-		event_token UserListSelection(MicaEditor::UserListSelectionHandler const &handler);
+		event_token UserListSelection(WinUIEditor::UserListSelectionHandler const &handler);
 		void UserListSelection(event_token const &token);
 
-		event_token URIDropped(MicaEditor::URIDroppedHandler const &handler);
+		event_token URIDropped(WinUIEditor::URIDroppedHandler const &handler);
 		void URIDropped(event_token const &token);
 
-		event_token DwellStart(MicaEditor::DwellStartHandler const &handler);
+		event_token DwellStart(WinUIEditor::DwellStartHandler const &handler);
 		void DwellStart(event_token const &token);
 
-		event_token DwellEnd(MicaEditor::DwellEndHandler const &handler);
+		event_token DwellEnd(WinUIEditor::DwellEndHandler const &handler);
 		void DwellEnd(event_token const &token);
 
-		event_token ZoomChanged(MicaEditor::ZoomChangedHandler const &handler);
+		event_token ZoomChanged(WinUIEditor::ZoomChangedHandler const &handler);
 		void ZoomChanged(event_token const &token);
 
-		event_token HotSpotClick(MicaEditor::HotSpotClickHandler const &handler);
+		event_token HotSpotClick(WinUIEditor::HotSpotClickHandler const &handler);
 		void HotSpotClick(event_token const &token);
 
-		event_token HotSpotDoubleClick(MicaEditor::HotSpotDoubleClickHandler const &handler);
+		event_token HotSpotDoubleClick(WinUIEditor::HotSpotDoubleClickHandler const &handler);
 		void HotSpotDoubleClick(event_token const &token);
 
-		event_token CallTipClick(MicaEditor::CallTipClickHandler const &handler);
+		event_token CallTipClick(WinUIEditor::CallTipClickHandler const &handler);
 		void CallTipClick(event_token const &token);
 
-		event_token AutoCSelection(MicaEditor::AutoCSelectionHandler const &handler);
+		event_token AutoCSelection(WinUIEditor::AutoCSelectionHandler const &handler);
 		void AutoCSelection(event_token const &token);
 
-		event_token IndicatorClick(MicaEditor::IndicatorClickHandler const &handler);
+		event_token IndicatorClick(WinUIEditor::IndicatorClickHandler const &handler);
 		void IndicatorClick(event_token const &token);
 
-		event_token IndicatorRelease(MicaEditor::IndicatorReleaseHandler const &handler);
+		event_token IndicatorRelease(WinUIEditor::IndicatorReleaseHandler const &handler);
 		void IndicatorRelease(event_token const &token);
 
-		event_token AutoCCancelled(MicaEditor::AutoCCancelledHandler const &handler);
+		event_token AutoCCancelled(WinUIEditor::AutoCCancelledHandler const &handler);
 		void AutoCCancelled(event_token const &token);
 
-		event_token AutoCCharDeleted(MicaEditor::AutoCCharDeletedHandler const &handler);
+		event_token AutoCCharDeleted(WinUIEditor::AutoCCharDeletedHandler const &handler);
 		void AutoCCharDeleted(event_token const &token);
 
-		event_token HotSpotReleaseClick(MicaEditor::HotSpotReleaseClickHandler const &handler);
+		event_token HotSpotReleaseClick(WinUIEditor::HotSpotReleaseClickHandler const &handler);
 		void HotSpotReleaseClick(event_token const &token);
 
-		event_token FocusIn(MicaEditor::FocusInHandler const &handler);
+		event_token FocusIn(WinUIEditor::FocusInHandler const &handler);
 		void FocusIn(event_token const &token);
 
-		event_token FocusOut(MicaEditor::FocusOutHandler const &handler);
+		event_token FocusOut(WinUIEditor::FocusOutHandler const &handler);
 		void FocusOut(event_token const &token);
 
-		event_token AutoCCompleted(MicaEditor::AutoCCompletedHandler const &handler);
+		event_token AutoCCompleted(WinUIEditor::AutoCCompletedHandler const &handler);
 		void AutoCCompleted(event_token const &token);
 
-		event_token MarginRightClick(MicaEditor::MarginRightClickHandler const &handler);
+		event_token MarginRightClick(WinUIEditor::MarginRightClickHandler const &handler);
 		void MarginRightClick(event_token const &token);
 
-		event_token AutoCSelectionChange(MicaEditor::AutoCSelectionChangeHandler const &handler);
+		event_token AutoCSelectionChange(WinUIEditor::AutoCSelectionChangeHandler const &handler);
 		void AutoCSelectionChange(event_token const &token);
 
 		/**
@@ -544,23 +544,23 @@ namespace winrt::MicaEditor::implementation
 		 * Are white space characters currently visible?
 		 * Returns one of SCWS_* constants.
 		 */
-		MicaEditor::WhiteSpace ViewWS();
+		WinUIEditor::WhiteSpace ViewWS();
 
 		/**
 		 * Make white space characters invisible, always visible or visible outside indentation.
 		 */
-		void ViewWS(MicaEditor::WhiteSpace const &value);
+		void ViewWS(WinUIEditor::WhiteSpace const &value);
 
 		/**
 		 * Retrieve the current tab draw mode.
 		 * Returns one of SCTD_* constants.
 		 */
-		MicaEditor::TabDrawMode TabDrawMode();
+		WinUIEditor::TabDrawMode TabDrawMode();
 
 		/**
 		 * Set how tabs are drawn when visible.
 		 */
-		void TabDrawMode(MicaEditor::TabDrawMode const &value);
+		void TabDrawMode(WinUIEditor::TabDrawMode const &value);
 
 		/**
 		 * Retrieve the position of the last correctly styled character.
@@ -570,12 +570,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the current end of line mode - one of CRLF, CR, or LF.
 		 */
-		MicaEditor::EndOfLine EOLMode();
+		WinUIEditor::EndOfLine EOLMode();
 
 		/**
 		 * Set the current end of line mode.
 		 */
-		void EOLMode(MicaEditor::EndOfLine const &value);
+		void EOLMode(WinUIEditor::EndOfLine const &value);
 
 		/**
 		 * Is drawing done first into a buffer or direct to the screen?
@@ -611,12 +611,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Is the IME displayed in a window or inline?
 		 */
-		MicaEditor::IMEInteraction IMEInteraction();
+		WinUIEditor::IMEInteraction IMEInteraction();
 
 		/**
 		 * Choose to display the IME in a window or inline.
 		 */
-		void IMEInteraction(MicaEditor::IMEInteraction const &value);
+		void IMEInteraction(WinUIEditor::IMEInteraction const &value);
 
 		/**
 		 * How many margins are there?.
@@ -631,12 +631,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the alpha of the selection.
 		 */
-		MicaEditor::Alpha SelAlpha();
+		WinUIEditor::Alpha SelAlpha();
 
 		/**
 		 * Set the alpha of the selection.
 		 */
-		void SelAlpha(MicaEditor::Alpha const &value);
+		void SelAlpha(WinUIEditor::Alpha const &value);
 
 		/**
 		 * Is the selection end of line filled?
@@ -651,22 +651,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the layer for drawing selections
 		 */
-		MicaEditor::Layer SelectionLayer();
+		WinUIEditor::Layer SelectionLayer();
 
 		/**
 		 * Set the layer for drawing selections: either opaquely on base layer or translucently over text
 		 */
-		void SelectionLayer(MicaEditor::Layer const &value);
+		void SelectionLayer(WinUIEditor::Layer const &value);
 
 		/**
 		 * Get the layer of the background of the line containing the caret.
 		 */
-		MicaEditor::Layer CaretLineLayer();
+		WinUIEditor::Layer CaretLineLayer();
 
 		/**
 		 * Set the layer of the background of the line containing the caret.
 		 */
-		void CaretLineLayer(MicaEditor::Layer const &value);
+		void CaretLineLayer(WinUIEditor::Layer const &value);
 
 		/**
 		 * Get only highlighting subline instead of whole line.
@@ -800,12 +800,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve autocompletion options.
 		 */
-		MicaEditor::AutoCompleteOption AutoCOptions();
+		WinUIEditor::AutoCompleteOption AutoCOptions();
 
 		/**
 		 * Set autocompletion options.
 		 */
-		void AutoCOptions(MicaEditor::AutoCompleteOption const &value);
+		void AutoCOptions(WinUIEditor::AutoCompleteOption const &value);
 
 		/**
 		 * Retrieve whether or not autocompletion deletes any word characters
@@ -886,12 +886,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Are the indentation guides visible?
 		 */
-		MicaEditor::IndentView IndentationGuides();
+		WinUIEditor::IndentView IndentationGuides();
 
 		/**
 		 * Show or hide indentation guides.
 		 */
-		void IndentationGuides(MicaEditor::IndentView const &value);
+		void IndentationGuides(WinUIEditor::IndentView const &value);
 
 		/**
 		 * Get the highlighted indentation guide column.
@@ -968,22 +968,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Returns the print colour mode.
 		 */
-		MicaEditor::PrintOption PrintColourMode();
+		WinUIEditor::PrintOption PrintColourMode();
 
 		/**
 		 * Modify colours when printing for clearer printed text.
 		 */
-		void PrintColourMode(MicaEditor::PrintOption const &value);
+		void PrintColourMode(WinUIEditor::PrintOption const &value);
 
 		/**
 		 * Report change history status.
 		 */
-		MicaEditor::ChangeHistoryOption ChangeHistory();
+		WinUIEditor::ChangeHistoryOption ChangeHistory();
 
 		/**
 		 * Enable or disable change history.
 		 */
-		void ChangeHistory(MicaEditor::ChangeHistoryOption const &value);
+		void ChangeHistory(WinUIEditor::ChangeHistoryOption const &value);
 
 		/**
 		 * Retrieve the display line at the top of the display.
@@ -1113,12 +1113,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the search flags used by SearchInTarget.
 		 */
-		MicaEditor::FindOption SearchFlags();
+		WinUIEditor::FindOption SearchFlags();
 
 		/**
 		 * Set the search flags used by SearchInTarget.
 		 */
-		void SearchFlags(MicaEditor::FindOption const &value);
+		void SearchFlags(WinUIEditor::FindOption const &value);
 
 		/**
 		 * Are all lines visible?
@@ -1128,22 +1128,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the style of fold display text.
 		 */
-		MicaEditor::FoldDisplayTextStyle FoldDisplayTextStyle();
+		WinUIEditor::FoldDisplayTextStyle FoldDisplayTextStyle();
 
 		/**
 		 * Set the style of fold display text.
 		 */
-		void FoldDisplayTextStyle(MicaEditor::FoldDisplayTextStyle const &value);
+		void FoldDisplayTextStyle(WinUIEditor::FoldDisplayTextStyle const &value);
 
 		/**
 		 * Get automatic folding behaviours.
 		 */
-		MicaEditor::AutomaticFold AutomaticFold();
+		WinUIEditor::AutomaticFold AutomaticFold();
 
 		/**
 		 * Set automatic folding behaviours.
 		 */
-		void AutomaticFold(MicaEditor::AutomaticFold const &value);
+		void AutomaticFold(WinUIEditor::AutomaticFold const &value);
 
 		/**
 		 * Does a tab pressed when caret is within indentation indent?
@@ -1178,42 +1178,42 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the limits to idle styling.
 		 */
-		MicaEditor::IdleStyling IdleStyling();
+		WinUIEditor::IdleStyling IdleStyling();
 
 		/**
 		 * Sets limits to idle styling.
 		 */
-		void IdleStyling(MicaEditor::IdleStyling const &value);
+		void IdleStyling(WinUIEditor::IdleStyling const &value);
 
 		/**
 		 * Retrieve whether text is word wrapped.
 		 */
-		MicaEditor::Wrap WrapMode();
+		WinUIEditor::Wrap WrapMode();
 
 		/**
 		 * Sets whether text is word wrapped.
 		 */
-		void WrapMode(MicaEditor::Wrap const &value);
+		void WrapMode(WinUIEditor::Wrap const &value);
 
 		/**
 		 * Retrive the display mode of visual flags for wrapped lines.
 		 */
-		MicaEditor::WrapVisualFlag WrapVisualFlags();
+		WinUIEditor::WrapVisualFlag WrapVisualFlags();
 
 		/**
 		 * Set the display mode of visual flags for wrapped lines.
 		 */
-		void WrapVisualFlags(MicaEditor::WrapVisualFlag const &value);
+		void WrapVisualFlags(WinUIEditor::WrapVisualFlag const &value);
 
 		/**
 		 * Retrive the location of visual flags for wrapped lines.
 		 */
-		MicaEditor::WrapVisualLocation WrapVisualFlagsLocation();
+		WinUIEditor::WrapVisualLocation WrapVisualFlagsLocation();
 
 		/**
 		 * Set the location of visual flags for wrapped lines.
 		 */
-		void WrapVisualFlagsLocation(MicaEditor::WrapVisualLocation const &value);
+		void WrapVisualFlagsLocation(WinUIEditor::WrapVisualLocation const &value);
 
 		/**
 		 * Retrive the start indent for wrapped lines.
@@ -1228,22 +1228,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve how wrapped sublines are placed. Default is fixed.
 		 */
-		MicaEditor::WrapIndentMode WrapIndentMode();
+		WinUIEditor::WrapIndentMode WrapIndentMode();
 
 		/**
 		 * Sets how wrapped sublines are placed. Default is fixed.
 		 */
-		void WrapIndentMode(MicaEditor::WrapIndentMode const &value);
+		void WrapIndentMode(WinUIEditor::WrapIndentMode const &value);
 
 		/**
 		 * Retrieve the degree of caching of layout information.
 		 */
-		MicaEditor::LineCache LayoutCache();
+		WinUIEditor::LineCache LayoutCache();
 
 		/**
 		 * Sets the degree of caching of layout information.
 		 */
-		void LayoutCache(MicaEditor::LineCache const &value);
+		void LayoutCache(WinUIEditor::LineCache const &value);
 
 		/**
 		 * Retrieve the document width assumed for scrolling.
@@ -1291,7 +1291,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * How many phases is drawing done in?
 		 */
-		MicaEditor::PhasesDraw PhasesDraw();
+		WinUIEditor::PhasesDraw PhasesDraw();
 
 		/**
 		 * In one phase draw, text is drawn in a series of rectangular blocks with no overlap.
@@ -1299,37 +1299,37 @@ namespace winrt::MicaEditor::implementation
 		 * In multiple phase draw, each element is drawn over the whole drawing area, allowing text
 		 * to overlap from one line to the next.
 		 */
-		void PhasesDraw(MicaEditor::PhasesDraw const &value);
+		void PhasesDraw(WinUIEditor::PhasesDraw const &value);
 
 		/**
 		 * Retrieve the quality level for text.
 		 */
-		MicaEditor::FontQuality FontQuality();
+		WinUIEditor::FontQuality FontQuality();
 
 		/**
 		 * Choose the quality level for text from the FontQuality enumeration.
 		 */
-		void FontQuality(MicaEditor::FontQuality const &value);
+		void FontQuality(WinUIEditor::FontQuality const &value);
 
 		/**
 		 * Retrieve the effect of pasting when there are multiple selections.
 		 */
-		MicaEditor::MultiPaste MultiPaste();
+		WinUIEditor::MultiPaste MultiPaste();
 
 		/**
 		 * Change the effect of pasting when there are multiple selections.
 		 */
-		void MultiPaste(MicaEditor::MultiPaste const &value);
+		void MultiPaste(WinUIEditor::MultiPaste const &value);
 
 		/**
 		 * Report accessibility status.
 		 */
-		MicaEditor::Accessibility Accessibility();
+		WinUIEditor::Accessibility Accessibility();
 
 		/**
 		 * Enable or disable accessibility.
 		 */
-		void Accessibility(MicaEditor::Accessibility const &value);
+		void Accessibility(WinUIEditor::Accessibility const &value);
 
 		/**
 		 * Are the end of line characters visible?
@@ -1365,13 +1365,13 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the edge highlight mode.
 		 */
-		MicaEditor::EdgeVisualStyle EdgeMode();
+		WinUIEditor::EdgeVisualStyle EdgeMode();
 
 		/**
 		 * The edge may be displayed by a line (EDGE_LINE/EDGE_MULTILINE) or by highlighting text that
 		 * goes beyond it (EDGE_BACKGROUND) or not displayed at all (EDGE_NONE).
 		 */
-		void EdgeMode(MicaEditor::EdgeVisualStyle const &value);
+		void EdgeMode(WinUIEditor::EdgeVisualStyle const &value);
 
 		/**
 		 * Retrieve the colour used in edge indication.
@@ -1407,17 +1407,17 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get which document options are set.
 		 */
-		MicaEditor::DocumentOption DocumentOptions();
+		WinUIEditor::DocumentOption DocumentOptions();
 
 		/**
 		 * Get which document modification events are sent to the container.
 		 */
-		MicaEditor::ModificationFlags ModEventMask();
+		WinUIEditor::ModificationFlags ModEventMask();
 
 		/**
 		 * Set which document modification events are sent to the container.
 		 */
-		void ModEventMask(MicaEditor::ModificationFlags const &value);
+		void ModEventMask(WinUIEditor::ModificationFlags const &value);
 
 		/**
 		 * Get whether command events are sent to the container.
@@ -1442,12 +1442,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get error status.
 		 */
-		MicaEditor::Status Status();
+		WinUIEditor::Status Status();
 
 		/**
 		 * Change error status - 0 = OK.
 		 */
-		void Status(MicaEditor::Status const &value);
+		void Status(WinUIEditor::Status const &value);
 
 		/**
 		 * Get whether mouse gets captured.
@@ -1472,12 +1472,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get cursor type.
 		 */
-		MicaEditor::CursorShape Cursor();
+		WinUIEditor::CursorShape Cursor();
 
 		/**
 		 * Sets the cursor to one of the SC_CURSOR* values.
 		 */
-		void Cursor(MicaEditor::CursorShape const &value);
+		void Cursor(WinUIEditor::CursorShape const &value);
 
 		/**
 		 * Get the way control characters are displayed.
@@ -1503,12 +1503,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Is printing line wrapped?
 		 */
-		MicaEditor::Wrap PrintWrapMode();
+		WinUIEditor::Wrap PrintWrapMode();
 
 		/**
 		 * Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
 		 */
-		void PrintWrapMode(MicaEditor::Wrap const &value);
+		void PrintWrapMode(WinUIEditor::Wrap const &value);
 
 		/**
 		 * Get whether underlining for active hotspots.
@@ -1533,13 +1533,13 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the mode of the current selection.
 		 */
-		MicaEditor::SelectionMode SelectionMode();
+		WinUIEditor::SelectionMode SelectionMode();
 
 		/**
 		 * Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
 		 * by lines (SC_SEL_LINES).
 		 */
-		void SelectionMode(MicaEditor::SelectionMode const &value);
+		void SelectionMode(WinUIEditor::SelectionMode const &value);
 
 		/**
 		 * Get whether or not regular caret moves will extend or reduce the selection.
@@ -1554,42 +1554,42 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get auto-completion case insensitive behaviour.
 		 */
-		MicaEditor::CaseInsensitiveBehaviour AutoCCaseInsensitiveBehaviour();
+		WinUIEditor::CaseInsensitiveBehaviour AutoCCaseInsensitiveBehaviour();
 
 		/**
 		 * Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
 		 */
-		void AutoCCaseInsensitiveBehaviour(MicaEditor::CaseInsensitiveBehaviour const &value);
+		void AutoCCaseInsensitiveBehaviour(WinUIEditor::CaseInsensitiveBehaviour const &value);
 
 		/**
 		 * Retrieve the effect of autocompleting when there are multiple selections.
 		 */
-		MicaEditor::MultiAutoComplete AutoCMulti();
+		WinUIEditor::MultiAutoComplete AutoCMulti();
 
 		/**
 		 * Change the effect of autocompleting when there are multiple selections.
 		 */
-		void AutoCMulti(MicaEditor::MultiAutoComplete const &value);
+		void AutoCMulti(WinUIEditor::MultiAutoComplete const &value);
 
 		/**
 		 * Get the way autocompletion lists are ordered.
 		 */
-		MicaEditor::Ordering AutoCOrder();
+		WinUIEditor::Ordering AutoCOrder();
 
 		/**
 		 * Set the way autocompletion lists are ordered.
 		 */
-		void AutoCOrder(MicaEditor::Ordering const &value);
+		void AutoCOrder(WinUIEditor::Ordering const &value);
 
 		/**
 		 * Can the caret preferred x position only be changed by explicit movement commands?
 		 */
-		MicaEditor::CaretSticky CaretSticky();
+		WinUIEditor::CaretSticky CaretSticky();
 
 		/**
 		 * Stop the caret preferred x position changing when the user types.
 		 */
-		void CaretSticky(MicaEditor::CaretSticky const &value);
+		void CaretSticky(WinUIEditor::CaretSticky const &value);
 
 		/**
 		 * Get convert-on-paste setting
@@ -1604,22 +1604,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the background alpha of the caret line.
 		 */
-		MicaEditor::Alpha CaretLineBackAlpha();
+		WinUIEditor::Alpha CaretLineBackAlpha();
 
 		/**
 		 * Set background alpha of the caret line.
 		 */
-		void CaretLineBackAlpha(MicaEditor::Alpha const &value);
+		void CaretLineBackAlpha(WinUIEditor::Alpha const &value);
 
 		/**
 		 * Returns the current style of the caret.
 		 */
-		MicaEditor::CaretStyle CaretStyle();
+		WinUIEditor::CaretStyle CaretStyle();
 
 		/**
 		 * Set the style of the caret to be drawn.
 		 */
-		void CaretStyle(MicaEditor::CaretStyle const &value);
+		void CaretStyle(WinUIEditor::CaretStyle const &value);
 
 		/**
 		 * Get the current indicator
@@ -1706,22 +1706,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the margin options.
 		 */
-		MicaEditor::MarginOption MarginOptions();
+		WinUIEditor::MarginOption MarginOptions();
 
 		/**
 		 * Set the margin options.
 		 */
-		void MarginOptions(MicaEditor::MarginOption const &value);
+		void MarginOptions(WinUIEditor::MarginOption const &value);
 
 		/**
 		 * Get the visibility for the annotations for a view
 		 */
-		MicaEditor::AnnotationVisible AnnotationVisible();
+		WinUIEditor::AnnotationVisible AnnotationVisible();
 
 		/**
 		 * Set the visibility for the annotations for a view
 		 */
-		void AnnotationVisible(MicaEditor::AnnotationVisible const &value);
+		void AnnotationVisible(WinUIEditor::AnnotationVisible const &value);
 
 		/**
 		 * Get the start of the range of style numbers used for annotations
@@ -1846,12 +1846,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Return options for virtual space behaviour.
 		 */
-		MicaEditor::VirtualSpace VirtualSpaceOptions();
+		WinUIEditor::VirtualSpace VirtualSpaceOptions();
 
 		/**
 		 * Set options for virtual space behaviour.
 		 */
-		void VirtualSpaceOptions(MicaEditor::VirtualSpace const &value);
+		void VirtualSpaceOptions(WinUIEditor::VirtualSpace const &value);
 
 		/**
 		 * Get the modifier key used for rectangular selection.
@@ -1863,12 +1863,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the alpha of the selection.
 		 */
-		MicaEditor::Alpha AdditionalSelAlpha();
+		WinUIEditor::Alpha AdditionalSelAlpha();
 
 		/**
 		 * Set the alpha of the selection.
 		 */
-		void AdditionalSelAlpha(MicaEditor::Alpha const &value);
+		void AdditionalSelAlpha(WinUIEditor::Alpha const &value);
 
 		/**
 		 * Get the foreground colour of additional carets.
@@ -1893,12 +1893,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the tech.
 		 */
-		MicaEditor::Technology Technology();
+		WinUIEditor::Technology Technology();
 
 		/**
 		 * Set the technology used.
 		 */
-		void Technology(MicaEditor::Technology const &value);
+		void Technology(WinUIEditor::Technology const &value);
 
 		/**
 		 * Is the caret line always visible?
@@ -1913,27 +1913,27 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the line end types currently allowed.
 		 */
-		MicaEditor::LineEndType LineEndTypesAllowed();
+		WinUIEditor::LineEndType LineEndTypesAllowed();
 
 		/**
 		 * Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
 		 */
-		void LineEndTypesAllowed(MicaEditor::LineEndType const &value);
+		void LineEndTypesAllowed(WinUIEditor::LineEndType const &value);
 
 		/**
 		 * Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
 		 */
-		MicaEditor::LineEndType LineEndTypesActive();
+		WinUIEditor::LineEndType LineEndTypesActive();
 
 		/**
 		 * Get the visibility for the end of line annotations for a view
 		 */
-		MicaEditor::EOLAnnotationVisible EOLAnnotationVisible();
+		WinUIEditor::EOLAnnotationVisible EOLAnnotationVisible();
 
 		/**
 		 * Set the visibility for the end of line annotations for a view
 		 */
-		void EOLAnnotationVisible(MicaEditor::EOLAnnotationVisible const &value);
+		void EOLAnnotationVisible(WinUIEditor::EOLAnnotationVisible const &value);
 
 		/**
 		 * Get the start of the range of style numbers used for end of line annotations
@@ -1948,7 +1948,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve line character index state.
 		 */
-		MicaEditor::LineCharacterIndexType LineCharacterIndex();
+		WinUIEditor::LineCharacterIndexType LineCharacterIndex();
 
 		/**
 		 * Retrieve the lexing language of the document.
@@ -1959,7 +1959,7 @@ namespace winrt::MicaEditor::implementation
 		 * Bit set of LineEndType enumertion for which line ends beyond the standard
 		 * LF, CR, and CRLF are supported by the lexer.
 		 */
-		MicaEditor::LineEndType LineEndTypesSupported();
+		WinUIEditor::LineEndType LineEndTypesSupported();
 
 		/**
 		 * Where styles are duplicated by a feature such as active/inactive code
@@ -1975,12 +1975,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve bidirectional text display state.
 		 */
-		MicaEditor::Bidirectional Bidirectional();
+		WinUIEditor::Bidirectional Bidirectional();
 
 		/**
 		 * Set bidirectional text display state.
 		 */
-		void Bidirectional(MicaEditor::Bidirectional const &value);
+		void Bidirectional(WinUIEditor::Bidirectional const &value);
 
 		/**
 		 * Add text to the document at current position.
@@ -2105,7 +2105,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Convert all line endings in the document to one mode.
 		 */
-		void ConvertEOLs(MicaEditor::EndOfLine const &eolMode);
+		void ConvertEOLs(WinUIEditor::EndOfLine const &eolMode);
 
 		/**
 		 * Set the current styling position to start.
@@ -2137,7 +2137,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set the symbol used for a particular marker number.
 		 */
-		void MarkerDefine(int32_t markerNumber, MicaEditor::MarkerSymbol const &markerSymbol);
+		void MarkerDefine(int32_t markerNumber, WinUIEditor::MarkerSymbol const &markerSymbol);
 
 		/**
 		 * Enable/disable highlight for current folding block (smallest one that contains the caret)
@@ -2199,7 +2199,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Use the default or platform-defined colour for an element.
 		 */
-		void ResetElementColour(MicaEditor::Element const &element);
+		void ResetElementColour(WinUIEditor::Element const &element);
 
 		/**
 		 * Set the foreground colour of the main and additional selections and whether to use this setting.
@@ -2328,12 +2328,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Find some text in the document.
 		 */
-		int64_t FindText(MicaEditor::FindOption const &searchFlags, uint64_t ft);
+		int64_t FindText(WinUIEditor::FindOption const &searchFlags, uint64_t ft);
 
 		/**
 		 * Find some text in the document.
 		 */
-		int64_t FindTextFull(MicaEditor::FindOption const &searchFlags, uint64_t ft);
+		int64_t FindTextFull(WinUIEditor::FindOption const &searchFlags, uint64_t ft);
 
 		/**
 		 * Draw the document into a display context such as a printer.
@@ -2610,22 +2610,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Expand or contract a fold header.
 		 */
-		void FoldLine(int64_t line, MicaEditor::FoldAction const &action);
+		void FoldLine(int64_t line, WinUIEditor::FoldAction const &action);
 
 		/**
 		 * Expand or contract a fold header and its children.
 		 */
-		void FoldChildren(int64_t line, MicaEditor::FoldAction const &action);
+		void FoldChildren(int64_t line, WinUIEditor::FoldAction const &action);
 
 		/**
 		 * Expand a fold header and all children. Use the level argument instead of the line's current level.
 		 */
-		void ExpandChildren(int64_t line, MicaEditor::FoldLevel const &level);
+		void ExpandChildren(int64_t line, WinUIEditor::FoldLevel const &level);
 
 		/**
 		 * Expand or contract all fold headers.
 		 */
-		void FoldAll(MicaEditor::FoldAction const &action);
+		void FoldAll(WinUIEditor::FoldAction const &action);
 
 		/**
 		 * Ensure a particular line is visible by expanding any header line hiding it.
@@ -3059,27 +3059,27 @@ namespace winrt::MicaEditor::implementation
 		 * Find some text starting at the search anchor.
 		 * Does not ensure the selection is visible.
 		 */
-		int64_t SearchNextFromBuffer(MicaEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text);
-		int64_t SearchNext(MicaEditor::FindOption const &searchFlags, hstring const &text);
+		int64_t SearchNextFromBuffer(WinUIEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text);
+		int64_t SearchNext(WinUIEditor::FindOption const &searchFlags, hstring const &text);
 
 		/**
 		 * Find some text starting at the search anchor and moving backwards.
 		 * Does not ensure the selection is visible.
 		 */
-		int64_t SearchPrevFromBuffer(MicaEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text);
-		int64_t SearchPrev(MicaEditor::FindOption const &searchFlags, hstring const &text);
+		int64_t SearchPrevFromBuffer(WinUIEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text);
+		int64_t SearchPrev(WinUIEditor::FindOption const &searchFlags, hstring const &text);
 
 		/**
 		 * Set whether a pop up menu is displayed automatically when the user presses
 		 * the wrong mouse button on certain areas.
 		 */
-		void UsePopUp(MicaEditor::PopUp const &popUpMode);
+		void UsePopUp(WinUIEditor::PopUp const &popUpMode);
 
 		/**
 		 * Create a new document object.
 		 * Starts with reference count of 1 and not selected into editor.
 		 */
-		uint64_t CreateDocument(int64_t bytes, MicaEditor::DocumentOption const &documentOptions);
+		uint64_t CreateDocument(int64_t bytes, WinUIEditor::DocumentOption const &documentOptions);
 
 		/**
 		 * Extend life of document.
@@ -3117,7 +3117,7 @@ namespace winrt::MicaEditor::implementation
 		 * Set the way the display area is determined when a particular line
 		 * is to be moved to by Find, FindNext, GotoLine, etc.
 		 */
-		void SetVisiblePolicy(MicaEditor::VisiblePolicy const &visiblePolicy, int32_t visibleSlop);
+		void SetVisiblePolicy(WinUIEditor::VisiblePolicy const &visiblePolicy, int32_t visibleSlop);
 
 		/**
 		 * Delete back from the current position to the start of the line.
@@ -3143,13 +3143,13 @@ namespace winrt::MicaEditor::implementation
 		 * Set the way the caret is kept visible when going sideways.
 		 * The exclusion zone is given in pixels.
 		 */
-		void SetXCaretPolicy(MicaEditor::CaretPolicy const &caretPolicy, int32_t caretSlop);
+		void SetXCaretPolicy(WinUIEditor::CaretPolicy const &caretPolicy, int32_t caretSlop);
 
 		/**
 		 * Set the way the line the caret is on is kept visible.
 		 * The exclusion zone is given in lines.
 		 */
-		void SetYCaretPolicy(MicaEditor::CaretPolicy const &caretPolicy, int32_t caretSlop);
+		void SetYCaretPolicy(WinUIEditor::CaretPolicy const &caretPolicy, int32_t caretSlop);
 
 		/**
 		 * Move caret down one paragraph (delimited by empty lines).
@@ -3420,7 +3420,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Add a container action to the undo stack
 		 */
-		void AddUndoAction(int32_t token, MicaEditor::UndoFlags const &flags);
+		void AddUndoAction(int32_t token, WinUIEditor::UndoFlags const &flags);
 
 		/**
 		 * Find the position of a character from a point within the window.
@@ -3529,7 +3529,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Create an ILoader*.
 		 */
-		uint64_t CreateLoader(int64_t bytes, MicaEditor::DocumentOption const &documentOptions);
+		uint64_t CreateLoader(int64_t bytes, WinUIEditor::DocumentOption const &documentOptions);
 
 		/**
 		 * On macOS, show a find indicator.
@@ -3576,22 +3576,22 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Request line character index be created or its use count increased.
 		 */
-		void AllocateLineCharacterIndex(MicaEditor::LineCharacterIndexType const &lineCharacterIndex);
+		void AllocateLineCharacterIndex(WinUIEditor::LineCharacterIndexType const &lineCharacterIndex);
 
 		/**
 		 * Decrease use count of line character index and remove if 0.
 		 */
-		void ReleaseLineCharacterIndex(MicaEditor::LineCharacterIndexType const &lineCharacterIndex);
+		void ReleaseLineCharacterIndex(WinUIEditor::LineCharacterIndexType const &lineCharacterIndex);
 
 		/**
 		 * Retrieve the document line containing a position measured in index units.
 		 */
-		int64_t LineFromIndexPosition(int64_t pos, MicaEditor::LineCharacterIndexType const &lineCharacterIndex);
+		int64_t LineFromIndexPosition(int64_t pos, WinUIEditor::LineCharacterIndexType const &lineCharacterIndex);
 
 		/**
 		 * Retrieve the position measured in index units at the start of a document line.
 		 */
-		int64_t IndexPositionFromLine(int64_t line, MicaEditor::LineCharacterIndexType const &lineCharacterIndex);
+		int64_t IndexPositionFromLine(int64_t line, WinUIEditor::LineCharacterIndexType const &lineCharacterIndex);
 
 		/**
 		 * Start notifying the container of all key presses and commands.
@@ -3623,8 +3623,8 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the type of a property.
 		 */
-		MicaEditor::TypeProperty PropertyTypeFromBuffer(Windows::Storage::Streams::IBuffer const &name);
-		MicaEditor::TypeProperty PropertyType(hstring const &name);
+		WinUIEditor::TypeProperty PropertyTypeFromBuffer(Windows::Storage::Streams::IBuffer const &name);
+		WinUIEditor::TypeProperty PropertyType(hstring const &name);
 
 		/**
 		 * Describe a property.
@@ -3695,12 +3695,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the layer used for a marker that is drawn in the text area, not the margin.
 		 */
-		MicaEditor::Layer MarkerGetLayer(int32_t markerNumber);
+		WinUIEditor::Layer MarkerGetLayer(int32_t markerNumber);
 
 		/**
 		 * Retrieve the type of a margin.
 		 */
-		MicaEditor::MarginType GetMarginTypeN(int32_t margin);
+		WinUIEditor::MarginType GetMarginTypeN(int32_t margin);
 
 		/**
 		 * Retrieve the width of a margin in pixels.
@@ -3720,7 +3720,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the cursor shown in a margin.
 		 */
-		MicaEditor::CursorShape GetMarginCursorN(int32_t margin);
+		WinUIEditor::CursorShape GetMarginCursorN(int32_t margin);
 
 		/**
 		 * Retrieve the background colour of a margin
@@ -3773,12 +3773,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get is a style mixed case, or to force upper or lower case.
 		 */
-		MicaEditor::CaseVisible StyleGetCase(int32_t style);
+		WinUIEditor::CaseVisible StyleGetCase(int32_t style);
 
 		/**
 		 * Get the character get of the font in a style.
 		 */
-		MicaEditor::CharacterSet StyleGetCharacterSet(int32_t style);
+		WinUIEditor::CharacterSet StyleGetCharacterSet(int32_t style);
 
 		/**
 		 * Get is a style visible or not.
@@ -3804,7 +3804,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the weight of characters of a style.
 		 */
-		MicaEditor::FontWeight StyleGetWeight(int32_t style);
+		WinUIEditor::FontWeight StyleGetWeight(int32_t style);
 
 		/**
 		 * Get whether a style may be monospaced.
@@ -3820,23 +3820,23 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the colour of an element.
 		 */
-		int32_t GetElementColour(MicaEditor::Element const &element);
+		int32_t GetElementColour(WinUIEditor::Element const &element);
 
 		/**
 		 * Get whether an element has been set by SetElementColour.
 		 * When false, a platform-defined or default colour is used.
 		 */
-		bool GetElementIsSet(MicaEditor::Element const &element);
+		bool GetElementIsSet(WinUIEditor::Element const &element);
 
 		/**
 		 * Get whether an element supports translucency.
 		 */
-		bool GetElementAllowsTranslucent(MicaEditor::Element const &element);
+		bool GetElementAllowsTranslucent(WinUIEditor::Element const &element);
 
 		/**
 		 * Get the colour of an element.
 		 */
-		int32_t GetElementBaseColour(MicaEditor::Element const &element);
+		int32_t GetElementBaseColour(WinUIEditor::Element const &element);
 
 		/**
 		 * Get the set of characters making up words for when moving or selecting by word.
@@ -3848,7 +3848,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the style of an indicator.
 		 */
-		MicaEditor::IndicatorStyle IndicGetStyle(int32_t indicator);
+		WinUIEditor::IndicatorStyle IndicGetStyle(int32_t indicator);
 
 		/**
 		 * Retrieve the foreground colour of an indicator.
@@ -3863,7 +3863,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the hover style of an indicator.
 		 */
-		MicaEditor::IndicatorStyle IndicGetHoverStyle(int32_t indicator);
+		WinUIEditor::IndicatorStyle IndicGetHoverStyle(int32_t indicator);
 
 		/**
 		 * Retrieve the foreground hover colour of an indicator.
@@ -3873,7 +3873,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the attributes of an indicator.
 		 */
-		MicaEditor::IndicFlag IndicGetFlags(int32_t indicator);
+		WinUIEditor::IndicFlag IndicGetFlags(int32_t indicator);
 
 		/**
 		 * Retrieve the stroke width of an indicator.
@@ -3914,12 +3914,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Retrieve the fold level of a line.
 		 */
-		MicaEditor::FoldLevel GetFoldLevel(int64_t line);
+		WinUIEditor::FoldLevel GetFoldLevel(int64_t line);
 
 		/**
 		 * Find the last child line of a header line.
 		 */
-		int64_t GetLastChild(int64_t line, MicaEditor::FoldLevel const &level);
+		int64_t GetLastChild(int64_t line, WinUIEditor::FoldLevel const &level);
 
 		/**
 		 * Find the parent line of a child line.
@@ -3988,12 +3988,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the alpha fill colour of the given indicator.
 		 */
-		MicaEditor::Alpha IndicGetAlpha(int32_t indicator);
+		WinUIEditor::Alpha IndicGetAlpha(int32_t indicator);
 
 		/**
 		 * Get the alpha outline colour of the given indicator.
 		 */
-		MicaEditor::Alpha IndicGetOutlineAlpha(int32_t indicator);
+		WinUIEditor::Alpha IndicGetOutlineAlpha(int32_t indicator);
 
 		/**
 		 * Get the text in the text margin for a line
@@ -4084,8 +4084,8 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get the appearance of a representation.
 		 */
-		MicaEditor::RepresentationAppearance GetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter);
-		MicaEditor::RepresentationAppearance GetRepresentationAppearance(hstring const &encodedCharacter);
+		WinUIEditor::RepresentationAppearance GetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter);
+		WinUIEditor::RepresentationAppearance GetRepresentationAppearance(hstring const &encodedCharacter);
 
 		/**
 		 * Get the colour of a representation.
@@ -4107,7 +4107,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Get whether a feature is supported
 		 */
-		bool SupportsFeature(MicaEditor::Supports const &feature);
+		bool SupportsFeature(WinUIEditor::Supports const &feature);
 
 		/**
 		 * Retrieve a "property" value previously set with SetProperty.
@@ -4210,17 +4210,17 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set the alpha used for a marker that is drawn in the text area, not the margin.
 		 */
-		void MarkerSetAlpha(int32_t markerNumber, MicaEditor::Alpha const &alpha);
+		void MarkerSetAlpha(int32_t markerNumber, WinUIEditor::Alpha const &alpha);
 
 		/**
 		 * Set the layer used for a marker that is drawn in the text area, not the margin.
 		 */
-		void MarkerSetLayer(int32_t markerNumber, MicaEditor::Layer const &layer);
+		void MarkerSetLayer(int32_t markerNumber, WinUIEditor::Layer const &layer);
 
 		/**
 		 * Set a margin to be either numeric or symbolic.
 		 */
-		void SetMarginTypeN(int32_t margin, MicaEditor::MarginType const &marginType);
+		void SetMarginTypeN(int32_t margin, WinUIEditor::MarginType const &marginType);
 
 		/**
 		 * Set the width of a margin to a width expressed in pixels.
@@ -4240,7 +4240,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set the cursor shown when the mouse is inside a margin.
 		 */
-		void SetMarginCursorN(int32_t margin, MicaEditor::CursorShape const &cursor);
+		void SetMarginCursorN(int32_t margin, WinUIEditor::CursorShape const &cursor);
 
 		/**
 		 * Set the background colour of a margin. Only visible for SC_MARGIN_COLOUR.
@@ -4291,7 +4291,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set a style to be mixed case, or to force upper or lower case.
 		 */
-		void StyleSetCase(int32_t style, MicaEditor::CaseVisible const &caseVisible);
+		void StyleSetCase(int32_t style, WinUIEditor::CaseVisible const &caseVisible);
 
 		/**
 		 * Set the size of characters of a style. Size is in points multiplied by 100.
@@ -4301,12 +4301,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set the weight of characters of a style.
 		 */
-		void StyleSetWeight(int32_t style, MicaEditor::FontWeight const &weight);
+		void StyleSetWeight(int32_t style, WinUIEditor::FontWeight const &weight);
 
 		/**
 		 * Set the character set of the font in a style.
 		 */
-		void StyleSetCharacterSet(int32_t style, MicaEditor::CharacterSet const &characterSet);
+		void StyleSetCharacterSet(int32_t style, WinUIEditor::CharacterSet const &characterSet);
 
 		/**
 		 * Set a style to be a hotspot or not.
@@ -4328,7 +4328,7 @@ namespace winrt::MicaEditor::implementation
 		 * Set the colour of an element. Translucency (alpha) may or may not be significant
 		 * and this may depend on the platform. The alpha byte should commonly be 0xff for opaque.
 		 */
-		void SetElementColour(MicaEditor::Element const &element, int32_t colourElement);
+		void SetElementColour(WinUIEditor::Element const &element, int32_t colourElement);
 
 		/**
 		 * Set a style to be visible or not.
@@ -4345,7 +4345,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set an indicator to plain, squiggle or TT.
 		 */
-		void IndicSetStyle(int32_t indicator, MicaEditor::IndicatorStyle const &indicatorStyle);
+		void IndicSetStyle(int32_t indicator, WinUIEditor::IndicatorStyle const &indicatorStyle);
 
 		/**
 		 * Set the foreground colour of an indicator.
@@ -4360,7 +4360,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set a hover indicator to plain, squiggle or TT.
 		 */
-		void IndicSetHoverStyle(int32_t indicator, MicaEditor::IndicatorStyle const &indicatorStyle);
+		void IndicSetHoverStyle(int32_t indicator, WinUIEditor::IndicatorStyle const &indicatorStyle);
 
 		/**
 		 * Set the foreground hover colour of an indicator.
@@ -4370,7 +4370,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set the attributes of an indicator.
 		 */
-		void IndicSetFlags(int32_t indicator, MicaEditor::IndicFlag const &flags);
+		void IndicSetFlags(int32_t indicator, WinUIEditor::IndicFlag const &flags);
 
 		/**
 		 * Set the stroke width of an indicator in hundredths of a pixel.
@@ -4440,7 +4440,7 @@ namespace winrt::MicaEditor::implementation
 		 * This encodes an integer level along with flags indicating whether the
 		 * line is a header and whether it is effectively white space.
 		 */
-		void SetFoldLevel(int64_t line, MicaEditor::FoldLevel const &level);
+		void SetFoldLevel(int64_t line, WinUIEditor::FoldLevel const &level);
 
 		/**
 		 * Show the children of a header line.
@@ -4450,7 +4450,7 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set some style options for folding.
 		 */
-		void SetFoldFlags(MicaEditor::FoldFlag const &flags);
+		void SetFoldFlags(WinUIEditor::FoldFlag const &flags);
 
 		/**
 		 * Set a fore colour for active hotspots.
@@ -4479,12 +4479,12 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set the alpha fill colour of the given indicator.
 		 */
-		void IndicSetAlpha(int32_t indicator, MicaEditor::Alpha const &alpha);
+		void IndicSetAlpha(int32_t indicator, WinUIEditor::Alpha const &alpha);
 
 		/**
 		 * Set the alpha outline colour of the given indicator.
 		 */
-		void IndicSetOutlineAlpha(int32_t indicator, MicaEditor::Alpha const &alpha);
+		void IndicSetOutlineAlpha(int32_t indicator, WinUIEditor::Alpha const &alpha);
 
 		/**
 		 * Set the text in the text margin for a line
@@ -4586,8 +4586,8 @@ namespace winrt::MicaEditor::implementation
 		/**
 		 * Set the appearance of a representation.
 		 */
-		void SetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, MicaEditor::RepresentationAppearance const &appearance);
-		void SetRepresentationAppearance(hstring const &encodedCharacter, MicaEditor::RepresentationAppearance const &appearance);
+		void SetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, WinUIEditor::RepresentationAppearance const &appearance);
+		void SetRepresentationAppearance(hstring const &encodedCharacter, WinUIEditor::RepresentationAppearance const &appearance);
 
 		/**
 		 * Set the colour of a representation.
@@ -4630,38 +4630,38 @@ namespace winrt::MicaEditor::implementation
 		void SetILexer(uint64_t ilexer);
 
 	private:
-		event<MicaEditor::StyleNeededHandler> _styleNeededEvent;
-		event<MicaEditor::CharAddedHandler> _charAddedEvent;
-		event<MicaEditor::SavePointReachedHandler> _savePointReachedEvent;
-		event<MicaEditor::SavePointLeftHandler> _savePointLeftEvent;
-		event<MicaEditor::ModifyAttemptROHandler> _modifyAttemptROEvent;
-		event<MicaEditor::KeyHandler> _keyEvent;
-		event<MicaEditor::DoubleClickHandler> _doubleClickEvent;
-		event<MicaEditor::UpdateUIHandler> _updateUIEvent;
-		event<MicaEditor::ModifiedHandler> _modifiedEvent;
-		event<MicaEditor::MacroRecordHandler> _macroRecordEvent;
-		event<MicaEditor::MarginClickHandler> _marginClickEvent;
-		event<MicaEditor::NeedShownHandler> _needShownEvent;
-		event<MicaEditor::PaintedHandler> _paintedEvent;
-		event<MicaEditor::UserListSelectionHandler> _userListSelectionEvent;
-		event<MicaEditor::URIDroppedHandler> _uRIDroppedEvent;
-		event<MicaEditor::DwellStartHandler> _dwellStartEvent;
-		event<MicaEditor::DwellEndHandler> _dwellEndEvent;
-		event<MicaEditor::ZoomChangedHandler> _zoomChangedEvent;
-		event<MicaEditor::HotSpotClickHandler> _hotSpotClickEvent;
-		event<MicaEditor::HotSpotDoubleClickHandler> _hotSpotDoubleClickEvent;
-		event<MicaEditor::CallTipClickHandler> _callTipClickEvent;
-		event<MicaEditor::AutoCSelectionHandler> _autoCSelectionEvent;
-		event<MicaEditor::IndicatorClickHandler> _indicatorClickEvent;
-		event<MicaEditor::IndicatorReleaseHandler> _indicatorReleaseEvent;
-		event<MicaEditor::AutoCCancelledHandler> _autoCCancelledEvent;
-		event<MicaEditor::AutoCCharDeletedHandler> _autoCCharDeletedEvent;
-		event<MicaEditor::HotSpotReleaseClickHandler> _hotSpotReleaseClickEvent;
-		event<MicaEditor::FocusInHandler> _focusInEvent;
-		event<MicaEditor::FocusOutHandler> _focusOutEvent;
-		event<MicaEditor::AutoCCompletedHandler> _autoCCompletedEvent;
-		event<MicaEditor::MarginRightClickHandler> _marginRightClickEvent;
-		event<MicaEditor::AutoCSelectionChangeHandler> _autoCSelectionChangeEvent;
+		event<WinUIEditor::StyleNeededHandler> _styleNeededEvent;
+		event<WinUIEditor::CharAddedHandler> _charAddedEvent;
+		event<WinUIEditor::SavePointReachedHandler> _savePointReachedEvent;
+		event<WinUIEditor::SavePointLeftHandler> _savePointLeftEvent;
+		event<WinUIEditor::ModifyAttemptROHandler> _modifyAttemptROEvent;
+		event<WinUIEditor::KeyHandler> _keyEvent;
+		event<WinUIEditor::DoubleClickHandler> _doubleClickEvent;
+		event<WinUIEditor::UpdateUIHandler> _updateUIEvent;
+		event<WinUIEditor::ModifiedHandler> _modifiedEvent;
+		event<WinUIEditor::MacroRecordHandler> _macroRecordEvent;
+		event<WinUIEditor::MarginClickHandler> _marginClickEvent;
+		event<WinUIEditor::NeedShownHandler> _needShownEvent;
+		event<WinUIEditor::PaintedHandler> _paintedEvent;
+		event<WinUIEditor::UserListSelectionHandler> _userListSelectionEvent;
+		event<WinUIEditor::URIDroppedHandler> _uRIDroppedEvent;
+		event<WinUIEditor::DwellStartHandler> _dwellStartEvent;
+		event<WinUIEditor::DwellEndHandler> _dwellEndEvent;
+		event<WinUIEditor::ZoomChangedHandler> _zoomChangedEvent;
+		event<WinUIEditor::HotSpotClickHandler> _hotSpotClickEvent;
+		event<WinUIEditor::HotSpotDoubleClickHandler> _hotSpotDoubleClickEvent;
+		event<WinUIEditor::CallTipClickHandler> _callTipClickEvent;
+		event<WinUIEditor::AutoCSelectionHandler> _autoCSelectionEvent;
+		event<WinUIEditor::IndicatorClickHandler> _indicatorClickEvent;
+		event<WinUIEditor::IndicatorReleaseHandler> _indicatorReleaseEvent;
+		event<WinUIEditor::AutoCCancelledHandler> _autoCCancelledEvent;
+		event<WinUIEditor::AutoCCharDeletedHandler> _autoCCharDeletedEvent;
+		event<WinUIEditor::HotSpotReleaseClickHandler> _hotSpotReleaseClickEvent;
+		event<WinUIEditor::FocusInHandler> _focusInEvent;
+		event<WinUIEditor::FocusOutHandler> _focusOutEvent;
+		event<WinUIEditor::AutoCCompletedHandler> _autoCCompletedEvent;
+		event<WinUIEditor::MarginRightClickHandler> _marginRightClickEvent;
+		event<WinUIEditor::AutoCSelectionChangeHandler> _autoCSelectionChangeEvent;
 
 		weak_ref<EditorBaseControl> _editor{ nullptr };
 	};

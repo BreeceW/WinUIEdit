@@ -19,8 +19,8 @@ namespace Tool
         public async Task RunAsync(string path, string[] args)
         {
             var root = await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync();
-            var micaEditor = await root.GetFolderAsync("MicaEditor");
-            var themes = await micaEditor.GetFolderAsync("Themes");
+            var winUIEditor = await root.GetFolderAsync("WinUIEditor");
+            var themes = await winUIEditor.GetFolderAsync("Themes");
             var winui = await root.GetFolderAsync("scintilla\\winui");
             var scintillaInclude = await root.GetFolderAsync("scintilla\\include");
             var scintillaSrc = await root.GetFolderAsync("scintilla\\src");
@@ -50,7 +50,7 @@ namespace Tool
                 project.AppendChild(cppItems);
                 {
                     AppendInclude(doc, cppItems, "ClCompile", "$(GeneratedFilesDir)module.g.cpp", "Generated Files");
-                    await AppendIncludesAsync(doc, cppItems, micaEditor, "ClCompile", "cpp|cxx");
+                    await AppendIncludesAsync(doc, cppItems, winUIEditor, "ClCompile", "cpp|cxx");
                     await AppendIncludesAsync(doc, cppItems, winui, "ClCompile", "cpp|cxx", "..\\scintilla\\winui\\");
                     await AppendIncludesAsync(doc, cppItems, scintillaSrc, "ClCompile", "cpp|cxx", "..\\scintilla\\src\\", s_scintilla);
                     await AppendIncludesAsync(doc, cppItems, call, "ClCompile", "cpp|cxx", "..\\scintilla\\call\\", s_scintilla);
@@ -62,7 +62,7 @@ namespace Tool
                 var hItems = doc.CreateElementNS(s_ns, "ItemGroup");
                 project.AppendChild(hItems);
                 {
-                    await AppendIncludesAsync(doc, hItems, micaEditor, "ClInclude", "h");
+                    await AppendIncludesAsync(doc, hItems, winUIEditor, "ClInclude", "h");
                     await AppendIncludesAsync(doc, hItems, winui, "ClInclude", "h", "..\\scintilla\\winui\\");
                     await AppendIncludesAsync(doc, hItems, scintillaInclude, "ClInclude", "h", "..\\scintilla\\include\\", s_scintilla);
                     await AppendIncludesAsync(doc, hItems, scintillaSrc, "ClInclude", "h", "..\\scintilla\\src\\", s_scintilla);
@@ -73,7 +73,7 @@ namespace Tool
                 var modItems = doc.CreateElementNS(s_ns, "ItemGroup");
                 project.AppendChild(modItems);
                 {
-                    AppendInclude(doc, modItems, "None", "MicaEditor.def");
+                    AppendInclude(doc, modItems, "None", "WinUIEditor.def");
                     AppendInclude(doc, modItems, "None", "packages.config");
                     AppendInclude(doc, modItems, "None", "Defines.idl");
                 }
@@ -82,7 +82,7 @@ namespace Tool
                 project.AppendChild(xamlItems);
                 {
                     await AppendIncludesAsync(doc, xamlItems, themes, "Page", "xaml", "Themes\\");
-                    await AppendIncludesAsync(doc, xamlItems, micaEditor, "Page", "xaml");
+                    await AppendIncludesAsync(doc, xamlItems, winUIEditor, "Page", "xaml");
                 }
 
                 var natvisItems = doc.CreateElementNS(s_ns, "ItemGroup");
@@ -94,18 +94,18 @@ namespace Tool
                 var idlItems = doc.CreateElementNS(s_ns, "ItemGroup");
                 project.AppendChild(idlItems);
                 {
-                    await AppendIncludesAsync(doc, idlItems, micaEditor, "Midl", "idl", exclude: "Defines.idl");
+                    await AppendIncludesAsync(doc, idlItems, winUIEditor, "Midl", "idl", exclude: "Defines.idl");
                 }
             }
 
             var xml = PrettyPrint(doc.GetXml());
 
-            var filtersFile = await micaEditor.GetFileAsync("MicaEditor.vcxproj.filters");
+            var filtersFile = await winUIEditor.GetFileAsync("WinUIEditor.vcxproj.filters");
             await FileIO.WriteTextAsync(filtersFile, xml);
 
-            var projectFile = await micaEditor.GetFileAsync("MicaEditor.vcxproj");
+            var projectFile = await winUIEditor.GetFileAsync("WinUIEditor.vcxproj");
             var projectText = await FileIO.ReadTextAsync(projectFile);
-            var expanded = await WildcardExpandAsync(micaEditor, projectText);
+            var expanded = await WildcardExpandAsync(winUIEditor, projectText);
             await FileIO.WriteTextAsync(projectFile, expanded);
         }
 

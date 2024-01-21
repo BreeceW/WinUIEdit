@@ -8,7 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:CppDemoUwp"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mica="using:MicaEditor"
+    xmlns:editor="using:WinUIEditor"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     NavigationCacheMode="Required"
@@ -154,39 +154,39 @@
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Z"
                     AccessKey="U"
                     Click="CommandMenuItem_Click"
-                    Tag="{x:Bind mica:ScintillaMessage.Undo}"
+                    Tag="{x:Bind editor:ScintillaMessage.Undo}"
                     Text="Undo" />
                 <MenuFlyoutItem
                     MinWidth="230"
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+Y"
                     AccessKey="U"
                     Click="CommandMenuItem_Click"
-                    Tag="{x:Bind mica:ScintillaMessage.Redo}"
+                    Tag="{x:Bind editor:ScintillaMessage.Redo}"
                     Text="Redo" />
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+X"
                     AccessKey="T"
                     Click="CommandMenuItem_Click"
-                    Tag="{x:Bind mica:ScintillaMessage.Cut}"
+                    Tag="{x:Bind editor:ScintillaMessage.Cut}"
                     Text="Cut" />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+C"
                     AccessKey="C"
                     Click="CommandMenuItem_Click"
-                    Tag="{x:Bind mica:ScintillaMessage.Copy}"
+                    Tag="{x:Bind editor:ScintillaMessage.Copy}"
                     Text="Copy" />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+V"
                     AccessKey="P"
                     Click="CommandMenuItem_Click"
-                    Tag="{x:Bind mica:ScintillaMessage.Paste}"
+                    Tag="{x:Bind editor:ScintillaMessage.Paste}"
                     Text="Paste" />
                 <MenuFlyoutItem
                     Windows10version1803:KeyboardAcceleratorTextOverride="Del"
                     AccessKey="L"
                     Click="CommandMenuItem_Click"
-                    Tag="{x:Bind mica:ScintillaMessage.Clear}"
+                    Tag="{x:Bind editor:ScintillaMessage.Clear}"
                     Text="Delete" />
                 <!--<MenuFlyoutSeparator />
             <MenuFlyoutItem AccessKey="F" Text="Find">
@@ -219,7 +219,7 @@
                     Windows10version1803:KeyboardAcceleratorTextOverride="Ctrl+A"
                     AccessKey="A"
                     Click="CommandMenuItem_Click"
-                    Tag="{x:Bind mica:ScintillaMessage.SelectAll}"
+                    Tag="{x:Bind editor:ScintillaMessage.SelectAll}"
                     Text="Select all" />
                 <MenuFlyoutItem
                     AccessKey="D"
@@ -368,7 +368,7 @@
             Grid.ColumnSpan="2"
             Height="1"
             Fill="{ThemeResource DividerLineBrush}" />
-        <mica:CodeEditorControl
+        <editor:CodeEditorControl
             x:Name="Editor"
             Grid.Row="3"
             Grid.Column="0"

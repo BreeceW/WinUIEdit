@@ -2259,7 +2259,7 @@ namespace Scintilla::Internal {
 		_sisNativeWithD2D->SetDevice(d2dDevice.get());
 	}
 
-	void ScintillaWinUI::RegisterGraphics(std::shared_ptr<MicaEditor::Wrapper> const &wrapper)
+	void ScintillaWinUI::RegisterGraphics(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper)
 	{
 		_wrapper = wrapper;
 		wMain = _wrapper.get(); // Todo: Make sure this makes sense

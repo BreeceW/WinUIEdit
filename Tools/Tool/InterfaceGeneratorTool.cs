@@ -191,11 +191,11 @@ namespace Tool
                 throw new InvalidOperationException("Missing or extra getters or setters");
             }
 
-            var idlSB = new StringBuilder("namespace MicaEditor" + End + "{" + End);
+            var idlSB = new StringBuilder("namespace WinUIEditor" + End + "{" + End);
             var cppSB = new StringBuilder(
                 "#include \"pch.h\"" + End + "#include \"EditorBaseControl.h\"" + End + "#include \"EditorWrapper.h\"" + End + "#include \"Editor.g.cpp\"" + End
                 + End
-                + "namespace winrt::MicaEditor::implementation" + End
+                + "namespace winrt::WinUIEditor::implementation" + End
                 + "{" + End);
             var hSB = new StringBuilder("#pragma once" + End + "#include \"Editor.g.h\"" + End);
 
@@ -205,7 +205,7 @@ namespace Tool
             }
 
             hSB.Append(End
-                + "namespace winrt::MicaEditor::implementation" + End
+                + "namespace winrt::WinUIEditor::implementation" + End
                 + "{" + End);
 
             WriteIdlEnu(idlSB, messageEnu);
@@ -305,19 +305,19 @@ namespace Tool
             cppSB.Append("}" + End);
             hSB.Append(In + In + "weak_ref<EditorBaseControl> _editor{ nullptr };" + End + In + "};" + End + "}" + End);
 
-            var idlFile = await parent.CreateFileAsync("MicaEditor\\EditorWrapper.idl", CreationCollisionOption.ReplaceExisting);
+            var idlFile = await parent.CreateFileAsync("WinUIEditor\\EditorWrapper.idl", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(idlFile, idlSB.ToString());
 
-            var cppFile = await parent.CreateFileAsync("MicaEditor\\EditorWrapper.cpp", CreationCollisionOption.ReplaceExisting);
+            var cppFile = await parent.CreateFileAsync("WinUIEditor\\EditorWrapper.cpp", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(cppFile, cppSB.ToString());
 
-            var hFile = await parent.CreateFileAsync("MicaEditor\\EditorWrapper.h", CreationCollisionOption.ReplaceExisting);
+            var hFile = await parent.CreateFileAsync("WinUIEditor\\EditorWrapper.h", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(hFile, hSB.ToString());
 
-            var xmlIntelliSenseFile = await parent.CreateFileAsync("MicaEditorCsWinRT\\nuget\\MicaEditor.xml", CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(xmlIntelliSenseFile, GenerateIntelliSenseXml("MicaEditor", funs, properties, evts));
-            var xmlIntelliSenseForProjectionFile = await parent.CreateFileAsync("MicaEditorCsWinRT\\nuget\\MicaEditorCsWinRT.xml", CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(xmlIntelliSenseForProjectionFile, GenerateIntelliSenseXml("MicaEditorCsWinRT", funs, properties, evts));
+            var xmlIntelliSenseFile = await parent.CreateFileAsync("WinUIEditorCsWinRT\\nuget\\WinUIEditor.xml", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(xmlIntelliSenseFile, GenerateIntelliSenseXml("WinUIEditor", funs, properties, evts));
+            var xmlIntelliSenseForProjectionFile = await parent.CreateFileAsync("WinUIEditorCsWinRT\\nuget\\WinUIEditorCsWinRT.xml", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(xmlIntelliSenseForProjectionFile, GenerateIntelliSenseXml("WinUIEditorCsWinRT", funs, properties, evts));
         }
 
         private string GenerateIntelliSenseXml(string assembly, List<Function> funs, List<Property> properties, List<Event> evts)
@@ -345,22 +345,22 @@ namespace Tool
 
                 string Paren(string str) => string.IsNullOrEmpty(str) ? string.Empty : $"({str})";
 
-                Write("M", $"MicaEditor.Editor.{fun.Name}{(needsStringVersion ? (usesStringReturn ? "Write" : "From") + "Buffer" : string.Empty)}{Paren(string.Join(',', fun.Params.Select(p => ConvertToNetType(p.Type))))}", fun.Comment);
+                Write("M", $"WinUIEditor.Editor.{fun.Name}{(needsStringVersion ? (usesStringReturn ? "Write" : "From") + "Buffer" : string.Empty)}{Paren(string.Join(',', fun.Params.Select(p => ConvertToNetType(p.Type))))}", fun.Comment);
 
                 if (needsStringVersion)
                 {
-                    Write("M", $"MicaEditor.Editor.{fun.Name}{Paren(string.Join(',', fun.Params.Where(p => p.Type != "stringresult").Select(p => p.Type == "string" ? "System.String" : ConvertToNetType(p.Type))))}", fun.Comment);
+                    Write("M", $"WinUIEditor.Editor.{fun.Name}{Paren(string.Join(',', fun.Params.Where(p => p.Type != "stringresult").Select(p => p.Type == "string" ? "System.String" : ConvertToNetType(p.Type))))}", fun.Comment);
                 }
             }
 
             foreach (var prop in properties)
             {
-                Write("P", $"MicaEditor.Editor.{prop.Name}", prop.GetComment.Concat(prop.SetComment).ToList());
+                Write("P", $"WinUIEditor.Editor.{prop.Name}", prop.GetComment.Concat(prop.SetComment).ToList());
             }
 
             foreach (var evt in evts)
             {
-                Write("E", $"MicaEditor.Editor.{evt.Name}", evt.Comment);
+                Write("E", $"WinUIEditor.Editor.{evt.Name}", evt.Comment);
             }
 
             sb.Append($"    </members>{End}</doc>{End}");
@@ -787,7 +787,7 @@ namespace Tool
 
         private static void WriteCppEvent(StringBuilder sb, Event evt, bool header)
         {
-            sb.Append(In).Append(header ? In : string.Empty).AppendFormat("event_token {0}{1}(MicaEditor::{1}Handler const &handler){2}", !header ? "Editor::" : string.Empty, evt.Name, header ? ";" : string.Empty).Append(End);
+            sb.Append(In).Append(header ? In : string.Empty).AppendFormat("event_token {0}{1}(WinUIEditor::{1}Handler const &handler){2}", !header ? "Editor::" : string.Empty, evt.Name, header ? ";" : string.Empty).Append(End);
             if (!header)
             {
                 sb.Append(In).Append('{').Append(End).Append(In).Append(In).AppendFormat("return _{0}Event.add(handler);", ConvertEventNameToFieldName(evt.Name)).Append(End).Append(In).Append('}').Append(End).Append(End);
@@ -807,7 +807,7 @@ namespace Tool
 
         private static void WriteCppEventField(StringBuilder sb, Event evt)
         {
-            sb.Append(In).Append(In).AppendFormat("event<MicaEditor::{0}Handler> _{1}Event;", evt.Name, ConvertEventNameToFieldName(evt.Name)).Append(End);
+            sb.Append(In).Append(In).AppendFormat("event<WinUIEditor::{0}Handler> _{1}Event;", evt.Name, ConvertEventNameToFieldName(evt.Name)).Append(End);
         }
 
         private static void WriteCppEventArgs(StringBuilder sb, Event evt, bool header)
@@ -1077,7 +1077,7 @@ namespace Tool
                 "keymod" => "System.Int32",
                 "formatrange" => "System.UInt64",
                 "formatrangefull" => "System.UInt64",
-                _ => "MicaEditor." + def,
+                _ => "WinUIEditor." + def,
             };
         }
 
@@ -1134,8 +1134,8 @@ namespace Tool
                 "keymod" => "int32_t",
                 "formatrange" => "uint64_t",
                 "formatrangefull" => "uint64_t",
-                _ when param => "MicaEditor::" + def + " const &",
-                _ => "MicaEditor::" + def,
+                _ when param => "WinUIEditor::" + def + " const &",
+                _ => "WinUIEditor::" + def,
             };
         }
 

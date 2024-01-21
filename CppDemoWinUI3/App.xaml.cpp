@@ -13,7 +13,7 @@ using namespace Microsoft::UI::Xaml::Controls;
 using namespace Microsoft::UI::Xaml::Hosting;
 using namespace Microsoft::UI::Xaml::Media;
 using namespace Microsoft::UI::Xaml::Navigation;
-using namespace MicaEditor;
+using namespace WinUIEditor;
 using namespace CppDemoWinUI3;
 using namespace CppDemoWinUI3::implementation;
 

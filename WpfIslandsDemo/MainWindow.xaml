@@ -11,5 +11,5 @@
     Height="450"
     mc:Ignorable="d">
 
-    <xaml:WindowsXamlHost InitialTypeName="MicaEditor.CodeEditorControl" SizeChanged="WindowsXamlHost_SizeChanged" />
+    <xaml:WindowsXamlHost InitialTypeName="WinUIEditor.CodeEditorControl" SizeChanged="WindowsXamlHost_SizeChanged" />
 </Window>

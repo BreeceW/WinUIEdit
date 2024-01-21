@@ -314,7 +314,7 @@ public:
 typedef VarBuffer<XYPOSITION, stackBufferLength> TextPositions;
 
 UINT DpiForWindow(WindowID wid) noexcept {
-	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(wid) };
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(wid) };
 	return wrapper && wrapper->LogicalDpi()
 		? wrapper->LogicalDpi()
 		: USER_DEFAULT_SCREEN_DPI;
@@ -1796,7 +1796,7 @@ void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo) {
 }
 
 PRectangle Window::GetClientPosition() const {
-	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) };
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
 	if (wrapper)
 	{
 		return PRectangle::FromInts(0, 0, wrapper->Width(), wrapper->Height()); // WinUI Todo
@@ -1807,7 +1807,7 @@ void Window::Show(bool show) {
 }
 
 void Window::InvalidateAll() {
-	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) };
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
 	if (wrapper && wrapper->VsisNative())
 	{
 		wrapper->VsisNative()->Invalidate(RECT{0, 0, wrapper->Width(), wrapper->Height()});
@@ -1815,7 +1815,7 @@ void Window::InvalidateAll() {
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
-	auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) };
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
 	if (wrapper && wrapper->VsisNative())
 	{
 		wrapper->VsisNative()->Invalidate(RectFromPRectangle(rc));
@@ -1922,7 +1922,7 @@ void Window::InvalidateRectangle(PRectangle rc) {
 }*/
 
 void Window::SetCursor(Cursor curs) {
-	if (auto wrapper{ reinterpret_cast<MicaEditor::Wrapper *>(GetID()) })
+	if (auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) })
 	{
 		winrt::DCUR type{ winrt::DCUR::Arrow };
 		switch (curs) {
@@ -1945,7 +1945,7 @@ void Window::SetCursor(Cursor curs) {
 			type = winrt::DCUR::Hand;
 			break;
 		}
-		
+
 		wrapper->SetCursor(type);
 	}
 }

@@ -5,7 +5,7 @@
 #endif
 #include "Helpers.h"
 
-using namespace ::MicaEditor;
+using namespace ::WinUIEditor;
 using namespace winrt;
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -17,11 +17,11 @@ using namespace DUX::Input;
 
 using namespace winrt;
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
 	CodeEditorControl::CodeEditorControl()
 	{
-		DefaultStyleKey(winrt::box_value(L"MicaEditor.CodeEditorControl"));
+		DefaultStyleKey(winrt::box_value(L"WinUIEditor.CodeEditorControl"));
 
 		_editor = make_self<EditorBaseControl>();
 		_call = _editor->Call();
@@ -74,7 +74,7 @@ namespace winrt::MicaEditor::implementation
 
 		if (const auto presenter{ GetTemplateChild(L"EditorContainer").try_as<ContentPresenter>() })
 		{
-			presenter.Content(_editor.as<MicaEditor::EditorBaseControl>());
+			presenter.Content(_editor.as<WinUIEditor::EditorBaseControl>());
 		}
 	}
 
@@ -205,7 +205,7 @@ namespace winrt::MicaEditor::implementation
 		return _editor->PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
 
-	MicaEditor::Editor CodeEditorControl::Editor()
+	WinUIEditor::Editor CodeEditorControl::Editor()
 	{
 		return _editor->Editor();
 	}

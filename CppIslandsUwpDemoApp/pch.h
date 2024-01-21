@@ -14,4 +14,4 @@
 #include <winrt/Windows.UI.Xaml.Markup.h>
 #include <winrt/Windows.UI.Xaml.Navigation.h>
 
-#include <winrt/MicaEditor.h>
+#include <winrt/WinUIEditor.h>

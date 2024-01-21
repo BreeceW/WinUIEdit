@@ -1,13 +1,13 @@
 #pragma once
 
-#include <winrt/MicaEditor.h>
+#include <winrt/WinUIEditor.h>
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
 	struct TextRangeProvider : implements<TextRangeProvider, DUX::Automation::Provider::ITextRangeProvider>
 	{
-		TextRangeProvider(DUX::Automation::Provider::IRawElementProviderSimple const &peer, MicaEditor::Editor const &editor, int64_t rangeStart, int64_t rangeEnd, Windows::Foundation::Rect const &bounds);
-		
+		TextRangeProvider(DUX::Automation::Provider::IRawElementProviderSimple const &peer, WinUIEditor::Editor const &editor, int64_t rangeStart, int64_t rangeEnd, Windows::Foundation::Rect const &bounds);
+
 		DUX::Automation::Provider::ITextRangeProvider Clone();
 		bool Compare(DUX::Automation::Provider::ITextRangeProvider const &textRangeProvider);
 		int32_t CompareEndpoints(DUX::Automation::Text::TextPatternRangeEndpoint const &endpoint, DUX::Automation::Provider::ITextRangeProvider const &textRangeProvider, DUX::Automation::Text::TextPatternRangeEndpoint const &targetEndpoint);
@@ -30,7 +30,7 @@ namespace winrt::MicaEditor::implementation
 
 	private:
 		DUX::Automation::Provider::IRawElementProviderSimple _peer{ nullptr };
-		weak_ref<MicaEditor::Editor> _editor{ nullptr };
+		weak_ref<WinUIEditor::Editor> _editor{ nullptr };
 		int64_t _rangeStart;
 		int64_t _rangeEnd;
 		Windows::Foundation::Rect _bounds;

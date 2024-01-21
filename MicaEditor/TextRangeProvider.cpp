@@ -11,7 +11,7 @@ using namespace DUX::Automation::Text;
 
 constexpr hresult XAML_E_NOT_SUPPORTED{ static_cast<int32_t>(0x80131515) };
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
 	TextRangeProvider::TextRangeProvider(IRawElementProviderSimple const &peer, Editor const &editor, int64_t rangeStart, int64_t rangeEnd, Rect const &bounds)
 		: _peer{ peer }, _editor{ editor }, _rangeStart{ rangeStart }, _rangeEnd{ rangeEnd }, _bounds{ bounds }

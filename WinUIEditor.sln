@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsDemoWinUI3", "CsDemoWinUI3\CsDemoWinUI3.csproj", "{8DD935B8-B371-4C54-B276-2108FB42395F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MicaEditor", "MicaEditor\MicaEditor.vcxproj", "{290647E3-D8CB-46B5-87CE-409F721E441A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinUIEditor", "WinUIEditor\WinUIEditor.vcxproj", "{290647E3-D8CB-46B5-87CE-409F721E441A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppDemoWinUI3", "CppDemoWinUI3\CppDemoWinUI3.vcxproj", "{15F512FF-8050-4CBB-A901-56693C4D4BCB}"
 EndProject
@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinUI3", "WinUI3", "{23110D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "XamlIslands", "XamlIslands", "{2DADBE2B-A102-4DE2-A804-5ACE3834860D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicaEditorCsWinRT", "MicaEditorCsWinRT\MicaEditorCsWinRT.csproj", "{DEE6745F-56E7-4014-8983-8FA56D67A277}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinUIEditorCsWinRT", "WinUIEditorCsWinRT\WinUIEditorCsWinRT.csproj", "{DEE6745F-56E7-4014-8983-8FA56D67A277}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6054949-A719-4BE0-9139-B1AC3280D966}"
 	ProjectSection(SolutionItems) = preProject

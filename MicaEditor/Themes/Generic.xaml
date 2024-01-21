@@ -1,7 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MicaEditor">
+    xmlns:local="using:WinUIEditor">
 
     <!--  Todo: Apply corner radius to this. Remember conditional Setters do not work, so make a different style for each version. What happens with WinUI 3?  -->
     <Style TargetType="local:EditorBaseControl">

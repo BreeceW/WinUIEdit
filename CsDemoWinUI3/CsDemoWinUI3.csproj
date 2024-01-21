@@ -31,7 +31,7 @@
 	</ItemGroup>
 
 	<PropertyGroup>
-		<CsWinRTIncludes>MicaEditor</CsWinRTIncludes>
+		<CsWinRTIncludes>WinUIEditor</CsWinRTIncludes>
 	</PropertyGroup>
 
 	<!-- Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
@@ -41,6 +41,6 @@
 		<ProjectCapability Include="Msix" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\MicaEditor\MicaEditor.vcxproj" />
+		<ProjectReference Include="..\WinUIEditor\WinUIEditor.vcxproj" />
 	</ItemGroup>
 </Project>

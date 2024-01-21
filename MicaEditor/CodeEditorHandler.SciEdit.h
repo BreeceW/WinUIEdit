@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace MicaEditor::Internal
+namespace WinUIEditor::Internal
 {
 	enum class IndentationStatus
 	{

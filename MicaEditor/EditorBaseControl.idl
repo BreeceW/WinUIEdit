@@ -1,7 +1,7 @@
 #include "Defines.idl"
 import "EditorWrapper.idl";
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	[default_interface]
 	[webhosthidden]

@@ -1,17 +1,17 @@
 ﻿<Project>
 	<PropertyGroup>
-		<MicaEditorPlatform Condition="'$(Platform)' == 'Win32'">x86</MicaEditorPlatform>
-		<MicaEditorPlatform Condition="'$(Platform)' != 'Win32'">$(Platform)</MicaEditorPlatform>
-		<MicaEditorFolder>$(MSBuildThisFileDirectory)..\..\runtimes\win10-$(MicaEditorPlatform)\native\</MicaEditorFolder>
+		<WinUIEditorPlatform Condition="'$(Platform)' == 'Win32'">x86</WinUIEditorPlatform>
+		<WinUIEditorPlatform Condition="'$(Platform)' != 'Win32'">$(Platform)</WinUIEditorPlatform>
+		<WinUIEditorFolder>$(MSBuildThisFileDirectory)..\..\runtimes\win10-$(WinUIEditorPlatform)\native\</WinUIEditorFolder>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
-		<Reference Include="$(MSBuildThisFileDirectory)..\..\lib\uap10.0\MicaEditor.winmd">
-			<Implementation>MicaEditor.dll</Implementation>
+		<Reference Include="$(MSBuildThisFileDirectory)..\..\lib\uap10.0\WinUIEditor.winmd">
+			<Implementation>WinUIEditor.dll</Implementation>
 		</Reference>
 
-		<ReferenceCopyLocalPaths Condition="Exists('$(MicaEditorFolder)MicaEditor.dll')" Include="$(MicaEditorFolder)MicaEditor.dll" />
-		<ReferenceCopyLocalPaths Condition="Exists('$(MicaEditorFolder)MicaEditor.pri')" Include="$(MicaEditorFolder)MicaEditor.pri" />
-		<ReferenceCopyLocalPaths Condition="Exists('$(MicaEditorFolder)MicaEditor.pdb')" Include="$(MicaEditorFolder)MicaEditor.pdb" />
+		<ReferenceCopyLocalPaths Condition="Exists('$(WinUIEditorFolder)WinUIEditor.dll')" Include="$(WinUIEditorFolder)WinUIEditor.dll" />
+		<ReferenceCopyLocalPaths Condition="Exists('$(WinUIEditorFolder)WinUIEditor.pri')" Include="$(WinUIEditorFolder)WinUIEditor.pri" />
+		<ReferenceCopyLocalPaths Condition="Exists('$(WinUIEditorFolder)WinUIEditor.pdb')" Include="$(WinUIEditorFolder)WinUIEditor.pdb" />
 	</ItemGroup>
 </Project>

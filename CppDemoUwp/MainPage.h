@@ -31,14 +31,14 @@ namespace winrt::CppDemoUwp::implementation
 		void OnNavigatedTo(Windows::UI::Xaml::Navigation::NavigationEventArgs const &e);
 
 	private:
-		void Editor_UpdateUI(MicaEditor::Editor const &sender, MicaEditor::UpdateUIEventArgs const &args);
-		void Editor_ZoomChanged(MicaEditor::Editor const &sender, MicaEditor::ZoomChangedEventArgs const &args);
-		void Editor_SavePointReached(MicaEditor::Editor const &sender, MicaEditor::SavePointReachedEventArgs const &args);
-		void Editor_SavePointLeft(MicaEditor::Editor const &sender, MicaEditor::SavePointLeftEventArgs const &args);
-		MicaEditor::Editor::UpdateUI_revoker _updateUIRevoker{};
-		MicaEditor::Editor::ZoomChanged_revoker _zoomChangedRevoker{};
-		MicaEditor::Editor::SavePointReached_revoker _savePointReachedRevoker{};
-		MicaEditor::Editor::SavePointLeft_revoker _savePointLeftRevoker{};
+		void Editor_UpdateUI(WinUIEditor::Editor const &sender, WinUIEditor::UpdateUIEventArgs const &args);
+		void Editor_ZoomChanged(WinUIEditor::Editor const &sender, WinUIEditor::ZoomChangedEventArgs const &args);
+		void Editor_SavePointReached(WinUIEditor::Editor const &sender, WinUIEditor::SavePointReachedEventArgs const &args);
+		void Editor_SavePointLeft(WinUIEditor::Editor const &sender, WinUIEditor::SavePointLeftEventArgs const &args);
+		WinUIEditor::Editor::UpdateUI_revoker _updateUIRevoker{};
+		WinUIEditor::Editor::ZoomChanged_revoker _zoomChangedRevoker{};
+		WinUIEditor::Editor::SavePointReached_revoker _savePointReachedRevoker{};
+		WinUIEditor::Editor::SavePointLeft_revoker _savePointLeftRevoker{};
 		Windows::UI::Core::Preview::SystemNavigationManagerPreview::CloseRequested_revoker _closeRequestedRevoker{};
 		fire_and_forget OnCloseRequested(Windows::Foundation::IInspectable sender, Windows::UI::Core::Preview::SystemNavigationCloseRequestedPreviewEventArgs e);
 		void OnActivated(Windows::UI::Core::CoreWindow const &sender, Windows::UI::Core::WindowActivatedEventArgs const &e);

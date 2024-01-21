@@ -4,14 +4,14 @@
 
 #include "ControlIncludes.h"
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
     struct DummyPage : DummyPageT<DummyPage>
     {
     };
 }
 
-namespace winrt::MicaEditor::factory_implementation
+namespace winrt::WinUIEditor::factory_implementation
 {
     struct DummyPage : DummyPageT<DummyPage, implementation::DummyPage>
     {

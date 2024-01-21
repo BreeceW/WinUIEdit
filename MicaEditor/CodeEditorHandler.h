@@ -11,7 +11,7 @@
 #include "Lexilla.h"
 #include "CodeEditorHandler.SciEdit.h"
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	constexpr int IntRGBA(unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha = 0xff) noexcept
 	{

@@ -2,11 +2,11 @@
 
 #include "EditorBaseControlAutomationPeer.g.h"
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
     struct EditorBaseControlAutomationPeer : EditorBaseControlAutomationPeerT<EditorBaseControlAutomationPeer>
     {
-        EditorBaseControlAutomationPeer(MicaEditor::EditorBaseControl const &owner);
+        EditorBaseControlAutomationPeer(WinUIEditor::EditorBaseControl const &owner);
 
         hstring GetLocalizedControlTypeCore();
         Windows::Foundation::IInspectable GetPatternCore(DUX::Automation::Peers::PatternInterface const &patternInterface);
@@ -30,12 +30,12 @@ namespace winrt::MicaEditor::implementation
         void SetValue(hstring const &value);
 
     private:
-        MicaEditor::Editor::UpdateUI_revoker _updateUIRevoker{};
-        void Editor_UpdateUI(MicaEditor::Editor const &sender, MicaEditor::UpdateUIEventArgs const &args);
+        WinUIEditor::Editor::UpdateUI_revoker _updateUIRevoker{};
+        void Editor_UpdateUI(WinUIEditor::Editor const &sender, WinUIEditor::UpdateUIEventArgs const &args);
     };
 }
 
-namespace winrt::MicaEditor::factory_implementation
+namespace winrt::WinUIEditor::factory_implementation
 {
     struct EditorBaseControlAutomationPeer : EditorBaseControlAutomationPeerT<EditorBaseControlAutomationPeer, implementation::EditorBaseControlAutomationPeer>
     {

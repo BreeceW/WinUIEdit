@@ -3,7 +3,7 @@
 #include "EditorWrapper.h"
 #include "Editor.g.cpp"
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
 	StyleNeededEventArgs::StyleNeededEventArgs(int32_t position)
 		: _position { position }
@@ -207,7 +207,7 @@ namespace winrt::MicaEditor::implementation
 		return _length;
 	}
 
-	UserListSelectionEventArgs::UserListSelectionEventArgs(int32_t listType, const char *text, int32_t position, int32_t ch, MicaEditor::CompletionMethods const &listCompletionMethod)
+	UserListSelectionEventArgs::UserListSelectionEventArgs(int32_t listType, const char *text, int32_t position, int32_t ch, WinUIEditor::CompletionMethods const &listCompletionMethod)
 		: _listType { listType }, _textAsPointer { text }, _position { position }, _ch { ch }, _listCompletionMethod { listCompletionMethod }
 	{
 	}
@@ -255,7 +255,7 @@ namespace winrt::MicaEditor::implementation
 		return _ch;
 	}
 
-	MicaEditor::CompletionMethods UserListSelectionEventArgs::ListCompletionMethod()
+	WinUIEditor::CompletionMethods UserListSelectionEventArgs::ListCompletionMethod()
 	{
 		return _listCompletionMethod;
 	}
@@ -373,7 +373,7 @@ namespace winrt::MicaEditor::implementation
 		return _position;
 	}
 
-	AutoCSelectionEventArgs::AutoCSelectionEventArgs(const char *text, int32_t position, int32_t ch, MicaEditor::CompletionMethods const &listCompletionMethod)
+	AutoCSelectionEventArgs::AutoCSelectionEventArgs(const char *text, int32_t position, int32_t ch, WinUIEditor::CompletionMethods const &listCompletionMethod)
 		: _textAsPointer { text }, _position { position }, _ch { ch }, _listCompletionMethod { listCompletionMethod }
 	{
 	}
@@ -416,7 +416,7 @@ namespace winrt::MicaEditor::implementation
 		return _ch;
 	}
 
-	MicaEditor::CompletionMethods AutoCSelectionEventArgs::ListCompletionMethod()
+	WinUIEditor::CompletionMethods AutoCSelectionEventArgs::ListCompletionMethod()
 	{
 		return _listCompletionMethod;
 	}
@@ -466,7 +466,7 @@ namespace winrt::MicaEditor::implementation
 		return _position;
 	}
 
-	AutoCCompletedEventArgs::AutoCCompletedEventArgs(const char *text, int32_t position, int32_t ch, MicaEditor::CompletionMethods const &listCompletionMethod)
+	AutoCCompletedEventArgs::AutoCCompletedEventArgs(const char *text, int32_t position, int32_t ch, WinUIEditor::CompletionMethods const &listCompletionMethod)
 		: _textAsPointer { text }, _position { position }, _ch { ch }, _listCompletionMethod { listCompletionMethod }
 	{
 	}
@@ -509,7 +509,7 @@ namespace winrt::MicaEditor::implementation
 		return _ch;
 	}
 
-	MicaEditor::CompletionMethods AutoCCompletedEventArgs::ListCompletionMethod()
+	WinUIEditor::CompletionMethods AutoCCompletedEventArgs::ListCompletionMethod()
 	{
 		return _listCompletionMethod;
 	}
@@ -694,7 +694,7 @@ namespace winrt::MicaEditor::implementation
 		{
 			if (_userListSelectionEvent)
 			{
-				_userListSelectionEvent(*this, *make_self<implementation::UserListSelectionEventArgs>(static_cast<int32_t>(data->listType), data->text, static_cast<int32_t>(data->position), static_cast<int32_t>(data->ch), static_cast<MicaEditor::CompletionMethods>(data->listCompletionMethod)));
+				_userListSelectionEvent(*this, *make_self<implementation::UserListSelectionEventArgs>(static_cast<int32_t>(data->listType), data->text, static_cast<int32_t>(data->position), static_cast<int32_t>(data->ch), static_cast<WinUIEditor::CompletionMethods>(data->listCompletionMethod)));
 			}
 		}
 		break;
@@ -758,7 +758,7 @@ namespace winrt::MicaEditor::implementation
 		{
 			if (_autoCSelectionEvent)
 			{
-				_autoCSelectionEvent(*this, *make_self<implementation::AutoCSelectionEventArgs>(data->text, static_cast<int32_t>(data->position), static_cast<int32_t>(data->ch), static_cast<MicaEditor::CompletionMethods>(data->listCompletionMethod)));
+				_autoCSelectionEvent(*this, *make_self<implementation::AutoCSelectionEventArgs>(data->text, static_cast<int32_t>(data->position), static_cast<int32_t>(data->ch), static_cast<WinUIEditor::CompletionMethods>(data->listCompletionMethod)));
 			}
 		}
 		break;
@@ -822,7 +822,7 @@ namespace winrt::MicaEditor::implementation
 		{
 			if (_autoCCompletedEvent)
 			{
-				_autoCCompletedEvent(*this, *make_self<implementation::AutoCCompletedEventArgs>(data->text, static_cast<int32_t>(data->position), static_cast<int32_t>(data->ch), static_cast<MicaEditor::CompletionMethods>(data->listCompletionMethod)));
+				_autoCCompletedEvent(*this, *make_self<implementation::AutoCCompletedEventArgs>(data->text, static_cast<int32_t>(data->position), static_cast<int32_t>(data->ch), static_cast<WinUIEditor::CompletionMethods>(data->listCompletionMethod)));
 			}
 		}
 		break;
@@ -845,7 +845,7 @@ namespace winrt::MicaEditor::implementation
 		}
 	}
 
-	event_token Editor::StyleNeeded(MicaEditor::StyleNeededHandler const &handler)
+	event_token Editor::StyleNeeded(WinUIEditor::StyleNeededHandler const &handler)
 	{
 		return _styleNeededEvent.add(handler);
 	}
@@ -855,7 +855,7 @@ namespace winrt::MicaEditor::implementation
 		_styleNeededEvent.remove(token);
 	}
 
-	event_token Editor::CharAdded(MicaEditor::CharAddedHandler const &handler)
+	event_token Editor::CharAdded(WinUIEditor::CharAddedHandler const &handler)
 	{
 		return _charAddedEvent.add(handler);
 	}
@@ -865,7 +865,7 @@ namespace winrt::MicaEditor::implementation
 		_charAddedEvent.remove(token);
 	}
 
-	event_token Editor::SavePointReached(MicaEditor::SavePointReachedHandler const &handler)
+	event_token Editor::SavePointReached(WinUIEditor::SavePointReachedHandler const &handler)
 	{
 		return _savePointReachedEvent.add(handler);
 	}
@@ -875,7 +875,7 @@ namespace winrt::MicaEditor::implementation
 		_savePointReachedEvent.remove(token);
 	}
 
-	event_token Editor::SavePointLeft(MicaEditor::SavePointLeftHandler const &handler)
+	event_token Editor::SavePointLeft(WinUIEditor::SavePointLeftHandler const &handler)
 	{
 		return _savePointLeftEvent.add(handler);
 	}
@@ -885,7 +885,7 @@ namespace winrt::MicaEditor::implementation
 		_savePointLeftEvent.remove(token);
 	}
 
-	event_token Editor::ModifyAttemptRO(MicaEditor::ModifyAttemptROHandler const &handler)
+	event_token Editor::ModifyAttemptRO(WinUIEditor::ModifyAttemptROHandler const &handler)
 	{
 		return _modifyAttemptROEvent.add(handler);
 	}
@@ -895,7 +895,7 @@ namespace winrt::MicaEditor::implementation
 		_modifyAttemptROEvent.remove(token);
 	}
 
-	event_token Editor::Key(MicaEditor::KeyHandler const &handler)
+	event_token Editor::Key(WinUIEditor::KeyHandler const &handler)
 	{
 		return _keyEvent.add(handler);
 	}
@@ -905,7 +905,7 @@ namespace winrt::MicaEditor::implementation
 		_keyEvent.remove(token);
 	}
 
-	event_token Editor::DoubleClick(MicaEditor::DoubleClickHandler const &handler)
+	event_token Editor::DoubleClick(WinUIEditor::DoubleClickHandler const &handler)
 	{
 		return _doubleClickEvent.add(handler);
 	}
@@ -915,7 +915,7 @@ namespace winrt::MicaEditor::implementation
 		_doubleClickEvent.remove(token);
 	}
 
-	event_token Editor::UpdateUI(MicaEditor::UpdateUIHandler const &handler)
+	event_token Editor::UpdateUI(WinUIEditor::UpdateUIHandler const &handler)
 	{
 		return _updateUIEvent.add(handler);
 	}
@@ -925,7 +925,7 @@ namespace winrt::MicaEditor::implementation
 		_updateUIEvent.remove(token);
 	}
 
-	event_token Editor::Modified(MicaEditor::ModifiedHandler const &handler)
+	event_token Editor::Modified(WinUIEditor::ModifiedHandler const &handler)
 	{
 		return _modifiedEvent.add(handler);
 	}
@@ -935,7 +935,7 @@ namespace winrt::MicaEditor::implementation
 		_modifiedEvent.remove(token);
 	}
 
-	event_token Editor::MacroRecord(MicaEditor::MacroRecordHandler const &handler)
+	event_token Editor::MacroRecord(WinUIEditor::MacroRecordHandler const &handler)
 	{
 		return _macroRecordEvent.add(handler);
 	}
@@ -945,7 +945,7 @@ namespace winrt::MicaEditor::implementation
 		_macroRecordEvent.remove(token);
 	}
 
-	event_token Editor::MarginClick(MicaEditor::MarginClickHandler const &handler)
+	event_token Editor::MarginClick(WinUIEditor::MarginClickHandler const &handler)
 	{
 		return _marginClickEvent.add(handler);
 	}
@@ -955,7 +955,7 @@ namespace winrt::MicaEditor::implementation
 		_marginClickEvent.remove(token);
 	}
 
-	event_token Editor::NeedShown(MicaEditor::NeedShownHandler const &handler)
+	event_token Editor::NeedShown(WinUIEditor::NeedShownHandler const &handler)
 	{
 		return _needShownEvent.add(handler);
 	}
@@ -965,7 +965,7 @@ namespace winrt::MicaEditor::implementation
 		_needShownEvent.remove(token);
 	}
 
-	event_token Editor::Painted(MicaEditor::PaintedHandler const &handler)
+	event_token Editor::Painted(WinUIEditor::PaintedHandler const &handler)
 	{
 		return _paintedEvent.add(handler);
 	}
@@ -975,7 +975,7 @@ namespace winrt::MicaEditor::implementation
 		_paintedEvent.remove(token);
 	}
 
-	event_token Editor::UserListSelection(MicaEditor::UserListSelectionHandler const &handler)
+	event_token Editor::UserListSelection(WinUIEditor::UserListSelectionHandler const &handler)
 	{
 		return _userListSelectionEvent.add(handler);
 	}
@@ -985,7 +985,7 @@ namespace winrt::MicaEditor::implementation
 		_userListSelectionEvent.remove(token);
 	}
 
-	event_token Editor::URIDropped(MicaEditor::URIDroppedHandler const &handler)
+	event_token Editor::URIDropped(WinUIEditor::URIDroppedHandler const &handler)
 	{
 		return _uRIDroppedEvent.add(handler);
 	}
@@ -995,7 +995,7 @@ namespace winrt::MicaEditor::implementation
 		_uRIDroppedEvent.remove(token);
 	}
 
-	event_token Editor::DwellStart(MicaEditor::DwellStartHandler const &handler)
+	event_token Editor::DwellStart(WinUIEditor::DwellStartHandler const &handler)
 	{
 		return _dwellStartEvent.add(handler);
 	}
@@ -1005,7 +1005,7 @@ namespace winrt::MicaEditor::implementation
 		_dwellStartEvent.remove(token);
 	}
 
-	event_token Editor::DwellEnd(MicaEditor::DwellEndHandler const &handler)
+	event_token Editor::DwellEnd(WinUIEditor::DwellEndHandler const &handler)
 	{
 		return _dwellEndEvent.add(handler);
 	}
@@ -1015,7 +1015,7 @@ namespace winrt::MicaEditor::implementation
 		_dwellEndEvent.remove(token);
 	}
 
-	event_token Editor::ZoomChanged(MicaEditor::ZoomChangedHandler const &handler)
+	event_token Editor::ZoomChanged(WinUIEditor::ZoomChangedHandler const &handler)
 	{
 		return _zoomChangedEvent.add(handler);
 	}
@@ -1025,7 +1025,7 @@ namespace winrt::MicaEditor::implementation
 		_zoomChangedEvent.remove(token);
 	}
 
-	event_token Editor::HotSpotClick(MicaEditor::HotSpotClickHandler const &handler)
+	event_token Editor::HotSpotClick(WinUIEditor::HotSpotClickHandler const &handler)
 	{
 		return _hotSpotClickEvent.add(handler);
 	}
@@ -1035,7 +1035,7 @@ namespace winrt::MicaEditor::implementation
 		_hotSpotClickEvent.remove(token);
 	}
 
-	event_token Editor::HotSpotDoubleClick(MicaEditor::HotSpotDoubleClickHandler const &handler)
+	event_token Editor::HotSpotDoubleClick(WinUIEditor::HotSpotDoubleClickHandler const &handler)
 	{
 		return _hotSpotDoubleClickEvent.add(handler);
 	}
@@ -1045,7 +1045,7 @@ namespace winrt::MicaEditor::implementation
 		_hotSpotDoubleClickEvent.remove(token);
 	}
 
-	event_token Editor::CallTipClick(MicaEditor::CallTipClickHandler const &handler)
+	event_token Editor::CallTipClick(WinUIEditor::CallTipClickHandler const &handler)
 	{
 		return _callTipClickEvent.add(handler);
 	}
@@ -1055,7 +1055,7 @@ namespace winrt::MicaEditor::implementation
 		_callTipClickEvent.remove(token);
 	}
 
-	event_token Editor::AutoCSelection(MicaEditor::AutoCSelectionHandler const &handler)
+	event_token Editor::AutoCSelection(WinUIEditor::AutoCSelectionHandler const &handler)
 	{
 		return _autoCSelectionEvent.add(handler);
 	}
@@ -1065,7 +1065,7 @@ namespace winrt::MicaEditor::implementation
 		_autoCSelectionEvent.remove(token);
 	}
 
-	event_token Editor::IndicatorClick(MicaEditor::IndicatorClickHandler const &handler)
+	event_token Editor::IndicatorClick(WinUIEditor::IndicatorClickHandler const &handler)
 	{
 		return _indicatorClickEvent.add(handler);
 	}
@@ -1075,7 +1075,7 @@ namespace winrt::MicaEditor::implementation
 		_indicatorClickEvent.remove(token);
 	}
 
-	event_token Editor::IndicatorRelease(MicaEditor::IndicatorReleaseHandler const &handler)
+	event_token Editor::IndicatorRelease(WinUIEditor::IndicatorReleaseHandler const &handler)
 	{
 		return _indicatorReleaseEvent.add(handler);
 	}
@@ -1085,7 +1085,7 @@ namespace winrt::MicaEditor::implementation
 		_indicatorReleaseEvent.remove(token);
 	}
 
-	event_token Editor::AutoCCancelled(MicaEditor::AutoCCancelledHandler const &handler)
+	event_token Editor::AutoCCancelled(WinUIEditor::AutoCCancelledHandler const &handler)
 	{
 		return _autoCCancelledEvent.add(handler);
 	}
@@ -1095,7 +1095,7 @@ namespace winrt::MicaEditor::implementation
 		_autoCCancelledEvent.remove(token);
 	}
 
-	event_token Editor::AutoCCharDeleted(MicaEditor::AutoCCharDeletedHandler const &handler)
+	event_token Editor::AutoCCharDeleted(WinUIEditor::AutoCCharDeletedHandler const &handler)
 	{
 		return _autoCCharDeletedEvent.add(handler);
 	}
@@ -1105,7 +1105,7 @@ namespace winrt::MicaEditor::implementation
 		_autoCCharDeletedEvent.remove(token);
 	}
 
-	event_token Editor::HotSpotReleaseClick(MicaEditor::HotSpotReleaseClickHandler const &handler)
+	event_token Editor::HotSpotReleaseClick(WinUIEditor::HotSpotReleaseClickHandler const &handler)
 	{
 		return _hotSpotReleaseClickEvent.add(handler);
 	}
@@ -1115,7 +1115,7 @@ namespace winrt::MicaEditor::implementation
 		_hotSpotReleaseClickEvent.remove(token);
 	}
 
-	event_token Editor::FocusIn(MicaEditor::FocusInHandler const &handler)
+	event_token Editor::FocusIn(WinUIEditor::FocusInHandler const &handler)
 	{
 		return _focusInEvent.add(handler);
 	}
@@ -1125,7 +1125,7 @@ namespace winrt::MicaEditor::implementation
 		_focusInEvent.remove(token);
 	}
 
-	event_token Editor::FocusOut(MicaEditor::FocusOutHandler const &handler)
+	event_token Editor::FocusOut(WinUIEditor::FocusOutHandler const &handler)
 	{
 		return _focusOutEvent.add(handler);
 	}
@@ -1135,7 +1135,7 @@ namespace winrt::MicaEditor::implementation
 		_focusOutEvent.remove(token);
 	}
 
-	event_token Editor::AutoCCompleted(MicaEditor::AutoCCompletedHandler const &handler)
+	event_token Editor::AutoCCompleted(WinUIEditor::AutoCCompletedHandler const &handler)
 	{
 		return _autoCCompletedEvent.add(handler);
 	}
@@ -1145,7 +1145,7 @@ namespace winrt::MicaEditor::implementation
 		_autoCCompletedEvent.remove(token);
 	}
 
-	event_token Editor::MarginRightClick(MicaEditor::MarginRightClickHandler const &handler)
+	event_token Editor::MarginRightClick(WinUIEditor::MarginRightClickHandler const &handler)
 	{
 		return _marginRightClickEvent.add(handler);
 	}
@@ -1155,7 +1155,7 @@ namespace winrt::MicaEditor::implementation
 		_marginRightClickEvent.remove(token);
 	}
 
-	event_token Editor::AutoCSelectionChange(MicaEditor::AutoCSelectionChangeHandler const &handler)
+	event_token Editor::AutoCSelectionChange(WinUIEditor::AutoCSelectionChangeHandler const &handler)
 	{
 		return _autoCSelectionChangeEvent.add(handler);
 	}
@@ -1227,15 +1227,15 @@ namespace winrt::MicaEditor::implementation
 	 * Are white space characters currently visible?
 	 * Returns one of SCWS_* constants.
 	 */
-	MicaEditor::WhiteSpace Editor::ViewWS()
+	WinUIEditor::WhiteSpace Editor::ViewWS()
 	{
-		return static_cast<MicaEditor::WhiteSpace>(_editor.get()->PublicWndProc(Scintilla::Message::GetViewWS, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::WhiteSpace>(_editor.get()->PublicWndProc(Scintilla::Message::GetViewWS, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Make white space characters invisible, always visible or visible outside indentation.
 	 */
-	void Editor::ViewWS(MicaEditor::WhiteSpace const &value)
+	void Editor::ViewWS(WinUIEditor::WhiteSpace const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetViewWS, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1244,15 +1244,15 @@ namespace winrt::MicaEditor::implementation
 	 * Retrieve the current tab draw mode.
 	 * Returns one of SCTD_* constants.
 	 */
-	MicaEditor::TabDrawMode Editor::TabDrawMode()
+	WinUIEditor::TabDrawMode Editor::TabDrawMode()
 	{
-		return static_cast<MicaEditor::TabDrawMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetTabDrawMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::TabDrawMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetTabDrawMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set how tabs are drawn when visible.
 	 */
-	void Editor::TabDrawMode(MicaEditor::TabDrawMode const &value)
+	void Editor::TabDrawMode(WinUIEditor::TabDrawMode const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetTabDrawMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1268,15 +1268,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the current end of line mode - one of CRLF, CR, or LF.
 	 */
-	MicaEditor::EndOfLine Editor::EOLMode()
+	WinUIEditor::EndOfLine Editor::EOLMode()
 	{
-		return static_cast<MicaEditor::EndOfLine>(_editor.get()->PublicWndProc(Scintilla::Message::GetEOLMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::EndOfLine>(_editor.get()->PublicWndProc(Scintilla::Message::GetEOLMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the current end of line mode.
 	 */
-	void Editor::EOLMode(MicaEditor::EndOfLine const &value)
+	void Editor::EOLMode(WinUIEditor::EndOfLine const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetEOLMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1333,15 +1333,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Is the IME displayed in a window or inline?
 	 */
-	MicaEditor::IMEInteraction Editor::IMEInteraction()
+	WinUIEditor::IMEInteraction Editor::IMEInteraction()
 	{
-		return static_cast<MicaEditor::IMEInteraction>(_editor.get()->PublicWndProc(Scintilla::Message::GetIMEInteraction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::IMEInteraction>(_editor.get()->PublicWndProc(Scintilla::Message::GetIMEInteraction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Choose to display the IME in a window or inline.
 	 */
-	void Editor::IMEInteraction(MicaEditor::IMEInteraction const &value)
+	void Editor::IMEInteraction(WinUIEditor::IMEInteraction const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetIMEInteraction, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1365,15 +1365,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the alpha of the selection.
 	 */
-	MicaEditor::Alpha Editor::SelAlpha()
+	WinUIEditor::Alpha Editor::SelAlpha()
 	{
-		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the alpha of the selection.
 	 */
-	void Editor::SelAlpha(MicaEditor::Alpha const &value)
+	void Editor::SelAlpha(WinUIEditor::Alpha const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetSelAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1397,15 +1397,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the layer for drawing selections
 	 */
-	MicaEditor::Layer Editor::SelectionLayer()
+	WinUIEditor::Layer Editor::SelectionLayer()
 	{
-		return static_cast<MicaEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the layer for drawing selections: either opaquely on base layer or translucently over text
 	 */
-	void Editor::SelectionLayer(MicaEditor::Layer const &value)
+	void Editor::SelectionLayer(WinUIEditor::Layer const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionLayer, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1413,15 +1413,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the layer of the background of the line containing the caret.
 	 */
-	MicaEditor::Layer Editor::CaretLineLayer()
+	WinUIEditor::Layer Editor::CaretLineLayer()
 	{
-		return static_cast<MicaEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineLayer, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the layer of the background of the line containing the caret.
 	 */
-	void Editor::CaretLineLayer(MicaEditor::Layer const &value)
+	void Editor::CaretLineLayer(WinUIEditor::Layer const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineLayer, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1633,15 +1633,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve autocompletion options.
 	 */
-	MicaEditor::AutoCompleteOption Editor::AutoCOptions()
+	WinUIEditor::AutoCompleteOption Editor::AutoCOptions()
 	{
-		return static_cast<MicaEditor::AutoCompleteOption>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::AutoCompleteOption>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set autocompletion options.
 	 */
-	void Editor::AutoCOptions(MicaEditor::AutoCompleteOption const &value)
+	void Editor::AutoCOptions(WinUIEditor::AutoCompleteOption const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1767,15 +1767,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Are the indentation guides visible?
 	 */
-	MicaEditor::IndentView Editor::IndentationGuides()
+	WinUIEditor::IndentView Editor::IndentationGuides()
 	{
-		return static_cast<MicaEditor::IndentView>(_editor.get()->PublicWndProc(Scintilla::Message::GetIndentationGuides, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::IndentView>(_editor.get()->PublicWndProc(Scintilla::Message::GetIndentationGuides, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Show or hide indentation guides.
 	 */
-	void Editor::IndentationGuides(MicaEditor::IndentView const &value)
+	void Editor::IndentationGuides(WinUIEditor::IndentView const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetIndentationGuides, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1897,15 +1897,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Returns the print colour mode.
 	 */
-	MicaEditor::PrintOption Editor::PrintColourMode()
+	WinUIEditor::PrintOption Editor::PrintColourMode()
 	{
-		return static_cast<MicaEditor::PrintOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrintColourMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::PrintOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrintColourMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Modify colours when printing for clearer printed text.
 	 */
-	void Editor::PrintColourMode(MicaEditor::PrintOption const &value)
+	void Editor::PrintColourMode(WinUIEditor::PrintOption const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetPrintColourMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -1913,15 +1913,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Report change history status.
 	 */
-	MicaEditor::ChangeHistoryOption Editor::ChangeHistory()
+	WinUIEditor::ChangeHistoryOption Editor::ChangeHistory()
 	{
-		return static_cast<MicaEditor::ChangeHistoryOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetChangeHistory, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::ChangeHistoryOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetChangeHistory, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Enable or disable change history.
 	 */
-	void Editor::ChangeHistory(MicaEditor::ChangeHistoryOption const &value)
+	void Editor::ChangeHistory(WinUIEditor::ChangeHistoryOption const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetChangeHistory, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2129,15 +2129,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the search flags used by SearchInTarget.
 	 */
-	MicaEditor::FindOption Editor::SearchFlags()
+	WinUIEditor::FindOption Editor::SearchFlags()
 	{
-		return static_cast<MicaEditor::FindOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetSearchFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::FindOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetSearchFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the search flags used by SearchInTarget.
 	 */
-	void Editor::SearchFlags(MicaEditor::FindOption const &value)
+	void Editor::SearchFlags(WinUIEditor::FindOption const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetSearchFlags, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2153,15 +2153,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the style of fold display text.
 	 */
-	MicaEditor::FoldDisplayTextStyle Editor::FoldDisplayTextStyle()
+	WinUIEditor::FoldDisplayTextStyle Editor::FoldDisplayTextStyle()
 	{
-		return static_cast<MicaEditor::FoldDisplayTextStyle>(_editor.get()->PublicWndProc(Scintilla::Message::FoldDisplayTextGetStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::FoldDisplayTextStyle>(_editor.get()->PublicWndProc(Scintilla::Message::FoldDisplayTextGetStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the style of fold display text.
 	 */
-	void Editor::FoldDisplayTextStyle(MicaEditor::FoldDisplayTextStyle const &value)
+	void Editor::FoldDisplayTextStyle(WinUIEditor::FoldDisplayTextStyle const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::FoldDisplayTextSetStyle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2169,15 +2169,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get automatic folding behaviours.
 	 */
-	MicaEditor::AutomaticFold Editor::AutomaticFold()
+	WinUIEditor::AutomaticFold Editor::AutomaticFold()
 	{
-		return static_cast<MicaEditor::AutomaticFold>(_editor.get()->PublicWndProc(Scintilla::Message::GetAutomaticFold, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::AutomaticFold>(_editor.get()->PublicWndProc(Scintilla::Message::GetAutomaticFold, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set automatic folding behaviours.
 	 */
-	void Editor::AutomaticFold(MicaEditor::AutomaticFold const &value)
+	void Editor::AutomaticFold(WinUIEditor::AutomaticFold const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetAutomaticFold, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2233,15 +2233,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the limits to idle styling.
 	 */
-	MicaEditor::IdleStyling Editor::IdleStyling()
+	WinUIEditor::IdleStyling Editor::IdleStyling()
 	{
-		return static_cast<MicaEditor::IdleStyling>(_editor.get()->PublicWndProc(Scintilla::Message::GetIdleStyling, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::IdleStyling>(_editor.get()->PublicWndProc(Scintilla::Message::GetIdleStyling, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Sets limits to idle styling.
 	 */
-	void Editor::IdleStyling(MicaEditor::IdleStyling const &value)
+	void Editor::IdleStyling(WinUIEditor::IdleStyling const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetIdleStyling, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2249,15 +2249,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve whether text is word wrapped.
 	 */
-	MicaEditor::Wrap Editor::WrapMode()
+	WinUIEditor::Wrap Editor::WrapMode()
 	{
-		return static_cast<MicaEditor::Wrap>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Wrap>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Sets whether text is word wrapped.
 	 */
-	void Editor::WrapMode(MicaEditor::Wrap const &value)
+	void Editor::WrapMode(WinUIEditor::Wrap const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2265,15 +2265,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrive the display mode of visual flags for wrapped lines.
 	 */
-	MicaEditor::WrapVisualFlag Editor::WrapVisualFlags()
+	WinUIEditor::WrapVisualFlag Editor::WrapVisualFlags()
 	{
-		return static_cast<MicaEditor::WrapVisualFlag>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapVisualFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::WrapVisualFlag>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapVisualFlags, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the display mode of visual flags for wrapped lines.
 	 */
-	void Editor::WrapVisualFlags(MicaEditor::WrapVisualFlag const &value)
+	void Editor::WrapVisualFlags(WinUIEditor::WrapVisualFlag const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapVisualFlags, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2281,15 +2281,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrive the location of visual flags for wrapped lines.
 	 */
-	MicaEditor::WrapVisualLocation Editor::WrapVisualFlagsLocation()
+	WinUIEditor::WrapVisualLocation Editor::WrapVisualFlagsLocation()
 	{
-		return static_cast<MicaEditor::WrapVisualLocation>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapVisualFlagsLocation, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::WrapVisualLocation>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapVisualFlagsLocation, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the location of visual flags for wrapped lines.
 	 */
-	void Editor::WrapVisualFlagsLocation(MicaEditor::WrapVisualLocation const &value)
+	void Editor::WrapVisualFlagsLocation(WinUIEditor::WrapVisualLocation const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapVisualFlagsLocation, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2313,15 +2313,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve how wrapped sublines are placed. Default is fixed.
 	 */
-	MicaEditor::WrapIndentMode Editor::WrapIndentMode()
+	WinUIEditor::WrapIndentMode Editor::WrapIndentMode()
 	{
-		return static_cast<MicaEditor::WrapIndentMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapIndentMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::WrapIndentMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetWrapIndentMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Sets how wrapped sublines are placed. Default is fixed.
 	 */
-	void Editor::WrapIndentMode(MicaEditor::WrapIndentMode const &value)
+	void Editor::WrapIndentMode(WinUIEditor::WrapIndentMode const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetWrapIndentMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2329,15 +2329,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the degree of caching of layout information.
 	 */
-	MicaEditor::LineCache Editor::LayoutCache()
+	WinUIEditor::LineCache Editor::LayoutCache()
 	{
-		return static_cast<MicaEditor::LineCache>(_editor.get()->PublicWndProc(Scintilla::Message::GetLayoutCache, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::LineCache>(_editor.get()->PublicWndProc(Scintilla::Message::GetLayoutCache, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Sets the degree of caching of layout information.
 	 */
-	void Editor::LayoutCache(MicaEditor::LineCache const &value)
+	void Editor::LayoutCache(WinUIEditor::LineCache const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetLayoutCache, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2412,9 +2412,9 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * How many phases is drawing done in?
 	 */
-	MicaEditor::PhasesDraw Editor::PhasesDraw()
+	WinUIEditor::PhasesDraw Editor::PhasesDraw()
 	{
-		return static_cast<MicaEditor::PhasesDraw>(_editor.get()->PublicWndProc(Scintilla::Message::GetPhasesDraw, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::PhasesDraw>(_editor.get()->PublicWndProc(Scintilla::Message::GetPhasesDraw, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -2423,7 +2423,7 @@ namespace winrt::MicaEditor::implementation
 	 * In multiple phase draw, each element is drawn over the whole drawing area, allowing text
 	 * to overlap from one line to the next.
 	 */
-	void Editor::PhasesDraw(MicaEditor::PhasesDraw const &value)
+	void Editor::PhasesDraw(WinUIEditor::PhasesDraw const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetPhasesDraw, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2431,15 +2431,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the quality level for text.
 	 */
-	MicaEditor::FontQuality Editor::FontQuality()
+	WinUIEditor::FontQuality Editor::FontQuality()
 	{
-		return static_cast<MicaEditor::FontQuality>(_editor.get()->PublicWndProc(Scintilla::Message::GetFontQuality, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::FontQuality>(_editor.get()->PublicWndProc(Scintilla::Message::GetFontQuality, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Choose the quality level for text from the FontQuality enumeration.
 	 */
-	void Editor::FontQuality(MicaEditor::FontQuality const &value)
+	void Editor::FontQuality(WinUIEditor::FontQuality const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetFontQuality, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2447,15 +2447,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the effect of pasting when there are multiple selections.
 	 */
-	MicaEditor::MultiPaste Editor::MultiPaste()
+	WinUIEditor::MultiPaste Editor::MultiPaste()
 	{
-		return static_cast<MicaEditor::MultiPaste>(_editor.get()->PublicWndProc(Scintilla::Message::GetMultiPaste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::MultiPaste>(_editor.get()->PublicWndProc(Scintilla::Message::GetMultiPaste, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Change the effect of pasting when there are multiple selections.
 	 */
-	void Editor::MultiPaste(MicaEditor::MultiPaste const &value)
+	void Editor::MultiPaste(WinUIEditor::MultiPaste const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetMultiPaste, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2463,15 +2463,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Report accessibility status.
 	 */
-	MicaEditor::Accessibility Editor::Accessibility()
+	WinUIEditor::Accessibility Editor::Accessibility()
 	{
-		return static_cast<MicaEditor::Accessibility>(_editor.get()->PublicWndProc(Scintilla::Message::GetAccessibility, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Accessibility>(_editor.get()->PublicWndProc(Scintilla::Message::GetAccessibility, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Enable or disable accessibility.
 	 */
-	void Editor::Accessibility(MicaEditor::Accessibility const &value)
+	void Editor::Accessibility(WinUIEditor::Accessibility const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetAccessibility, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2528,16 +2528,16 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the edge highlight mode.
 	 */
-	MicaEditor::EdgeVisualStyle Editor::EdgeMode()
+	WinUIEditor::EdgeVisualStyle Editor::EdgeMode()
 	{
-		return static_cast<MicaEditor::EdgeVisualStyle>(_editor.get()->PublicWndProc(Scintilla::Message::GetEdgeMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::EdgeVisualStyle>(_editor.get()->PublicWndProc(Scintilla::Message::GetEdgeMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * The edge may be displayed by a line (EDGE_LINE/EDGE_MULTILINE) or by highlighting text that
 	 * goes beyond it (EDGE_BACKGROUND) or not displayed at all (EDGE_NONE).
 	 */
-	void Editor::EdgeMode(MicaEditor::EdgeVisualStyle const &value)
+	void Editor::EdgeMode(WinUIEditor::EdgeVisualStyle const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetEdgeMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2594,23 +2594,23 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get which document options are set.
 	 */
-	MicaEditor::DocumentOption Editor::DocumentOptions()
+	WinUIEditor::DocumentOption Editor::DocumentOptions()
 	{
-		return static_cast<MicaEditor::DocumentOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetDocumentOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::DocumentOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetDocumentOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Get which document modification events are sent to the container.
 	 */
-	MicaEditor::ModificationFlags Editor::ModEventMask()
+	WinUIEditor::ModificationFlags Editor::ModEventMask()
 	{
-		return static_cast<MicaEditor::ModificationFlags>(_editor.get()->PublicWndProc(Scintilla::Message::GetModEventMask, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::ModificationFlags>(_editor.get()->PublicWndProc(Scintilla::Message::GetModEventMask, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set which document modification events are sent to the container.
 	 */
-	void Editor::ModEventMask(MicaEditor::ModificationFlags const &value)
+	void Editor::ModEventMask(WinUIEditor::ModificationFlags const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetModEventMask, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2650,15 +2650,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get error status.
 	 */
-	MicaEditor::Status Editor::Status()
+	WinUIEditor::Status Editor::Status()
 	{
-		return static_cast<MicaEditor::Status>(_editor.get()->PublicWndProc(Scintilla::Message::GetStatus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Status>(_editor.get()->PublicWndProc(Scintilla::Message::GetStatus, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Change error status - 0 = OK.
 	 */
-	void Editor::Status(MicaEditor::Status const &value)
+	void Editor::Status(WinUIEditor::Status const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetStatus, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2698,15 +2698,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get cursor type.
 	 */
-	MicaEditor::CursorShape Editor::Cursor()
+	WinUIEditor::CursorShape Editor::Cursor()
 	{
-		return static_cast<MicaEditor::CursorShape>(_editor.get()->PublicWndProc(Scintilla::Message::GetCursor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::CursorShape>(_editor.get()->PublicWndProc(Scintilla::Message::GetCursor, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Sets the cursor to one of the SC_CURSOR* values.
 	 */
-	void Editor::Cursor(MicaEditor::CursorShape const &value)
+	void Editor::Cursor(WinUIEditor::CursorShape const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetCursor, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2747,15 +2747,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Is printing line wrapped?
 	 */
-	MicaEditor::Wrap Editor::PrintWrapMode()
+	WinUIEditor::Wrap Editor::PrintWrapMode()
 	{
-		return static_cast<MicaEditor::Wrap>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrintWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Wrap>(_editor.get()->PublicWndProc(Scintilla::Message::GetPrintWrapMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
 	 */
-	void Editor::PrintWrapMode(MicaEditor::Wrap const &value)
+	void Editor::PrintWrapMode(WinUIEditor::Wrap const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetPrintWrapMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2795,16 +2795,16 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the mode of the current selection.
 	 */
-	MicaEditor::SelectionMode Editor::SelectionMode()
+	WinUIEditor::SelectionMode Editor::SelectionMode()
 	{
-		return static_cast<MicaEditor::SelectionMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::SelectionMode>(_editor.get()->PublicWndProc(Scintilla::Message::GetSelectionMode, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
 	 * by lines (SC_SEL_LINES).
 	 */
-	void Editor::SelectionMode(MicaEditor::SelectionMode const &value)
+	void Editor::SelectionMode(WinUIEditor::SelectionMode const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetSelectionMode, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2828,15 +2828,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get auto-completion case insensitive behaviour.
 	 */
-	MicaEditor::CaseInsensitiveBehaviour Editor::AutoCCaseInsensitiveBehaviour()
+	WinUIEditor::CaseInsensitiveBehaviour Editor::AutoCCaseInsensitiveBehaviour()
 	{
-		return static_cast<MicaEditor::CaseInsensitiveBehaviour>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCaseInsensitiveBehaviour, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::CaseInsensitiveBehaviour>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetCaseInsensitiveBehaviour, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set auto-completion case insensitive behaviour to either prefer case-sensitive matches or have no preference.
 	 */
-	void Editor::AutoCCaseInsensitiveBehaviour(MicaEditor::CaseInsensitiveBehaviour const &value)
+	void Editor::AutoCCaseInsensitiveBehaviour(WinUIEditor::CaseInsensitiveBehaviour const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetCaseInsensitiveBehaviour, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2844,15 +2844,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the effect of autocompleting when there are multiple selections.
 	 */
-	MicaEditor::MultiAutoComplete Editor::AutoCMulti()
+	WinUIEditor::MultiAutoComplete Editor::AutoCMulti()
 	{
-		return static_cast<MicaEditor::MultiAutoComplete>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetMulti, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::MultiAutoComplete>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetMulti, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Change the effect of autocompleting when there are multiple selections.
 	 */
-	void Editor::AutoCMulti(MicaEditor::MultiAutoComplete const &value)
+	void Editor::AutoCMulti(WinUIEditor::MultiAutoComplete const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetMulti, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2860,15 +2860,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the way autocompletion lists are ordered.
 	 */
-	MicaEditor::Ordering Editor::AutoCOrder()
+	WinUIEditor::Ordering Editor::AutoCOrder()
 	{
-		return static_cast<MicaEditor::Ordering>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetOrder, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Ordering>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetOrder, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the way autocompletion lists are ordered.
 	 */
-	void Editor::AutoCOrder(MicaEditor::Ordering const &value)
+	void Editor::AutoCOrder(WinUIEditor::Ordering const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetOrder, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2876,15 +2876,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Can the caret preferred x position only be changed by explicit movement commands?
 	 */
-	MicaEditor::CaretSticky Editor::CaretSticky()
+	WinUIEditor::CaretSticky Editor::CaretSticky()
 	{
-		return static_cast<MicaEditor::CaretSticky>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretSticky, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::CaretSticky>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretSticky, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Stop the caret preferred x position changing when the user types.
 	 */
-	void Editor::CaretSticky(MicaEditor::CaretSticky const &value)
+	void Editor::CaretSticky(WinUIEditor::CaretSticky const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretSticky, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2908,15 +2908,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the background alpha of the caret line.
 	 */
-	MicaEditor::Alpha Editor::CaretLineBackAlpha()
+	WinUIEditor::Alpha Editor::CaretLineBackAlpha()
 	{
-		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineBackAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretLineBackAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set background alpha of the caret line.
 	 */
-	void Editor::CaretLineBackAlpha(MicaEditor::Alpha const &value)
+	void Editor::CaretLineBackAlpha(WinUIEditor::Alpha const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretLineBackAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -2924,15 +2924,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Returns the current style of the caret.
 	 */
-	MicaEditor::CaretStyle Editor::CaretStyle()
+	WinUIEditor::CaretStyle Editor::CaretStyle()
 	{
-		return static_cast<MicaEditor::CaretStyle>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::CaretStyle>(_editor.get()->PublicWndProc(Scintilla::Message::GetCaretStyle, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the style of the caret to be drawn.
 	 */
-	void Editor::CaretStyle(MicaEditor::CaretStyle const &value)
+	void Editor::CaretStyle(WinUIEditor::CaretStyle const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetCaretStyle, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3070,15 +3070,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the margin options.
 	 */
-	MicaEditor::MarginOption Editor::MarginOptions()
+	WinUIEditor::MarginOption Editor::MarginOptions()
 	{
-		return static_cast<MicaEditor::MarginOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::MarginOption>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the margin options.
 	 */
-	void Editor::MarginOptions(MicaEditor::MarginOption const &value)
+	void Editor::MarginOptions(WinUIEditor::MarginOption const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3086,15 +3086,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the visibility for the annotations for a view
 	 */
-	MicaEditor::AnnotationVisible Editor::AnnotationVisible()
+	WinUIEditor::AnnotationVisible Editor::AnnotationVisible()
 	{
-		return static_cast<MicaEditor::AnnotationVisible>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::AnnotationVisible>(_editor.get()->PublicWndProc(Scintilla::Message::AnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the visibility for the annotations for a view
 	 */
-	void Editor::AnnotationVisible(MicaEditor::AnnotationVisible const &value)
+	void Editor::AnnotationVisible(WinUIEditor::AnnotationVisible const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AnnotationSetVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3294,15 +3294,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Return options for virtual space behaviour.
 	 */
-	MicaEditor::VirtualSpace Editor::VirtualSpaceOptions()
+	WinUIEditor::VirtualSpace Editor::VirtualSpaceOptions()
 	{
-		return static_cast<MicaEditor::VirtualSpace>(_editor.get()->PublicWndProc(Scintilla::Message::GetVirtualSpaceOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::VirtualSpace>(_editor.get()->PublicWndProc(Scintilla::Message::GetVirtualSpaceOptions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set options for virtual space behaviour.
 	 */
-	void Editor::VirtualSpaceOptions(MicaEditor::VirtualSpace const &value)
+	void Editor::VirtualSpaceOptions(WinUIEditor::VirtualSpace const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetVirtualSpaceOptions, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3323,15 +3323,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the alpha of the selection.
 	 */
-	MicaEditor::Alpha Editor::AdditionalSelAlpha()
+	WinUIEditor::Alpha Editor::AdditionalSelAlpha()
 	{
-		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetAdditionalSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::GetAdditionalSelAlpha, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the alpha of the selection.
 	 */
-	void Editor::AdditionalSelAlpha(MicaEditor::Alpha const &value)
+	void Editor::AdditionalSelAlpha(WinUIEditor::Alpha const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetAdditionalSelAlpha, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3371,15 +3371,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the tech.
 	 */
-	MicaEditor::Technology Editor::Technology()
+	WinUIEditor::Technology Editor::Technology()
 	{
-		return static_cast<MicaEditor::Technology>(_editor.get()->PublicWndProc(Scintilla::Message::GetTechnology, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Technology>(_editor.get()->PublicWndProc(Scintilla::Message::GetTechnology, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the technology used.
 	 */
-	void Editor::Technology(MicaEditor::Technology const &value)
+	void Editor::Technology(WinUIEditor::Technology const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetTechnology, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3403,15 +3403,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the line end types currently allowed.
 	 */
-	MicaEditor::LineEndType Editor::LineEndTypesAllowed()
+	WinUIEditor::LineEndType Editor::LineEndTypesAllowed()
 	{
-		return static_cast<MicaEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesAllowed, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesAllowed, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
 	 */
-	void Editor::LineEndTypesAllowed(MicaEditor::LineEndType const &value)
+	void Editor::LineEndTypesAllowed(WinUIEditor::LineEndType const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetLineEndTypesAllowed, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3419,23 +3419,23 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
 	 */
-	MicaEditor::LineEndType Editor::LineEndTypesActive()
+	WinUIEditor::LineEndType Editor::LineEndTypesActive()
 	{
-		return static_cast<MicaEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesActive, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Get the visibility for the end of line annotations for a view
 	 */
-	MicaEditor::EOLAnnotationVisible Editor::EOLAnnotationVisible()
+	WinUIEditor::EOLAnnotationVisible Editor::EOLAnnotationVisible()
 	{
-		return static_cast<MicaEditor::EOLAnnotationVisible>(_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::EOLAnnotationVisible>(_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationGetVisible, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set the visibility for the end of line annotations for a view
 	 */
-	void Editor::EOLAnnotationVisible(MicaEditor::EOLAnnotationVisible const &value)
+	void Editor::EOLAnnotationVisible(WinUIEditor::EOLAnnotationVisible const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::EOLAnnotationSetVisible, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3459,9 +3459,9 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve line character index state.
 	 */
-	MicaEditor::LineCharacterIndexType Editor::LineCharacterIndex()
+	WinUIEditor::LineCharacterIndexType Editor::LineCharacterIndex()
 	{
-		return static_cast<MicaEditor::LineCharacterIndexType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineCharacterIndex, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::LineCharacterIndexType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineCharacterIndex, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -3476,9 +3476,9 @@ namespace winrt::MicaEditor::implementation
 	 * Bit set of LineEndType enumertion for which line ends beyond the standard
 	 * LF, CR, and CRLF are supported by the lexer.
 	 */
-	MicaEditor::LineEndType Editor::LineEndTypesSupported()
+	WinUIEditor::LineEndType Editor::LineEndTypesSupported()
 	{
-		return static_cast<MicaEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesSupported, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::LineEndType>(_editor.get()->PublicWndProc(Scintilla::Message::GetLineEndTypesSupported, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -3501,15 +3501,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve bidirectional text display state.
 	 */
-	MicaEditor::Bidirectional Editor::Bidirectional()
+	WinUIEditor::Bidirectional Editor::Bidirectional()
 	{
-		return static_cast<MicaEditor::Bidirectional>(_editor.get()->PublicWndProc(Scintilla::Message::GetBidirectional, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Bidirectional>(_editor.get()->PublicWndProc(Scintilla::Message::GetBidirectional, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Set bidirectional text display state.
 	 */
-	void Editor::Bidirectional(MicaEditor::Bidirectional const &value)
+	void Editor::Bidirectional(WinUIEditor::Bidirectional const &value)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetBidirectional, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3730,7 +3730,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Convert all line endings in the document to one mode.
 	 */
-	void Editor::ConvertEOLs(MicaEditor::EndOfLine const &eolMode)
+	void Editor::ConvertEOLs(WinUIEditor::EndOfLine const &eolMode)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::ConvertEOLs, static_cast<Scintilla::uptr_t>(eolMode), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -3780,7 +3780,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the symbol used for a particular marker number.
 	 */
-	void Editor::MarkerDefine(int32_t markerNumber, MicaEditor::MarkerSymbol const &markerSymbol)
+	void Editor::MarkerDefine(int32_t markerNumber, WinUIEditor::MarkerSymbol const &markerSymbol)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::MarkerDefine, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(markerSymbol));
 	}
@@ -3882,7 +3882,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Use the default or platform-defined colour for an element.
 	 */
-	void Editor::ResetElementColour(MicaEditor::Element const &element)
+	void Editor::ResetElementColour(WinUIEditor::Element const &element)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::ResetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -4107,7 +4107,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Find some text in the document.
 	 */
-	int64_t Editor::FindText(MicaEditor::FindOption const &searchFlags, uint64_t ft)
+	int64_t Editor::FindText(WinUIEditor::FindOption const &searchFlags, uint64_t ft)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::FindText, static_cast<Scintilla::uptr_t>(searchFlags), static_cast<Scintilla::sptr_t>(ft)));
 	}
@@ -4115,7 +4115,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Find some text in the document.
 	 */
-	int64_t Editor::FindTextFull(MicaEditor::FindOption const &searchFlags, uint64_t ft)
+	int64_t Editor::FindTextFull(WinUIEditor::FindOption const &searchFlags, uint64_t ft)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::FindTextFull, static_cast<Scintilla::uptr_t>(searchFlags), static_cast<Scintilla::sptr_t>(ft)));
 	}
@@ -4633,7 +4633,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Expand or contract a fold header.
 	 */
-	void Editor::FoldLine(int64_t line, MicaEditor::FoldAction const &action)
+	void Editor::FoldLine(int64_t line, WinUIEditor::FoldAction const &action)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::FoldLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(action));
 	}
@@ -4641,7 +4641,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Expand or contract a fold header and its children.
 	 */
-	void Editor::FoldChildren(int64_t line, MicaEditor::FoldAction const &action)
+	void Editor::FoldChildren(int64_t line, WinUIEditor::FoldAction const &action)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::FoldChildren, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(action));
 	}
@@ -4649,7 +4649,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Expand a fold header and all children. Use the level argument instead of the line's current level.
 	 */
-	void Editor::ExpandChildren(int64_t line, MicaEditor::FoldLevel const &level)
+	void Editor::ExpandChildren(int64_t line, WinUIEditor::FoldLevel const &level)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::ExpandChildren, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level));
 	}
@@ -4657,7 +4657,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Expand or contract all fold headers.
 	 */
-	void Editor::FoldAll(MicaEditor::FoldAction const &action)
+	void Editor::FoldAll(WinUIEditor::FoldAction const &action)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::FoldAll, static_cast<Scintilla::uptr_t>(action), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -5348,12 +5348,12 @@ namespace winrt::MicaEditor::implementation
 	 * Find some text starting at the search anchor.
 	 * Does not ensure the selection is visible.
 	 */
-	int64_t Editor::SearchNextFromBuffer(MicaEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text)
+	int64_t Editor::SearchNextFromBuffer(WinUIEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchNext, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
-	int64_t Editor::SearchNext(MicaEditor::FindOption const &searchFlags, hstring const &text)
+	int64_t Editor::SearchNext(WinUIEditor::FindOption const &searchFlags, hstring const &text)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchNext, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
@@ -5362,12 +5362,12 @@ namespace winrt::MicaEditor::implementation
 	 * Find some text starting at the search anchor and moving backwards.
 	 * Does not ensure the selection is visible.
 	 */
-	int64_t Editor::SearchPrevFromBuffer(MicaEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text)
+	int64_t Editor::SearchPrevFromBuffer(WinUIEditor::FindOption const &searchFlags, Windows::Storage::Streams::IBuffer const &text)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchPrev, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
 	}
 
-	int64_t Editor::SearchPrev(MicaEditor::FindOption const &searchFlags, hstring const &text)
+	int64_t Editor::SearchPrev(WinUIEditor::FindOption const &searchFlags, hstring const &text)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::SearchPrev, static_cast<Scintilla::uptr_t>(searchFlags), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str())));
 	}
@@ -5376,7 +5376,7 @@ namespace winrt::MicaEditor::implementation
 	 * Set whether a pop up menu is displayed automatically when the user presses
 	 * the wrong mouse button on certain areas.
 	 */
-	void Editor::UsePopUp(MicaEditor::PopUp const &popUpMode)
+	void Editor::UsePopUp(WinUIEditor::PopUp const &popUpMode)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::UsePopUp, static_cast<Scintilla::uptr_t>(popUpMode), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -5385,7 +5385,7 @@ namespace winrt::MicaEditor::implementation
 	 * Create a new document object.
 	 * Starts with reference count of 1 and not selected into editor.
 	 */
-	uint64_t Editor::CreateDocument(int64_t bytes, MicaEditor::DocumentOption const &documentOptions)
+	uint64_t Editor::CreateDocument(int64_t bytes, WinUIEditor::DocumentOption const &documentOptions)
 	{
 		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CreateDocument, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(documentOptions)));
 	}
@@ -5444,7 +5444,7 @@ namespace winrt::MicaEditor::implementation
 	 * Set the way the display area is determined when a particular line
 	 * is to be moved to by Find, FindNext, GotoLine, etc.
 	 */
-	void Editor::SetVisiblePolicy(MicaEditor::VisiblePolicy const &visiblePolicy, int32_t visibleSlop)
+	void Editor::SetVisiblePolicy(WinUIEditor::VisiblePolicy const &visiblePolicy, int32_t visibleSlop)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetVisiblePolicy, static_cast<Scintilla::uptr_t>(visiblePolicy), static_cast<Scintilla::sptr_t>(visibleSlop));
 	}
@@ -5485,7 +5485,7 @@ namespace winrt::MicaEditor::implementation
 	 * Set the way the caret is kept visible when going sideways.
 	 * The exclusion zone is given in pixels.
 	 */
-	void Editor::SetXCaretPolicy(MicaEditor::CaretPolicy const &caretPolicy, int32_t caretSlop)
+	void Editor::SetXCaretPolicy(WinUIEditor::CaretPolicy const &caretPolicy, int32_t caretSlop)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetXCaretPolicy, static_cast<Scintilla::uptr_t>(caretPolicy), static_cast<Scintilla::sptr_t>(caretSlop));
 	}
@@ -5494,7 +5494,7 @@ namespace winrt::MicaEditor::implementation
 	 * Set the way the line the caret is on is kept visible.
 	 * The exclusion zone is given in lines.
 	 */
-	void Editor::SetYCaretPolicy(MicaEditor::CaretPolicy const &caretPolicy, int32_t caretSlop)
+	void Editor::SetYCaretPolicy(WinUIEditor::CaretPolicy const &caretPolicy, int32_t caretSlop)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetYCaretPolicy, static_cast<Scintilla::uptr_t>(caretPolicy), static_cast<Scintilla::sptr_t>(caretSlop));
 	}
@@ -5955,7 +5955,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Add a container action to the undo stack
 	 */
-	void Editor::AddUndoAction(int32_t token, MicaEditor::UndoFlags const &flags)
+	void Editor::AddUndoAction(int32_t token, WinUIEditor::UndoFlags const &flags)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AddUndoAction, static_cast<Scintilla::uptr_t>(token), static_cast<Scintilla::sptr_t>(flags));
 	}
@@ -6132,7 +6132,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Create an ILoader*.
 	 */
-	uint64_t Editor::CreateLoader(int64_t bytes, MicaEditor::DocumentOption const &documentOptions)
+	uint64_t Editor::CreateLoader(int64_t bytes, WinUIEditor::DocumentOption const &documentOptions)
 	{
 		return static_cast<uint64_t>(_editor.get()->PublicWndProc(Scintilla::Message::CreateLoader, static_cast<Scintilla::uptr_t>(bytes), static_cast<Scintilla::sptr_t>(documentOptions)));
 	}
@@ -6210,7 +6210,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Request line character index be created or its use count increased.
 	 */
-	void Editor::AllocateLineCharacterIndex(MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
+	void Editor::AllocateLineCharacterIndex(WinUIEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AllocateLineCharacterIndex, static_cast<Scintilla::uptr_t>(lineCharacterIndex), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -6218,7 +6218,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Decrease use count of line character index and remove if 0.
 	 */
-	void Editor::ReleaseLineCharacterIndex(MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
+	void Editor::ReleaseLineCharacterIndex(WinUIEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::ReleaseLineCharacterIndex, static_cast<Scintilla::uptr_t>(lineCharacterIndex), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -6226,7 +6226,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the document line containing a position measured in index units.
 	 */
-	int64_t Editor::LineFromIndexPosition(int64_t pos, MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
+	int64_t Editor::LineFromIndexPosition(int64_t pos, WinUIEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::LineFromIndexPosition, static_cast<Scintilla::uptr_t>(pos), static_cast<Scintilla::sptr_t>(lineCharacterIndex)));
 	}
@@ -6234,7 +6234,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the position measured in index units at the start of a document line.
 	 */
-	int64_t Editor::IndexPositionFromLine(int64_t line, MicaEditor::LineCharacterIndexType const &lineCharacterIndex)
+	int64_t Editor::IndexPositionFromLine(int64_t line, WinUIEditor::LineCharacterIndexType const &lineCharacterIndex)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::IndexPositionFromLine, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(lineCharacterIndex)));
 	}
@@ -6298,14 +6298,14 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the type of a property.
 	 */
-	MicaEditor::TypeProperty Editor::PropertyTypeFromBuffer(Windows::Storage::Streams::IBuffer const &name)
+	WinUIEditor::TypeProperty Editor::PropertyTypeFromBuffer(Windows::Storage::Streams::IBuffer const &name)
 	{
-		return static_cast<MicaEditor::TypeProperty>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(name ? name.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::TypeProperty>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(name ? name.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
 	}
 
-	MicaEditor::TypeProperty Editor::PropertyType(hstring const &name)
+	WinUIEditor::TypeProperty Editor::PropertyType(hstring const &name)
 	{
-		return static_cast<MicaEditor::TypeProperty>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(to_string(name).c_str()), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::TypeProperty>(_editor.get()->PublicWndProc(Scintilla::Message::PropertyType, reinterpret_cast<Scintilla::uptr_t>(to_string(name).c_str()), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6498,17 +6498,17 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the layer used for a marker that is drawn in the text area, not the margin.
 	 */
-	MicaEditor::Layer Editor::MarkerGetLayer(int32_t markerNumber)
+	WinUIEditor::Layer Editor::MarkerGetLayer(int32_t markerNumber)
 	{
-		return static_cast<MicaEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerGetLayer, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Layer>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerGetLayer, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Retrieve the type of a margin.
 	 */
-	MicaEditor::MarginType Editor::GetMarginTypeN(int32_t margin)
+	WinUIEditor::MarginType Editor::GetMarginTypeN(int32_t margin)
 	{
-		return static_cast<MicaEditor::MarginType>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginTypeN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::MarginType>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginTypeN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6538,9 +6538,9 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the cursor shown in a margin.
 	 */
-	MicaEditor::CursorShape Editor::GetMarginCursorN(int32_t margin)
+	WinUIEditor::CursorShape Editor::GetMarginCursorN(int32_t margin)
 	{
-		return static_cast<MicaEditor::CursorShape>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginCursorN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::CursorShape>(_editor.get()->PublicWndProc(Scintilla::Message::GetMarginCursorN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6636,17 +6636,17 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get is a style mixed case, or to force upper or lower case.
 	 */
-	MicaEditor::CaseVisible Editor::StyleGetCase(int32_t style)
+	WinUIEditor::CaseVisible Editor::StyleGetCase(int32_t style)
 	{
-		return static_cast<MicaEditor::CaseVisible>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetCase, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::CaseVisible>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetCase, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Get the character get of the font in a style.
 	 */
-	MicaEditor::CharacterSet Editor::StyleGetCharacterSet(int32_t style)
+	WinUIEditor::CharacterSet Editor::StyleGetCharacterSet(int32_t style)
 	{
-		return static_cast<MicaEditor::CharacterSet>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetCharacterSet, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::CharacterSet>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetCharacterSet, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6685,9 +6685,9 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the weight of characters of a style.
 	 */
-	MicaEditor::FontWeight Editor::StyleGetWeight(int32_t style)
+	WinUIEditor::FontWeight Editor::StyleGetWeight(int32_t style)
 	{
-		return static_cast<MicaEditor::FontWeight>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetWeight, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::FontWeight>(_editor.get()->PublicWndProc(Scintilla::Message::StyleGetWeight, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6725,7 +6725,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the colour of an element.
 	 */
-	int32_t Editor::GetElementColour(MicaEditor::Element const &element)
+	int32_t Editor::GetElementColour(WinUIEditor::Element const &element)
 	{
 		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
@@ -6734,7 +6734,7 @@ namespace winrt::MicaEditor::implementation
 	 * Get whether an element has been set by SetElementColour.
 	 * When false, a platform-defined or default colour is used.
 	 */
-	bool Editor::GetElementIsSet(MicaEditor::Element const &element)
+	bool Editor::GetElementIsSet(WinUIEditor::Element const &element)
 	{
 		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementIsSet, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
@@ -6742,7 +6742,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get whether an element supports translucency.
 	 */
-	bool Editor::GetElementAllowsTranslucent(MicaEditor::Element const &element)
+	bool Editor::GetElementAllowsTranslucent(WinUIEditor::Element const &element)
 	{
 		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementAllowsTranslucent, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
@@ -6750,7 +6750,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the colour of an element.
 	 */
-	int32_t Editor::GetElementBaseColour(MicaEditor::Element const &element)
+	int32_t Editor::GetElementBaseColour(WinUIEditor::Element const &element)
 	{
 		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetElementBaseColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(0)));
 	}
@@ -6782,9 +6782,9 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the style of an indicator.
 	 */
-	MicaEditor::IndicatorStyle Editor::IndicGetStyle(int32_t indicator)
+	WinUIEditor::IndicatorStyle Editor::IndicGetStyle(int32_t indicator)
 	{
-		return static_cast<MicaEditor::IndicatorStyle>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::IndicatorStyle>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6806,9 +6806,9 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the hover style of an indicator.
 	 */
-	MicaEditor::IndicatorStyle Editor::IndicGetHoverStyle(int32_t indicator)
+	WinUIEditor::IndicatorStyle Editor::IndicGetHoverStyle(int32_t indicator)
 	{
-		return static_cast<MicaEditor::IndicatorStyle>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetHoverStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::IndicatorStyle>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetHoverStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6822,9 +6822,9 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the attributes of an indicator.
 	 */
-	MicaEditor::IndicFlag Editor::IndicGetFlags(int32_t indicator)
+	WinUIEditor::IndicFlag Editor::IndicGetFlags(int32_t indicator)
 	{
-		return static_cast<MicaEditor::IndicFlag>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetFlags, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::IndicFlag>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetFlags, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -6901,15 +6901,15 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Retrieve the fold level of a line.
 	 */
-	MicaEditor::FoldLevel Editor::GetFoldLevel(int64_t line)
+	WinUIEditor::FoldLevel Editor::GetFoldLevel(int64_t line)
 	{
-		return static_cast<MicaEditor::FoldLevel>(_editor.get()->PublicWndProc(Scintilla::Message::GetFoldLevel, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::FoldLevel>(_editor.get()->PublicWndProc(Scintilla::Message::GetFoldLevel, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Find the last child line of a header line.
 	 */
-	int64_t Editor::GetLastChild(int64_t line, MicaEditor::FoldLevel const &level)
+	int64_t Editor::GetLastChild(int64_t line, WinUIEditor::FoldLevel const &level)
 	{
 		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetLastChild, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level)));
 	}
@@ -7071,17 +7071,17 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the alpha fill colour of the given indicator.
 	 */
-	MicaEditor::Alpha Editor::IndicGetAlpha(int32_t indicator)
+	WinUIEditor::Alpha Editor::IndicGetAlpha(int32_t indicator)
 	{
-		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
 	 * Get the alpha outline colour of the given indicator.
 	 */
-	MicaEditor::Alpha Editor::IndicGetOutlineAlpha(int32_t indicator)
+	WinUIEditor::Alpha Editor::IndicGetOutlineAlpha(int32_t indicator)
 	{
-		return static_cast<MicaEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetOutlineAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::Alpha>(_editor.get()->PublicWndProc(Scintilla::Message::IndicGetOutlineAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -7296,14 +7296,14 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get the appearance of a representation.
 	 */
-	MicaEditor::RepresentationAppearance Editor::GetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter)
+	WinUIEditor::RepresentationAppearance Editor::GetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter)
 	{
-		return static_cast<MicaEditor::RepresentationAppearance>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::RepresentationAppearance>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(0)));
 	}
 
-	MicaEditor::RepresentationAppearance Editor::GetRepresentationAppearance(hstring const &encodedCharacter)
+	WinUIEditor::RepresentationAppearance Editor::GetRepresentationAppearance(hstring const &encodedCharacter)
 	{
-		return static_cast<MicaEditor::RepresentationAppearance>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::RepresentationAppearance>(_editor.get()->PublicWndProc(Scintilla::Message::GetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**
@@ -7354,7 +7354,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Get whether a feature is supported
 	 */
-	bool Editor::SupportsFeature(MicaEditor::Supports const &feature)
+	bool Editor::SupportsFeature(WinUIEditor::Supports const &feature)
 	{
 		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::SupportsFeature, static_cast<Scintilla::uptr_t>(feature), static_cast<Scintilla::sptr_t>(0)));
 	}
@@ -7577,7 +7577,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the alpha used for a marker that is drawn in the text area, not the margin.
 	 */
-	void Editor::MarkerSetAlpha(int32_t markerNumber, MicaEditor::Alpha const &alpha)
+	void Editor::MarkerSetAlpha(int32_t markerNumber, WinUIEditor::Alpha const &alpha)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetAlpha, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(alpha));
 	}
@@ -7585,7 +7585,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the layer used for a marker that is drawn in the text area, not the margin.
 	 */
-	void Editor::MarkerSetLayer(int32_t markerNumber, MicaEditor::Layer const &layer)
+	void Editor::MarkerSetLayer(int32_t markerNumber, WinUIEditor::Layer const &layer)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::MarkerSetLayer, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(layer));
 	}
@@ -7593,7 +7593,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set a margin to be either numeric or symbolic.
 	 */
-	void Editor::SetMarginTypeN(int32_t margin, MicaEditor::MarginType const &marginType)
+	void Editor::SetMarginTypeN(int32_t margin, WinUIEditor::MarginType const &marginType)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginTypeN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(marginType));
 	}
@@ -7625,7 +7625,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the cursor shown when the mouse is inside a margin.
 	 */
-	void Editor::SetMarginCursorN(int32_t margin, MicaEditor::CursorShape const &cursor)
+	void Editor::SetMarginCursorN(int32_t margin, WinUIEditor::CursorShape const &cursor)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetMarginCursorN, static_cast<Scintilla::uptr_t>(margin), static_cast<Scintilla::sptr_t>(cursor));
 	}
@@ -7710,7 +7710,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set a style to be mixed case, or to force upper or lower case.
 	 */
-	void Editor::StyleSetCase(int32_t style, MicaEditor::CaseVisible const &caseVisible)
+	void Editor::StyleSetCase(int32_t style, WinUIEditor::CaseVisible const &caseVisible)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetCase, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(caseVisible));
 	}
@@ -7726,7 +7726,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the weight of characters of a style.
 	 */
-	void Editor::StyleSetWeight(int32_t style, MicaEditor::FontWeight const &weight)
+	void Editor::StyleSetWeight(int32_t style, WinUIEditor::FontWeight const &weight)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetWeight, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(weight));
 	}
@@ -7734,7 +7734,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the character set of the font in a style.
 	 */
-	void Editor::StyleSetCharacterSet(int32_t style, MicaEditor::CharacterSet const &characterSet)
+	void Editor::StyleSetCharacterSet(int32_t style, WinUIEditor::CharacterSet const &characterSet)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::StyleSetCharacterSet, static_cast<Scintilla::uptr_t>(style), static_cast<Scintilla::sptr_t>(characterSet));
 	}
@@ -7772,7 +7772,7 @@ namespace winrt::MicaEditor::implementation
 	 * Set the colour of an element. Translucency (alpha) may or may not be significant
 	 * and this may depend on the platform. The alpha byte should commonly be 0xff for opaque.
 	 */
-	void Editor::SetElementColour(MicaEditor::Element const &element, int32_t colourElement)
+	void Editor::SetElementColour(WinUIEditor::Element const &element, int32_t colourElement)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetElementColour, static_cast<Scintilla::uptr_t>(element), static_cast<Scintilla::sptr_t>(colourElement));
 	}
@@ -7802,7 +7802,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set an indicator to plain, squiggle or TT.
 	 */
-	void Editor::IndicSetStyle(int32_t indicator, MicaEditor::IndicatorStyle const &indicatorStyle)
+	void Editor::IndicSetStyle(int32_t indicator, WinUIEditor::IndicatorStyle const &indicatorStyle)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(indicatorStyle));
 	}
@@ -7826,7 +7826,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set a hover indicator to plain, squiggle or TT.
 	 */
-	void Editor::IndicSetHoverStyle(int32_t indicator, MicaEditor::IndicatorStyle const &indicatorStyle)
+	void Editor::IndicSetHoverStyle(int32_t indicator, WinUIEditor::IndicatorStyle const &indicatorStyle)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetHoverStyle, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(indicatorStyle));
 	}
@@ -7842,7 +7842,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the attributes of an indicator.
 	 */
-	void Editor::IndicSetFlags(int32_t indicator, MicaEditor::IndicFlag const &flags)
+	void Editor::IndicSetFlags(int32_t indicator, WinUIEditor::IndicFlag const &flags)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetFlags, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(flags));
 	}
@@ -7955,7 +7955,7 @@ namespace winrt::MicaEditor::implementation
 	 * This encodes an integer level along with flags indicating whether the
 	 * line is a header and whether it is effectively white space.
 	 */
-	void Editor::SetFoldLevel(int64_t line, MicaEditor::FoldLevel const &level)
+	void Editor::SetFoldLevel(int64_t line, WinUIEditor::FoldLevel const &level)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetFoldLevel, static_cast<Scintilla::uptr_t>(line), static_cast<Scintilla::sptr_t>(level));
 	}
@@ -7971,7 +7971,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set some style options for folding.
 	 */
-	void Editor::SetFoldFlags(MicaEditor::FoldFlag const &flags)
+	void Editor::SetFoldFlags(WinUIEditor::FoldFlag const &flags)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetFoldFlags, static_cast<Scintilla::uptr_t>(flags), static_cast<Scintilla::sptr_t>(0));
 	}
@@ -8023,7 +8023,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the alpha fill colour of the given indicator.
 	 */
-	void Editor::IndicSetAlpha(int32_t indicator, MicaEditor::Alpha const &alpha)
+	void Editor::IndicSetAlpha(int32_t indicator, WinUIEditor::Alpha const &alpha)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(alpha));
 	}
@@ -8031,7 +8031,7 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the alpha outline colour of the given indicator.
 	 */
-	void Editor::IndicSetOutlineAlpha(int32_t indicator, MicaEditor::Alpha const &alpha)
+	void Editor::IndicSetOutlineAlpha(int32_t indicator, WinUIEditor::Alpha const &alpha)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::IndicSetOutlineAlpha, static_cast<Scintilla::uptr_t>(indicator), static_cast<Scintilla::sptr_t>(alpha));
 	}
@@ -8210,12 +8210,12 @@ namespace winrt::MicaEditor::implementation
 	/**
 	 * Set the appearance of a representation.
 	 */
-	void Editor::SetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, MicaEditor::RepresentationAppearance const &appearance)
+	void Editor::SetRepresentationAppearanceFromBuffer(Windows::Storage::Streams::IBuffer const &encodedCharacter, WinUIEditor::RepresentationAppearance const &appearance)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(encodedCharacter ? encodedCharacter.data() : nullptr), static_cast<Scintilla::sptr_t>(appearance));
 	}
 
-	void Editor::SetRepresentationAppearance(hstring const &encodedCharacter, MicaEditor::RepresentationAppearance const &appearance)
+	void Editor::SetRepresentationAppearance(hstring const &encodedCharacter, WinUIEditor::RepresentationAppearance const &appearance)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::SetRepresentationAppearance, reinterpret_cast<Scintilla::uptr_t>(to_string(encodedCharacter).c_str()), static_cast<Scintilla::sptr_t>(appearance));
 	}

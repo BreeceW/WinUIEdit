@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
-		<id>MicaEditor.WinUI</id>
+		<id>WinUIEdit</id>
 		<version>0.0.1-prerelease</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for WinUI 3 based on Scintilla</description>
@@ -22,33 +22,33 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\_buildWinUI3\AnyCPU\Release\MicaEditorCsWinRT\bin\MicaEditorCsWinRT.dll" target="lib\net6.0-windows10.0.17763.0" />
+		<file src="..\..\_buildWinUI3\AnyCPU\Release\WinUIEditorCsWinRT\bin\WinUIEditorCsWinRT.dll" target="lib\net6.0-windows10.0.17763.0" />
 
-		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\netcoreapp3.0" />
-		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\uap10.0" />
-		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" target="lib\net46" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\netcoreapp3.0" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\uap10.0" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\net46" />
 
-		<file src="MicaEditor.targets" target="build\native\MicaEditor.WinUI.targets" />
+		<file src="WinUIEditor.targets" target="build\native\WinUIEditor.WinUI.targets" />
 
-		<file src="..\..\_buildWinUI3\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-arm64\native" />
-		<file src="..\..\_buildWinUI3\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-arm64\native" />
-		<file src="..\..\_buildWinUI3\ARM64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-arm64\native" />
+		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-arm64\native" />
+		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-arm64\native" />
+		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-arm64\native" />
 
-		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-x64\native" />
-		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-x64\native" />
-		<file src="..\..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-x64\native" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-x64\native" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-x64\native" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-x64\native" />
 
-		<file src="..\..\_buildWinUI3\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.dll" target="runtimes\win10-x86\native" />
-		<file src="..\..\_buildWinUI3\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.pri" target="runtimes\win10-x86\native" />
-		<file src="..\..\_buildWinUI3\Win32\Release\MicaEditor\bin\MicaEditor\MicaEditor.pdb" target="runtimes\win10-x86\native" />
+		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-x86\native" />
+		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-x86\native" />
+		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-x86\native" />
 
-		<file src="MicaEditorCsWinRT.xml" target="lib\net6.0-windows10.0.17763.0" />
-		<file src="MicaEditor.xml" target="lib\netcoreapp3.0" />
-		<file src="MicaEditor.xml" target="lib\uap10.0" />
-		<file src="MicaEditor.xml" target="lib\net46" />
+		<file src="WinUIEditorCsWinRT.xml" target="lib\net6.0-windows10.0.17763.0" />
+		<file src="WinUIEditor.xml" target="lib\netcoreapp3.0" />
+		<file src="WinUIEditor.xml" target="lib\uap10.0" />
+		<file src="WinUIEditor.xml" target="lib\net46" />
 
-		<file src="..\..\MicaEditor\Themes\Generic.xaml" target="lib\uap10.0\MicaEditor\Themes" />
-		<file src="..\..\MicaEditor\Themes\Generic.xaml" target="lib\net6.0-windows10.0.17763.0\MicaEditor\Themes" />
+		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\uap10.0\WinUIEditor\Themes" />
+		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\net6.0-windows10.0.17763.0\WinUIEditor\Themes" />
 
 		<file src="..\..\README.md" />
 		<file src="..\..\LICENSE" />

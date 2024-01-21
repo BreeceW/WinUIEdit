@@ -6,14 +6,14 @@
 #include "ScintillaCall.h"
 #include "Wrapper.h"
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
 	struct EditorBaseControl : EditorBaseControlT<EditorBaseControl>
 	{
 		EditorBaseControl();
 		~EditorBaseControl();
 
-		MicaEditor::Editor Editor();
+		WinUIEditor::Editor Editor();
 		std::shared_ptr<Scintilla::ScintillaCall> Call() noexcept { return _call; }
 
 		void OnApplyTemplate();
@@ -50,7 +50,7 @@ namespace winrt::MicaEditor::implementation
 		bool _isLoaded{ false };
 #endif
 		bool _isFocused{ false };
-		MicaEditor::Editor _editorWrapper{ nullptr };
+		WinUIEditor::Editor _editorWrapper{ nullptr };
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale{ 0 };
@@ -98,7 +98,7 @@ namespace winrt::MicaEditor::implementation
 		bool ShowContextMenu(DUX::UIElement const &targetElement, Windows::Foundation::Point const &point);
 		bool ShowContextMenuAtCurrentPosition();
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative;
-		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
+		std::shared_ptr<::WinUIEditor::Wrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);
 #ifndef WINUI3
 		Windows::Graphics::Display::DisplayInformation::DpiChanged_revoker _dpiChangedRevoker{};
@@ -109,7 +109,7 @@ namespace winrt::MicaEditor::implementation
 	};
 }
 
-namespace winrt::MicaEditor::factory_implementation
+namespace winrt::WinUIEditor::factory_implementation
 {
 	struct EditorBaseControl : EditorBaseControlT<EditorBaseControl, implementation::EditorBaseControl>
 	{

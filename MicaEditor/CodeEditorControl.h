@@ -5,13 +5,13 @@
 #include "CodeEditorHandler.h"
 #include "EditorBaseControl.h"
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
-	struct CodeEditorControl : CodeEditorControlT<CodeEditorControl>, ::MicaEditor::CodeEditorHandler
+	struct CodeEditorControl : CodeEditorControlT<CodeEditorControl>, ::WinUIEditor::CodeEditorHandler
 	{
 		CodeEditorControl();
 		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
-		MicaEditor::Editor Editor();
+		WinUIEditor::Editor Editor();
 		void OnApplyTemplate();
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
 
@@ -54,12 +54,12 @@ namespace winrt::MicaEditor::implementation
 		void InvalidateStyleRedraw() override;
 		void StyleClearCustom() override;
 
-		void DefaultColorsChanged(::MicaEditor::CodeEditorTheme theme) override;
-		void SyntaxHighlightingApplied(::MicaEditor::CodeEditorTheme theme) override;
+		void DefaultColorsChanged(::WinUIEditor::CodeEditorTheme theme) override;
+		void SyntaxHighlightingApplied(::WinUIEditor::CodeEditorTheme theme) override;
 	};
 }
 
-namespace winrt::MicaEditor::factory_implementation
+namespace winrt::WinUIEditor::factory_implementation
 {
 	struct CodeEditorControl : CodeEditorControlT<CodeEditorControl, implementation::CodeEditorControl>
 	{

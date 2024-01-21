@@ -31,4 +31,4 @@
 #include <winrt/Microsoft.UI.Xaml.Media.h>
 #include <winrt/Microsoft.UI.Xaml.XamlTypeInfo.h>
 
-#include <winrt/MicaEditor.h>
+#include <winrt/WinUIEditor.h>

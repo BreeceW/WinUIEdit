@@ -5,7 +5,7 @@
 #include "Helpers.h"
 #include "EditorBaseControl.h"
 
-using namespace ::MicaEditor;
+using namespace ::WinUIEditor;
 using namespace winrt;
 using namespace Windows::Foundation;
 using namespace DUX::Automation;
@@ -13,9 +13,9 @@ using namespace DUX::Automation::Peers;
 using namespace DUX::Automation::Provider;
 using namespace DUX::Automation::Text;
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
-	EditorBaseControlAutomationPeer::EditorBaseControlAutomationPeer(MicaEditor::EditorBaseControl const &owner) : base_type(owner)
+	EditorBaseControlAutomationPeer::EditorBaseControlAutomationPeer(WinUIEditor::EditorBaseControl const &owner) : base_type(owner)
 	{
 		_updateUIRevoker = owner.Editor().UpdateUI(auto_revoke, { this, &EditorBaseControlAutomationPeer::Editor_UpdateUI });
 	}
@@ -54,7 +54,7 @@ namespace winrt::MicaEditor::implementation
 
 	hstring EditorBaseControlAutomationPeer::GetClassNameCore()
 	{
-		return hstring{ name_of<MicaEditor::EditorBaseControl>() };
+		return hstring{ name_of<WinUIEditor::EditorBaseControl>() };
 	}
 
 	AutomationControlType EditorBaseControlAutomationPeer::GetAutomationControlTypeCore()
@@ -65,19 +65,19 @@ namespace winrt::MicaEditor::implementation
 	ITextRangeProvider EditorBaseControlAutomationPeer::DocumentRange()
 	{
 		// Todo: Look at how WinUI 2 handles GetImpl in automation peers
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 		return make<TextRangeProvider>(ProviderFromPeer(*this), editor, 0, editor.Length(), GetBoundingRectangle());
 	}
 
 	SupportedTextSelection EditorBaseControlAutomationPeer::SupportedTextSelection()
 	{
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 		return editor.MultipleSelection() ? SupportedTextSelection::Multiple : SupportedTextSelection::Single;
 	}
 
 	com_array<ITextRangeProvider> EditorBaseControlAutomationPeer::GetSelection()
 	{
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 		const auto n{ static_cast<uint32_t>(editor.Selections()) };
 		com_array<ITextRangeProvider> arr(n, nullptr);
 		const auto topLeft{ GetBoundingRectangle() };
@@ -95,7 +95,7 @@ namespace winrt::MicaEditor::implementation
 		// Visual Studio implements this line by line
 		// Todo: Consider folding and line visible messages
 		// Todo: Not sure if this is the best method for top line
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 
 		const auto firstVisibleLine{ editor.FirstVisibleLine() };
 		const auto maxLine{ editor.LineCount() - 1 };
@@ -129,7 +129,7 @@ namespace winrt::MicaEditor::implementation
 			screenLocation.X - rect.X,
 			screenLocation.Y - rect.Y };
 
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 		const auto pos{ editor.PositionFromPoint(point.X, point.Y) };
 		const auto line{ editor.LineFromPosition(pos) };
 		const auto start{ editor.PositionFromLine(line) };
@@ -158,7 +158,7 @@ namespace winrt::MicaEditor::implementation
 
 	ITextRangeProvider EditorBaseControlAutomationPeer::GetCaretRange(bool &isActive)
 	{
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 
 		isActive = editor.Focus();
 
@@ -169,21 +169,21 @@ namespace winrt::MicaEditor::implementation
 
 	bool EditorBaseControlAutomationPeer::IsReadOnly()
 	{
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 
 		return editor.ReadOnly();
 	}
 
 	hstring EditorBaseControlAutomationPeer::Value()
 	{
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 
 		return editor.GetText(editor.Length()); // Todo: this could potentially be gigabytes of data, so provide a maximum safeguard
 	}
 
 	void EditorBaseControlAutomationPeer::SetValue(hstring const &value)
 	{
-		const auto editor{ Owner().as<MicaEditor::EditorBaseControl>().Editor() };
+		const auto editor{ Owner().as<WinUIEditor::EditorBaseControl>().Editor() };
 
 		editor.SetText(value);
 	}

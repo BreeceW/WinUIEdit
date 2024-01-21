@@ -16,7 +16,7 @@ namespace WinFormsIslandsDemo
             {
                 Dock = DockStyle.Fill,
             };
-            var control = Microsoft.Toolkit.Win32.UI.XamlHost.UWPTypeFactory.CreateXamlContentByType("MicaEditor.CodeEditorControl");
+            var control = Microsoft.Toolkit.Win32.UI.XamlHost.UWPTypeFactory.CreateXamlContentByType("WinUIEditor.CodeEditorControl");
             host.Child = control;
             Controls.Add(host);
 

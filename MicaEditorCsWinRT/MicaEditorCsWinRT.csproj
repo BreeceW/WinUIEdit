@@ -8,38 +8,38 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<CsWinRTIncludes Condition="$(MicaEditorUseWinUI3)">MicaEditor</CsWinRTIncludes>
+		<CsWinRTIncludes Condition="$(WinUIEditorUseWinUI3)">WinUIEditor</CsWinRTIncludes>
 		<CsWinRTGeneratedFilesDir>$(OutDir)</CsWinRTGeneratedFilesDir>
-	</PropertyGroup> 
+	</PropertyGroup>
 
 	<PropertyGroup>
 		<GeneratedNugetDir>.\nuget\</GeneratedNugetDir>
-		<NuspecFile Condition="$(MicaEditorUseWinUI3)">$(GeneratedNugetDir)MicaEditorWinUI3.nuspec</NuspecFile>
-		<NuspecFile Condition="!$(MicaEditorUseWinUI3)">$(GeneratedNugetDir)MicaEditorUWP.nuspec</NuspecFile>
+		<NuspecFile Condition="$(WinUIEditorUseWinUI3)">$(GeneratedNugetDir)WinUIEditorWinUI3.nuspec</NuspecFile>
+		<NuspecFile Condition="!$(WinUIEditorUseWinUI3)">$(GeneratedNugetDir)WinUIEditorUWP.nuspec</NuspecFile>
 		<OutputPath>$(GeneratedNugetDir)</OutputPath>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="nuget\MicaEditor.targets" />
-		<None Include="nuget\MicaEditorWinUI3.nuspec" />
-		<None Include="nuget\MicaEditorUWP.nuspec" />
-		<None Include="nuget\MicaEditor.xml" />
-		<None Include="nuget\MicaEditorCsWinRT.xml" />
+		<None Include="nuget\WinUIEditor.targets" />
+		<None Include="nuget\WinUIEditorWinUI3.nuspec" />
+		<None Include="nuget\WinUIEditorUWP.nuspec" />
+		<None Include="nuget\WinUIEditor.xml" />
+		<None Include="nuget\WinUIEditorCsWinRT.xml" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.0.4" />
-		<PackageReference Condition="$(MicaEditorUseWinUI3)" Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
+		<PackageReference Condition="$(WinUIEditorUseWinUI3)" Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<CsWinRTInputs Condition="$(MicaEditorUseWinUI3)" Include="..\_buildWinUI3\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" />
-		<CsWinRTInputs Condition="!$(MicaEditorUseWinUI3)" Include="..\_buildUwp\x64\Release\MicaEditor\bin\MicaEditor\MicaEditor.winmd" />
+		<CsWinRTInputs Condition="$(WinUIEditorUseWinUI3)" Include="..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" />
+		<CsWinRTInputs Condition="!$(WinUIEditorUseWinUI3)" Include="..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\MicaEditor\MicaEditor.vcxproj" />
+		<ProjectReference Include="..\WinUIEditor\WinUIEditor.vcxproj" />
 	</ItemGroup>
 
 	<PropertyGroup>

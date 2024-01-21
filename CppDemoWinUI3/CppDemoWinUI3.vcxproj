@@ -157,7 +157,7 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MicaEditor\MicaEditor.vcxproj">
+    <ProjectReference Include="..\WinUIEditor\WinUIEditor.vcxproj">
       <Project>{290647e3-d8cb-46b5-87ce-409f721e441a}</Project>
     </ProjectReference>
   </ItemGroup>

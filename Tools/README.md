@@ -18,7 +18,7 @@ Run the Package tool like this:
 
 `Package winui3:a.b.c uwp:x.y.z` builds WinUI 3 and UWP variants and changes version of the WinUI 3 package to a.b.c and the UWP package to x.y.z
 
-The resulting package(s) are located in the MicaEditorCsWinRT\nuget folder.
+The resulting package(s) are located in the WinUIEditorCsWinRT\nuget folder.
 
 ## Update
 This tool updates the version of Scintilla and Lexilla to the version specified.
@@ -80,9 +80,9 @@ Run the WinUI3 tool like this:
 `WinUI3`
 
 ## Vcxproj
-This tool generates the MicaEditor.vcxproj and MicaEditor.vcxproj.filters files.
+This tool generates the WinUIEditor.vcxproj and WinUIEditor.vcxproj.filters files.
 It adds support for wildcards to vcxproj files and filters them according to predefined folders.
-Filters in the MicaEditor project must be modified by changing the Vcxproj tool, not in Visual Studio.
+Filters in the WinUIEditor project must be modified by changing the Vcxproj tool, not in Visual Studio.
 
 Run the Vcxproj tool like this:
 

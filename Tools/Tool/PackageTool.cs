@@ -13,8 +13,8 @@ namespace Tool
         {
             var root = await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync();
             var solution = await root.GetFileAsync("WinUIEditor.sln");
-            var uwpNuspec = await root.GetFileAsync("MicaEditorCsWinRT\\nuget\\MicaEditorUWP.nuspec");
-            var winui3Nuspec = await root.GetFileAsync("MicaEditorCsWinRT\\nuget\\MicaEditorWinUI3.nuspec");
+            var uwpNuspec = await root.GetFileAsync("WinUIEditorCsWinRT\\nuget\\WinUIEditorUWP.nuspec");
+            var winui3Nuspec = await root.GetFileAsync("WinUIEditorCsWinRT\\nuget\\WinUIEditorWinUI3.nuspec");
 
             if (!ReadArgs(args, out var uwp, out var uwpVersion, out var winui3, out var winui3Version))
             {
@@ -31,11 +31,11 @@ namespace Tool
                 {
                     await SetVersionAsync(uwpNuspec, uwpVersion);
                 }
-                await BuildAsync(solution.Path, "MicaEditor", false, "x64");
-                await BuildAsync(solution.Path, "MicaEditor", false, "x86");
-                await BuildAsync(solution.Path, "MicaEditor", false, "arm64");
-                await BuildAsync(solution.Path, "MicaEditor", false, "ARM");
-                await BuildAsync(solution.Path, "MicaEditorCsWinRT", false, "Any CPU", "Projection");
+                await BuildAsync(solution.Path, "WinUIEditor", false, "x64");
+                await BuildAsync(solution.Path, "WinUIEditor", false, "x86");
+                await BuildAsync(solution.Path, "WinUIEditor", false, "arm64");
+                await BuildAsync(solution.Path, "WinUIEditor", false, "ARM");
+                await BuildAsync(solution.Path, "WinUIEditorCsWinRT", false, "Any CPU", "Projection");
             }
 
             if (winui3)
@@ -44,10 +44,10 @@ namespace Tool
                 {
                     await SetVersionAsync(winui3Nuspec, winui3Version);
                 }
-                await BuildAsync(solution.Path, "MicaEditor", true, "x64");
-                await BuildAsync(solution.Path, "MicaEditor", true, "x86");
-                await BuildAsync(solution.Path, "MicaEditor", true, "arm64");
-                await BuildAsync(solution.Path, "MicaEditorCsWinRT", true, "Any CPU", "Projection");
+                await BuildAsync(solution.Path, "WinUIEditor", true, "x64");
+                await BuildAsync(solution.Path, "WinUIEditor", true, "x86");
+                await BuildAsync(solution.Path, "WinUIEditor", true, "arm64");
+                await BuildAsync(solution.Path, "WinUIEditorCsWinRT", true, "Any CPU", "Projection");
             }
         }
 
@@ -64,7 +64,7 @@ namespace Tool
             Console.WriteLine($"Building {label ?? $"{(useWinUI3 ? "WinUI 3" : "UWP")} {architecture}"}");
             var process = new Process();
             process.StartInfo.FileName = "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe";
-            process.StartInfo.Arguments = $"\"{solution}\" -r -t:\"{project}\" -p:MicaEditorUseWinUI3={useWinUI3};Configuration=Release;Platform=\"{architecture}\"";
+            process.StartInfo.Arguments = $"\"{solution}\" -r -t:\"{project}\" -p:WinUIEditorUseWinUI3={useWinUI3};Configuration=Release;Platform=\"{architecture}\"";
             process.Start();
             await process.WaitForExitAsync();
         }
@@ -135,7 +135,7 @@ namespace Tool
                 uwp = true;
                 winui3 = true;
             }
-            
+
             if ((!uwp && uwpVersion != null) || (!winui3 && winui3Version != null))
             {
                 return false;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Wrapper.h"
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	winrt::com_ptr<::IVirtualSurfaceImageSourceNative> Wrapper::VsisNative()
 	{

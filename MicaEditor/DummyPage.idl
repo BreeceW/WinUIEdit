@@ -1,6 +1,6 @@
 #include "Defines.idl"
 
-namespace MicaEditor
+namespace WinUIEditor
 {
     [default_interface]
     [webhosthidden]

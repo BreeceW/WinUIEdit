@@ -22,7 +22,7 @@ using namespace Windows::Storage;
 using namespace Windows::Storage::Pickers;
 using namespace Windows::Storage::Streams;
 using namespace Microsoft::UI::Xaml::Controls;
-using namespace MicaEditor;
+using namespace WinUIEditor;
 
 namespace winrt::CppDemoUwp::implementation
 {
@@ -415,7 +415,7 @@ namespace winrt::CppDemoUwp::implementation
 		ApplicationView::GetForCurrentView().Title(title);
 	}
 
-	void MainPage::Editor_UpdateUI(MicaEditor::Editor const &sender, UpdateUIEventArgs const &args)
+	void MainPage::Editor_UpdateUI(WinUIEditor::Editor const &sender, UpdateUIEventArgs const &args)
 	{
 		if (static_cast<int>(static_cast<Update>(args.Updated()) & (Update::Content | Update::Selection)))
 		{
@@ -426,18 +426,18 @@ namespace winrt::CppDemoUwp::implementation
 		}
 	}
 
-	void MainPage::Editor_ZoomChanged(MicaEditor::Editor const &sender, ZoomChangedEventArgs const &args)
+	void MainPage::Editor_ZoomChanged(WinUIEditor::Editor const &sender, ZoomChangedEventArgs const &args)
 	{
 		const auto size{ sender.StyleGetSizeFractional(static_cast<int32_t>(StylesCommon::Default)) };
 		ZoomStatus().Text(to_hstring(static_cast<uint16_t>(std::round((size + sender.Zoom() * 100) * 100.0 / size))) + L"%");
 	}
 
-	void MainPage::Editor_SavePointReached(MicaEditor::Editor const &sender, SavePointReachedEventArgs const &args)
+	void MainPage::Editor_SavePointReached(WinUIEditor::Editor const &sender, SavePointReachedEventArgs const &args)
 	{
 		SetTitle(false);
 	}
 
-	void MainPage::Editor_SavePointLeft(MicaEditor::Editor const &sender, SavePointLeftEventArgs const &args)
+	void MainPage::Editor_SavePointLeft(WinUIEditor::Editor const &sender, SavePointLeftEventArgs const &args)
 	{
 		SetTitle(true);
 	}

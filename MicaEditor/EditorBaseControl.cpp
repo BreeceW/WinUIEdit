@@ -7,7 +7,7 @@
 #include "Helpers.h"
 #include "EditorBaseControlAutomationPeer.h"
 
-using namespace ::MicaEditor;
+using namespace ::WinUIEditor;
 using namespace winrt;
 using namespace DUX;
 using namespace DUX::Automation::Peers;
@@ -23,13 +23,13 @@ using namespace Windows::Graphics::Display;
 using namespace Windows::ApplicationModel;
 using namespace Windows::ApplicationModel::DataTransfer;
 
-namespace winrt::MicaEditor::implementation
+namespace winrt::WinUIEditor::implementation
 {
 	// Todo: Something about this control is keeping the WinUI 3 versions from closing.
 	// Note that making this into a blank control fixes the issue, so it is definitely something here.
 	EditorBaseControl::EditorBaseControl()
 	{
-		DefaultStyleKey(winrt::box_value(L"MicaEditor.EditorBaseControl"));
+		DefaultStyleKey(winrt::box_value(L"WinUIEditor.EditorBaseControl"));
 
 		_wrapper = std::make_shared<Wrapper>();
 
@@ -74,7 +74,7 @@ namespace winrt::MicaEditor::implementation
 		_scintilla->Finalize();
 	}
 
-	MicaEditor::Editor EditorBaseControl::Editor()
+	WinUIEditor::Editor EditorBaseControl::Editor()
 	{
 		return _editorWrapper;
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	int ConvertFromDipToPixelUnit(float val, float dpiAdjustmentRatio, bool rounded = true);
 	bool IsClassicWindow();

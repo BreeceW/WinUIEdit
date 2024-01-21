@@ -14,10 +14,10 @@
 #include <stdexcept>
 #include "SciLexer.h"
 
-using namespace MicaEditor::Internal;
+using namespace WinUIEditor::Internal;
 using namespace Scintilla;
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	static constexpr bool IsBrace(char ch) noexcept
 	{

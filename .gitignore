@@ -7,7 +7,7 @@
 Tools/Diff/monaco/
 Tools/Diff *
 Tools/nuget.exe
-MicaEditorCsWinRT/nuget/*.zip
+WinUIEditorCsWinRT/nuget/*.zip
 
 # User-specific files
 *.rsuser

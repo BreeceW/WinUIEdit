@@ -57,7 +57,7 @@ namespace Scintilla::Internal {
 	{
 	public:
 		ScintillaWinUI();
-		void RegisterGraphics(std::shared_ptr<MicaEditor::Wrapper> const &wrapper);
+		void RegisterGraphics(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper);
 		void TrimGraphics();
 		void DpiChanged();
 		void SizeChanged();
@@ -220,7 +220,7 @@ namespace Scintilla::Internal {
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
 		winrt::com_ptr<::ID2D1DeviceContext> _d2dDeviceContext{ nullptr };
 		winrt::com_ptr<::IDXGIDevice3> _dxgiDevice{ nullptr };
-		std::shared_ptr<::MicaEditor::Wrapper> _wrapper{ nullptr };
+		std::shared_ptr<::WinUIEditor::Wrapper> _wrapper{ nullptr };
 
 		// Timer implementation
 		// Todo: Planning to not use XAML APIs on the Scintilla side, so replace DispatcherTimer with something that works outside of XAML

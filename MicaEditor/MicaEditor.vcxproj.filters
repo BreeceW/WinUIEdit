@@ -751,7 +751,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MicaEditor.def" />
+    <None Include="WinUIEditor.def" />
     <None Include="packages.config" />
     <None Include="Defines.idl" />
   </ItemGroup>

@@ -48,9 +48,9 @@
 	<Extensions>
 		<Extension Category="windows.activatableClass.inProcessServer">
 			<InProcessServer>
-				<Path>MicaEditor.dll</Path>
-				<ActivatableClass ActivatableClassId="MicaEditor.EditorBaseControl" ThreadingModel="both" />
-				<ActivatableClass ActivatableClassId="MicaEditor.XamlMetaDataProvider" ThreadingModel="both" />
+				<Path>WinUIEditor.dll</Path>
+				<ActivatableClass ActivatableClassId="WinUIEditor.EditorBaseControl" ThreadingModel="both" />
+				<ActivatableClass ActivatableClassId="WinUIEditor.XamlMetaDataProvider" ThreadingModel="both" />
 			</InProcessServer>
 		</Extension>
 	</Extensions>

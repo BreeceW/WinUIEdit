@@ -28,11 +28,11 @@ namespace Tool
         {
             var file = await (await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync()).GetFileAsync(project);
             var text = await FileIO.ReadTextAsync(file);
-            if (text.Contains($"<MicaEditorUseWinUI3>{BoolToString(value)}</MicaEditorUseWinUI3>"))
+            if (text.Contains($"<WinUIEditorUseWinUI3>{BoolToString(value)}</WinUIEditorUseWinUI3>"))
             {
                 return;
             }
-            text = text.Replace($"<MicaEditorUseWinUI3>{BoolToString(!value)}</MicaEditorUseWinUI3>", $"<MicaEditorUseWinUI3>{BoolToString(value)}</MicaEditorUseWinUI3>");
+            text = text.Replace($"<WinUIEditorUseWinUI3>{BoolToString(!value)}</WinUIEditorUseWinUI3>", $"<WinUIEditorUseWinUI3>{BoolToString(value)}</WinUIEditorUseWinUI3>");
             await FileIO.WriteTextAsync(file, text);
         }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MicaEditor
+namespace WinUIEditor
 {
 	class Wrapper
 	{

@@ -30,4 +30,4 @@
 #include <wil/cppwinrt_helpers.h>
 #include <DispatcherQueue.h>
 
-#include <winrt/MicaEditor.h>
+#include <winrt/WinUIEditor.h>
