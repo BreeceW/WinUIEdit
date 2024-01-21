@@ -8,9 +8,9 @@ namespace WinUIEditor
 	runtimeclass EditorBaseControl : DUX.Controls.Control
 	{
 		EditorBaseControl();
-		UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
+		UInt64 SendMessage(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
 		Editor Editor { get; };
+		event Windows.Foundation.EventHandler<UInt64> NotifyMessageReceived;
 		event Windows.Foundation.EventHandler<Double> DpiChanged;
-		event Windows.Foundation.EventHandler<UInt64> ScintillaNotification;
 	}
 }

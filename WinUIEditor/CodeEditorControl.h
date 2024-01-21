@@ -10,7 +10,7 @@ namespace winrt::WinUIEditor::implementation
 	struct CodeEditorControl : CodeEditorControlT<CodeEditorControl>, ::WinUIEditor::CodeEditorHandler
 	{
 		CodeEditorControl();
-		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
+		uint64_t SendMessage(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
 		WinUIEditor::Editor Editor();
 		void OnApplyTemplate();
 		void OnKeyDown(DUX::Input::KeyRoutedEventArgs const &e);
@@ -45,7 +45,7 @@ namespace winrt::WinUIEditor::implementation
 		DUX::FrameworkElement::ActualThemeChanged_revoker _actualThemeChangedRevoker{};
 		void OnActualThemeChanged(Windows::Foundation::IInspectable const &sender, Windows::Foundation::IInspectable const &e);
 		void Editor_DpiChanged(Windows::Foundation::IInspectable const &sender, double value);
-		void Editor_ScintillaNotification(Windows::Foundation::IInspectable const &sender, uint64_t value);
+		void Editor_NotifyMessageReceived(Windows::Foundation::IInspectable const &sender, uint64_t value);
 #ifndef WINUI3
 		DUX::ElementTheme LegacyActualTheme();
 #endif

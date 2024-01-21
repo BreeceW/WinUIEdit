@@ -29,7 +29,7 @@ namespace winrt::WinUIEditor::implementation
 		SetLexilla(CreateLexer);
 		Initialize();
 		_editor->DpiChanged({ this, &CodeEditorControl::Editor_DpiChanged });
-		_editor->ScintillaNotification({ this, &CodeEditorControl::Editor_ScintillaNotification });
+		_editor->NotifyMessageReceived({ this, &CodeEditorControl::Editor_NotifyMessageReceived });
 
 		Loaded({ this, &CodeEditorControl::OnLoaded });
 		Unloaded({ this, &CodeEditorControl::OnUnloaded });
@@ -200,7 +200,7 @@ namespace winrt::WinUIEditor::implementation
 		}
 	}
 
-	uint64_t CodeEditorControl::Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
+	uint64_t CodeEditorControl::SendMessage(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
 	{
 		return _editor->PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
@@ -220,7 +220,7 @@ namespace winrt::WinUIEditor::implementation
 		UpdateDpi(value);
 	}
 
-	void CodeEditorControl::Editor_ScintillaNotification(IInspectable const &sender, uint64_t value)
+	void CodeEditorControl::Editor_NotifyMessageReceived(IInspectable const &sender, uint64_t value)
 	{
 		ProcessNotification(reinterpret_cast<Scintilla::NotificationData *>(value));
 	}

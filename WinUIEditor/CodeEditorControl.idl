@@ -8,8 +8,8 @@ namespace WinUIEditor
     runtimeclass CodeEditorControl : DUX.Controls.Control
     {
         CodeEditorControl();
+        UInt64 SendMessage(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
         Editor Editor { get; };
-        UInt64 Scintilla(ScintillaMessage message, UInt64 wParam, UInt64 lParam);
         String HighlightingLanguage { get; set; };
         event Windows.Foundation.EventHandler<DUX.ElementTheme> DefaultColorsChanged;
         event Windows.Foundation.EventHandler<DUX.ElementTheme> SyntaxHighlightingApplied;

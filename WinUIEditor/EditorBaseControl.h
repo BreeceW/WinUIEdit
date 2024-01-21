@@ -26,7 +26,7 @@ namespace winrt::WinUIEditor::implementation
 		DUX::Automation::Peers::AutomationPeer OnCreateAutomationPeer();
 
 		Scintilla::sptr_t PublicWndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam);
-		uint64_t Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
+		uint64_t SendMessage(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam);
 
 		void StyleSetForeTransparent(int style, Scintilla::Internal::ColourRGBA color);
 		void StyleSetBackTransparent(int style, Scintilla::Internal::ColourRGBA color);
@@ -36,8 +36,8 @@ namespace winrt::WinUIEditor::implementation
 		event_token DpiChanged(Windows::Foundation::EventHandler<double> const &handler);
 		void DpiChanged(event_token const &token) noexcept;
 
-		event_token ScintillaNotification(Windows::Foundation::EventHandler<uint64_t> const &handler);
-		void ScintillaNotification(event_token const &token) noexcept;
+		event_token NotifyMessageReceived(Windows::Foundation::EventHandler<uint64_t> const &handler);
+		void NotifyMessageReceived(event_token const &token) noexcept;
 		float DpiScale();
 
 	private:
@@ -55,7 +55,7 @@ namespace winrt::WinUIEditor::implementation
 		com_ptr<::Scintilla::Internal::ScintillaWinUI> _scintilla{ nullptr };
 		float _dpiScale{ 0 };
 		event<Windows::Foundation::EventHandler<double>> _dpiChangedEvent;
-		event<Windows::Foundation::EventHandler<uint64_t>> _scintillaNotificationEvent;
+		event<Windows::Foundation::EventHandler<uint64_t>> _notifyMessageReceived;
 		DUX::FrameworkElement::SizeChanged_revoker _imageTargetSizeChangedRevoker{};
 		void ImageTarget_SizeChanged(Windows::Foundation::IInspectable const &sender, DUX::SizeChangedEventArgs const &args);
 		DUX::UIElement::PointerMoved_revoker _imageTargetPointerMovedRevoker{};

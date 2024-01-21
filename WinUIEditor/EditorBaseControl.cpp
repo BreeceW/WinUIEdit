@@ -269,7 +269,7 @@ namespace winrt::WinUIEditor::implementation
 		return _scintilla->WndProc(iMessage, wParam, lParam);
 	}
 
-	uint64_t EditorBaseControl::Scintilla(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
+	uint64_t EditorBaseControl::SendMessage(ScintillaMessage const &message, uint64_t wParam, uint64_t lParam)
 	{
 		return PublicWndProc(static_cast<Scintilla::Message>(message), wParam, lParam);
 	}
@@ -606,7 +606,7 @@ namespace winrt::WinUIEditor::implementation
 		{
 			const auto data{ reinterpret_cast<Scintilla::NotificationData *>(lParam) };
 			const auto sender{ tag.as<EditorBaseControl>() };
-			sender->_scintillaNotificationEvent(*sender, lParam);
+			sender->_notifyMessageReceived(*sender, lParam);
 			sender->_editorWrapper.as<implementation::Editor>()->ProcessEvent(data);
 		}
 
@@ -623,14 +623,14 @@ namespace winrt::WinUIEditor::implementation
 		_dpiChangedEvent.remove(token);
 	}
 
-	event_token EditorBaseControl::ScintillaNotification(EventHandler<uint64_t> const &handler)
+	event_token EditorBaseControl::NotifyMessageReceived(EventHandler<uint64_t> const &handler)
 	{
-		return _scintillaNotificationEvent.add(handler);
+		return _notifyMessageReceived.add(handler);
 	}
 
-	void EditorBaseControl::ScintillaNotification(event_token const &token) noexcept
+	void EditorBaseControl::NotifyMessageReceived(event_token const &token) noexcept
 	{
-		_scintillaNotificationEvent.remove(token);
+		_notifyMessageReceived.remove(token);
 	}
 
 	float EditorBaseControl::DpiScale()

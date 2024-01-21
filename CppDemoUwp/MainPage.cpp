@@ -278,7 +278,7 @@ namespace winrt::CppDemoUwp::implementation
 	{
 		FocusEditor();
 
-		Editor().Scintilla(unbox_value<ScintillaMessage>(sender.as<FrameworkElement>().Tag()), 0, 0);
+		Editor().SendMessage(unbox_value<ScintillaMessage>(sender.as<FrameworkElement>().Tag()), 0, 0);
 	}
 
 	void MainPage::HighlightingLanguageButton_Click(IInspectable const &sender, RoutedEventArgs const &e)
