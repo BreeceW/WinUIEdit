@@ -22,7 +22,7 @@
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\uap10.0" />
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\net46" />
 
-		<file src="WinUIEditor.targets" target="build\native\WinUIEditor.Uwp.targets" />
+		<file src="WinUIEditor.targets" target="build\native\WinUIEdit.Uwp.targets" />
 
 		<file src="..\..\_buildUwp\ARM\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-arm\native" />
 		<file src="..\..\_buildUwp\ARM\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-arm\native" />
