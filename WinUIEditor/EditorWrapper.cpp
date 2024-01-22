@@ -2818,6 +2818,14 @@ namespace winrt::WinUIEditor::implementation
 	}
 
 	/**
+	 * Set whether or not regular caret moves will extend or reduce the selection.
+	 */
+	void Editor::MoveExtendsSelection(bool value)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::SetMoveExtendsSelection, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
 	 * Get currently selected item position in the auto-completion list
 	 */
 	int32_t Editor::AutoCCurrent()
@@ -5590,6 +5598,15 @@ namespace winrt::WinUIEditor::implementation
 	}
 
 	/**
+	 * Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
+	 * by lines (SC_SEL_LINES) without changing MoveExtendsSelection.
+	 */
+	void Editor::ChangeSelectionMode(WinUIEditor::SelectionMode const &selectionMode)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::ChangeSelectionMode, static_cast<Scintilla::uptr_t>(selectionMode), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
 	 * Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
 	 */
 	int64_t Editor::GetLineSelStartPosition(int64_t line)
@@ -5999,6 +6016,14 @@ namespace winrt::WinUIEditor::implementation
 	void Editor::AddSelection(int64_t caret, int64_t anchor)
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::AddSelection, static_cast<Scintilla::uptr_t>(caret), static_cast<Scintilla::sptr_t>(anchor));
+	}
+
+	/**
+	 * Find the selection index for a point. -1 when not at a selection.
+	 */
+	int32_t Editor::SelectionFromPoint(int32_t x, int32_t y)
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::SelectionFromPoint, static_cast<Scintilla::uptr_t>(x), static_cast<Scintilla::sptr_t>(y)));
 	}
 
 	/**

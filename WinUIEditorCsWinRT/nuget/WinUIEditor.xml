@@ -856,6 +856,10 @@ The result may point half way (2 bytes) inside a non-BMP character.</summary>
         <member name="M:WinUIEditor.Editor.CopyText(System.Int64,System.String)">
             <summary>Copy argument text to the clipboard.</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.ChangeSelectionMode(WinUIEditor.SelectionMode)">
+            <summary>Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
+by lines (SC_SEL_LINES) without changing MoveExtendsSelection.</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.GetLineSelStartPosition(System.Int64)">
             <summary>Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).</summary>
         </member>
@@ -1013,6 +1017,9 @@ Return INVALID_POSITION if not close to text.</summary>
         </member>
         <member name="M:WinUIEditor.Editor.AddSelection(System.Int64,System.Int64)">
             <summary>Add a selection</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.SelectionFromPoint(System.Int32,System.Int32)">
+            <summary>Find the selection index for a point. -1 when not at a selection.</summary>
         </member>
         <member name="M:WinUIEditor.Editor.DropSelectionN(System.Int32)">
             <summary>Drop one selection</summary>
@@ -2333,7 +2340,8 @@ Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGL
 by lines (SC_SEL_LINES).</summary>
         </member>
         <member name="P:WinUIEditor.Editor.MoveExtendsSelection">
-            <summary>Get whether or not regular caret moves will extend or reduce the selection.</summary>
+            <summary>Get whether or not regular caret moves will extend or reduce the selection.
+Set whether or not regular caret moves will extend or reduce the selection.</summary>
         </member>
         <member name="P:WinUIEditor.Editor.AutoCCurrent">
             <summary>Get currently selected item position in the auto-completion list</summary>

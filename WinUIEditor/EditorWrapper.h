@@ -1547,6 +1547,11 @@ namespace winrt::WinUIEditor::implementation
 		bool MoveExtendsSelection();
 
 		/**
+		 * Set whether or not regular caret moves will extend or reduce the selection.
+		 */
+		void MoveExtendsSelection(bool value);
+
+		/**
 		 * Get currently selected item position in the auto-completion list
 		 */
 		int32_t AutoCCurrent();
@@ -3208,6 +3213,12 @@ namespace winrt::WinUIEditor::implementation
 		void CopyText(int64_t length, hstring const &text);
 
 		/**
+		 * Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
+		 * by lines (SC_SEL_LINES) without changing MoveExtendsSelection.
+		 */
+		void ChangeSelectionMode(WinUIEditor::SelectionMode const &selectionMode);
+
+		/**
 		 * Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
 		 */
 		int64_t GetLineSelStartPosition(int64_t line);
@@ -3447,6 +3458,11 @@ namespace winrt::WinUIEditor::implementation
 		 * Add a selection
 		 */
 		void AddSelection(int64_t caret, int64_t anchor);
+
+		/**
+		 * Find the selection index for a point. -1 when not at a selection.
+		 */
+		int32_t SelectionFromPoint(int32_t x, int32_t y);
 
 		/**
 		 * Drop one selection

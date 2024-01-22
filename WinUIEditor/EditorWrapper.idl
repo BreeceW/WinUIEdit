@@ -542,7 +542,9 @@ namespace WinUIEditor
 		CopyRange = 2419,
 		CopyText = 2420,
 		SetSelectionMode = 2422,
+		ChangeSelectionMode = 2659,
 		GetSelectionMode = 2423,
+		SetMoveExtendsSelection = 2719,
 		GetMoveExtendsSelection = 2706,
 		GetLineSelStartPosition = 2424,
 		GetLineSelEndPosition = 2425,
@@ -662,6 +664,7 @@ namespace WinUIEditor
 		ClearSelections = 2571,
 		SetSelection = 2572,
 		AddSelection = 2573,
+		SelectionFromPoint = 2474,
 		DropSelectionN = 2671,
 		SetMainSelection = 2574,
 		GetMainSelection = 2575,
@@ -5465,8 +5468,9 @@ namespace WinUIEditor
 
 		/**
 		 * Get whether or not regular caret moves will extend or reduce the selection.
+		 * Set whether or not regular caret moves will extend or reduce the selection.
 		 */
-		Boolean MoveExtendsSelection { get; };
+		Boolean MoveExtendsSelection { get; set; };
 
 		/**
 		 * Get currently selected item position in the auto-completion list
@@ -6980,6 +6984,12 @@ namespace WinUIEditor
 		void CopyText(Int64 length, String text);
 
 		/**
+		 * Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
+		 * by lines (SC_SEL_LINES) without changing MoveExtendsSelection.
+		 */
+		void ChangeSelectionMode(SelectionMode selectionMode);
+
+		/**
 		 * Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
 		 */
 		Int64 GetLineSelStartPosition(Int64 line);
@@ -7219,6 +7229,11 @@ namespace WinUIEditor
 		 * Add a selection
 		 */
 		void AddSelection(Int64 caret, Int64 anchor);
+
+		/**
+		 * Find the selection index for a point. -1 when not at a selection.
+		 */
+		Int32 SelectionFromPoint(Int32 x, Int32 y);
 
 		/**
 		 * Drop one selection
