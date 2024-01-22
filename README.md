@@ -40,8 +40,8 @@ The WinUI 3 version of this control should work on Windows 10, version 1809 and 
 
 ## Development
 
-### How to build
-Currently, to switch the build between UWP and WinUI 3, you will need to modify [WinUIEditor.vcxproj](https://github.com/BreeceW/WinUIEdit/blob/main/WinUIEditor/WinUIEditor.vcxproj) to change `WinUIEditorUseWinUI3` to `true` or `false`. To do this quickly, use the [WinUI3](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#winui3) and [Uwp](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#uwp) tools.
+### How to build this project
+To switch the build between WinUI 3 and UWP, you will need to modify [UseWinUI3.txt](https://github.com/BreeceW/WinUIEdit/blob/main/UseWinUI3.txt) to `true` or `false`. To do this quickly, use the [WinUI3](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#winui3) and [Uwp](https://github.com/BreeceW/WinUIEdit/tree/main/Tools#uwp) tools.
 Open WinUIEditor.sln in Visual Studio 2022. Then, set CsDemoUWP or CppDemoUWP as the startup project for UWP or CsDemoWinUI3 or CppDemoWinUI3 for WinUI 3. Now you can build and run the project.
 
 ### Project file structure
