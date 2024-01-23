@@ -89,8 +89,7 @@ namespace WinUIEditor
 #ifdef WINUI3
 		if (_mouseCaptureElement)
 		{
-			// Todo: This is protected but works anyway
-			_mouseCaptureElement.ProtectedCursor(winrt::Microsoft::UI::Input::InputSystemCursor::Create(cursor));
+			_mouseCaptureElement.try_as<winrt::Microsoft::UI::Xaml::IUIElementProtected>().ProtectedCursor(winrt::Microsoft::UI::Input::InputSystemCursor::Create(cursor));
 		}
 #else
 		winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(winrt::Windows::UI::Core::CoreCursor{ cursor, 0 });
