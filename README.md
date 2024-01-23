@@ -4,8 +4,8 @@
 
 This is an early work-in-progress code editor control for both UWP and WinUI 3. It is a port of the [Scintilla editor component](https://www.scintilla.org). It is written in C++ and works with C#, C++, and any other WinRT-compatible language.
 
-[!NOTE]
-This control is currently not production ready. Breaking API changes are very likely at this stage.
+> [!NOTE]
+> This control is currently not production ready. Breaking API changes are very likely at this stage.
 
 ## Quick start
 Install either the [WinUIEdit](https://www.nuget.org/packages/WinUIEdit) NuGet package if using WinUI 3 or the [WinUIEdit.Uwp](https://www.nuget.org/packages/WinUIEdit.Uwp) NuGet package if using UWP (WinUI 2).
