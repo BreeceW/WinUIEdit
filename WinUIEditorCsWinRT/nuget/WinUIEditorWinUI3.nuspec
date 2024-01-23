@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>WinUIEdit</id>
-		<version>0.0.1-prerelease</version>
+		<version>0.0.2-prerelease</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for WinUI 3 based on Scintilla</description>
 		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>
@@ -30,14 +30,23 @@
 
 		<file src="WinUIEditor.targets" target="build\native\WinUIEdit.targets" />
 
+		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win-arm64\native" />
+		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win-arm64\native" />
+		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win-arm64\native" />
 		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-arm64\native" />
 		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-arm64\native" />
 		<file src="..\..\_buildWinUI3\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-arm64\native" />
 
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win-x64\native" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win-x64\native" />
+		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win-x64\native" />
 		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-x64\native" />
 		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-x64\native" />
 		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-x64\native" />
 
+		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win-x86\native" />
+		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win-x86\native" />
+		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win-x86\native" />
 		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-x86\native" />
 		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-x86\native" />
 		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-x86\native" />
