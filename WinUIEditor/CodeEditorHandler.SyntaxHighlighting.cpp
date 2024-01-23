@@ -98,7 +98,7 @@ namespace WinUIEditor
 			_call->SetILexer(nullptr);
 			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
 		}
-		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"js" || _highlightingLanguage == L"json")
+		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"js")
 		{
 			_call->SetKeyWords(5, "todo toDo Todo ToDo TODO fixme fixMe Fixme FixMe FIXME");
 		}
