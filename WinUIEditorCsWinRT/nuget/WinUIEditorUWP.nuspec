@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>WinUIEdit.Uwp</id>
-		<version>0.0.1-prerelease</version>
+		<version>0.0.2-prerelease</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for UWP based on Scintilla</description>
 		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>
