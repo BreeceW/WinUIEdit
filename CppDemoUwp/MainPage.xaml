@@ -6,9 +6,9 @@
     xmlns:Windows10version1803="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 6)"
     xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:editor="using:WinUIEditor"
     xmlns:local="using:CppDemoUwp"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:editor="using:WinUIEditor"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     NavigationCacheMode="Required"
@@ -525,7 +525,7 @@
                                 AccessKey="J1"
                                 Click="HighlightingLanguageItem_Click"
                                 GroupName="HighlightingLanguage"
-                                Tag="js"
+                                Tag="javascript"
                                 Text="JavaScript" />
                             <muxc:RadioMenuFlyoutItem
                                 AccessKey="J2"

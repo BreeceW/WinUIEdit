@@ -57,7 +57,7 @@ namespace WinUIEditor
 				SCE_C_OPERATOR, { "{", },
 				SCE_C_OPERATOR, { "}", });
 		}
-		else if (_highlightingLanguage == L"js")
+		else if (_highlightingLanguage == L"javascript")
 		{
 			_call->SetILexer(_createLexer("cpp"));
 			// This list of keywords from MDN https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#keywords
@@ -98,7 +98,7 @@ namespace WinUIEditor
 			_call->SetILexer(nullptr);
 			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
 		}
-		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"js")
+		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"javascript")
 		{
 			_call->SetKeyWords(5, "todo toDo Todo ToDo TODO fixme fixMe Fixme FixMe FIXME");
 		}
@@ -106,7 +106,7 @@ namespace WinUIEditor
 
 	void CodeEditorHandler::UpdateLanguageStyles()
 	{
-		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"js")
+		if (_highlightingLanguage == L"cpp" || _highlightingLanguage == L"csharp" || _highlightingLanguage == L"javascript")
 		{
 			switch (_theme)
 			{
