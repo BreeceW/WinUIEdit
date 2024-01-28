@@ -2086,6 +2086,13 @@ namespace Scintilla::Internal {
 		}
 
 		Redraw();
+
+		// The below is normally called immediately after paste, but it is duplicated here so it can happen after the async paste
+		if ((caretSticky == CaretSticky::Off) || (caretSticky == CaretSticky::WhiteSpace))
+		{
+			SetLastXChosen();
+		}
+		EnsureCaretVisible();
 	}
 
 	void ScintillaWinUI::ClaimSelection()
