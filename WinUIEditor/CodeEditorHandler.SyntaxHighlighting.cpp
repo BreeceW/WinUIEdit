@@ -27,6 +27,18 @@ namespace WinUIEditor
 				"virtual void volatile wchar_t xor xor_eq");
 			_call->SetKeyWords(1,
 				"break case catch co_await co_return co_yield continue do else for goto if return switch throw try while");
+			_call->SetKeyWords(2,
+				"a addindex addtogroup anchor arg attention"
+				"author b brief bug c class code date def defgroup deprecated dontinclude"
+				"e em endcode endhtmlonly endif endlatexonly endlink endverbatim enum example exception"
+				"f$ f[ f] file fn hideinitializer htmlinclude htmlonly"
+				"if image include ingroup internal invariant interface latexonly li line link"
+				"mainpage name namespace nosubgrouping note overload"
+				"p page par param param[in] param[out]"
+				"post pre ref relates remarks return retval"
+				"sa section see showinitializer since skip skipline struct subsection"
+				"test throw throws todo typedef union until"
+				"var verbatim verbinclude version warning weakgroup $ @ \\ & < > # { }");
 			SetLanguageIndentMode(
 				SCE_C_WORD2, { "case", "default", "do", "else", "for", "if", "while", },
 				SCE_C_OPERATOR, { ";", },
@@ -69,8 +81,6 @@ namespace WinUIEditor
 			_call->SetKeyWords(1,
 				"break case catch continue default do else finally for if import return "
 				"switch throw try while with yield await package as from");
-			_call->SetKeyWords(2,
-				"flow");
 			SetLanguageIndentMode(
 				SCE_C_WORD2, { "case", "default", "do", "else", "for", "if", "while", },
 				SCE_C_OPERATOR, { ";", },
