@@ -338,6 +338,8 @@ namespace WinUIEditor
 		SetLexer();
 
 		UpdateStyles();
+
+		_call->ColouriseAll();
 	}
 
 	void CodeEditorHandler::ProcessNotification(NotificationData *data)
