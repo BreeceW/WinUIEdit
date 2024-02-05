@@ -719,6 +719,7 @@ struct OptionsHTML {
 	bool foldComment = false;
 	bool foldHeredoc = false;
 	bool foldXmlAtTagOpen = false;
+	bool winuieditStyleTagBracketsAsTagEnd = false; // WinUI
 };
 
 const char * const htmlWordListDesc[] = {
@@ -783,6 +784,11 @@ struct OptionSetHTML : public OptionSet<OptionsHTML> {
 
 		DefineProperty("fold.xml.at.tag.open", &OptionsHTML::foldXmlAtTagOpen,
 			"Enable folding for XML at the start of open tag. "
+			"The default is off.");
+
+		// WinUI
+		DefineProperty("winuiedit.style.tag.brackets.as.tag.end", &OptionsHTML::winuieditStyleTagBracketsAsTagEnd,
+			"Style the <, >, and / characters in tags as SCE_H_TAGEND instead of SCE_H_TAG. "
 			"The default is off.");
 
 		DefineWordListSets(isPHPScript_ ? phpscriptWordListDesc : htmlWordListDesc);
@@ -1161,6 +1167,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 	const bool allowScripts = options.allowScripts;
 	const bool isMako = options.isMako;
 	const bool isDjango = options.isDjango;
+	const bool winuieditStyleTagBracketsAsTagEnd = options.winuieditStyleTagBracketsAsTagEnd; // WinUI
 	const CharacterSet setHTMLWord(CharacterSet::setAlphaNum, ".-_:!#", true);
 	const CharacterSet setTagContinue(CharacterSet::setAlphaNum, ".-_:!#[", true);
 	const CharacterSet setAttributeContinue(CharacterSet::setAlphaNum, ".-_:!#/", true);
@@ -1714,8 +1721,13 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					levelCurrent--;
 				}
 				styler.ColourTo(i - 1, StateToPrint);
-				if (chNext != '!')
+				// WinUI
+				if (chNext != '!') {
+					if (winuieditStyleTagBracketsAsTagEnd) {
+						styler.ColourTo(tagClosing ? i + 1 : i, SCE_H_TAGEND);
+					}
 					state = SCE_H_TAGUNKNOWN;
+				}
 			} else if (ch == '&') {
 				styler.ColourTo(i - 1, SCE_H_DEFAULT);
 				state = SCE_H_ENTITY;
@@ -1904,7 +1916,13 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					eClass = SCE_H_TAG;
 				}
 				if (ch == '>') {
-					styler.ColourTo(i, eClass);
+					// WinUI
+					if (winuieditStyleTagBracketsAsTagEnd) {
+						styler.ColourTo(i - 1, eClass);
+						styler.ColourTo(i, SCE_H_TAGEND);
+					} else {
+						styler.ColourTo(i, eClass);
+					}
 					if (inScriptType == eNonHtmlScript) {
 						state = StateForScript(scriptLanguage);
 					} else {
