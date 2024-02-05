@@ -522,6 +522,12 @@
                                 Tag="csharp"
                                 Text="C#" />
                             <muxc:RadioMenuFlyoutItem
+                                AccessKey="H"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                Tag="html"
+                                Text="HTML" />
+                            <muxc:RadioMenuFlyoutItem
                                 AccessKey="J1"
                                 Click="HighlightingLanguageItem_Click"
                                 GroupName="HighlightingLanguage"
@@ -533,6 +539,12 @@
                                 GroupName="HighlightingLanguage"
                                 Tag="json"
                                 Text="JSON" />
+                            <muxc:RadioMenuFlyoutItem
+                                AccessKey="X"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                Tag="xml"
+                                Text="XML" />
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </HyperlinkButton>
