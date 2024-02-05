@@ -50,5 +50,5 @@ Open WinUIEditor.sln in Visual Studio 2022. Then, set CsDemoUWP or CppDemoUWP as
 |**WinUIEditor**|XAML control that hosts the Scintilla port (the C++ project in this folder is also responsible for compiling the scintilla folder code)|
 |**scintilla\winui**|Scintilla platform code for UWP/WinUI 3|
 |scintilla|Unmodified Scintilla source code with new winui subfolder|
-|lexilla|Unmodified Lexilla source code|
+|lexilla|Lexilla source code (patches noted in [WinUIModified.txt](https://github.com/BreeceW/WinUIEdit/blob/main/lexilla/WinUIModified.txt))|
 |Tools|Tools to keep the Scintilla code up-to-date and aid in development (see Tools\README)|
