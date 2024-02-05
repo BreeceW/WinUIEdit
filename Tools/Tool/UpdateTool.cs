@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Web.Http;
@@ -13,7 +16,7 @@ namespace Tool
         public async Task RunAsync(string path, string[] args)
         {
             var updateLibrary = args[0].Trim().ToUpperInvariant();
-            
+
             string selectedLibrary;
             if (updateLibrary == "SCINTILLA")
             {
@@ -38,7 +41,7 @@ namespace Tool
 
             foreach (var file in await sourceFolder.GetItemsAsync())
             {
-                if (file.Name != "winui")
+                if (file.Name != "winui" && file.Name != "WinUIModified.txt")
                 {
                     await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
                 }
@@ -49,6 +52,27 @@ namespace Tool
             await scintillaZipDownload.Content.WriteToStreamAsync(await scintillaZipFile.OpenAsync(FileAccessMode.ReadWrite));
             await Process.Start("tar", new[] { "-xf", scintillaZipFile.Path, "-C", root.Path, }).WaitForExitAsync();
             await scintillaZipFile.DeleteAsync();
+
+            if (await sourceFolder.TryGetItemAsync("WinUIModified.txt") is IStorageFile modified)
+            {
+                var lines = (await FileIO.ReadLinesAsync(modified)).Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
+                if (lines.Count == 0)
+                {
+                    return;
+                }
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write("Patch the following files by re-applying the deleted lines marked ");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("// WinUI");
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine(" in the diff editor:");
+                Console.ResetColor();
+                foreach (var line in lines)
+                {
+                    Console.WriteLine($"* {Path.GetRelativePath(root.Path, Path.Combine(Path.GetDirectoryName(modified.Path), line))}");
+                }
+            }
         }
     }
 }

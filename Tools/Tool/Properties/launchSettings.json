@@ -2,7 +2,7 @@
     "profiles": {
         "Update Tool": {
             "commandName": "Project",
-            "commandLineArgs": "Update 5.2.1"
+            "commandLineArgs": "Update lexilla 5.3.0"
         },
         "Compare Tool": {
             "commandName": "Project",
