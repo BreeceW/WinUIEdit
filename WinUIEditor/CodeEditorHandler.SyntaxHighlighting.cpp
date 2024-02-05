@@ -103,6 +103,13 @@ namespace WinUIEditor
 				SCE_JSON_OPERATOR, { "{", "[", },
 				SCE_JSON_OPERATOR, { "}", "]", });
 		}
+		else if (_highlightingLanguage == L"xml" || _highlightingLanguage == L"html")
+		{
+			const auto lexer{ _createLexer(_highlightingLanguage == L"xml" ? "xml" : "hypertext")};
+			lexer->PropertySet("winuiedit.style.tag.brackets.as.tag.end", "1");
+			_call->SetILexer(lexer);
+			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
+		}
 		else
 		{
 			_call->SetILexer(nullptr);
@@ -241,6 +248,65 @@ namespace WinUIEditor
 				StyleSetFore(SCE_JSON_KEYWORD, LightPlus2(Scope::ConstantLanguage));
 				StyleSetFore(SCE_JSON_LDKEYWORD, LightPlus2(Scope::KeywordControl));
 				StyleSetFore(SCE_JSON_ERROR, LightPlus2(Scope::Invalid));
+				break;
+			}
+		}
+		else if (_highlightingLanguage == L"xml" || _highlightingLanguage == L"html")
+		{
+			switch (_theme)
+			{
+			case CodeEditorTheme::Dark:
+				StyleSetFore(static_cast<int>(StylesCommon::Default), DarkPlusEditorForeground);
+				StyleClearCustom();
+
+				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), DarkPlusEditorForeground);
+
+				StyleSetFore(SCE_H_TAG, DarkPlus2(Scope::EntityNameTag));
+				StyleSetFore(SCE_H_TAGUNKNOWN, DarkPlus2(Scope::EntityNameTag));
+				StyleSetFore(SCE_H_ATTRIBUTE, DarkPlus2(Scope::EntityOtherAttribute_Name));
+				StyleSetFore(SCE_H_ATTRIBUTEUNKNOWN, DarkPlus2(Scope::EntityOtherAttribute_Name));
+				StyleSetFore(SCE_H_NUMBER, DarkPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_H_DOUBLESTRING, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_H_SINGLESTRING, DarkPlus2(Scope::String));
+				// ...
+				StyleSetFore(SCE_H_COMMENT, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_H_ENTITY, DarkPlus2(Scope::ConstantCharacter));
+				StyleSetFore(SCE_H_TAGEND, DarkPlus2(Scope::PunctuationDefinitionTag));
+				StyleSetFore(SCE_H_XMLSTART, DarkPlus2(Scope::PunctuationDefinitionTag));
+				StyleSetFore(SCE_H_XMLEND, DarkPlus2(Scope::PunctuationDefinitionTag));
+				// ...
+				StyleSetFore(SCE_H_CDATA, DarkPlus2(Scope::String));
+				if (_highlightingLanguage == L"html")
+				{
+					StyleSetFore(SCE_H_VALUE, DarkPlus2(Scope::String));
+				}
+				break;
+
+			case CodeEditorTheme::Light:
+				StyleSetFore(static_cast<int>(StylesCommon::Default), LightPlusEditorForeground);
+				StyleClearCustom();
+
+				StyleSetFore(static_cast<int>(StylesCommon::BraceLight), LightPlusEditorForeground);
+
+				StyleSetFore(SCE_H_TAG, LightPlus2(Scope::EntityNameTag));
+				StyleSetFore(SCE_H_TAGUNKNOWN, LightPlus2(Scope::EntityNameTag));
+				StyleSetFore(SCE_H_ATTRIBUTE, LightPlus2(Scope::EntityOtherAttribute_Name));
+				StyleSetFore(SCE_H_ATTRIBUTEUNKNOWN, LightPlus2(Scope::EntityOtherAttribute_Name));
+				StyleSetFore(SCE_H_NUMBER, LightPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_H_DOUBLESTRING, LightPlus2(Scope::StringQuotedDoubleXml));
+				StyleSetFore(SCE_H_SINGLESTRING, LightPlus2(Scope::StringQuotedSingleXml));
+				// ...
+				StyleSetFore(SCE_H_COMMENT, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_H_ENTITY, LightPlus2(Scope::ConstantCharacter));
+				StyleSetFore(SCE_H_TAGEND, LightPlus2(Scope::PunctuationDefinitionTag));
+				StyleSetFore(SCE_H_XMLSTART, LightPlus2(Scope::PunctuationDefinitionTag));
+				StyleSetFore(SCE_H_XMLEND, LightPlus2(Scope::PunctuationDefinitionTag));
+				// ...
+				StyleSetFore(SCE_H_CDATA, LightPlus2(Scope::StringUnquotedCdataXml));
+				if (_highlightingLanguage == L"html")
+				{
+					StyleSetFore(SCE_H_VALUE, LightPlus2(Scope::StringUnquotedHtml));
+				}
 				break;
 			}
 		}
