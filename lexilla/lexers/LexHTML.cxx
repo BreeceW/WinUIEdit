@@ -1377,6 +1377,10 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				}
 				// closing tag of the script (it's a closing HTML tag anyway)
 				styler.ColourTo(i - 1, StateToPrint);
+				// WinUI
+				if (winuieditStyleTagBracketsAsTagEnd) {
+					styler.ColourTo(i + 1, SCE_H_TAGEND);
+				}
 				state = SCE_H_TAGUNKNOWN;
 				inScriptType = eHtml;
 				scriptLanguage = eScriptNone;
@@ -1966,7 +1970,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			if (!setAttributeContinue.Contains(ch)) {
 				isLanguageType = classifyAttribHTML(inScriptType, styler.GetStartSegment(), i - 1, keywords, styler);
 				if (ch == '>') {
-					styler.ColourTo(i, SCE_H_TAG);
+					styler.ColourTo(i, winuieditStyleTagBracketsAsTagEnd ? SCE_H_TAGEND : SCE_H_TAG); // WinUI
 					if (inScriptType == eNonHtmlScript) {
 						state = StateForScript(scriptLanguage);
 					} else {
@@ -1992,7 +1996,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 		case SCE_H_OTHER:
 			if (ch == '>') {
 				styler.ColourTo(i - 1, StateToPrint);
-				styler.ColourTo(i, SCE_H_TAG);
+				styler.ColourTo(i, winuieditStyleTagBracketsAsTagEnd ? SCE_H_TAGEND : SCE_H_TAG); // WinUI
 				if (inScriptType == eNonHtmlScript) {
 					state = StateForScript(scriptLanguage);
 				} else {
@@ -2073,7 +2077,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 						styler.ColourTo(i - 1, StateToPrint);
 					}
 					if (ch == '>') {
-						styler.ColourTo(i, SCE_H_TAG);
+						styler.ColourTo(i, winuieditStyleTagBracketsAsTagEnd ? SCE_H_TAGEND : SCE_H_TAG); // WinUI
 						if (inScriptType == eNonHtmlScript) {
 							state = StateForScript(scriptLanguage);
 						} else {
