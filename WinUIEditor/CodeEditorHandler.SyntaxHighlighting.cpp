@@ -12,7 +12,9 @@ namespace WinUIEditor
 	{
 		if (_highlightingLanguage == L"cpp")
 		{
-			_call->SetILexer(_createLexer("cpp"));
+			const auto lexer{ _createLexer("cpp") };
+			lexer->PropertySet("fold", "1");
+			_call->SetILexer(lexer);
 			// This list of keywords from SciTe (cpp.properties)
 			_call->SetKeyWords(0,
 				"alignas alignof and and_eq asm audit auto axiom bitand bitor bool "
@@ -47,7 +49,9 @@ namespace WinUIEditor
 		}
 		else if (_highlightingLanguage == L"csharp")
 		{
-			_call->SetILexer(_createLexer("cpp"));
+			const auto lexer{ _createLexer("cpp") };
+			lexer->PropertySet("fold", "1");
+			_call->SetILexer(lexer);
 			// This list of keywords from SciTe (cpp.properties) and https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
 			_call->SetKeyWords(0,
 				"abstract as ascending async await base bool by byte char checked "
@@ -71,7 +75,9 @@ namespace WinUIEditor
 		}
 		else if (_highlightingLanguage == L"javascript")
 		{
-			_call->SetILexer(_createLexer("cpp"));
+			const auto lexer{ _createLexer("cpp") };
+			lexer->PropertySet("fold", "1");
+			_call->SetILexer(lexer);
 			// This list of keywords from MDN https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#keywords
 			// Note additional words like undefined
 			_call->SetKeyWords(0,
@@ -90,6 +96,7 @@ namespace WinUIEditor
 		else if (_highlightingLanguage == L"json")
 		{
 			const auto lexer{ _createLexer("json") };
+			lexer->PropertySet("fold", "1");
 			lexer->PropertySet("lexer.json.allow.comments", "1");
 			lexer->PropertySet("lexer.json.escape.sequence", "1");
 			_call->SetILexer(lexer);
@@ -106,6 +113,8 @@ namespace WinUIEditor
 		else if (_highlightingLanguage == L"xml" || _highlightingLanguage == L"html")
 		{
 			const auto lexer{ _createLexer(_highlightingLanguage == L"xml" ? "xml" : "hypertext")};
+			lexer->PropertySet("fold", "1");
+			lexer->PropertySet("fold.html", "1");
 			lexer->PropertySet("winuiedit.style.tag.brackets.as.tag.end", "1");
 			_call->SetILexer(lexer);
 			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
