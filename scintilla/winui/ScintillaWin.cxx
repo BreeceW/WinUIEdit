@@ -2770,6 +2770,20 @@ namespace Scintilla::Internal {
 		InvalidateStyleRedraw();
 	}
 
+	// Replacement for the public Scintilla API SetFoldMarginColour that does not ignore the alpha component
+	void ScintillaWinUI::SetFoldMarginColorTransparent(bool useSetting, ColourRGBA back)
+	{
+		vs.foldmarginColour = useSetting ? back : std::optional<ColourRGBA>{};
+		InvalidateStyleRedraw();
+	}
+
+	// Replacement for the public Scintilla API SetFoldMarginHiColour that does not ignore the alpha component
+	void ScintillaWinUI::SetFoldMarginHiColorTransparent(bool useSetting, ColourRGBA fore)
+	{
+		vs.foldmarginHighlightColour = useSetting ? fore : std::optional<ColourRGBA>{};
+		InvalidateStyleRedraw();
+	}
+
 	void ScintillaWinUI::StyleClearCustom()
 	{
 		// Reset all styles to be like the default style except the predefined styles

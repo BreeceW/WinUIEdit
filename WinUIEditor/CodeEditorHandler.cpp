@@ -114,6 +114,16 @@ namespace WinUIEditor
 		}
 	}
 
+	void CodeEditorHandler::SetFoldMarginColor(bool useSetting, ColourAlpha back)
+	{
+		// Implement for transparent folding margin. Not implemented so default is preserved
+	} //
+
+	void CodeEditorHandler::SetFoldMarginHiColor(bool useSetting, ColourAlpha fore)
+	{
+		// Implement for transparent folding margin. Not implemented so default is preserved
+	} //
+
 	void CodeEditorHandler::DefaultColorsChanged(CodeEditorTheme theme)
 	{
 		// Default event handler

@@ -293,6 +293,16 @@ namespace winrt::WinUIEditor::implementation
 		_editor->StyleClearCustom();
 	}
 
+	void CodeEditorControl::SetFoldMarginColor(bool useSetting, Scintilla::ColourAlpha back)
+	{
+		_editor->SetFoldMarginColorTransparent(useSetting, Scintilla::Internal::ColourRGBA{ back });
+	}
+
+	void CodeEditorControl::SetFoldMarginHiColor(bool useSetting, Scintilla::ColourAlpha fore)
+	{
+		_editor->SetFoldMarginHiColorTransparent(useSetting, Scintilla::Internal::ColourRGBA{ fore });
+	}
+
 	void CodeEditorControl::DefaultColorsChanged(CodeEditorTheme theme)
 	{
 		_defaultColorsChangedEvent(*this, CodeEditorToXamlTheme(theme));

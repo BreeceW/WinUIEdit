@@ -83,6 +83,8 @@ namespace Scintilla::Internal {
 		void StyleSetBackTransparent(int style, ColourRGBA color);
 		void PublicInvalidateStyleRedraw();
 		void StyleClearCustom();
+		void SetFoldMarginColorTransparent(bool useSetting, ColourRGBA back);
+		void SetFoldMarginHiColorTransparent(bool useSetting, ColourRGBA fore);
 
 		void SetWndProc(std::function<LRESULT(winrt::Windows::Foundation::IInspectable const &, UINT, WPARAM, LPARAM)> wndProc);
 		void SetWndProcTag(winrt::Windows::Foundation::IInspectable const &tag);

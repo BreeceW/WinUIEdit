@@ -294,6 +294,16 @@ namespace winrt::WinUIEditor::implementation
 		_scintilla->StyleClearCustom();
 	}
 
+	void EditorBaseControl::SetFoldMarginColorTransparent(bool useSetting, Scintilla::Internal::ColourRGBA back)
+	{
+		_scintilla->SetFoldMarginColorTransparent(useSetting, back);
+	}
+
+	void EditorBaseControl::SetFoldMarginHiColorTransparent(bool useSetting, Scintilla::Internal::ColourRGBA fore)
+	{
+		_scintilla->SetFoldMarginHiColorTransparent(useSetting, fore);
+	}
+
 	void EditorBaseControl::OnApplyTemplate()
 	{
 		__super::OnApplyTemplate();

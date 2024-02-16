@@ -57,6 +57,8 @@ namespace winrt::WinUIEditor::implementation
 		void StyleSetBack(int style, Scintilla::ColourAlpha color) override;
 		void InvalidateStyleRedraw() override;
 		void StyleClearCustom() override;
+		void SetFoldMarginColor(bool useSetting, Scintilla::ColourAlpha back) override;
+		void SetFoldMarginHiColor(bool useSetting, Scintilla::ColourAlpha fore) override;
 
 		void DefaultColorsChanged(::WinUIEditor::CodeEditorTheme theme) override;
 		void SyntaxHighlightingApplied(::WinUIEditor::CodeEditorTheme theme) override;
