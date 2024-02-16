@@ -2563,7 +2563,7 @@ namespace Scintilla::Internal {
 		// without significant impact on presentation frame rate.
 		for (ULONG i = 0; i < drawingBoundsCount; i++)
 		{
-			paintingAllText = RECTContains(drawingBounds[i], GetTextRectangle());
+			paintingAllText = RECTContains(drawingBounds[i], GetClientRectangle());
 			DrawBit(drawingBounds[i]);
 
 			if (paintState == PaintState::abandoned)
