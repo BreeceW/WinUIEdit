@@ -357,7 +357,7 @@ int classifyTagHTML(Sci_PositionU start, Sci_PositionU end,
 }
 
 void classifyWordHTJS(Sci_PositionU start, Sci_PositionU end,
-                             const WordList &keywords, Accessor &styler, script_mode inScriptType) {
+                             const WordList &keywords, const WordList &keywords2, Accessor &styler, script_mode inScriptType) { // WinUI
 	char s[30 + 1];
 	Sci_PositionU i = 0;
 	for (; i < end - start + 1 && i < 30; i++) {
@@ -371,6 +371,8 @@ void classifyWordHTJS(Sci_PositionU start, Sci_PositionU end,
 		chAttr = SCE_HJ_NUMBER;
 	} else if (keywords.InList(s)) {
 		chAttr = SCE_HJ_KEYWORD;
+	} else if (keywords2.InList(s)) { // WinUI
+		chAttr = 53;
 	}
 	styler.ColourTo(end, statePrintForState(chAttr, inScriptType));
 }
@@ -996,6 +998,7 @@ class LexerHTML : public DefaultLexer {
 	WordList keywords4;
 	WordList keywords5;
 	WordList keywords6; // SGML (DTD) keywords
+	WordList keywords7; // WinUI
 	OptionsHTML options;
 	OptionSetHTML osHTML;
 	std::set<std::string> nonFoldingTags;
@@ -1074,6 +1077,10 @@ Sci_Position SCI_METHOD LexerHTML::WordListSet(int n, const char *wl) {
 		break;
 	case 5:
 		wordListN = &keywords6;
+		break;
+	// WinUI
+	case 6:
+		wordListN = &keywords7;
 		break;
 	}
 	Sci_Position firstModification = -1;
@@ -1668,7 +1675,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			// Bounce out of any ASP mode
 			switch (state) {
 			case SCE_HJ_WORD:
-				classifyWordHTJS(styler.GetStartSegment(), i - 1, keywords2, styler, inScriptType);
+				classifyWordHTJS(styler.GetStartSegment(), i - 1, keywords2, keywords7, styler, inScriptType); // WinUI
 				break;
 			case SCE_HB_WORD:
 				classifyWordHTVB(styler.GetStartSegment(), i - 1, keywords3, styler, inScriptType);
@@ -2147,7 +2154,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			break;
 		case SCE_HJ_WORD:
 			if (!IsAWordChar(ch)) {
-				classifyWordHTJS(styler.GetStartSegment(), i - 1, keywords2, styler, inScriptType);
+				classifyWordHTJS(styler.GetStartSegment(), i - 1, keywords2, keywords7, styler, inScriptType); // WinUI
 				//styler.ColourTo(i - 1, eHTJSKeyword);
 				state = SCE_HJ_DEFAULT;
 				if (ch == '/' && chNext == '*') {
@@ -2633,7 +2640,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 
 	switch (state) {
 	case SCE_HJ_WORD:
-		classifyWordHTJS(styler.GetStartSegment(), lengthDoc - 1, keywords2, styler, inScriptType);
+		classifyWordHTJS(styler.GetStartSegment(), lengthDoc - 1, keywords2, keywords7, styler, inScriptType); // WinUI
 		break;
 	case SCE_HB_WORD:
 		classifyWordHTVB(styler.GetStartSegment(), lengthDoc - 1, keywords3, styler, inScriptType);
