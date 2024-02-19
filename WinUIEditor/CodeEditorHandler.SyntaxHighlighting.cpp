@@ -8,6 +8,8 @@ using namespace Scintilla;
 
 namespace WinUIEditor
 {
+	static constexpr auto WINUI_SCE_HJ_KEYWORD2{ 53 };
+
 	void CodeEditorHandler::SetLexer()
 	{
 		if (_highlightingLanguage == L"cpp")
@@ -99,12 +101,21 @@ namespace WinUIEditor
 		}
 		else if (_highlightingLanguage == L"xml" || _highlightingLanguage == L"html")
 		{
-			const auto lexer{ _createLexer(_highlightingLanguage == L"xml" ? "xml" : "hypertext")};
+			const auto lexer{ _createLexer(_highlightingLanguage == L"xml" ? "xml" : "hypertext") };
 			lexer->PropertySet("fold", "1");
 			lexer->PropertySet("fold.html", "1");
 			lexer->PropertySet("winuiedit.style.tag.brackets.as.tag.end", "1");
 			_call->SetILexer(lexer);
-			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
+			if (_highlightingLanguage == L"html")
+			{
+				_call->SetKeyWords(5, "ELEMENT DOCTYPE doctype ATTLIST ENTITY NOTATION");
+
+				SetJavaScriptDefaults(1, 6, WINUI_SCE_HJ_KEYWORD2, SCE_HJ_SYMBOLS);
+			}
+			else
+			{
+				SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
+			}
 		}
 		else
 		{
@@ -273,6 +284,7 @@ namespace WinUIEditor
 		}
 		else if (_highlightingLanguage == L"xml" || _highlightingLanguage == L"html")
 		{
+			const auto isHtml{ _highlightingLanguage == L"html" };
 			switch (_theme)
 			{
 			case CodeEditorTheme::Dark:
@@ -296,9 +308,29 @@ namespace WinUIEditor
 				StyleSetFore(SCE_H_XMLEND, DarkPlus2(Scope::PunctuationDefinitionTag));
 				// ...
 				StyleSetFore(SCE_H_CDATA, DarkPlus2(Scope::String));
-				if (_highlightingLanguage == L"html")
+				StyleSetFore(SCE_H_SGML_DEFAULT, DarkPlus2(Scope::PunctuationDefinitionTag));
+				StyleSetFore(SCE_H_SGML_COMMAND, DarkPlus2(Scope::EntityNameTag));
+				StyleSetFore(SCE_H_SGML_1ST_PARAM, DarkPlus2(Scope::EntityOtherAttribute_Name));
+				StyleSetFore(SCE_H_SGML_DOUBLESTRING, DarkPlus2(Scope::String));
+				// ...
+				StyleSetFore(SCE_H_SGML_COMMENT, DarkPlus2(Scope::Comment));
+				// ...
+				if (isHtml)
 				{
 					StyleSetFore(SCE_H_VALUE, DarkPlus2(Scope::String));
+
+					StyleSetFore(SCE_HJ_COMMENT, DarkPlus2(Scope::Comment));
+					StyleSetFore(SCE_HJ_COMMENTLINE, DarkPlus2(Scope::Comment));
+					StyleSetFore(SCE_HJ_COMMENTDOC, DarkPlus2(Scope::Comment));
+					StyleSetFore(SCE_HJ_NUMBER, DarkPlus2(Scope::ConstantNumeric));
+					StyleSetFore(SCE_HJ_WORD, DarkPlus2(Scope::Variable));
+					StyleSetFore(SCE_HJ_KEYWORD, DarkPlus2(Scope::Keyword));
+					StyleSetFore(WINUI_SCE_HJ_KEYWORD2, DarkPlus2(Scope::KeywordControl));
+					StyleSetFore(SCE_HJ_DOUBLESTRING, DarkPlus2(Scope::String));
+					StyleSetFore(SCE_HJ_SINGLESTRING, DarkPlus2(Scope::String));
+					StyleSetFore(SCE_HJ_SYMBOLS, DarkPlus2(Scope::KeywordOperator));
+					StyleSetFore(SCE_HJ_STRINGEOL, DarkPlus2(Scope::String));
+					StyleSetFore(SCE_HJ_REGEX, DarkPlus2(Scope::StringRegexp));
 				}
 				break;
 
@@ -313,8 +345,8 @@ namespace WinUIEditor
 				StyleSetFore(SCE_H_ATTRIBUTE, LightPlus2(Scope::EntityOtherAttribute_Name));
 				StyleSetFore(SCE_H_ATTRIBUTEUNKNOWN, LightPlus2(Scope::EntityOtherAttribute_Name));
 				StyleSetFore(SCE_H_NUMBER, LightPlus2(Scope::ConstantNumeric));
-				StyleSetFore(SCE_H_DOUBLESTRING, LightPlus2(Scope::StringQuotedDoubleXml));
-				StyleSetFore(SCE_H_SINGLESTRING, LightPlus2(Scope::StringQuotedSingleXml));
+				StyleSetFore(SCE_H_DOUBLESTRING, isHtml ? LightPlus2(Scope::StringQuotedDoubleHtml) : LightPlus2(Scope::StringQuotedDoubleXml));
+				StyleSetFore(SCE_H_SINGLESTRING, isHtml ? LightPlus2(Scope::StringQuotedSingleHtml) : LightPlus2(Scope::StringQuotedSingleXml));
 				// ...
 				StyleSetFore(SCE_H_COMMENT, LightPlus2(Scope::Comment));
 				StyleSetFore(SCE_H_ENTITY, LightPlus2(Scope::ConstantCharacter));
@@ -322,10 +354,30 @@ namespace WinUIEditor
 				StyleSetFore(SCE_H_XMLSTART, LightPlus2(Scope::PunctuationDefinitionTag));
 				StyleSetFore(SCE_H_XMLEND, LightPlus2(Scope::PunctuationDefinitionTag));
 				// ...
-				StyleSetFore(SCE_H_CDATA, LightPlus2(Scope::StringUnquotedCdataXml));
-				if (_highlightingLanguage == L"html")
+				StyleSetFore(SCE_H_CDATA, isHtml ? LightPlus2(Scope::String) : LightPlus2(Scope::StringUnquotedCdataXml));
+				StyleSetFore(SCE_H_SGML_DEFAULT, LightPlus2(Scope::PunctuationDefinitionTag));
+				StyleSetFore(SCE_H_SGML_COMMAND, LightPlus2(Scope::EntityNameTag));
+				StyleSetFore(SCE_H_SGML_1ST_PARAM, LightPlus2(Scope::EntityOtherAttribute_Name));
+				StyleSetFore(SCE_H_SGML_DOUBLESTRING, LightPlus2(Scope::StringQuotedDoubleHtml));
+				// ...
+				StyleSetFore(SCE_H_SGML_COMMENT, LightPlus2(Scope::Comment));
+				// ...
+				if (isHtml)
 				{
 					StyleSetFore(SCE_H_VALUE, LightPlus2(Scope::StringUnquotedHtml));
+
+					StyleSetFore(SCE_HJ_COMMENT, LightPlus2(Scope::Comment));
+					StyleSetFore(SCE_HJ_COMMENTLINE, LightPlus2(Scope::Comment));
+					StyleSetFore(SCE_HJ_COMMENTDOC, LightPlus2(Scope::Comment));
+					StyleSetFore(SCE_HJ_NUMBER, LightPlus2(Scope::ConstantNumeric));
+					StyleSetFore(SCE_HJ_WORD, LightPlus2(Scope::Variable));
+					StyleSetFore(SCE_HJ_KEYWORD, LightPlus2(Scope::Keyword));
+					StyleSetFore(WINUI_SCE_HJ_KEYWORD2, LightPlus2(Scope::KeywordControl));
+					StyleSetFore(SCE_HJ_DOUBLESTRING, LightPlus2(Scope::String));
+					StyleSetFore(SCE_HJ_SINGLESTRING, LightPlus2(Scope::String));
+					StyleSetFore(SCE_HJ_SYMBOLS, LightPlus2(Scope::KeywordOperator));
+					StyleSetFore(SCE_HJ_STRINGEOL, LightPlus2(Scope::String));
+					StyleSetFore(SCE_HJ_REGEX, LightPlus2(Scope::StringRegexp));
 				}
 				break;
 			}
