@@ -157,7 +157,10 @@ namespace WinUIEditor
 				StyleSetFore(SCE_C_UUID, DarkPlus2(Scope::ConstantNumeric));
 				StyleSetFore(SCE_C_PREPROCESSOR, DarkPlus2(Scope::MetaPreprocessor));
 				StyleSetFore(SCE_C_OPERATOR, DarkPlus2(Scope::KeywordOperator));
-				//StyleSetFore(SCE_C_IDENTIFIER, DarkPlus2(Scope::));
+				if (_highlightingLanguage != L"cpp")
+				{
+					StyleSetFore(SCE_C_IDENTIFIER, DarkPlus2(Scope::Variable));
+				}
 				StyleSetFore(SCE_C_STRINGEOL, DarkPlus2(Scope::String));
 				StyleSetFore(SCE_C_VERBATIM, DarkPlus2(Scope::String));
 				StyleSetFore(SCE_C_REGEX, DarkPlus2(Scope::StringRegexp));
@@ -194,7 +197,10 @@ namespace WinUIEditor
 				StyleSetFore(SCE_C_UUID, LightPlus2(Scope::ConstantNumeric));
 				StyleSetFore(SCE_C_PREPROCESSOR, LightPlus2(Scope::MetaPreprocessor));
 				StyleSetFore(SCE_C_OPERATOR, LightPlus2(Scope::KeywordOperator));
-				//StyleSetFore(SCE_C_IDENTIFIER, LightPlus2(Scope::));
+				if (_highlightingLanguage != L"cpp")
+				{
+					StyleSetFore(SCE_C_IDENTIFIER, LightPlus2(Scope::Variable));
+				}
 				StyleSetFore(SCE_C_STRINGEOL, LightPlus2(Scope::String));
 				StyleSetFore(SCE_C_VERBATIM, LightPlus2(Scope::String));
 				StyleSetFore(SCE_C_REGEX, LightPlus2(Scope::StringRegexp));
