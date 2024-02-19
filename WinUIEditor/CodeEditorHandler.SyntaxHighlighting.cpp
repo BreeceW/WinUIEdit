@@ -78,20 +78,7 @@ namespace WinUIEditor
 			const auto lexer{ _createLexer("cpp") };
 			lexer->PropertySet("fold", "1");
 			_call->SetILexer(lexer);
-			// This list of keywords from MDN https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#keywords
-			// Note additional words like undefined
-			_call->SetKeyWords(0,
-				"class const debugger delete export extends false function in instanceof "
-				"new null super this true typeof var void let static enum implements "
-				"interface private protected public arguments async get of set Infinity NaN undefined");
-			_call->SetKeyWords(1,
-				"break case catch continue default do else finally for if import return "
-				"switch throw try while with yield await package as from");
-			SetLanguageIndentMode(
-				SCE_C_WORD2, { "case", "default", "do", "else", "for", "if", "while", },
-				SCE_C_OPERATOR, { ";", },
-				SCE_C_OPERATOR, { "{", "[" },
-				SCE_C_OPERATOR, { "}", "]" });
+			SetJavaScriptDefaults(0, 1, SCE_C_WORD2, SCE_C_OPERATOR);
 		}
 		else if (_highlightingLanguage == L"json")
 		{
@@ -128,6 +115,24 @@ namespace WinUIEditor
 		{
 			_call->SetKeyWords(5, "todo toDo Todo ToDo TODO fixme fixMe Fixme FixMe FIXME");
 		}
+	}
+
+	void CodeEditorHandler::SetJavaScriptDefaults(int wordList1, int wordList2, int indentKeywordStyle, int symbolStyle)
+	{
+		// This list of keywords from MDN https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#keywords
+		// Note additional words like undefined
+		_call->SetKeyWords(wordList1,
+			"class const debugger delete export extends false function in instanceof "
+			"new null super this true typeof var void let static enum implements "
+			"interface private protected public arguments async get of set Infinity NaN undefined");
+		_call->SetKeyWords(wordList2,
+			"break case catch continue default do else finally for if import return "
+			"switch throw try while with yield await package as from");
+		SetLanguageIndentMode(
+			indentKeywordStyle, { "case", "default", "do", "else", "for", "if", "while", },
+			symbolStyle, { ";", },
+			symbolStyle, { "{", "[" },
+			symbolStyle, { "}", "]" });
 	}
 
 	void CodeEditorHandler::UpdateLanguageStyles()

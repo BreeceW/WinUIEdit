@@ -71,6 +71,7 @@ namespace WinUIEditor
 		);
 
 		void SetLexer();
+		void SetJavaScriptDefaults(int wordList1, int wordList2, int indentKeywordStyle, int symbolStyle);
 		void UpdateLanguageStyles();
 
 		static constexpr bool _sciIndentOpening{ false };
