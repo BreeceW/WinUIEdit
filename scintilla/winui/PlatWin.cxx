@@ -773,7 +773,7 @@ void SurfaceD2D::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 		hr = pRenderTarget->CreateBitmapBrush(pBitmap, brushProperties, &pBitmapBrush);
 		ReleaseUnknown(pBitmap);
 		if (SUCCEEDED(hr) && pBitmapBrush) {
-			ClearRectangle(rc);
+			ClearRectangle(rc); // Mica: Transparent folding margin
 			pRenderTarget->FillRectangle(
 				RectangleFromPRectangle(rc),
 				pBitmapBrush);
