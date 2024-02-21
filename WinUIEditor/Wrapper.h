@@ -43,6 +43,11 @@ namespace WinUIEditor
 
 		winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation> StartDragAsync(winrt::DUI::PointerPoint const &pointerPoint);
 
+		// Font used for arrows in folding column markers. Stored here to allow retrieval from SurfaceD2D
+		// Do not access outside of GetChevronFontFromSurface
+		std::shared_ptr<Scintilla::Internal::Font> chevronFont{ nullptr };
+		Scintilla::Internal::XYPOSITION chevronFontSize{ -1.0 };
+
 	private:
 		winrt::DUX::Input::Pointer _lastPointer{ nullptr };
 		winrt::DUX::UIElement _mouseCaptureElement{ nullptr };

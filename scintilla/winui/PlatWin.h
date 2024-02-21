@@ -60,4 +60,6 @@ struct ISetRenderingParams {
 };
 #endif
 
+std::shared_ptr<Font> GetChevronFontFromSurface(Surface const &surface, XYPOSITION size);
+
 }

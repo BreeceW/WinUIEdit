@@ -444,6 +444,36 @@ namespace Scintilla::Internal {
 		}
 	};
 
+	static constexpr auto MarkerSymbolChevronDown{ 1989 };
+	static constexpr auto MarkerSymbolChevronRight{ 1990 };
+
+	static void DrawChevronFolder(Surface *surface, const PRectangle &rcWhole, const Font *fontForCharacter, int tFold, Scintilla::MarginType marginStyle, const void *lineMarker)
+	{
+		const auto ln{ const_cast<LineMarker *>(reinterpret_cast<LineMarker const *>(lineMarker)) };
+		const auto open{ ln->markType == static_cast<MarkerSymbol>(MarkerSymbolChevronDown) };
+		if (!open && ln->markType != static_cast<MarkerSymbol>(MarkerSymbolChevronRight))
+		{
+			ln->customDraw = nullptr;
+			ln->Draw(surface, rcWhole, fontForCharacter, static_cast<LineMarker::FoldPart>(tFold), marginStyle);
+			ln->customDraw = &DrawChevronFolder;
+			return;
+		}
+
+		const XYPOSITION height{ (rcWhole.right - rcWhole.left) * 1.1 };
+		const auto font{ GetChevronFontFromSurface(*surface, height) };
+
+		const auto text{ open ? u8"\uE972" : u8"\uE974" };
+		const XYPOSITION width = surface->WidthTextUTF8(font.get(), text);
+		const PRectangle rc(rcWhole.left, rcWhole.top, rcWhole.right, rcWhole.bottom);
+		PRectangle rcText = rc;
+		rcText.left += (rc.Width() - width) / 2;
+		rcText.right = rcText.left + width;
+		rcText.top += (rc.Height() - height) / 2;
+		rcText.bottom = rcText.top + height;
+		surface->DrawTextTransparentUTF8(rcText, font.get(), rcText.bottom,
+			text, ln->back);
+	}
+
 	ScintillaWinUI::ScintillaWinUI()
 	{
 		// This is a legacy Scintilla feature that is recommended to be disabled (though not deprecated)
@@ -451,6 +481,13 @@ namespace Scintilla::Internal {
 		commandEvents = false;
 
 		view.bufferedDraw = false;
+
+		// Hack to add a custom arrow type for folding (1989 chevron down, 1990 chevron right) to avoid modifying margin drawing source
+		// Todo: Place behind option
+		vs.markers[static_cast<int>(Scintilla::MarkerOutline::Folder)].customDraw = &DrawChevronFolder;
+		vs.markers[static_cast<int>(Scintilla::MarkerOutline::FolderEnd)].customDraw = &DrawChevronFolder;
+		vs.markers[static_cast<int>(Scintilla::MarkerOutline::FolderOpen)].customDraw = &DrawChevronFolder;
+		vs.markers[static_cast<int>(Scintilla::MarkerOutline::FolderOpenMid)].customDraw = &DrawChevronFolder;
 
 		pdoc->AllocateLineCharacterIndex(Scintilla::LineCharacterIndexType::Utf16);
 

@@ -392,6 +392,7 @@ class SurfaceD2D : public Surface, public ISetRenderingParams {
 	int logPixelsY = USER_DEFAULT_SCREEN_DPI;
 	int deviceScaleFactor = 1;
 	std::shared_ptr<RenderingParams> renderingParams;
+	WindowID windowId; // Used to access chevron folding font
 
 	void Clear() noexcept;
 	void SetFontQuality(FontQuality extraFontFlag);
@@ -469,6 +470,8 @@ public:
 	void FlushDrawing() override;
 
 	void SetRenderingParams(std::shared_ptr<RenderingParams> renderingParams_) override;
+
+	WindowID GetWindowId() const;
 };
 
 SurfaceD2D::SurfaceD2D() noexcept {
@@ -521,6 +524,7 @@ void SurfaceD2D::Release() noexcept {
 }
 
 void SurfaceD2D::SetScale(WindowID wid) noexcept {
+	windowId = wid;
 	fontQuality = invalidFontQuality;
 	logPixelsY = DpiForWindow(wid);
 }
@@ -1749,12 +1753,42 @@ void SurfaceD2D::SetRenderingParams(std::shared_ptr<RenderingParams> renderingPa
 	renderingParams = std::move(renderingParams_);
 }
 
+WindowID SurfaceD2D::GetWindowId() const
+{
+	return windowId;
+}
+
 #endif
 
 std::unique_ptr<Surface> Surface::Allocate(Technology technology) {
 #if defined(USE_D2D)
 	return std::make_unique<SurfaceD2D>();
 #endif
+}
+
+std::shared_ptr<Font> GetChevronFontFromSurface(Surface const &surface, XYPOSITION size)
+{
+	// Use presence of UniversalApiContract v14 as a rough proxy of whether Fluent icons are installed
+	static const auto useNewIcons = winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14, 0);
+
+	const auto &surfaceD2D{ static_cast<SurfaceD2D const &>(surface) };
+	const auto wid{ surfaceD2D.GetWindowId() };
+	if (!wid)
+	{
+		const FontParameters fp{ useNewIcons ? "Segoe Fluent Icons" : "Segoe MDL2 Assets", size };
+		return Font::Allocate(fp);
+	}
+
+	const auto wrapper{ static_cast<WinUIEditor::Wrapper *>(wid) };
+
+	if (!wrapper->chevronFont || wrapper->chevronFontSize != size)
+	{
+		const FontParameters fp{ useNewIcons ? "Segoe Fluent Icons" : "Segoe MDL2 Assets", size };
+		wrapper->chevronFont = Font::Allocate(fp);
+		wrapper->chevronFontSize = size;
+	}
+
+	return wrapper->chevronFont;
 }
 
 Window::~Window() noexcept {
