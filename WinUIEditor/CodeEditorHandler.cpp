@@ -389,6 +389,38 @@ namespace WinUIEditor
 				AutoIndent(data->ch);
 			}
 		}
+
+		if (data->nmhdr.code == Notification::DoubleClick && _call->FoldDisplayTextGetStyle() != FoldDisplayTextStyle::Hidden)
+		{
+			const auto lineEndPosition{ _call->LineEndPosition(data->line) };
+			if ((data->position == lineEndPosition || data->position == InvalidPosition)
+				&& !_call->FoldExpanded(data->line))
+			{
+				const auto ctrl{ FlagSet(data->modifiers, KeyMod::Ctrl) };
+				const auto shift{ FlagSet(data->modifiers, KeyMod::Shift) };
+				const auto levelClick{ _call->FoldLevel(data->line) };
+				if (LevelIsHeader(levelClick))
+				{
+					if (shift)
+					{
+						// Ensure all children visible
+						_call->ExpandChildren(data->line, levelClick);
+					}
+					else if (ctrl)
+					{
+						_call->FoldChildren(data->line, FoldAction::Toggle);
+					}
+					else
+					{
+						// Toggle this line
+						_call->FoldLine(data->line, FoldAction::Toggle);
+					}
+
+					// Remove selection from double click
+					_call->SetEmptySelection(lineEndPosition);
+				}
+			}
+		}
 	}
 
 	std::string CodeEditorHandler::GetMainSelectedText(bool expandCaretToWord, sptr_t &start, sptr_t &end)
