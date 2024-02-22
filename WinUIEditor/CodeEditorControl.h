@@ -32,7 +32,6 @@ namespace winrt::WinUIEditor::implementation
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };
 		event<Windows::Foundation::EventHandler<int64_t>> _notifyMessageReceived;
 
-		hstring _highlightingLanguage;
 		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _defaultColorsChangedEvent;
 		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _syntaxHighlightingAppliedEvent;
 		DUD::DispatcherQueue _dispatcherQueue{ nullptr };

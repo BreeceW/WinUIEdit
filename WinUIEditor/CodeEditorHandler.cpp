@@ -427,7 +427,12 @@ namespace WinUIEditor
 		_call->SetMainSelection(mainSelection);
 	}
 
-	void CodeEditorHandler::SetHighlightingLanguage(std::wstring_view value)
+	std::wstring_view CodeEditorHandler::HighlightingLanguage()
+	{
+		return _highlightingLanguage;
+	}
+
+	void CodeEditorHandler::HighlightingLanguage(std::wstring_view value)
 	{
 		if (_highlightingLanguage == value)
 		{

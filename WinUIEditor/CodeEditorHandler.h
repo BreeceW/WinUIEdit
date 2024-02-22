@@ -33,7 +33,8 @@ namespace WinUIEditor
 		void UpdateColors(CodeEditorTheme theme);
 		void UpdateDpi(double value);
 		void ChangeAllOccurrences();
-		void SetHighlightingLanguage(std::wstring_view language);
+		std::wstring_view HighlightingLanguage();
+		void HighlightingLanguage(std::wstring_view language);
 		void ProcessNotification(Scintilla::NotificationData *data);
 
 	protected:

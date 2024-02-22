@@ -227,12 +227,12 @@ namespace winrt::WinUIEditor::implementation
 
 	hstring CodeEditorControl::HighlightingLanguage()
 	{
-		return _highlightingLanguage;
+		return hstring{ CodeEditorHandler::HighlightingLanguage() };
 	}
 
 	void CodeEditorControl::HighlightingLanguage(hstring const &value)
 	{
-		SetHighlightingLanguage(value);
+		CodeEditorHandler::HighlightingLanguage(value);
 	}
 
 	event_token CodeEditorControl::DefaultColorsChanged(EventHandler<ElementTheme> const &handler)
