@@ -26,6 +26,13 @@ namespace WinUIEditor
 	{
 		// Todo: Support high contrast mode
 
+		constexpr auto folderForeDark{ IntRGBA(0, 0, 0, 0) };
+		constexpr auto folderBackDark{ IntRGBA(0xFF, 0xFF, 0xFF, 148) };
+		constexpr auto folderBackHighlightDark{ folderBackDark };
+		constexpr auto folderForeLight{ IntRGBA(0xFF, 0xFF, 0xFF, 0) };
+		constexpr auto folderBackLight{ IntRGBA(0, 0, 0, 108) };
+		constexpr auto folderBackHighlightLight{ folderBackLight };
+
 		if (_theme != theme)
 		{
 			_theme = theme;
@@ -37,6 +44,24 @@ namespace WinUIEditor
 				_call->SetElementColour(Element::SelectionBack, IntRGBA(0x26, 0x4F, 0x78));
 				_call->SetElementColour(Element::SelectionAdditionalBack, IntRGBA(0x26, 0x4F, 0x78));
 				_call->SetElementColour(Element::SelectionInactiveBack, IntRGBA(0x3A, 0x3D, 0x41));
+				_call->SetElementColour(Element::HiddenLine, IntRGBA(0xFF, 0xFF, 0xFF, 48));
+
+				MarkerSetColors(Scintilla::MarkerOutline::FolderOpen, folderForeDark, folderBackDark, folderBackHighlightDark);
+				MarkerSetColors(Scintilla::MarkerOutline::Folder, folderForeDark, folderBackDark, folderBackHighlightDark);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderSub, folderForeDark, folderBackDark, folderBackHighlightDark);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderTail, folderForeDark, folderBackDark, folderBackHighlightDark);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderEnd, folderForeDark, folderBackDark, folderBackHighlightDark);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderOpenMid, folderForeDark, folderBackDark, folderBackHighlightDark);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderMidTail, folderForeDark, folderBackDark, folderBackHighlightDark);
+
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToOrigin), IntRGBA(0x35, 0x95, 0xDE));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToOrigin), IntRGBA(0x35, 0x95, 0xDE, 0x00));
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistorySaved), IntRGBA(0x55, 0xB1, 0x55));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistorySaved), IntRGBA(0x55, 0xB1, 0x55));
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryModified), IntRGBA(0xD0, 0xB1, 0x32));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryModified), IntRGBA(0x27, 0x27, 0x27, 0x00));
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x93, 0xB1, 0x44));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x93, 0xB1, 0x44, 0x00));
 				break;
 
 			case CodeEditorTheme::Light:
@@ -44,6 +69,24 @@ namespace WinUIEditor
 				_call->SetElementColour(Element::SelectionBack, IntRGBA(0xAD, 0xD6, 0xFF));
 				_call->SetElementColour(Element::SelectionAdditionalBack, IntRGBA(0xAD, 0xD6, 0xFF));
 				_call->SetElementColour(Element::SelectionInactiveBack, IntRGBA(0xE5, 0xEB, 0xF1));
+				_call->SetElementColour(Element::HiddenLine, IntRGBA(0x00, 0x00, 0x00, 64));
+
+				MarkerSetColors(Scintilla::MarkerOutline::FolderOpen, folderForeLight, folderBackLight, folderBackHighlightLight);
+				MarkerSetColors(Scintilla::MarkerOutline::Folder, folderForeLight, folderBackLight, folderBackHighlightLight);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderSub, folderForeLight, folderBackLight, folderBackHighlightLight);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderTail, folderForeLight, folderBackLight, folderBackHighlightLight);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderEnd, folderForeLight, folderBackLight, folderBackHighlightLight);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderOpenMid, folderForeLight, folderBackLight, folderBackHighlightLight);
+				MarkerSetColors(Scintilla::MarkerOutline::FolderMidTail, folderForeLight, folderBackLight, folderBackHighlightLight);
+
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToOrigin), IntRGBA(0x00, 0x78, 0xD4));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToOrigin), IntRGBA(0x00, 0x78, 0xD4, 0x00));
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistorySaved), IntRGBA(0x10, 0x7C, 0x10));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistorySaved), IntRGBA(0x10, 0x7C, 0x10));
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryModified), IntRGBA(0xAE, 0x8C, 0x00));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryModified), IntRGBA(0xF5, 0xF5, 0xF5, 0x00));
+				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x5F, 0x84, 0x08));
+				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x5F, 0x84, 0x08, 0x00));
 				break;
 			}
 
@@ -117,12 +160,12 @@ namespace WinUIEditor
 	void CodeEditorHandler::SetFoldMarginColor(bool useSetting, ColourAlpha back)
 	{
 		// Implement for transparent folding margin. Not implemented so default is preserved
-	} //
+	}
 
 	void CodeEditorHandler::SetFoldMarginHiColor(bool useSetting, ColourAlpha fore)
 	{
 		// Implement for transparent folding margin. Not implemented so default is preserved
-	} //
+	}
 
 	void CodeEditorHandler::DefaultColorsChanged(CodeEditorTheme theme)
 	{
@@ -158,6 +201,9 @@ namespace WinUIEditor
 
 			StyleSetFore(static_cast<int>(StylesCommon::ControlChar), IntRGBA(0xFF, 0xFF, 0xFF));
 			StyleSetBack(static_cast<int>(StylesCommon::ControlChar), IntRGBA(0x96, 0x00, 0x00));
+
+			StyleSetFore(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0xB8, 0xC2, 0xCC));
+			StyleSetBack(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0x26, 0x33, 0x3F));
 			break;
 
 		case CodeEditorTheme::Light:
@@ -177,6 +223,9 @@ namespace WinUIEditor
 
 			StyleSetFore(static_cast<int>(StylesCommon::ControlChar), IntRGBA(0xFF, 0xFF, 0xFF));
 			StyleSetBack(static_cast<int>(StylesCommon::ControlChar), IntRGBA(0x96, 0x00, 0x00));
+
+			StyleSetFore(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0x73, 0x79, 0x80));
+			StyleSetBack(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0xDC, 0xEA, 0xF5));
 			break;
 		}
 
@@ -187,6 +236,14 @@ namespace WinUIEditor
 		SyntaxHighlightingApplied(_theme);
 
 		InvalidateStyleRedraw();
+	}
+
+	void CodeEditorHandler::MarkerSetColors(Scintilla::MarkerOutline marker, Scintilla::ColourAlpha fore, Scintilla::ColourAlpha back, Scintilla::ColourAlpha backHighlight)
+	{
+		const auto markerNumber{ static_cast<int>(marker) };
+		_call->MarkerSetForeTranslucent(markerNumber, fore);
+		_call->MarkerSetBackTranslucent(markerNumber, back);
+		_call->MarkerSetBackSelectedTranslucent(markerNumber, backHighlight);
 	}
 
 	void CodeEditorHandler::UpdateCaretLineBackColors(bool colorsUpdated)
@@ -249,7 +306,23 @@ namespace WinUIEditor
 		const auto line{ _call->LineCount() };
 		const auto width{ 12 + 11 * std::max(3, static_cast<int>(std::floor(std::log10(line) + 1))) };
 		_call->SetMarginWidthN(0, ConvertFromDipToPixelUnit(std::floorf(factor * width + 0.5f), _dpiScale));
-		_call->SetMarginLeft(ConvertFromDipToPixelUnit(std::floorf(factor * 23 + 0.5f), _dpiScale));
+		_call->SetMarginWidthN(1, ConvertFromDipToPixelUnit(std::floorf(factor * 12 + 0.5f), _dpiScale));
+		_call->SetMarginWidthN(2, ConvertFromDipToPixelUnit(std::floorf(factor * 10 + 0.5f), _dpiScale));
+		const auto foldMarkerStroke{ ConvertFromDipToPixelUnit(factor * 100.0f, _dpiScale, false) };
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::FolderOpen), foldMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::Folder), foldMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::FolderSub), foldMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::FolderTail), foldMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::FolderEnd), foldMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::FolderOpenMid), foldMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::FolderMidTail), foldMarkerStroke);
+		const auto historyMarkerStroke{ foldMarkerStroke };
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToOrigin), historyMarkerStroke);
+		// HistorySaved is left at default width (1) because rendering artifacts occur with the solid color + box outline
+		//_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::HistorySaved), historyMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::HistoryModified), historyMarkerStroke);
+		_call->MarkerSetStrokeWidth(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), historyMarkerStroke);
+		_call->SetMarginLeft(ConvertFromDipToPixelUnit(std::floorf(factor * 1 + 0.5f), _dpiScale));
 		// Todo: Set caret width to be at least the UISettings system caret width
 		const auto caretWidth{ std::max(1.0f, std::floorf(factor * 2 * _dpiScale)) };
 		_call->SetCaretWidth(caretWidth); // Todo: Needs to stop blinking after timeout and respect blink rate
@@ -275,8 +348,7 @@ namespace WinUIEditor
 		_call->SetEndAtLastLine(false);
 		_call->SetTabWidth(4);
 		_call->SetIndent(4); // Brace matching and autoindent relies on this
-		_call->SetMarginWidthN(1, 0);
-		_call->StyleSetFont(static_cast<int>(StylesCommon::Default), "Cascadia Code");
+		_call->StyleSetFont(static_cast<int>(StylesCommon::Default), "Cascadia Code"); // Todo: Use font available on Windows 10
 		_call->StyleSetSizeFractional(static_cast<int>(StylesCommon::Default), 11 * FontSizeMultiplier);
 		_call->SetAdditionalSelectionTyping(true);
 		_call->SetMultiPaste(MultiPaste::Each);
@@ -285,6 +357,27 @@ namespace WinUIEditor
 		_call->SetCaretLineLayer(Layer::UnderText);
 		_call->SetCaretLineHighlightSubLine(true);
 		_call->SetIndentationGuides(IndentView::LookBoth);
+		_call->SetMarginMaskN(2, Scintilla::MaskFolders);
+		_call->SetMarginSensitiveN(2, true);
+		SetFoldMarginColor(true, IntRGBA(0, 0, 0, 0));
+		SetFoldMarginHiColor(true, IntRGBA(0, 0, 0, 0));
+
+		constexpr auto useCustomChevron{ true }; // Todo: make overridable
+		constexpr auto chevronMinus{ static_cast<MarkerSymbol>(1989) };
+		constexpr auto chevronPlus{ static_cast<MarkerSymbol>(1990) };
+		_call->MarkerDefine(static_cast<int>(MarkerOutline::FolderOpen), useCustomChevron ? chevronMinus : MarkerSymbol::BoxMinus);
+		_call->MarkerDefine(static_cast<int>(MarkerOutline::Folder), useCustomChevron ? chevronPlus : MarkerSymbol::BoxPlus);
+		_call->MarkerDefine(static_cast<int>(MarkerOutline::FolderSub), MarkerSymbol::VLine);
+		_call->MarkerDefine(static_cast<int>(MarkerOutline::FolderTail), MarkerSymbol::LCorner);
+		_call->MarkerDefine(static_cast<int>(MarkerOutline::FolderEnd), useCustomChevron ? chevronPlus : MarkerSymbol::BoxPlusConnected);
+		_call->MarkerDefine(static_cast<int>(MarkerOutline::FolderOpenMid), useCustomChevron ? chevronMinus : MarkerSymbol::BoxMinusConnected);
+		_call->MarkerDefine(static_cast<int>(MarkerOutline::FolderMidTail), MarkerSymbol::TCorner);
+		_call->MarkerEnableHighlight(false);
+
+		_call->SetDefaultFoldDisplayText(u8"\u00a0\u22ef\u00a0"); // ... nbsp + centered vertically + nbsp
+		_call->FoldDisplayTextSetStyle(Scintilla::FoldDisplayTextStyle::Standard);
+
+		_call->SetAutomaticFold(static_cast<Scintilla::AutomaticFold>(static_cast<int>(Scintilla::AutomaticFold::Show) | static_cast<int>(Scintilla::AutomaticFold::Click) | static_cast<int>(Scintilla::AutomaticFold::Change)));
 	}
 
 	// Todo: This code needs to integrate with find and replace

@@ -74,6 +74,8 @@ namespace WinUIEditor
 		void SetJavaScriptDefaults(int wordList1, int wordList2, int indentKeywordStyle, int symbolStyle);
 		void UpdateLanguageStyles();
 
+		void MarkerSetColors(Scintilla::MarkerOutline marker, Scintilla::ColourAlpha fore, Scintilla::ColourAlpha back, Scintilla::ColourAlpha backHighlight);
+
 		static constexpr bool _sciIndentOpening{ false };
 		static constexpr bool _sciIndentClosing{ false };
 		static constexpr int _sciStatementLookback{ 20 };
