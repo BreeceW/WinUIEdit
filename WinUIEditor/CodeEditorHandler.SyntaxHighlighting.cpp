@@ -60,7 +60,7 @@ namespace WinUIEditor
 				"class const decimal default delegate descending double enum "
 				"equals event explicit extern false fixed float from get group "
 				"implicit in int interface internal into is join lock let long nameof namespace new nint null "
-				"object on operator orderby out override params private protected public "
+				"object on operator orderby out override params partial private protected public "
 				"readonly ref sbyte sealed select set short sizeof stackalloc static "
 				"string struct this true typeof uint ulong"
 				"unchecked unsafe ushort var virtual void volatile where");
