@@ -117,6 +117,11 @@ namespace WinUIEditor
 				SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
 			}
 		}
+		else if (_highlightingLanguage == L"plaintext")
+		{
+			_call->SetILexer(_createLexer("null"));
+			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
+		}
 		else
 		{
 			_call->SetILexer(nullptr);

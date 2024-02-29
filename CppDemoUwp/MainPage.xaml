@@ -374,6 +374,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Background="{ThemeResource ControlFillColorTertiaryBrush}"
+            HighlightingLanguage="plaintext"
             Loaded="Editor_Loaded"
             TabIndex="0" />
 
@@ -507,7 +508,7 @@
                                 Click="HighlightingLanguageItem_Click"
                                 GroupName="HighlightingLanguage"
                                 IsChecked="True"
-                                Tag=""
+                                Tag="plaintext"
                                 Text="Plain text" />
                             <muxc:RadioMenuFlyoutItem
                                 AccessKey="C1"
