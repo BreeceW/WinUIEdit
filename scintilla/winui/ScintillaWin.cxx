@@ -100,7 +100,10 @@
 #include "PlatWin.h"
 #include "ScintillaWin.h"
 
-void WINAPIV DebugOut(const wchar_t *fmt, ...) {
+//#define EnableTsfDebugMessages
+
+#ifdef EnableTsfDebugMessages
+static void WINAPIV DebugOut(const wchar_t *fmt, ...) {
 	wchar_t s[2000];
 	va_list args;
 	va_start(args, fmt);
@@ -108,6 +111,7 @@ void WINAPIV DebugOut(const wchar_t *fmt, ...) {
 	va_end(args);
 	OutputDebugStringW(s);
 }
+#endif
 
 namespace Scintilla::Internal {
 
@@ -686,7 +690,9 @@ namespace Scintilla::Internal {
 				}
 				else if (_tfTextStoreACPSink)
 				{
+#ifdef EnableTsfDebugMessages
 					DebugOut(L"OnTextChange, Start: %d, Old End: %d, New End: %d\n", chg.acpStart, chg.acpOldEnd, chg.acpNewEnd);
+#endif
 					_tfTextStoreACPSink->OnTextChange(0, &chg);
 				}
 			}
@@ -1204,14 +1210,18 @@ namespace Scintilla::Internal {
 	{
 		while (!msgq.empty())
 		{
-			OutputDebugStringW(L"Processing Queued Message\n");
+#ifdef EnableTsfDebugMessages
+			DebugOut(L"Processing Queued Message\n");
+#endif
 			ProcessMessage(msgq.front());
 			msgq.pop();
 		}
 		_fromNotifyQueue = true;
 		while (!notifyq.empty())
 		{
-			OutputDebugStringW(L"Processing Queued Notification\n");
+#ifdef EnableTsfDebugMessages
+			DebugOut(L"Processing Queued Notification\n");
+#endif
 			ProcessMessage(notifyq.front());
 			notifyq.pop();
 		}
@@ -1300,7 +1310,9 @@ namespace Scintilla::Internal {
 			pSelection->style.ase = caret.active ? TS_AE_END : TS_AE_NONE;
 		}
 		pSelection->style.fInterimChar = 0;
+#ifdef EnableTsfDebugMessages
 		DebugOut(L"GetSelection, ACP: %d, Sci: %d; ACP: %d, Sci: %d, Mode: %d\n", DocPositionToAcp(SelectionStart().Position()), SelectionStart().Position(), DocPositionToAcp(SelectionEnd().Position()), SelectionEnd().Position(), pSelection->style.ase);
+#endif
 		return S_OK;
 	}
 
@@ -1351,13 +1363,17 @@ namespace Scintilla::Internal {
 			__super::SetSelection(AcpToDocPosition(end), AcpToDocPosition(start));
 			break;
 		}
+#ifdef EnableTsfDebugMessages
 		DebugOut(L"SetSelection, ACP: %d, Sci: %d; ACP: %d, Sci: %d; Mode: %d\n", start, AcpToDocPosition(start), end, AcpToDocPosition(end), pSelection->style.ase);
+#endif
 		return S_OK;
 	}
 
 	IFACEMETHODIMP ScintillaWinUI::GetText(LONG acpStart, LONG acpEnd, WCHAR *pchPlain, ULONG cchPlainReq, ULONG *pcchPlainRet, TS_RUNINFO *prgRunInfo, ULONG cRunInfoReq, ULONG *pcRunInfoRet, LONG *pacpNext)
 	{
+#ifdef EnableTsfDebugMessages
 		DebugOut(L"GetText: %d_%d\n", acpStart, acpEnd);
+#endif
 
 		if (_lock == NONE)
 		{
@@ -1647,7 +1663,9 @@ namespace Scintilla::Internal {
 			pChange->acpStart = newAcpStart;
 			pChange->acpOldEnd = newAcpStart + utf16Len;
 			pChange->acpNewEnd = newAcpStart + cch;
+#ifdef EnableTsfDebugMessages
 			DebugOut(L"SetText, Start: %d, Old End: %d, New End: %d\n", pChange->acpStart, pChange->acpOldEnd, pChange->acpNewEnd);
+#endif
 		}
 
 		return S_OK;
@@ -1883,14 +1901,18 @@ namespace Scintilla::Internal {
 
 	IFACEMETHODIMP ScintillaWinUI::OnEndComposition(ITfCompositionView *pComposition)
 	{
-		DebugOut(L"OnEndComposition");
+#ifdef EnableTsfDebugMessages
+		DebugOut(L"OnEndComposition\n");
+#endif
 		ImeEndComposition(); // Todo: Maybe
 		return S_OK;
 	}
 
 	IFACEMETHODIMP ScintillaWinUI::OnStartComposition(ITfCompositionView *pComposition, BOOL *pfOk)
 	{
-		DebugOut(L"OnStartComposition");
+#ifdef EnableTsfDebugMessages
+		DebugOut(L"OnStartComposition\n");
+#endif
 		*pfOk = true;
 		view.imeCaretBlockOverride = true;
 		return S_OK;
@@ -1898,7 +1920,9 @@ namespace Scintilla::Internal {
 
 	IFACEMETHODIMP ScintillaWinUI::OnUpdateComposition(ITfCompositionView *pComposition, ITfRange *pRangeNew)
 	{
-		DebugOut(L"OnUpdateComposition");
+#ifdef EnableTsfDebugMessages
+		DebugOut(L"OnUpdateComposition\n");
+#endif
 		return S_OK;
 	}
 
@@ -2144,7 +2168,9 @@ namespace Scintilla::Internal {
 			//TSF:  The selection has changed - notify the sink, if there's no lock held.
 			if (_tfTextStoreACPSink && _lock == NONE)
 			{
+#ifdef EnableTsfDebugMessages
 				DebugOut(L"OnSelectionChange\n");
+#endif
 				_tfTextStoreACPSink->OnSelectionChange();
 			}
 		}
