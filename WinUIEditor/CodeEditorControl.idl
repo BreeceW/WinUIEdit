@@ -13,5 +13,7 @@ namespace WinUIEditor
         String HighlightingLanguage { get; set; };
         event Windows.Foundation.EventHandler<DUX.ElementTheme> DefaultColorsChanged;
         event Windows.Foundation.EventHandler<DUX.ElementTheme> SyntaxHighlightingApplied;
+        void ApplyDefaultsToDocument();
+        void ResetLexer();
     }
 }

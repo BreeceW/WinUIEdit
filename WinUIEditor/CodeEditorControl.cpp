@@ -255,6 +255,17 @@ namespace winrt::WinUIEditor::implementation
 		_syntaxHighlightingAppliedEvent.remove(token);
 	}
 
+	void CodeEditorControl::ApplyDefaultsToDocument()
+	{
+		ChangeDocumentDefaults();
+		UpdateZoom();
+	}
+
+	void CodeEditorControl::ResetLexer()
+	{
+		SetLexer();
+	}
+
 #ifndef WINUI3
 	DUX::ElementTheme CodeEditorControl::LegacyActualTheme()
 	{

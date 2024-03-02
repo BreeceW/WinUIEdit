@@ -27,6 +27,9 @@ namespace winrt::WinUIEditor::implementation
 		event_token SyntaxHighlightingApplied(Windows::Foundation::EventHandler<DUX::ElementTheme> const &handler);
 		void SyntaxHighlightingApplied(event_token const &token) noexcept;
 
+		void ApplyDefaultsToDocument();
+		void ResetLexer();
+
 	private:
 		com_ptr<EditorBaseControl> _editor{ nullptr };
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };

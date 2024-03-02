@@ -20,6 +20,14 @@ namespace WinUIEditor
 	{
 		AddKeyboardShortcuts();
 		ChangeDefaults();
+		ChangeDocumentDefaults();
+	}
+
+	void CodeEditorHandler::ChangeDocumentDefaults()
+	{
+		_call->SetUseTabs(false);
+		_call->SetTabWidth(4);
+		_call->SetIndent(4); // Brace matching and autoindent relies on this
 	}
 
 	void CodeEditorHandler::UpdateColors(CodeEditorTheme theme)
@@ -346,8 +354,6 @@ namespace WinUIEditor
 		_call->SetVisiblePolicy(VisiblePolicy::Slop, 0);
 		_call->SetHScrollBar(true);
 		_call->SetEndAtLastLine(false);
-		_call->SetTabWidth(4);
-		_call->SetIndent(4); // Brace matching and autoindent relies on this
 		_call->StyleSetFont(static_cast<int>(StylesCommon::Default), "Cascadia Code"); // Todo: Use font available on Windows 10
 		_call->StyleSetSizeFractional(static_cast<int>(StylesCommon::Default), 11 * FontSizeMultiplier);
 		_call->SetAdditionalSelectionTyping(true);

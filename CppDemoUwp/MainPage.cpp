@@ -174,8 +174,9 @@ namespace winrt::CppDemoUwp::implementation
 		FocusEditor();
 
 		_activeFile = nullptr;
-		Editor().Editor().ClearAll();
-		Editor().Editor().EmptyUndoBuffer();
+		Editor().Editor().DocPointer(0);
+		Editor().ResetLexer();
+		Editor().ApplyDefaultsToDocument();
 		SetTitle(false);
 	}
 
@@ -352,11 +353,8 @@ namespace winrt::CppDemoUwp::implementation
 		}
 		stream.Close();
 		Editor().Editor().DocPointer(reinterpret_cast<uint64_t>(loader->ConvertToDocument()));
-		const auto zoom{ Editor().Editor().Zoom() };
-		Editor().Editor().Zoom(zoom + 1); // Zoom in and out to force recalculation of number width
-		Editor().Editor().Zoom(zoom); // Todo: Remove hack
-		Editor().Editor().AllocateLineCharacterIndex(LineCharacterIndexType::Utf16); // Todo: Run on background thread
-		Editor().Editor().UndoCollection(true);
+		Editor().ResetLexer();
+		Editor().ApplyDefaultsToDocument();
 		if (large)
 		{
 			FileLoadingBar().Visibility(Visibility::Collapsed);

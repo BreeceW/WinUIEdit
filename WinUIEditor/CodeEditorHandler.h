@@ -30,12 +30,15 @@ namespace WinUIEditor
 		void SetScintilla(std::shared_ptr<Scintilla::ScintillaCall> call);
 		void SetLexilla(Lexilla::CreateLexerFn createLexer);
 		void Initialize();
+		void ChangeDocumentDefaults();
 		void UpdateColors(CodeEditorTheme theme);
 		void UpdateDpi(double value);
+		void UpdateZoom();
 		void ChangeAllOccurrences();
 		std::wstring_view HighlightingLanguage();
 		void HighlightingLanguage(std::wstring_view language);
 		void ProcessNotification(Scintilla::NotificationData *data);
+		void SetLexer();
 
 	protected:
 		virtual void StyleSetFore(int style, Scintilla::ColourAlpha color);
@@ -60,7 +63,6 @@ namespace WinUIEditor
 		void UpdateCaretLineBackColors(bool colorsUpdated = false);
 		void UpdateBraceMatch();
 		void AutoIndent(char ch);
-		void UpdateZoom();
 		void AddKeyboardShortcuts();
 		void ChangeDefaults();
 		std::string GetMainSelectedText(bool expandCaretToWord, Scintilla::sptr_t &start, Scintilla::sptr_t &end);
@@ -71,7 +73,6 @@ namespace WinUIEditor
 			int blockEndStyle, const std::set<std::string> &blockEndWords
 		);
 
-		void SetLexer();
 		void SetJavaScriptDefaults(int wordList1, int wordList2, int indentKeywordStyle, int symbolStyle);
 		void UpdateLanguageStyles();
 
