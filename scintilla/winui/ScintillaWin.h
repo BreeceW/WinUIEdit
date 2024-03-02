@@ -275,5 +275,6 @@ namespace Scintilla::Internal {
 		void StartDrag() override;
 		winrt::fire_and_forget DoDragAsync();
 		int CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength);
+		sptr_t OnSetDocPointer(uptr_t wParam, sptr_t lParam);
 	};
 }

@@ -3042,6 +3042,39 @@ namespace Scintilla::Internal {
 		return returnValue;
 	}
 
+	// We need to tell TSF the document has changed here because no modified event is sent
+	sptr_t ScintillaWinUI::OnSetDocPointer(uptr_t wParam, sptr_t lParam)
+	{
+		const auto oldLen{ DocPositionToAcp(pdoc->Length()) };
+		
+		const auto ret{ __super::WndProc(Message::SetDocPointer, wParam, lParam) };
+
+		if (pdoc->LineCharacterIndex() != LineCharacterIndexType::Utf16)
+		{
+			pdoc->AllocateLineCharacterIndex(LineCharacterIndexType::Utf16);
+		}
+		if (!pdoc->IsCollectingUndo())
+		{
+			pdoc->SetUndoCollection(true);
+		}
+		const auto newLen{ DocPositionToAcp(pdoc->Length()) };
+		TS_TEXTCHANGE chg;
+		chg.acpStart = 0;
+		chg.acpOldEnd = oldLen;
+		chg.acpNewEnd = newLen;
+		if (_tsfCore)
+		{
+			_editContext.NotifyTextChanged(winrt::Windows::UI::Text::Core::CoreTextRange{ chg.acpStart, chg.acpNewEnd }, chg.acpNewEnd - chg.acpStart, winrt::Windows::UI::Text::Core::CoreTextRange{ static_cast<int32_t>(DocPositionToAcp(SelectionStart().Position())), static_cast<int32_t>(DocPositionToAcp(SelectionEnd().Position())) });
+		}
+		else if (_tfTextStoreACPSink && _lock == NONE)
+		{
+			_tfTextStoreACPSink->OnTextChange(0, &chg);
+			_tfTextStoreACPSink->OnSelectionChange(); // Todo: Do we need to notify selection change?
+		}
+
+		return ret;
+	}
+
 	sptr_t ScintillaWinUI::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam)
 	{
 		// Todo: Consider implementing these
@@ -3074,6 +3107,9 @@ namespace Scintilla::Internal {
 			InvalidateStyleRedraw();
 		}
 		return 0;
+
+		case Message::SetDocPointer:
+			return OnSetDocPointer(wParam, lParam);
 
 		default:
 			return __super::WndProc(iMessage, wParam, lParam);
