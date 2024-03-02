@@ -353,6 +353,10 @@ namespace winrt::CppDemoUwp::implementation
 		}
 		stream.Close();
 		Editor().Editor().DocPointer(reinterpret_cast<uint64_t>(loader->ConvertToDocument()));
+		if (!Editor().Editor().UndoCollection())
+		{
+			Editor().Editor().UndoCollection(true);
+		}
 		Editor().ResetLexer();
 		Editor().ApplyDefaultsToDocument();
 		if (large)
