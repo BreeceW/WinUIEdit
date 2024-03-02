@@ -33,7 +33,7 @@ You can download a demo from Microsoft Store [here](https://apps.microsoft.com/d
 <img alt="Mica Editor: replica of Windows 11 Notepad with WinUIEdit control using syntax highlighting, line numbers, and mica, demoing C++ sample code" src="https://user-images.githubusercontent.com/18747724/213900470-3c57b252-3488-40d1-b708-f392a30aab2f.png" width="500" />
 
 ## Advanced usage
-`CodeEditorControl` wraps `EditorBaseControl` and includes additional features and changes default settings and styles. `EditorBaseControl` can be used directly if only the original Scintilla control is desired. The Scintilla API is available through a WinRT wrapper exposed by the `Editor` property, as well as the original window message-based API via the `Scintilla` method.
+`CodeEditorControl` wraps `EditorBaseControl` and includes additional features and changes default settings and styles. `EditorBaseControl` can be used directly if only the original Scintilla control is desired. The Scintilla API is available through a WinRT wrapper exposed by the `Editor` property, as well as the original window message-based API via the `SendMessage` method.
 
 ## Windows version support
 The WinUI 3 version of this control should work on Windows 10, version 1809 and later and support ARM64, x64, and x86. The UWP version of this control should work on Windows 10, version 1703 and later. It will run on ARM64, ARM32, x64, and x86.
