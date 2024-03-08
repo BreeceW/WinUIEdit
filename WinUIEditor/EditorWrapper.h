@@ -699,6 +699,51 @@ namespace winrt::WinUIEditor::implementation
 		void CharacterCategoryOptimization(int32_t value);
 
 		/**
+		 * How many undo actions are in the history?
+		 */
+		int32_t UndoActions();
+
+		/**
+		 * Which action is the save point?
+		 */
+		int32_t UndoSavePoint();
+
+		/**
+		 * Set action as the save point
+		 */
+		void UndoSavePoint(int32_t value);
+
+		/**
+		 * Which action is the detach point?
+		 */
+		int32_t UndoDetach();
+
+		/**
+		 * Set action as the detach point
+		 */
+		void UndoDetach(int32_t value);
+
+		/**
+		 * Which action is the tentative point?
+		 */
+		int32_t UndoTentative();
+
+		/**
+		 * Set action as the tentative point
+		 */
+		void UndoTentative(int32_t value);
+
+		/**
+		 * Which action is the current point?
+		 */
+		int32_t UndoCurrent();
+
+		/**
+		 * Set action as the current point
+		 */
+		void UndoCurrent(int32_t value);
+
+		/**
 		 * Get the size of the dots used to mark space characters.
 		 */
 		int32_t WhitespaceSize();
@@ -2247,6 +2292,17 @@ namespace winrt::WinUIEditor::implementation
 		 * End a sequence of actions that is undone and redone as a unit.
 		 */
 		void EndUndoAction();
+
+		/**
+		 * Push one action onto undo history with no text
+		 */
+		void PushUndoActionType(int32_t type, int64_t pos);
+
+		/**
+		 * Set the text and length of the most recently pushed action
+		 */
+		void ChangeLastUndoActionTextFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text);
+		void ChangeLastUndoActionText(int64_t length, hstring const &text);
 
 		/**
 		 * Set the foreground colour of all whitespace and whether to use this setting.
@@ -3860,6 +3916,22 @@ namespace winrt::WinUIEditor::implementation
 		 */
 		int32_t GetWordCharsWriteBuffer(Windows::Storage::Streams::IBuffer const &characters);
 		hstring GetWordChars();
+
+		/**
+		 * What is the type of an action?
+		 */
+		int32_t GetUndoActionType(int32_t action);
+
+		/**
+		 * What is the position of an action?
+		 */
+		int64_t GetUndoActionPosition(int32_t action);
+
+		/**
+		 * What is the text of an action?
+		 */
+		int32_t GetUndoActionTextWriteBuffer(int32_t action, Windows::Storage::Streams::IBuffer const &text);
+		hstring GetUndoActionText(int32_t action);
 
 		/**
 		 * Retrieve the style of an indicator.

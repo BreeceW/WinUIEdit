@@ -2452,7 +2452,7 @@ namespace Scintilla::Internal {
 			// handle the message but pass it on.
 			RECT rc;
 			GetWindowRect(MainHWND(), &rc);
-			const POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+			const POINT pt = POINTFromLParam(lParam);
 			if (!PtInRect(&rc, pt))
 				return ::DefWindowProc(MainHWND(), iMessage, wParam, lParam);
 		}

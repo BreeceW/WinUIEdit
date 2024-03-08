@@ -157,6 +157,20 @@ namespace WinUIEditor
 		GetCharacterCategoryOptimization = 2721,
 		BeginUndoAction = 2078,
 		EndUndoAction = 2079,
+		GetUndoActions = 2790,
+		SetUndoSavePoint = 2791,
+		GetUndoSavePoint = 2792,
+		SetUndoDetach = 2793,
+		GetUndoDetach = 2794,
+		SetUndoTentative = 2795,
+		GetUndoTentative = 2796,
+		SetUndoCurrent = 2797,
+		GetUndoCurrent = 2798,
+		PushUndoActionType = 2800,
+		ChangeLastUndoActionText = 2801,
+		GetUndoActionType = 2802,
+		GetUndoActionPosition = 2803,
+		GetUndoActionText = 2804,
 		IndicSetStyle = 2080,
 		IndicGetStyle = 2081,
 		IndicSetFore = 2082,
@@ -4928,6 +4942,35 @@ namespace WinUIEditor
 		Int32 CharacterCategoryOptimization { get; set; };
 
 		/**
+		 * How many undo actions are in the history?
+		 */
+		Int32 UndoActions { get; };
+
+		/**
+		 * Which action is the save point?
+		 * Set action as the save point
+		 */
+		Int32 UndoSavePoint { get; set; };
+
+		/**
+		 * Which action is the detach point?
+		 * Set action as the detach point
+		 */
+		Int32 UndoDetach { get; set; };
+
+		/**
+		 * Which action is the tentative point?
+		 * Set action as the tentative point
+		 */
+		Int32 UndoTentative { get; set; };
+
+		/**
+		 * Which action is the current point?
+		 * Set action as the current point
+		 */
+		Int32 UndoCurrent { get; set; };
+
+		/**
 		 * Get the size of the dots used to mark space characters.
 		 * Set the size of the dots used to mark space characters.
 		 */
@@ -6018,6 +6061,17 @@ namespace WinUIEditor
 		 * End a sequence of actions that is undone and redone as a unit.
 		 */
 		void EndUndoAction();
+
+		/**
+		 * Push one action onto undo history with no text
+		 */
+		void PushUndoActionType(Int32 type, Int64 pos);
+
+		/**
+		 * Set the text and length of the most recently pushed action
+		 */
+		void ChangeLastUndoActionTextFromBuffer(Int64 length, Windows.Storage.Streams.IBuffer text);
+		void ChangeLastUndoActionText(Int64 length, String text);
 
 		/**
 		 * Set the foreground colour of all whitespace and whether to use this setting.
@@ -7631,6 +7685,22 @@ namespace WinUIEditor
 		 */
 		Int32 GetWordCharsWriteBuffer(Windows.Storage.Streams.IBuffer characters);
 		String GetWordChars();
+
+		/**
+		 * What is the type of an action?
+		 */
+		Int32 GetUndoActionType(Int32 action);
+
+		/**
+		 * What is the position of an action?
+		 */
+		Int64 GetUndoActionPosition(Int32 action);
+
+		/**
+		 * What is the text of an action?
+		 */
+		Int32 GetUndoActionTextWriteBuffer(Int32 action, Windows.Storage.Streams.IBuffer text);
+		String GetUndoActionText(Int32 action);
 
 		/**
 		 * Retrieve the style of an indicator.

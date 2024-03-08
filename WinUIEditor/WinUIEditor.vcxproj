@@ -308,6 +308,7 @@
     <ClInclude Include="..\scintilla\src\SparseVector.h" />
     <ClInclude Include="..\scintilla\src\SplitVector.h" />
     <ClInclude Include="..\scintilla\src\Style.h" />
+    <ClInclude Include="..\scintilla\src\UndoHistory.h" />
     <ClInclude Include="..\scintilla\src\UniConversion.h" />
     <ClInclude Include="..\scintilla\src\UniqueString.h" />
     <ClInclude Include="..\scintilla\src\ViewStyle.h" />
@@ -421,6 +422,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\scintilla\src\Style.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\scintilla\src\UndoHistory.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\scintilla\src\UniConversion.cxx">

@@ -101,8 +101,8 @@ void LoadD2DOnce() noexcept {
 	hDLLD2D = ::LoadLibraryEx(TEXT("D2D1.DLL"), 0, loadLibraryFlags);
 	D2D1CFSig fnD2DCF = DLLFunction<D2D1CFSig>(hDLLD2D, "D2D1CreateFactory");
 	if (fnD2DCF) {
-		// A single threaded factory as Scintilla always draw on the GUI thread
-		fnD2DCF(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+		// A multi threaded factory in case Scintilla is used with multiple GUI threads
+		fnD2DCF(D2D1_FACTORY_TYPE_MULTI_THREADED,
 			__uuidof(ID2D1Factory),
 			nullptr,
 			reinterpret_cast<IUnknown**>(&pD2DFactory));

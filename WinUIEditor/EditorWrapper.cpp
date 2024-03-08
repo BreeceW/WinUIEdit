@@ -1475,6 +1475,78 @@ namespace winrt::WinUIEditor::implementation
 	}
 
 	/**
+	 * How many undo actions are in the history?
+	 */
+	int32_t Editor::UndoActions()
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoActions, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * Which action is the save point?
+	 */
+	int32_t Editor::UndoSavePoint()
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoSavePoint, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * Set action as the save point
+	 */
+	void Editor::UndoSavePoint(int32_t value)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::SetUndoSavePoint, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
+	 * Which action is the detach point?
+	 */
+	int32_t Editor::UndoDetach()
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoDetach, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * Set action as the detach point
+	 */
+	void Editor::UndoDetach(int32_t value)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::SetUndoDetach, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
+	 * Which action is the tentative point?
+	 */
+	int32_t Editor::UndoTentative()
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoTentative, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * Set action as the tentative point
+	 */
+	void Editor::UndoTentative(int32_t value)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::SetUndoTentative, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
+	 * Which action is the current point?
+	 */
+	int32_t Editor::UndoCurrent()
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoCurrent, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * Set action as the current point
+	 */
+	void Editor::UndoCurrent(int32_t value)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::SetUndoCurrent, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
 	 * Get the size of the dots used to mark space characters.
 	 */
 	int32_t Editor::WhitespaceSize()
@@ -3963,6 +4035,27 @@ namespace winrt::WinUIEditor::implementation
 	void Editor::EndUndoAction()
 	{
 		_editor.get()->PublicWndProc(Scintilla::Message::EndUndoAction, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
+	 * Push one action onto undo history with no text
+	 */
+	void Editor::PushUndoActionType(int32_t type, int64_t pos)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::PushUndoActionType, static_cast<Scintilla::uptr_t>(type), static_cast<Scintilla::sptr_t>(pos));
+	}
+
+	/**
+	 * Set the text and length of the most recently pushed action
+	 */
+	void Editor::ChangeLastUndoActionTextFromBuffer(int64_t length, Windows::Storage::Streams::IBuffer const &text)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::ChangeLastUndoActionText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr));
+	}
+
+	void Editor::ChangeLastUndoActionText(int64_t length, hstring const &text)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::ChangeLastUndoActionText, static_cast<Scintilla::uptr_t>(length), reinterpret_cast<Scintilla::sptr_t>(to_string(text).c_str()));
 	}
 
 	/**
@@ -6796,6 +6889,46 @@ namespace winrt::WinUIEditor::implementation
 		{
 			std::string value(len, '\0');
 			_editor.get()->PublicWndProc(Scintilla::Message::GetWordChars, static_cast<Scintilla::uptr_t>(0), reinterpret_cast<Scintilla::sptr_t>(value.data()));
+			return to_hstring(value);
+		}
+		else
+		{
+			return hstring{};
+		}
+	}
+
+	/**
+	 * What is the type of an action?
+	 */
+	int32_t Editor::GetUndoActionType(int32_t action)
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoActionType, static_cast<Scintilla::uptr_t>(action), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * What is the position of an action?
+	 */
+	int64_t Editor::GetUndoActionPosition(int32_t action)
+	{
+		return static_cast<int64_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoActionPosition, static_cast<Scintilla::uptr_t>(action), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * What is the text of an action?
+	 */
+	int32_t Editor::GetUndoActionTextWriteBuffer(int32_t action, Windows::Storage::Streams::IBuffer const &text)
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoActionText, static_cast<Scintilla::uptr_t>(action), reinterpret_cast<Scintilla::sptr_t>(text ? text.data() : nullptr)));
+	}
+
+	hstring Editor::GetUndoActionText(int32_t action)
+	{
+		const auto wParam{ static_cast<Scintilla::uptr_t>(action) };
+		const auto len{ static_cast<size_t>(_editor.get()->PublicWndProc(Scintilla::Message::GetUndoActionText, wParam, static_cast<Scintilla::sptr_t>(0))) };
+		if (len)
+		{
+			std::string value(len, '\0');
+			_editor.get()->PublicWndProc(Scintilla::Message::GetUndoActionText, wParam, reinterpret_cast<Scintilla::sptr_t>(value.data()));
 			return to_hstring(value);
 		}
 		else

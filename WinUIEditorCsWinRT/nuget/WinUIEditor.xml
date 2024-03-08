@@ -181,6 +181,15 @@ May be nested.</summary>
         <member name="M:WinUIEditor.Editor.EndUndoAction">
             <summary>End a sequence of actions that is undone and redone as a unit.</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.PushUndoActionType(System.Int32,System.Int64)">
+            <summary>Push one action onto undo history with no text</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.ChangeLastUndoActionTextFromBuffer(System.Int64,Windows.Storage.Streams.IBuffer)">
+            <summary>Set the text and length of the most recently pushed action</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.ChangeLastUndoActionText(System.Int64,System.String)">
+            <summary>Set the text and length of the most recently pushed action</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.SetWhitespaceFore(System.Boolean,System.Int32)">
             <summary>Set the foreground colour of all whitespace and whether to use this setting.</summary>
         </member>
@@ -1311,6 +1320,18 @@ Returns the number of characters</summary>
             <summary>Get the set of characters making up words for when moving or selecting by word.
 Returns the number of characters</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.GetUndoActionType(System.Int32)">
+            <summary>What is the type of an action?</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.GetUndoActionPosition(System.Int32)">
+            <summary>What is the position of an action?</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.GetUndoActionTextWriteBuffer(System.Int32,Windows.Storage.Streams.IBuffer)">
+            <summary>What is the text of an action?</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.GetUndoActionText(System.Int32)">
+            <summary>What is the text of an action?</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.IndicGetStyle(System.Int32)">
             <summary>Retrieve the style of an indicator.</summary>
         </member>
@@ -1974,6 +1995,25 @@ Get the time in milliseconds that the caret is on and off. 0 = steady on.</summa
         <member name="P:WinUIEditor.Editor.CharacterCategoryOptimization">
             <summary>Get the number of characters to have directly indexed categories
 Set the number of characters to have directly indexed categories</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.UndoActions">
+            <summary>How many undo actions are in the history?</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.UndoSavePoint">
+            <summary>Which action is the save point?
+Set action as the save point</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.UndoDetach">
+            <summary>Which action is the detach point?
+Set action as the detach point</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.UndoTentative">
+            <summary>Which action is the tentative point?
+Set action as the tentative point</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.UndoCurrent">
+            <summary>Which action is the current point?
+Set action as the current point</summary>
         </member>
         <member name="P:WinUIEditor.Editor.WhitespaceSize">
             <summary>Get the size of the dots used to mark space characters.
