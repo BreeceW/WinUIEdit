@@ -324,6 +324,7 @@
     <ClInclude Include="..\lexilla\lexlib\CharacterCategory.h" />
     <ClInclude Include="..\lexilla\lexlib\CharacterSet.h" />
     <ClInclude Include="..\lexilla\lexlib\DefaultLexer.h" />
+    <ClInclude Include="..\lexilla\lexlib\InList.h" />
     <ClInclude Include="..\lexilla\lexlib\LexAccessor.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerBase.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerModule.h" />
@@ -812,6 +813,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\DefaultLexer.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexlib\InList.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexAccessor.cxx">

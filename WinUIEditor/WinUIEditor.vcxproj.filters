@@ -504,6 +504,9 @@
     <ClCompile Include="..\lexilla\lexlib\DefaultLexer.cxx">
       <Filter>Lexilla</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexlib\InList.cxx">
+      <Filter>Lexilla</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexAccessor.cxx">
       <Filter>Lexilla</Filter>
     </ClCompile>
@@ -711,6 +714,9 @@
       <Filter>Lexilla</Filter>
     </ClInclude>
     <ClInclude Include="..\lexilla\lexlib\DefaultLexer.h">
+      <Filter>Lexilla</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lexilla\lexlib\InList.h">
       <Filter>Lexilla</Filter>
     </ClInclude>
     <ClInclude Include="..\lexilla\lexlib\LexAccessor.h">
