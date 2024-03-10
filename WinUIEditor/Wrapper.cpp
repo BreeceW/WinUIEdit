@@ -8,9 +8,28 @@ namespace WinUIEditor
 		return _vsisNative;
 	}
 
-	void Wrapper::VsisNative(winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative)
+	void Wrapper::VsisNative(winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &value)
 	{
-		_vsisNative = vsisNative;
+		_vsisNative = value;
+		_sisNativeWithD2D = _vsisNative.as<::ISurfaceImageSourceNativeWithD2D>();
+	}
+
+	winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> Wrapper::SisNativeWithD2D()
+	{
+		return _sisNativeWithD2D;
+	}
+
+	winrt::com_ptr<::ID2D1DeviceContext> Wrapper::D2dDeviceContext()
+	{
+		return _d2dDeviceContext;
+	}
+
+	void Wrapper::TrimDxgiDevice()
+	{
+		if (_dxgiDevice)
+		{
+			_dxgiDevice->Trim();
+		}
 	}
 
 	float Wrapper::LogicalDpi()
@@ -190,5 +209,53 @@ namespace WinUIEditor
 	winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation> Wrapper::StartDragAsync(winrt::DUI::PointerPoint const &pointerPoint)
 	{
 		return _mouseCaptureElement.StartDragAsync(pointerPoint);
+	}
+
+	void Wrapper::CreateGraphicsDevices()
+	{
+		// Todo: Is there any cleanup that needs to be done when the control is deleted or if the device gets re-created?
+
+		uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+
+		D3D_FEATURE_LEVEL featureLevels[] =
+		{
+			D3D_FEATURE_LEVEL_11_1,
+			D3D_FEATURE_LEVEL_11_0,
+			D3D_FEATURE_LEVEL_10_1,
+			D3D_FEATURE_LEVEL_10_0,
+			D3D_FEATURE_LEVEL_9_3,
+			D3D_FEATURE_LEVEL_9_2,
+			D3D_FEATURE_LEVEL_9_1,
+		};
+
+		// Create the Direct3D device
+		winrt::com_ptr<ID3D11Device> d3dDevice;
+		D3D_FEATURE_LEVEL supportedFeatureLevel;
+		winrt::check_hresult(D3D11CreateDevice(
+			nullptr,
+			D3D_DRIVER_TYPE_HARDWARE,
+			0,
+			creationFlags,
+			featureLevels,
+			ARRAYSIZE(featureLevels),
+			D3D11_SDK_VERSION,
+			d3dDevice.put(),
+			&supportedFeatureLevel,
+			nullptr));
+
+		// Get the Direct3D device.
+		_dxgiDevice = d3dDevice.as<IDXGIDevice3>();
+
+		// Create the Direct2D device and a corresponding context
+		winrt::com_ptr<ID2D1Device> d2dDevice;
+		D2D1CreateDevice(_dxgiDevice.get(), nullptr, d2dDevice.put());
+
+		winrt::check_hresult(
+			d2dDevice->CreateDeviceContext(
+				D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
+				_d2dDeviceContext.put()));
+
+		// Associate the Direct2D device with the SurfaceImageSource
+		SisNativeWithD2D()->SetDevice(d2dDevice.get());
 	}
 }

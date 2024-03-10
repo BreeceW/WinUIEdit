@@ -43,7 +43,7 @@ namespace winrt::WinUIEditor::implementation
 		}
 #endif
 
-		_scintilla = make_self<Scintilla::Internal::ScintillaWinUI>();
+		_scintilla = make_self<Scintilla::Internal::ScintillaWinUI>(_wrapper);
 		_call = std::make_shared<Scintilla::ScintillaCall>();
 		_call->SetFnPtr(reinterpret_cast<SciFnDirectStatus>(_scintilla->WndProc(Scintilla::Message::GetDirectStatusFunction, 0, 0)), _scintilla->WndProc(Scintilla::Message::GetDirectPointer, 0, 0));
 
@@ -326,7 +326,7 @@ namespace winrt::WinUIEditor::implementation
 		_vsisNative = virtualSurfaceImageSource.as<::IVirtualSurfaceImageSourceNative>();
 
 		_wrapper->VsisNative(_vsisNative);
-		_scintilla->RegisterGraphics(_wrapper);
+		_wrapper->CreateGraphicsDevices();
 		_vsisNative->RegisterForUpdatesNeeded(_scintilla.as<::IVirtualSurfaceUpdatesCallbackNative>().get());
 
 		// The SurfaceImageSource object's underlying
@@ -655,7 +655,8 @@ namespace winrt::WinUIEditor::implementation
 		// Required or crashes on resume
 		// https://learn.microsoft.com/en-us/windows/uwp/gaming/directx-and-xaml-interop
 		// https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_3/nf-dxgi1_3-idxgidevice3-trim
-		_scintilla->TrimGraphics();
+		// Todo: Should ClearResources get called too? https://github.com/microsoft/Win2D/blob/master/winrt/lib/drawing/CanvasDevice.cpp#L1040
+		_wrapper->TrimDxgiDevice();
 	}
 #endif
 }

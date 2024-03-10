@@ -56,9 +56,7 @@ namespace Scintilla::Internal {
 		public ::winrt::implements<ScintillaWinUI, ::IVirtualSurfaceUpdatesCallbackNative, ITextStoreACP2, ITfContextOwnerCompositionSink>
 	{
 	public:
-		ScintillaWinUI();
-		void RegisterGraphics(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper);
-		void TrimGraphics();
+		ScintillaWinUI(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper);
 		void DpiChanged();
 		void SizeChanged();
 		void FocusChanged(bool focused);
@@ -108,8 +106,6 @@ namespace Scintilla::Internal {
 		winrt::weak_ref<winrt::Windows::Foundation::IInspectable> _wndProcTag;
 		LRESULT SendMessage(UINT msg, WPARAM wParam, LPARAM lParam);
 
-		void CreateGraphicsDevices();
-
 		Sci::Position AcpToDocPosition(Sci::Position acp, bool *acpWithinSurrogatePair = nullptr);
 		Sci::Position DocPositionToAcp(Sci::Position docPosition);
 
@@ -126,8 +122,8 @@ namespace Scintilla::Internal {
 		Scintilla::KeyMod WindowsModifiers(winrt::Windows::System::VirtualKeyModifiers modifiers);
 		void AddWString(std::wstring_view wsv, CharacterSource charSource); // win32
 		std::string EncodeWString(std::wstring_view wsv);
-		wchar_t lastHighSurrogateChar; // win32
-		bool lastKeyDownConsumed; // win32?
+		wchar_t lastHighSurrogateChar{ 0 }; // win32
+		bool lastKeyDownConsumed{ false }; // win32?
 		void ImeEndComposition();
 		std::queue<std::unique_ptr<IMessage>> msgq{}; //31
 		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
@@ -179,15 +175,15 @@ namespace Scintilla::Internal {
 		winrt::com_ptr<ITfContext> _tfContext{ nullptr };
 		winrt::com_ptr<IUnknown> _sinkUnk{ nullptr };
 		winrt::com_ptr<ITextStoreACPSink> _tfTextStoreACPSink{ nullptr };
-		DWORD  _textStoreSinkMask;
-		TfEditCookie _tfEditCookie;
-		TfClientId _tfClientId;
+		DWORD  _textStoreSinkMask{ 0 };
+		TfEditCookie _tfEditCookie{ 0 };
+		TfClientId _tfClientId{ 0 };
 		enum LockTypes
 		{
 			NONE = 0,
 			READONLY = TS_LF_READ,
 			READWRITE = TS_LF_READWRITE
-		} _lock, _lockAsync;
+		} _lock{ NONE }, _lockAsync{ NONE };
 		IFACEMETHOD(AdviseSink)(const IID &, IUnknown *, DWORD) override;
 		IFACEMETHOD(UnadviseSink)(IUnknown *) override;
 		IFACEMETHOD(RequestLock)(DWORD, HRESULT *) override;
@@ -218,11 +214,7 @@ namespace Scintilla::Internal {
 		IFACEMETHOD(OnStartComposition)(ITfCompositionView *pComposition, BOOL *pfOk);
 		IFACEMETHOD(OnUpdateComposition)(ITfCompositionView *pComposition, ITfRange *pRangeNew);
 
-		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> _sisNativeWithD2D{ nullptr };
-		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
-		winrt::com_ptr<::ID2D1DeviceContext> _d2dDeviceContext{ nullptr };
-		winrt::com_ptr<::IDXGIDevice3> _dxgiDevice{ nullptr };
-		std::shared_ptr<::WinUIEditor::Wrapper> _wrapper{ nullptr };
+		std::shared_ptr<::WinUIEditor::Wrapper> _mainWrapper{ nullptr };
 
 		// Timer implementation
 		// Todo: Planning to not use XAML APIs on the Scintilla side, so replace DispatcherTimer with something that works outside of XAML

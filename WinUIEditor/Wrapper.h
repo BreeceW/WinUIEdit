@@ -6,7 +6,10 @@ namespace WinUIEditor
 	{
 	public:
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> VsisNative();
-		void VsisNative(winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &vsisNative);
+		void VsisNative(winrt::com_ptr<::IVirtualSurfaceImageSourceNative> const &value);
+		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> SisNativeWithD2D();
+		winrt::com_ptr<::ID2D1DeviceContext> D2dDeviceContext();
+		void TrimDxgiDevice();
 		float LogicalDpi();
 		void LogicalDpi(float value);
 		int Width();
@@ -43,6 +46,8 @@ namespace WinUIEditor
 
 		winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation> StartDragAsync(winrt::DUI::PointerPoint const &pointerPoint);
 
+		void CreateGraphicsDevices();
+
 		// Font used for arrows in folding column markers. Stored here to allow retrieval from SurfaceD2D
 		// Do not access outside of GetChevronFontFromSurface
 		std::shared_ptr<Scintilla::Internal::Font> chevronFont{ nullptr };
@@ -55,6 +60,9 @@ namespace WinUIEditor
 		winrt::DUX::Controls::Primitives::ScrollBar _verticalScrollBar{ nullptr };
 		bool _captured;
 		winrt::com_ptr<IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
+		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> _sisNativeWithD2D{ nullptr };
+		winrt::com_ptr<::ID2D1DeviceContext> _d2dDeviceContext{ nullptr };
+		winrt::com_ptr<::IDXGIDevice3> _dxgiDevice{ nullptr };
 		float _logicalDpi;
 		int _width;
 		int _height;

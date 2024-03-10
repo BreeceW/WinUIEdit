@@ -477,8 +477,11 @@ namespace Scintilla::Internal {
 			text, ln->back);
 	}
 
-	ScintillaWinUI::ScintillaWinUI()
+	ScintillaWinUI::ScintillaWinUI(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper)
 	{
+		_mainWrapper = wrapper;
+		wMain = _mainWrapper.get();
+
 		// This is a legacy Scintilla feature that is recommended to be disabled (though not deprecated)
 		// It is not currently supported in EditorBaseControl because it is a performance hit and is redundant
 		commandEvents = false;
@@ -863,9 +866,9 @@ namespace Scintilla::Internal {
 		ScintillaBase::Finalise();
 		StopTimers();
 		SetIdle(false);
-		if (_vsisNative)
+		if (_mainWrapper->VsisNative())
 		{
-			_vsisNative->RegisterForUpdatesNeeded(nullptr);
+			_mainWrapper->VsisNative()->RegisterForUpdatesNeeded(nullptr);
 		}
 		if (_tfDocumentManager)
 		{
@@ -2045,7 +2048,7 @@ namespace Scintilla::Internal {
 	}
 
 	bool ScintillaWinUI::ChangeScrollRange(int nBar, int nMin, int nMax, UINT nPage) noexcept {
-		if (!_wrapper || !_wrapper->HasScrollBars())
+		if (!_mainWrapper->HasScrollBars())
 		{
 			return false;
 		}
@@ -2056,21 +2059,21 @@ namespace Scintilla::Internal {
 
 		if (nBar == SB_HORZ)
 		{
-			if (static_cast<int>(_wrapper->HorizontalScrollBarMinimum()) != nMin || static_cast<int>(_wrapper->HorizontalScrollBarMaximum()) != max || static_cast<UINT>(_wrapper->HorizontalScrollBarViewportSize()) != nPage)
+			if (static_cast<int>(_mainWrapper->HorizontalScrollBarMinimum()) != nMin || static_cast<int>(_mainWrapper->HorizontalScrollBarMaximum()) != max || static_cast<UINT>(_mainWrapper->HorizontalScrollBarViewportSize()) != nPage)
 			{
-				_wrapper->HorizontalScrollBarViewportSize(nPage);
-				_wrapper->HorizontalScrollBarMinimum(nMin);
-				_wrapper->HorizontalScrollBarMaximum(max);
+				_mainWrapper->HorizontalScrollBarViewportSize(nPage);
+				_mainWrapper->HorizontalScrollBarMinimum(nMin);
+				_mainWrapper->HorizontalScrollBarMaximum(max);
 				return true;
 			}
 		}
 		else
 		{
-			if (static_cast<int>(_wrapper->VerticalScrollBarMinimum()) != nMin || static_cast<int>(_wrapper->VerticalScrollBarMaximum()) != max || static_cast<UINT>(_wrapper->VerticalScrollBarViewportSize()) != nPage)
+			if (static_cast<int>(_mainWrapper->VerticalScrollBarMinimum()) != nMin || static_cast<int>(_mainWrapper->VerticalScrollBarMaximum()) != max || static_cast<UINT>(_mainWrapper->VerticalScrollBarViewportSize()) != nPage)
 			{
-				_wrapper->VerticalScrollBarViewportSize(nPage);
-				_wrapper->VerticalScrollBarMinimum(nMin);
-				_wrapper->VerticalScrollBarMaximum(max);
+				_mainWrapper->VerticalScrollBarViewportSize(nPage);
+				_mainWrapper->VerticalScrollBarMinimum(nMin);
+				_mainWrapper->VerticalScrollBarMaximum(max);
 				return true;
 			}
 		}
@@ -2083,16 +2086,16 @@ namespace Scintilla::Internal {
 			return;
 		}*/
 
-		const auto value{ static_cast<int>(barType == SB_HORZ ? _wrapper->HorizontalScrollBarValue() : _wrapper->VerticalScrollBarValue()) };
+		const auto value{ static_cast<int>(barType == SB_HORZ ? _mainWrapper->HorizontalScrollBarValue() : _mainWrapper->VerticalScrollBarValue()) };
 		if (value != pos) {
 			DwellEnd(true);
 			if (barType == SB_HORZ)
 			{
-				_wrapper->HorizontalScrollBarValue(pos);
+				_mainWrapper->HorizontalScrollBarValue(pos);
 			}
 			else
 			{
-				_wrapper->VerticalScrollBarValue(pos);
+				_mainWrapper->VerticalScrollBarValue(pos);
 			}
 		}
 	}
@@ -2244,17 +2247,12 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::SetMouseCapture(bool on)
 	{
-		if (_wrapper)
-		{
-			_wrapper->SetMouseCapture(on);
-		}
+		_mainWrapper->SetMouseCapture(on);
 	}
 
 	bool ScintillaWinUI::HaveMouseCapture()
 	{
-		return _wrapper
-			? _wrapper->HaveMouseCapture()
-			: false;
+		return _mainWrapper->HaveMouseCapture();
 	}
 
 	std::string ScintillaWinUI::UTF8FromEncoded(std::string_view encoded) const
@@ -2278,71 +2276,6 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::AddToPopUp(const char *label, int cmd, bool enabled)
 	{
-	}
-
-	void ScintillaWinUI::CreateGraphicsDevices()
-	{
-		// Todo: Is there any cleanup that needs to be done when the control is deleted or if the device gets re-created?
-
-		uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-
-		D3D_FEATURE_LEVEL featureLevels[] =
-		{
-			D3D_FEATURE_LEVEL_11_1,
-			D3D_FEATURE_LEVEL_11_0,
-			D3D_FEATURE_LEVEL_10_1,
-			D3D_FEATURE_LEVEL_10_0,
-			D3D_FEATURE_LEVEL_9_3,
-			D3D_FEATURE_LEVEL_9_2,
-			D3D_FEATURE_LEVEL_9_1,
-		};
-
-		// Create the Direct3D device
-		winrt::com_ptr<ID3D11Device> d3dDevice;
-		D3D_FEATURE_LEVEL supportedFeatureLevel;
-		winrt::check_hresult(D3D11CreateDevice(
-			nullptr,
-			D3D_DRIVER_TYPE_HARDWARE,
-			0,
-			creationFlags,
-			featureLevels,
-			ARRAYSIZE(featureLevels),
-			D3D11_SDK_VERSION,
-			d3dDevice.put(),
-			&supportedFeatureLevel,
-			nullptr));
-
-		// Get the Direct3D device.
-		_dxgiDevice = d3dDevice.as<IDXGIDevice3>();
-
-		// Create the Direct2D device and a corresponding context
-		winrt::com_ptr<ID2D1Device> d2dDevice;
-		D2D1CreateDevice(_dxgiDevice.get(), nullptr, d2dDevice.put());
-
-		winrt::check_hresult(
-			d2dDevice->CreateDeviceContext(
-				D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
-				_d2dDeviceContext.put()));
-
-		// Associate the Direct2D device with the SurfaceImageSource
-		_sisNativeWithD2D->SetDevice(d2dDevice.get());
-	}
-
-	void ScintillaWinUI::RegisterGraphics(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper)
-	{
-		_wrapper = wrapper;
-		wMain = _wrapper.get(); // Todo: Make sure this makes sense
-
-		_vsisNative = wrapper->VsisNative();
-		_sisNativeWithD2D = _vsisNative.as<ISurfaceImageSourceNativeWithD2D>();
-
-		CreateGraphicsDevices();
-	}
-
-	void ScintillaWinUI::TrimGraphics()
-	{
-		// Todo: Should ClearResources get called too? https://github.com/microsoft/Win2D/blob/master/winrt/lib/drawing/CanvasDevice.cpp#L1040
-		_dxgiDevice->Trim();
 	}
 
 	void ScintillaWinUI::DpiChanged()
@@ -2603,12 +2536,12 @@ namespace Scintilla::Internal {
 	IFACEMETHODIMP ScintillaWinUI::UpdatesNeeded()
 	{
 		ULONG drawingBoundsCount = 0;
-		HRESULT hr = _vsisNative->GetUpdateRectCount(&drawingBoundsCount);
+		HRESULT hr = _mainWrapper->VsisNative()->GetUpdateRectCount(&drawingBoundsCount);
 		if (FAILED(hr))
 			return hr;
 
 		std::unique_ptr<RECT[]> drawingBounds{ std::make_unique<RECT[]>(drawingBoundsCount) };
-		hr = _vsisNative->GetUpdateRects(drawingBounds.get(), drawingBoundsCount);
+		hr = _mainWrapper->VsisNative()->GetUpdateRects(drawingBounds.get(), drawingBoundsCount);
 		if (FAILED(hr))
 			return hr;
 
@@ -2641,7 +2574,7 @@ namespace Scintilla::Internal {
 			paintState = PaintState::painting;
 			paintingAllText = true;
 			// Todo: This is in contradiction with the above paragraph about drawing size. But invalidation results in flickering
-			DrawBit(RECT{ 0, 0, _wrapper->Width(), _wrapper->Height() });
+			DrawBit(RECT{ 0, 0, _mainWrapper->Width(), _mainWrapper->Height() });
 		}
 
 		paintState = PaintState::notPainting;
@@ -2651,6 +2584,8 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::DrawBit(RECT const &drawingBounds)
 	{
+		const auto &sisNativeWithD2D{ _mainWrapper->SisNativeWithD2D() };
+
 		winrt::com_ptr<IDXGISurface> surface;
 		POINT surfaceOffset = { 0 };
 
@@ -2660,7 +2595,7 @@ namespace Scintilla::Internal {
 		//
 		//This method returns the point (x,y) offset of the updated target rectangle in the offset
 		//parameter. You use this offset to determine where to draw into inside the IDXGISurface.
-		HRESULT beginDrawHR = _sisNativeWithD2D->BeginDraw(drawingBounds, __uuidof(::IDXGISurface), surface.put_void(), &surfaceOffset);
+		HRESULT beginDrawHR = sisNativeWithD2D->BeginDraw(drawingBounds, __uuidof(::IDXGISurface), surface.put_void(), &surfaceOffset);
 		if (beginDrawHR == DXGI_ERROR_DEVICE_REMOVED || beginDrawHR == DXGI_ERROR_DEVICE_RESET || beginDrawHR == E_SURFACE_CONTENTS_LOST)
 		{
 			// For surface lost:
@@ -2673,32 +2608,34 @@ namespace Scintilla::Internal {
 			// That says you do not need to re-create the devices when E_SURFACE_CONTENTS_LOST but in testing it seems necessary
 			// https://learn.microsoft.com/en-us/windows/uwp/gaming/handling-device-lost-scenarios
 
-			CreateGraphicsDevices();
+			_mainWrapper->CreateGraphicsDevices();
 			InvalidateStyleRedraw(); // just Redraw() does not work
 		}
 		else
 		{
+			const auto &d2dDeviceContext{ _mainWrapper->D2dDeviceContext() };
+
 			winrt::com_ptr<ID2D1Bitmap1> bitmap;
 			// surface can be null if E_FAIL (got while debugging)
 			// Todo: handle general fail case for above
-			HRESULT hrBitMap = _d2dDeviceContext->CreateBitmapFromDxgiSurface(
+			HRESULT hrBitMap = d2dDeviceContext->CreateBitmapFromDxgiSurface(
 				surface.get(), nullptr, bitmap.put());
 			if (FAILED(hrBitMap))
 			{
 				winrt::throw_hresult(hrBitMap);
 			}
-			_d2dDeviceContext->BeginDraw();
-			_d2dDeviceContext->SetTarget(bitmap.get());
+			d2dDeviceContext->BeginDraw();
+			d2dDeviceContext->SetTarget(bitmap.get());
 
 			surfaceOffset.x -= drawingBounds.left;
 			surfaceOffset.y -= drawingBounds.top;
 			float offsetX = surfaceOffset.x;
 			float offsetY = surfaceOffset.y;
 
-			_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Translation(offsetX, offsetY));
+			d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Translation(offsetX, offsetY));
 
 			// Constrain the drawing only to the designated portion of the surface
-			_d2dDeviceContext->PushAxisAlignedClip(
+			d2dDeviceContext->PushAxisAlignedClip(
 				D2D1::RectF(
 					drawingBounds.left, drawingBounds.top, drawingBounds.right, drawingBounds.bottom
 				),
@@ -2706,7 +2643,7 @@ namespace Scintilla::Internal {
 			);
 
 			auto surf{ Scintilla::Internal::Surface::Allocate(technology) };
-			surf->Init(_d2dDeviceContext.get(), _wrapper.get());
+			surf->Init(d2dDeviceContext.get(), _mainWrapper.get());
 			//surf->SetUnicodeMode(true); // Todo: Figure out what to make this
 			//surf->SetDBCSMode(0);  // Todo: Figure out what to make this
 			surf->SetMode(SurfaceMode{ 65001, false }); // Todo: Ensure these values are good
@@ -2715,10 +2652,10 @@ namespace Scintilla::Internal {
 
 			surf->Release();
 
-			_d2dDeviceContext->EndDraw();
+			d2dDeviceContext->EndDraw();
 		}
 
-		_sisNativeWithD2D->EndDraw();
+		sisNativeWithD2D->EndDraw();
 	}
 
 	UINT ScintillaWinUI::CodePageOfDocument() const noexcept {
@@ -2976,7 +2913,7 @@ namespace Scintilla::Internal {
 
 	winrt::fire_and_forget ScintillaWinUI::DoDragAsync()
 	{
-		if (!_wrapper || !_dragPointer)
+		if (!_dragPointer)
 		{
 			co_return;
 		}
@@ -2986,7 +2923,7 @@ namespace Scintilla::Internal {
 		//Platform::DebugPrintf("About to DoDragDrop %x %x\n", pDataObject, pDropSource);
 		try
 		{
-			const auto operation{ co_await _wrapper->StartDragAsync(_dragPointer) };
+			const auto operation{ co_await _mainWrapper->StartDragAsync(_dragPointer) };
 			//Platform::DebugPrintf("DoDragDrop = %x\n", hr);
 			if (operation == winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move && dropWentOutside)
 			{
