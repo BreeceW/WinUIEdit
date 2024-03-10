@@ -256,15 +256,14 @@ namespace Scintilla::Internal {
 	}
 
 	std::wstring StringMapCase(std::wstring_view wsv, DWORD mapFlags) {
-		/*const int charsConverted = ::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
-			wsv.data(), static_cast<int>(wsv.length()), nullptr, 0);
+		const int charsConverted = ::LCMapStringEx(LOCALE_NAME_SYSTEM_DEFAULT, mapFlags,
+			wsv.data(), static_cast<int>(wsv.length()), nullptr, 0, nullptr, nullptr, 0);
 		std::wstring wsConverted(charsConverted, 0);
 		if (charsConverted) {
-			::LCMapStringW(LOCALE_SYSTEM_DEFAULT, mapFlags,
-				wsv.data(), static_cast<int>(wsv.length()), wsConverted.data(), charsConverted);
+			::LCMapStringEx(LOCALE_NAME_SYSTEM_DEFAULT, mapFlags,
+				wsv.data(), static_cast<int>(wsv.length()), wsConverted.data(), charsConverted, nullptr, nullptr, 0);
 		}
-		return wsConverted;*/
-		return std::wstring{ wsv }; // WinUI Todo
+		return wsConverted;
 	}
 
 	constexpr uint8_t NotifyMessageId = 1;
