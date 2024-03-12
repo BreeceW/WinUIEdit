@@ -2458,6 +2458,11 @@ namespace Scintilla::Internal {
 		}
 	}
 
+	void ScintillaWinUI::PointerExited()
+	{
+		MouseLeave();
+	}
+
 	void ScintillaWinUI::HorizontalScroll(ScrollEventType event, int value) {
 		int xPos = xOffset;
 		const PRectangle rcText = GetTextRectangle();

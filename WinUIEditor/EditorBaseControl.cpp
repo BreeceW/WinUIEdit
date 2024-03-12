@@ -351,8 +351,8 @@ namespace winrt::WinUIEditor::implementation
 #ifndef WINUI3
 			_imageTargetPointerCaptureLostRevoker = imageTarget.PointerCaptureLost(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerCaptureLost });
 			_imageTargetPointerEnteredRevoker = imageTarget.PointerEntered(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerEntered });
-			_imageTargetPointerExitedRevoker = imageTarget.PointerExited(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerExited });
 #endif
+			_imageTargetPointerExitedRevoker = imageTarget.PointerExited(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerExited });
 			_imageTargetPointerWheelChangedRevoker = imageTarget.PointerWheelChanged(auto_revoke, { this, &EditorBaseControl::ImageTarget_PointerWheelChanged });
 			_imageTargetDragEnterRevoker = imageTarget.DragEnter(auto_revoke, { this, &EditorBaseControl::ImageTarget_DragEnter });
 			_imageTargetDragOverRevoker = imageTarget.DragOver(auto_revoke, { this, &EditorBaseControl::ImageTarget_DragOver });
@@ -475,16 +475,17 @@ namespace winrt::WinUIEditor::implementation
 	{
 		_isPointerOver = true;
 	}
+#endif
 
 	void EditorBaseControl::ImageTarget_PointerExited(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		_isPointerOver = false;
+		_scintilla->PointerExited();
 		if (!_wrapper->HaveMouseCapture())
 		{
 			winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(Windows::UI::Core::CoreCursor{ Windows::UI::Core::CoreCursorType::Arrow, 0 });
 		}
 	}
-#endif
 
 	void EditorBaseControl::OnKeyDown(KeyRoutedEventArgs const &e)
 	{

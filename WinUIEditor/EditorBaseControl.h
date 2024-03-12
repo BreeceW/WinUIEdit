@@ -69,9 +69,9 @@ namespace winrt::WinUIEditor::implementation
 		void ImageTarget_PointerCaptureLost(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
 		DUX::UIElement::PointerEntered_revoker _imageTargetPointerEnteredRevoker{};
 		void ImageTarget_PointerEntered(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
+#endif
 		DUX::UIElement::PointerExited_revoker _imageTargetPointerExitedRevoker{};
 		void ImageTarget_PointerExited(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
-#endif
 		DUX::UIElement::PointerWheelChanged_revoker _imageTargetPointerWheelChangedRevoker{};
 		void ImageTarget_PointerWheelChanged(Windows::Foundation::IInspectable const &sender, DUX::Input::PointerRoutedEventArgs const &e);
 		DUX::UIElement::DragEnter_revoker _imageTargetDragEnterRevoker{};
