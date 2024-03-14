@@ -479,12 +479,14 @@ namespace winrt::WinUIEditor::implementation
 
 	void EditorBaseControl::ImageTarget_PointerExited(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
+#ifndef WINUI3
 		_isPointerOver = false;
-		_scintilla->PointerExited();
 		if (!_wrapper->HaveMouseCapture())
 		{
 			winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread().PointerCursor(Windows::UI::Core::CoreCursor{ Windows::UI::Core::CoreCursorType::Arrow, 0 });
 		}
+#endif
+		_scintilla->PointerExited();
 	}
 
 	void EditorBaseControl::OnKeyDown(KeyRoutedEventArgs const &e)
