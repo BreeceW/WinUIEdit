@@ -117,6 +117,14 @@ namespace WinUIEditor
 				SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
 			}
 		}
+		else if (_highlightingLanguage == L"yaml")
+		{
+			const auto lexer{ _createLexer("yaml") };
+			lexer->PropertySet("fold", "1");
+			_call->SetILexer(lexer);
+			_call->SetKeyWords(0, "true True TRUE false False FALSE yes Yes YES no No NO null Null NULL");
+			SetLanguageIndentMode(0, { }, 0, { }, 0, { }, 0, { });
+		}
 		else if (_highlightingLanguage == L"plaintext")
 		{
 			_call->SetILexer(_createLexer("null"));
@@ -384,6 +392,45 @@ namespace WinUIEditor
 					StyleSetFore(SCE_HJ_STRINGEOL, LightPlus2(Scope::String));
 					StyleSetFore(SCE_HJ_REGEX, LightPlus2(Scope::StringRegexp));
 				}
+				break;
+			}
+		}
+		else if (_highlightingLanguage == L"yaml")
+		{
+			switch (_theme)
+			{
+			case CodeEditorTheme::Dark:
+				StyleSetFore(static_cast<int>(StylesCommon::Default), DarkPlusEditorForeground);
+				StyleClearCustom();
+
+				StyleSetFore(SCE_YAML_DEFAULT, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_YAML_COMMENT, DarkPlus2(Scope::Comment));
+				StyleSetFore(SCE_YAML_IDENTIFIER, DarkPlus2(Scope::EntityNameTag));
+				StyleSetFore(SCE_YAML_KEYWORD, DarkPlus2(Scope::ConstantLanguage));
+				StyleSetFore(SCE_YAML_NUMBER, DarkPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_YAML_REFERENCE, DarkPlus2(Scope::Variable));
+				StyleSetFore(SCE_YAML_DOCUMENT, DarkPlusEditorForeground);
+				StyleSetFore(SCE_YAML_TEXT, DarkPlus2(Scope::String));
+				StyleSetFore(SCE_YAML_ERROR, DarkPlus2(Scope::Invalid));
+				StyleSetFore(SCE_YAML_OPERATOR, DarkPlusEditorForeground);
+				break;
+
+			case CodeEditorTheme::Light:
+				StyleSetFore(static_cast<int>(StylesCommon::Default), LightPlusEditorForeground);
+				StyleClearCustom();
+
+				// Scopes are slightly different to improve legibility of properties
+				// Todo: Unify scopes to be correct once a real theming system is made
+				StyleSetFore(SCE_YAML_DEFAULT, LightPlus2(Scope::String));
+				StyleSetFore(SCE_YAML_COMMENT, LightPlus2(Scope::Comment));
+				StyleSetFore(SCE_YAML_IDENTIFIER, LightPlus2(Scope::SupportConstantProperty_Value));
+				StyleSetFore(SCE_YAML_KEYWORD, LightPlus2(Scope::ConstantLanguage));
+				StyleSetFore(SCE_YAML_NUMBER, LightPlus2(Scope::ConstantNumeric));
+				StyleSetFore(SCE_YAML_REFERENCE, LightPlus2(Scope::Variable));
+				StyleSetFore(SCE_YAML_DOCUMENT, LightPlusEditorForeground);
+				StyleSetFore(SCE_YAML_TEXT, LightPlus2(Scope::String));
+				StyleSetFore(SCE_YAML_ERROR, LightPlus2(Scope::Invalid));
+				StyleSetFore(SCE_YAML_OPERATOR, LightPlusEditorForeground);
 				break;
 			}
 		}
