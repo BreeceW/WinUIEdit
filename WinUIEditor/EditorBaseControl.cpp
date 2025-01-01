@@ -31,7 +31,7 @@ namespace winrt::WinUIEditor::implementation
 	{
 		DefaultStyleKey(winrt::box_value(L"WinUIEditor.EditorBaseControl"));
 
-		_wrapper = std::make_shared<Wrapper>();
+		_wrapper = std::make_shared<MainWrapper>(*this);
 
 		Loaded({ this, &EditorBaseControl::OnLoaded });
 		Unloaded({ this, &EditorBaseControl::OnUnloaded });

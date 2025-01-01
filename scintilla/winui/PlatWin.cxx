@@ -61,6 +61,7 @@
 #include "PlatWin.h"
 
 #include "Wrapper.h"
+#include "MainWrapper.h"
 
 // __uuidof is a Microsoft extension but makes COM code neater, so disable warning
 #if defined(__clang__)
@@ -1795,6 +1796,11 @@ Window::~Window() noexcept {
 }
 
 void Window::Destroy() noexcept {
+	const auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
+	if (wrapper)
+	{
+		wrapper->Destroy();
+	}
 	wid = nullptr;
 }
 
@@ -1828,6 +1834,11 @@ RECT RectFromMonitor(HMONITOR hMonitor) noexcept {
 }
 
 void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo) {
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
+	if (wrapper)
+	{
+		return wrapper->SetPositionRelative(rc, *reinterpret_cast<WinUIEditor::Wrapper *>(relativeTo->GetID()));
+	}
 }
 
 PRectangle Window::GetClientPosition() const {
@@ -1839,6 +1850,11 @@ PRectangle Window::GetClientPosition() const {
 }
 
 void Window::Show(bool show) {
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
+	if (wrapper)
+	{
+		wrapper->Show(show);
+	}
 }
 
 void Window::InvalidateAll() {
@@ -1957,7 +1973,7 @@ void Window::InvalidateRectangle(PRectangle rc) {
 }*/
 
 void Window::SetCursor(Cursor curs) {
-	if (auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) })
+	if (auto wrapper{ static_cast<WinUIEditor::MainWrapper *>(static_cast<WinUIEditor::Wrapper *>(GetID())) }) // Todo: Consider moving SetCursor or checking the type of window (this should only be called on main)
 	{
 		winrt::DCUR type{ winrt::DCUR::Arrow };
 		switch (curs) {

@@ -31,6 +31,7 @@
     <ClCompile Include="EditorBaseControlAutomationPeer.cpp" />
     <ClCompile Include="EditorWrapper.cpp" />
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="MainWrapper.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TextRangeProvider.cpp" />
     <ClCompile Include="Wrapper.cpp" />
@@ -547,6 +548,7 @@
     <ClInclude Include="EditorWrapper.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="LightPlus.h" />
+    <ClInclude Include="MainWrapper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TextMateScope.h" />
     <ClInclude Include="TextRangeProvider.h" />

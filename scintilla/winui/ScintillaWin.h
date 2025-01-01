@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Wrapper.h"
+#include "MainWrapper.h"
 
 namespace Scintilla::Internal {
 	enum class ScrollEventType : int32_t
@@ -56,7 +57,7 @@ namespace Scintilla::Internal {
 		public ::winrt::implements<ScintillaWinUI, ::IVirtualSurfaceUpdatesCallbackNative, ITextStoreACP2, ITfContextOwnerCompositionSink>
 	{
 	public:
-		ScintillaWinUI(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper);
+		ScintillaWinUI(std::shared_ptr<WinUIEditor::MainWrapper> const &wrapper);
 		void DpiChanged();
 		void SizeChanged();
 		void FocusChanged(bool focused);
@@ -215,7 +216,7 @@ namespace Scintilla::Internal {
 		IFACEMETHOD(OnStartComposition)(ITfCompositionView *pComposition, BOOL *pfOk);
 		IFACEMETHOD(OnUpdateComposition)(ITfCompositionView *pComposition, ITfRange *pRangeNew);
 
-		std::shared_ptr<::WinUIEditor::Wrapper> _mainWrapper{ nullptr };
+		std::shared_ptr<::WinUIEditor::MainWrapper> _mainWrapper{ nullptr };
 
 		// Timer implementation
 		// Todo: Planning to not use XAML APIs on the Scintilla side, so replace DispatcherTimer with something that works outside of XAML

@@ -1,5 +1,10 @@
 #pragma once
 
+namespace Scintilla::Internal
+{
+	class ScintillaWinUI;
+}
+
 namespace WinUIEditor
 {
 	class Wrapper
@@ -17,54 +22,37 @@ namespace WinUIEditor
 		int Height();
 		void Height(int value);
 
-		// Todo: Make abstract
-		void SetMouseCapture(bool on);
-		bool HaveMouseCapture();
-
-		// Todo: Move to separate XAML class
-		void SetMouseCaptureElement(winrt::DUX::UIElement const &element);
-		void SetCursor(winrt::DCUR cursor);
-
-		void SetScrollBars(winrt::DUX::Controls::Primitives::ScrollBar const &horizontalScrollBar, winrt::DUX::Controls::Primitives::ScrollBar const &verticalScrollBar);
-		bool HasScrollBars();
-		void HorizontalScrollBarValue(double value);
-		void VerticalScrollBarValue(double value);
-		void HorizontalScrollBarMinimum(double value);
-		void VerticalScrollBarMinimum(double value);
-		void HorizontalScrollBarMaximum(double value);
-		void VerticalScrollBarMaximum(double value);
-		void HorizontalScrollBarViewportSize(double value);
-		void VerticalScrollBarViewportSize(double value);
-		double HorizontalScrollBarValue();
-		double VerticalScrollBarValue();
-		double HorizontalScrollBarMinimum();
-		double VerticalScrollBarMinimum();
-		double HorizontalScrollBarMaximum();
-		double VerticalScrollBarMaximum();
-		double HorizontalScrollBarViewportSize();
-		double VerticalScrollBarViewportSize();
-
-		winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation> StartDragAsync(winrt::DUI::PointerPoint const &pointerPoint);
-
 		void CreateGraphicsDevices();
+
+		std::shared_ptr<Wrapper> CreateCallTipWindow(Scintilla::Internal::PRectangle rc, winrt::com_ptr<Scintilla::Internal::ScintillaWinUI> const &scintilla);
+		virtual void SetPositionRelative(Scintilla::Internal::PRectangle rc, Wrapper const &wrapper) = 0;
+
+		virtual void Show(bool visible) = 0;
+		virtual void Destroy() = 0;
+		void AdjustCallTipPadding(Scintilla::Internal::CallTip &callTip);
+
+		bool TransformToRoot(float &x, float &y) const;
 
 		// Font used for arrows in folding column markers. Stored here to allow retrieval from SurfaceD2D
 		// Do not access outside of GetChevronFontFromSurface
 		std::shared_ptr<Scintilla::Internal::Font> chevronFont{ nullptr };
 		Scintilla::Internal::XYPOSITION chevronFontSize{ -1.0 };
 
+	protected:
+		Wrapper(winrt::DUXC::Control const& control);
+		winrt::weak_ref<winrt::DUXC::Control> _control{ nullptr };
+
 	private:
-		winrt::DUX::Input::Pointer _lastPointer{ nullptr };
-		winrt::DUX::UIElement _mouseCaptureElement{ nullptr };
-		winrt::DUX::Controls::Primitives::ScrollBar _horizontalScrollBar{ nullptr };
-		winrt::DUX::Controls::Primitives::ScrollBar _verticalScrollBar{ nullptr };
-		bool _captured;
 		winrt::com_ptr<IVirtualSurfaceImageSourceNative> _vsisNative{ nullptr };
 		winrt::com_ptr<::ISurfaceImageSourceNativeWithD2D> _sisNativeWithD2D{ nullptr };
 		winrt::com_ptr<::ID2D1DeviceContext> _d2dDeviceContext{ nullptr };
 		winrt::com_ptr<::IDXGIDevice3> _dxgiDevice{ nullptr };
-		float _logicalDpi;
-		int _width;
-		int _height;
+		float _logicalDpi{ 96.f };
+		int _width{ 0 };
+		int _height{ 0 };
+#ifndef WINUI3
+		bool _hasUac8{ winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 8) }; // Todo: Make static
+		bool _hasFcu{ winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
+#endif
 	};
 }

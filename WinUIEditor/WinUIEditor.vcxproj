@@ -160,6 +160,7 @@
       <DependentUpon>EditorBaseControlAutomationPeer.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="MainWrapper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="..\scintilla\winui\PlatWin.h" />
     <ClInclude Include="..\scintilla\winui\ScintillaWin.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="EditorBaseControlAutomationPeer.cpp">
       <SubType>Code</SubType>
     </ClCompile>
+    <ClCompile Include="MainWrapper.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

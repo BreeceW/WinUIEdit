@@ -477,10 +477,10 @@ namespace Scintilla::Internal {
 			text, ln->back);
 	}
 
-	ScintillaWinUI::ScintillaWinUI(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper)
+	ScintillaWinUI::ScintillaWinUI(std::shared_ptr<WinUIEditor::MainWrapper> const &wrapper)
 	{
 		_mainWrapper = wrapper;
-		wMain = _mainWrapper.get();
+		wMain = static_cast<WinUIEditor::Wrapper *>(_mainWrapper.get());
 
 		// This is a legacy Scintilla feature that is recommended to be disabled (though not deprecated)
 		// It is not currently supported in EditorBaseControl because it is a performance hit and is redundant
