@@ -304,6 +304,16 @@ namespace winrt::WinUIEditor::implementation
 		_scintilla->SetFoldMarginHiColorTransparent(useSetting, fore);
 	}
 
+	void EditorBaseControl::SetCallTipBackgroundColorTransparent(Scintilla::Internal::ColourRGBA color)
+	{
+		_scintilla->SetCallTipBackgroundColorTransparent(color);
+	}
+
+	void EditorBaseControl::SetCallTipHoverColor(Scintilla::Internal::ColourRGBA color)
+	{
+		_scintilla->SetCallTipHoverColor(color);
+	}
+
 	void EditorBaseControl::OnApplyTemplate()
 	{
 		__super::OnApplyTemplate();

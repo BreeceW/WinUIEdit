@@ -134,6 +134,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CallTipControl.h">
+      <DependentUpon>CallTipControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="CallTipWrapper.h" />
     <ClInclude Include="CodeEditorHandler.SciEdit.h" />
     <ClInclude Include="CodeEditorHandler.h" />
     <ClInclude Include="ControlIncludes.h" />
@@ -170,6 +175,10 @@
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CallTipControl.cpp">
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="CallTipWrapper.cpp" />
     <ClCompile Include="CodeEditorHandler.SciEdit.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -215,6 +224,10 @@
     <None Include="Defines.idl" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="CallTipControl.idl">
+      <DependentUpon>CallTipControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="DummyPage.idl" Condition="'$(UseDummyPage)' == 'true'">
       <DependentUpon>DummyPage.xaml</DependentUpon>
       <SubType>Code</SubType>

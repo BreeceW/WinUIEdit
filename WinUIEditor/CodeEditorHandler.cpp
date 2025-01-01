@@ -70,6 +70,11 @@ namespace WinUIEditor
 				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryModified), IntRGBA(0x27, 0x27, 0x27, 0x00));
 				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x93, 0xB1, 0x44));
 				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x93, 0xB1, 0x44, 0x00));
+
+				SetCallTipBackgroundColor(IntRGBA(0x00, 0x00, 0x00, 0x00));
+				_call->CallTipSetFore(IntRGBA(0xFF, 0xFF, 0xFF));
+				_call->CallTipSetForeHlt(IntRGBA(0x56, 0x9C, 0xD6));
+				SetCallTipHoverColor(IntRGBA(0xFF, 0xFF, 0xFF, 0xA6));
 				break;
 
 			case CodeEditorTheme::Light:
@@ -95,6 +100,11 @@ namespace WinUIEditor
 				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryModified), IntRGBA(0xF5, 0xF5, 0xF5, 0x00));
 				_call->MarkerSetForeTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x5F, 0x84, 0x08));
 				_call->MarkerSetBackTranslucent(static_cast<int>(Scintilla::MarkerOutline::HistoryRevertedToModified), IntRGBA(0x5F, 0x84, 0x08, 0x00));
+
+				SetCallTipBackgroundColor(IntRGBA(0xFF, 0xFF, 0xFF, 0x00));
+				_call->CallTipSetFore(IntRGBA(0x00, 0x00, 0x00));
+				_call->CallTipSetForeHlt(IntRGBA(0x00, 0x00, 0xFF));
+				SetCallTipHoverColor(IntRGBA(0x00, 0x00, 0x00, 0x88));
 				break;
 			}
 
@@ -173,6 +183,17 @@ namespace WinUIEditor
 	void CodeEditorHandler::SetFoldMarginHiColor(bool useSetting, ColourAlpha fore)
 	{
 		// Implement for transparent folding margin. Not implemented so default is preserved
+	}
+
+	void CodeEditorHandler::SetCallTipBackgroundColor(Scintilla::ColourAlpha color)
+	{
+		// Overridable to allow users to internally set transparent color
+		_call->CallTipSetBack(color);
+	}
+
+	void CodeEditorHandler::SetCallTipHoverColor(Scintilla::ColourAlpha color)
+	{
+		// Implement if platform supports setting a color when call tip arrows are hovered
 	}
 
 	void CodeEditorHandler::DefaultColorsChanged(CodeEditorTheme theme)

@@ -314,6 +314,16 @@ namespace winrt::WinUIEditor::implementation
 		_editor->SetFoldMarginHiColorTransparent(useSetting, Scintilla::Internal::ColourRGBA{ fore });
 	}
 
+	void CodeEditorControl::SetCallTipBackgroundColor(Scintilla::ColourAlpha color)
+	{
+		_editor->SetCallTipBackgroundColorTransparent(Scintilla::Internal::ColourRGBA{ color });
+	}
+
+	void CodeEditorControl::SetCallTipHoverColor(Scintilla::ColourAlpha color)
+	{
+		_editor->SetCallTipHoverColor(Scintilla::Internal::ColourRGBA{ color });
+	}
+
 	void CodeEditorControl::DefaultColorsChanged(CodeEditorTheme theme)
 	{
 		_defaultColorsChangedEvent(*this, CodeEditorToXamlTheme(theme));

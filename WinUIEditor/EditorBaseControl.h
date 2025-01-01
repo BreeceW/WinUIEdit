@@ -35,6 +35,8 @@ namespace winrt::WinUIEditor::implementation
 		void StyleClearCustom();
 		void SetFoldMarginColorTransparent(bool useSetting, Scintilla::Internal::ColourRGBA back);
 		void SetFoldMarginHiColorTransparent(bool useSetting, Scintilla::Internal::ColourRGBA fore);
+		void SetCallTipBackgroundColorTransparent(Scintilla::Internal::ColourRGBA color);
+		void SetCallTipHoverColor(Scintilla::Internal::ColourRGBA color);
 
 		event_token DpiChanged(Windows::Foundation::EventHandler<double> const &handler);
 		void DpiChanged(event_token const &token) noexcept;

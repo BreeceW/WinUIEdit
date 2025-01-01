@@ -22,6 +22,8 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="CallTipControl.cpp" />
+    <ClCompile Include="CallTipWrapper.cpp" />
     <ClCompile Include="CodeEditorControl.cpp" />
     <ClCompile Include="CodeEditorHandler.cpp" />
     <ClCompile Include="CodeEditorHandler.SciEdit.cpp" />
@@ -537,6 +539,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CallTipControl.h" />
+    <ClInclude Include="CallTipWrapper.h" />
     <ClInclude Include="CodeEditorControl.h" />
     <ClInclude Include="CodeEditorHandler.h" />
     <ClInclude Include="CodeEditorHandler.SciEdit.h" />
@@ -777,6 +781,7 @@
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="CallTipControl.idl" />
     <Midl Include="CodeEditorControl.idl" />
     <Midl Include="DummyPage.idl" />
     <Midl Include="EditorBaseControl.idl" />

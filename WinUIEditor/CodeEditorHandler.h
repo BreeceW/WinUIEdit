@@ -47,6 +47,8 @@ namespace WinUIEditor
 		virtual void StyleClearCustom();
 		virtual void SetFoldMarginColor(bool useSetting, Scintilla::ColourAlpha back);
 		virtual void SetFoldMarginHiColor(bool useSetting, Scintilla::ColourAlpha fore);
+		virtual void SetCallTipBackgroundColor(Scintilla::ColourAlpha color);
+		virtual void SetCallTipHoverColor(Scintilla::ColourAlpha color);
 
 		virtual void DefaultColorsChanged(CodeEditorTheme theme);
 		virtual void SyntaxHighlightingApplied(CodeEditorTheme theme);
