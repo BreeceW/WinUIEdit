@@ -76,8 +76,10 @@ CallTip::CallTip() noexcept {
 	colourSel = ColourRGBA(0, 0, 0x80);
 	colourShade = black;
 	colourLight = silver;
+	colourHovered = silver; // WinUI
 	codePage = 0;
 	clickPlace = 0;
+	hoverPlace = 0; // WinUI
 }
 
 CallTip::~CallTip() {
@@ -99,6 +101,11 @@ int CallTip::NextTabPos(int x) const noexcept {
 	}
 }
 
+// WinUI
+namespace Scintilla::Internal {
+	std::shared_ptr<Font> GetChevronFontFromSurface(const Surface &surface, XYPOSITION size);
+}
+
 namespace {
 
 // Although this test includes 0, we should never see a \0 character.
@@ -107,6 +114,15 @@ constexpr bool IsArrowCharacter(char ch) noexcept {
 }
 
 void DrawArrow(Surface *surface, const PRectangle &rc, bool upArrow, ColourRGBA colourBG, ColourRGBA colourUnSel) {
+	// WinUI
+	const auto height{ rc.Height() * 0.45 };
+	const auto font{ Scintilla::Internal::GetChevronFontFromSurface(*surface, height) };
+	const auto text{ upArrow ? u8"\uEDDB" : u8"\uEDDC" };
+	const XYPOSITION textWidth = surface->WidthTextUTF8(font.get(), text);
+	const PRectangle rcText{ rc.left + textWidth / 2, rc.top, rc.right - textWidth / 2, rc.bottom };
+	surface->DrawTextTransparentUTF8(rcText, font.get(), rcText.Height() / 2 + height / 2, text, colourUnSel);
+	return;
+
 	surface->FillRectangle(rc, colourBG);
 	const PRectangle rcClientInner = Clamp(rc.Inset(1), Edge::right, rc.right - 2);
 	surface->FillRectangle(rcClientInner, colourUnSel);
@@ -171,7 +187,7 @@ int CallTip::DrawChunk(Surface *surface, int x, std::string_view sv,
 			rcClient.left = static_cast<XYPOSITION>(x);
 			rcClient.right = static_cast<XYPOSITION>(xEnd);
 			if (draw) {
-				DrawArrow(surface, rcClient, upArrow, colourBG, colourUnSel);
+				DrawArrow(surface, rcClient, upArrow, colourBG, hoverPlace == 0 || (hoverPlace == 1 && !upArrow) || (hoverPlace == 2 && upArrow) ? colourUnSel : colourHovered); // WinUI
 			}
 			offsetMain = xEnd;
 			if (upArrow) {
@@ -281,6 +297,24 @@ void CallTip::MouseClick(Point pt) noexcept {
 		clickPlace = 1;
 	if (rectDown.Contains(pt))
 		clickPlace = 2;
+}
+
+// WinUI
+void CallTip::MouseMove(Point pt) noexcept
+{
+	const auto old{ hoverPlace };
+	
+	hoverPlace = 0;
+	if (rectUp.Contains(pt))
+		hoverPlace = 1;
+	if (rectDown.Contains(pt))
+		hoverPlace = 2;
+	
+	if (hoverPlace != old)
+	{
+		wCallTip.InvalidateRectangle(rectUp);
+		wCallTip.InvalidateRectangle(rectDown);
+	}
 }
 
 PRectangle CallTip::CallTipStart(Sci::Position pos, Point pt, int textHeight, const char *defn,
