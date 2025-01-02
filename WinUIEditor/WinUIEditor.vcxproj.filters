@@ -228,6 +228,9 @@
     <ClCompile Include="..\lexilla\lexers\LexD.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexDart.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexDataflex.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
@@ -360,6 +363,9 @@
     <ClCompile Include="..\lexilla\lexers\LexNimrod.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexNix.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexNsis.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
@@ -474,6 +480,12 @@
     <ClCompile Include="..\lexilla\lexers\LexTeX.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTOML.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTroff.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexTxt2tags.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
@@ -493,6 +505,9 @@
       <Filter>Lexers</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexYAML.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexZig.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\Accessor.cxx">
@@ -517,9 +532,6 @@
       <Filter>Lexilla</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexerModule.cxx">
-      <Filter>Lexilla</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lexilla\lexlib\LexerNoExceptions.cxx">
       <Filter>Lexilla</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexerSimple.cxx">
@@ -732,9 +744,6 @@
       <Filter>Lexilla</Filter>
     </ClInclude>
     <ClInclude Include="..\lexilla\lexlib\LexerModule.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lexilla\lexlib\LexerNoExceptions.h">
       <Filter>Lexilla</Filter>
     </ClInclude>
     <ClInclude Include="..\lexilla\lexlib\LexerSimple.h">

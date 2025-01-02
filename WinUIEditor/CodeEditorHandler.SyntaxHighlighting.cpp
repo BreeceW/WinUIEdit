@@ -8,7 +8,7 @@ using namespace Scintilla;
 
 namespace WinUIEditor
 {
-	static constexpr auto WINUI_SCE_HJ_KEYWORD2{ 53 };
+	static constexpr auto WINUI_SCE_HJ_KEYWORD2{ 54 }; // Todo: Use constant in LexHTML
 
 	void CodeEditorHandler::SetLexer()
 	{

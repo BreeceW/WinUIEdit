@@ -343,7 +343,6 @@
     <ClInclude Include="..\lexilla\lexlib\LexAccessor.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerBase.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerModule.h" />
-    <ClInclude Include="..\lexilla\lexlib\LexerNoExceptions.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerSimple.h" />
     <ClInclude Include="..\lexilla\lexlib\OptionSet.h" />
     <ClInclude Include="..\lexilla\lexlib\PropSetSimple.h" />
@@ -549,6 +548,9 @@
     <ClCompile Include="..\lexilla\lexers\LexD.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexDart.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexDataflex.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -681,6 +683,9 @@
     <ClCompile Include="..\lexilla\lexers\LexNimrod.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexNix.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexNsis.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -795,6 +800,12 @@
     <ClCompile Include="..\lexilla\lexers\LexTeX.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTOML.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTroff.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexTxt2tags.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -814,6 +825,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexYAML.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexZig.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <!--</WildcardClInclude>-->
@@ -840,9 +854,6 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexerModule.cxx">
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\lexilla\lexlib\LexerNoExceptions.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexerSimple.cxx">
