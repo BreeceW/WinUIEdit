@@ -26,8 +26,6 @@ using namespace WinUIEditor;
 
 namespace winrt::CppDemoUwp::implementation
 {
-	int pos = 1;
-
 	void MainPage::InitializeComponent()
 	{
 		MainPageT::InitializeComponent();
@@ -47,77 +45,6 @@ namespace winrt::CppDemoUwp::implementation
 		{
 			Editor().Editor().StyleSetFont(static_cast<int32_t>(StylesCommon::Default), L"Consolas");
 		}
-
-		Editor().Editor().MouseDwellTime(500);
-		//Editor().Editor().CallTipSetPosition(true);
-		Editor().Editor().CallTipClick([](winrt::WinUIEditor::Editor const &sender, winrt::WinUIEditor::CallTipClickEventArgs const &args)
-			{
-				//sender.AppendText(1, to_hstring(args.Position()));
-				const auto count{ 3 };
-				if (args.Position() == 1)
-				{
-					pos = pos - 1 == 0 ? (count - 1) : pos - 1;
-				}
-				else if (args.Position() == 2)
-				{
-					pos = pos + 1 == count ? 1 : pos + 1;
-				}
-				if (pos != 2)
-				{
-					sender.CallTipShow(sender.CallTipPosStart(), L"\001 " + winrt::to_hstring(pos) + L" of 2 \002 void Console.Beep()\n\n            \u2009\u2009Plays the sound of a beep through the console speaker.");
-				}
-				else
-				{
-					sender.CallTipShow(sender.CallTipPosStart(), L"\001 " + winrt::to_hstring(pos) + L" of 2 \002 void Console.Beep(int frequency, int duration)\n\n            \u2009\u2009Plays the sound of a beep of a specified frequency and duration through\n            \u2009\u2009the console speaker.\n\n            \u2009\u2009frequency: The frequency of the beep, ranging from 37 to 32767 hertz.");
-					sender.CallTipSetHlt(33, 33 + 9);
-					sender.CallTipSetForeHlt(RGB(0x99, 0xDC, 0xFE));
-				}
-			});
-		//Editor().Editor().DwellStart([](winrt::WinUIEditor::Editor const &sender, winrt::WinUIEditor::DwellStartEventArgs const &args)
-		Editor().Editor().CharAdded([](winrt::WinUIEditor::Editor const &sender, winrt::WinUIEditor::CharAddedEventArgs const &args)
-			{
-				if (args.Ch() != '(')
-				{
-					return;
-				}
-
-				const auto pos{ sender.SelectionStart() };
-				if (pos == -1)
-				{
-					return;
-				}
-				/*const auto start{ sender.WordStartPosition(pos, true) };
-				const auto end{ sender.WordEndPosition(pos, true) };
-				if (end - start <= 0)
-				{
-					return;
-				}*/
-				/*if (sender.CallTipActive())
-				{
-					const auto callTipPos{ sender.CallTipPosStart() };
-					if (callTipPos >= start && callTipPos <= end)
-					{
-						return;
-					}
-				}*/
-				using Position = intptr_t;
-				struct CharacterRangeFull
-				{
-					Position cpMin;
-					Position cpMax;
-				};
-				struct TextRangeFull
-				{
-					CharacterRangeFull chrg;
-					char *lpstrText;
-				};
-				//std::string s(end - start, '\0');
-				//TextRangeFull tr{ { start, end }, &s[0] };
-				//sender.GetTextRangeFull(reinterpret_cast<uint64_t>(&tr));
-				sender.CallTipShow(pos, L"\001 1 of 2 \002 void Console.Beep()\n\n            \u2009\u2009Plays the sound of a beep through the console speaker.");
-				sender.CallTipSetPosStart(pos);
-				//sender.CallTipSetForeHlt(sender.StyleGetFore(sender.GetStyleAt(start)));
-			});
 	}
 
 	fire_and_forget MainPage::OnCloseRequested(IInspectable sender, SystemNavigationCloseRequestedPreviewEventArgs e)
@@ -156,37 +83,6 @@ namespace winrt::CppDemoUwp::implementation
 
 	void MainPage::Editor_Loaded(IInspectable const &sender, RoutedEventArgs const &e)
 	{
-		/*const auto target{ Editor().try_as<IControlProtected>().GetTemplateChild(L"EditorContainer").as<ContentPresenter>().Content().try_as<IControlProtected>().GetTemplateChild(L"ImageTarget").as<FrameworkElement>() };
-		target.PointerMoved([&](IInspectable const &sender, PointerRoutedEventArgs const &e)
-			{
-				const auto editor{ Editor().Editor() };
-
-				if (editor.CallTipActive())
-				{
-					const auto s{ sender.as<FrameworkElement>() };
-					auto point{ e.GetCurrentPoint(s) };
-					auto scaled{ point.Position() };
-					auto dpiScale{ 0.0 };
-					if (const auto uiElement10{ s.try_as<IUIElement10>() })
-					{
-						dpiScale = uiElement10.XamlRoot().RasterizationScale();
-					}
-					else
-					{
-						dpiScale = Windows::Graphics::Display::DisplayInformation::GetForCurrentView().RawPixelsPerViewPixel();
-					}
-					auto x{ scaled.X * dpiScale };
-					auto y{ scaled.Y * dpiScale };
-					const auto pos{ editor.PositionFromPoint(x, y) };
-
-					const auto callTipPos{ editor.CallTipPosStart() };
-					if (pos == -1 || (pos < editor.WordStartPosition(callTipPos, true) || pos > editor.WordEndPosition(callTipPos, true)))
-					{
-						editor.CallTipCancel();
-					}
-				}
-			});*/
-
 		FocusEditor();
 	}
 
@@ -398,112 +294,6 @@ namespace winrt::CppDemoUwp::implementation
 		const auto item{ sender.as<MenuFlyoutItem>() };
 		Editor().HighlightingLanguage(unbox_value<hstring>(item.Tag()));
 		HighlightingLanguageButton().Content(box_value(item.Text()));
-	}
-
-	Windows::Foundation::IAsyncAction MainPage::TestAppWindowMenuItem_Click(IInspectable const &sender, RoutedEventArgs const &e)
-	{
-		const auto window{ co_await Windows::UI::WindowManagement::AppWindow::TryCreateAsync() };
-		const Border background{};
-		const CodeEditorControl codeEditorControl{};
-		background.Child(codeEditorControl);
-		codeEditorControl.Loaded([codeEditorControl](IInspectable const &sender, RoutedEventArgs const &e)
-			{
-				const auto target{ sender.try_as<IControlProtected>().GetTemplateChild(L"EditorContainer").as<ContentPresenter>().Content().try_as<IControlProtected>().GetTemplateChild(L"ImageTarget").as<FrameworkElement>() };
-				target.PointerMoved([&](IInspectable const &sender, PointerRoutedEventArgs const &e)
-					{
-						const auto editor{ codeEditorControl.Editor() };
-
-						if (editor.CallTipActive())
-						{
-							const auto s{ sender.as<FrameworkElement>() };
-							auto point{ e.GetCurrentPoint(s) };
-							auto scaled{ point.Position() };
-							auto dpiScale{ 0.0 };
-							if (const auto uiElement10{ s.try_as<IUIElement10>() })
-							{
-								dpiScale = uiElement10.XamlRoot().RasterizationScale();
-							}
-							else
-							{
-								dpiScale = Windows::Graphics::Display::DisplayInformation::GetForCurrentView().RawPixelsPerViewPixel();
-							}
-							auto x{ scaled.X * dpiScale };
-							auto y{ scaled.Y * dpiScale };
-							const auto pos{ editor.PositionFromPoint(x, y) };
-
-							const auto callTipPos{ editor.CallTipPosStart() };
-							if (pos == -1 || (pos < editor.WordStartPosition(callTipPos, true) || pos > editor.WordEndPosition(callTipPos, true)))
-							{
-								editor.CallTipCancel();
-							}
-						}
-					});
-			});
-
-		if (!ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14, 0))
-		{
-			codeEditorControl.Editor().StyleSetFont(static_cast<int32_t>(StylesCommon::Default), L"Consolas");
-		}
-
-		codeEditorControl.Editor().MouseDwellTime(500);
-		codeEditorControl.Editor().CallTipSetPosition(true);
-		codeEditorControl.Editor().CallTipClick([](winrt::WinUIEditor::Editor const &sender, winrt::WinUIEditor::CallTipClickEventArgs const &args)
-			{
-				//sender.AppendText(1, to_hstring(args.Position()));
-				if (args.Position() == 1)
-				{
-					pos = pos - 1 == 0 ? 5 : pos - 1;
-				}
-				else if (args.Position() == 2)
-				{
-					pos = pos + 1 == 6 ? 1 : pos + 1;
-				}
-				sender.CallTipShow(sender.CallTipPosStart(), L"\001 " + winrt::to_hstring(pos) + L" of 5 \002 Hovering Swift\nTaylor Swift\nFearless\nSpeak Now\nRed\n1989\nReputation\nLover\nFolklore\nEvermore\nMidnights\nTortured Poets Department");
-			});
-		codeEditorControl.Editor().DwellStart([](winrt::WinUIEditor::Editor const &sender, winrt::WinUIEditor::DwellStartEventArgs const &args)
-			{
-				const auto pos{ args.Position() };
-				if (pos == -1)
-				{
-					return;
-				}
-				const auto start{ sender.WordStartPosition(pos, true) };
-				const auto end{ sender.WordEndPosition(pos, true) };
-				if (end - start <= 0)
-				{
-					return;
-				}
-				if (sender.CallTipActive())
-				{
-					const auto callTipPos{ sender.CallTipPosStart() };
-					if (callTipPos >= start && callTipPos <= end)
-					{
-						return;
-					}
-				}
-				using Position = intptr_t;
-				struct CharacterRangeFull
-				{
-					Position cpMin;
-					Position cpMax;
-				};
-				struct TextRangeFull
-				{
-					CharacterRangeFull chrg;
-					char *lpstrText;
-				};
-				std::string s(end - start, '\0');
-				TextRangeFull tr{ { start, end }, &s[0] };
-				sender.GetTextRangeFull(reinterpret_cast<uint64_t>(&tr));
-				sender.CallTipShow(pos, L"\001 1 of 5 \002 Hovering " + to_hstring(s) + L"\nTaylor Swift\nFearless\nSpeak Now\nRed\n1989\nReputation\nLover\nFolklore\nEvermore\nMidnights\nTortured Poets Department");
-				sender.CallTipSetPosStart(pos);
-				sender.CallTipSetHlt(9, 9 + end - start);
-				//sender.CallTipSetForeHlt(sender.StyleGetFore(sender.GetStyleAt(start)));
-			});
-
-		background.Background(Application::Current().Resources().TryLookup(box_value(L"SolidBackgroundFillColorBaseBrush")).as<Brush>());
-		Windows::UI::Xaml::Hosting::ElementCompositionPreview::SetAppWindowContent(window, background);
-		co_await window.TryShowAsync();
 	}
 
 	void MainPage::OnNavigatedTo(NavigationEventArgs const &e)
