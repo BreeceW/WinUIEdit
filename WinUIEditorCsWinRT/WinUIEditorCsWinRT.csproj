@@ -30,7 +30,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
-		<PackageReference Condition="$(WinUIEditorUseWinUI3)" Include="Microsoft.WindowsAppSDK" Version="1.5.240227000" />
+		<PackageReference Condition="$(WinUIEditorUseWinUI3)" Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
 	</ItemGroup>
 
 	<ItemGroup>
