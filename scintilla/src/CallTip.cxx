@@ -7,6 +7,7 @@
 
 #include <cstddef>
 #include <cstdlib>
+#include <cstdint>
 #include <cassert>
 #include <cstring>
 #include <cstdio>
@@ -303,13 +304,13 @@ void CallTip::MouseClick(Point pt) noexcept {
 void CallTip::MouseMove(Point pt) noexcept
 {
 	const auto old{ hoverPlace };
-	
+
 	hoverPlace = 0;
 	if (rectUp.Contains(pt))
 		hoverPlace = 1;
 	if (rectDown.Contains(pt))
 		hoverPlace = 2;
-	
+
 	if (hoverPlace != old)
 	{
 		wCallTip.InvalidateRectangle(rectUp);

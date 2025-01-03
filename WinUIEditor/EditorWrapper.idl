@@ -123,6 +123,8 @@ namespace WinUIEditor
 		StyleSetHotSpot = 2409,
 		StyleSetCheckMonospaced = 2254,
 		StyleGetCheckMonospaced = 2255,
+		StyleSetStretch = 2258,
+		StyleGetStretch = 2259,
 		StyleSetInvisibleRepresentation = 2256,
 		StyleGetInvisibleRepresentation = 2257,
 		SetElementColour = 2753,
@@ -157,6 +159,7 @@ namespace WinUIEditor
 		GetCharacterCategoryOptimization = 2721,
 		BeginUndoAction = 2078,
 		EndUndoAction = 2079,
+		GetUndoSequence = 2799,
 		GetUndoActions = 2790,
 		SetUndoSavePoint = 2791,
 		GetUndoSavePoint = 2792,
@@ -230,6 +233,8 @@ namespace WinUIEditor
 		AutoCGetMaxWidth = 2209,
 		AutoCSetMaxHeight = 2210,
 		AutoCGetMaxHeight = 2211,
+		AutoCSetStyle = 2109,
+		AutoCGetStyle = 2120,
 		SetIndent = 2122,
 		GetIndent = 2123,
 		SetUseTabs = 2124,
@@ -442,7 +447,9 @@ namespace WinUIEditor
 		Cancel = 2325,
 		DeleteBack = 2326,
 		Tab = 2327,
+		LineIndent = 2813,
 		BackTab = 2328,
+		LineDedent = 2814,
 		NewLine = 2329,
 		FormFeed = 2330,
 		VCHome = 2331,
@@ -623,6 +630,9 @@ namespace WinUIEditor
 		SetLayoutThreads = 2775,
 		GetLayoutThreads = 2776,
 		CopyAllowLine = 2519,
+		CutAllowLine = 2810,
+		SetCopySeparator = 2811,
+		GetCopySeparator = 2812,
 		GetCharacterPointer = 2520,
 		GetRangePointer = 2643,
 		GetGapPosition = 2644,
@@ -964,6 +974,19 @@ namespace WinUIEditor
 		Bold = 700,
 	};
 
+	enum FontStretch
+	{
+		UltraCondensed = 1,
+		ExtraCondensed = 2,
+		Condensed = 3,
+		SemiCondensed = 4,
+		Normal = 5,
+		SemiExpanded = 6,
+		Expanded = 7,
+		ExtraExpanded = 8,
+		UltraExpanded = 9,
+	};
+
 	enum Element
 	{
 		List = 0,
@@ -978,6 +1001,8 @@ namespace WinUIEditor
 		SelectionSecondaryBack = 15,
 		SelectionInactiveText = 16,
 		SelectionInactiveBack = 17,
+		SelectionInactiveAdditionalText = 18,
+		SelectionInactiveAdditionalBack = 19,
 		Caret = 40,
 		CaretAdditional = 41,
 		CaretLineBack = 50,
@@ -1059,6 +1084,7 @@ namespace WinUIEditor
 	{
 		Normal = 0,
 		FixedSize = 1,
+		SelectFirstItem = 2,
 	};
 
 	enum IndentView
@@ -1658,6 +1684,7 @@ namespace WinUIEditor
 		InvalidPosition = -1,
 		ScCpUtf8 = 65001,
 		MarkerMax = 31,
+		ScMaskHistory = 31457280,
 		ScMaskFolders = -33554432,
 		ScMaxMargin = 4,
 		ScFontSizeMultiplier = 100,
@@ -5062,6 +5089,11 @@ namespace WinUIEditor
 		Int32 CharacterCategoryOptimization { get; set; };
 
 		/**
+		 * Is an undo sequence active?
+		 */
+		Int32 UndoSequence { get; };
+
+		/**
 		 * How many undo actions are in the history?
 		 */
 		Int32 UndoActions { get; };
@@ -5187,6 +5219,12 @@ namespace WinUIEditor
 		 * The default is 5 rows.
 		 */
 		Int32 AutoCMaxHeight { get; set; };
+
+		/**
+		 * Get the style number used for auto-completion and user lists fonts.
+		 * Set the style number used for auto-completion and user lists fonts.
+		 */
+		Int32 AutoCStyle { get; set; };
 
 		/**
 		 * Retrieve indentation size.
@@ -6785,9 +6823,20 @@ namespace WinUIEditor
 		void Tab();
 
 		/**
-		 * Dedent the selected lines.
+		 * Indent the current and selected lines.
+		 */
+		void LineIndent();
+
+		/**
+		 * If selection is empty or all on one line dedent the line if caret is at start, else move caret.
+		 * If more than one line selected, dedent the lines.
 		 */
 		void BackTab();
+
+		/**
+		 * Dedent the current and selected lines.
+		 */
+		void LineDedent();
 
 		/**
 		 * Insert a new line, may use a CRLF, CR or LF depending on EOL mode.
@@ -7349,6 +7398,11 @@ namespace WinUIEditor
 		void CopyAllowLine();
 
 		/**
+		 * Cut the selection, if selection empty cut the line with the caret
+		 */
+		void CutAllowLine();
+
+		/**
 		 * Which symbol was defined for markerNumber with MarkerDefine
 		 */
 		Int32 MarkerSymbolDefined(Int32 markerNumber);
@@ -7773,6 +7827,11 @@ namespace WinUIEditor
 		Boolean StyleGetCheckMonospaced(Int32 style);
 
 		/**
+		 * Get the stretch of characters of a style.
+		 */
+		FontStretch StyleGetStretch(Int32 style);
+
+		/**
 		 * Get the invisible representation for a style.
 		 */
 		Int32 StyleGetInvisibleRepresentationWriteBuffer(Int32 style, Windows.Storage.Streams.IBuffer representation);
@@ -7954,6 +8013,12 @@ namespace WinUIEditor
 		 */
 		Int32 AutoCGetCurrentTextWriteBuffer(Windows.Storage.Streams.IBuffer text);
 		String AutoCGetCurrentText();
+
+		/**
+		 * Get the string to separate parts when copying a multiple selection.
+		 */
+		Int32 GetCopySeparatorWriteBuffer(Windows.Storage.Streams.IBuffer separator);
+		String GetCopySeparator();
 
 		/**
 		 * Return a read-only pointer to a range of characters in the document.
@@ -8296,6 +8361,11 @@ namespace WinUIEditor
 		void StyleSetCheckMonospaced(Int32 style, Boolean checkMonospaced);
 
 		/**
+		 * Set the stretch of characters of a style.
+		 */
+		void StyleSetStretch(Int32 style, FontStretch stretch);
+
+		/**
 		 * Set the invisible representation for a style.
 		 */
 		void StyleSetInvisibleRepresentationFromBuffer(Int32 style, Windows.Storage.Streams.IBuffer representation);
@@ -8452,6 +8522,12 @@ namespace WinUIEditor
 		 */
 		void SetPunctuationCharsFromBuffer(Windows.Storage.Streams.IBuffer characters);
 		void SetPunctuationChars(String characters);
+
+		/**
+		 * Set the string to separate parts when copying a multiple selection.
+		 */
+		void SetCopySeparatorFromBuffer(Windows.Storage.Streams.IBuffer separator);
+		void SetCopySeparator(String separator);
 
 		/**
 		 * Set the alpha fill colour of the given indicator.
