@@ -289,6 +289,11 @@
                         GroupName="Bidirectional"
                         Text="RTL (experimental)" />
                 </MenuFlyoutSubItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem
+                    AccessKey="W"
+                    Click="TestAppWindowMenuItem_Click"
+                    Text="Test AppWindow" />
             </muxc:MenuBarItem>
         </muxc:MenuBar>
         <Button

@@ -28,6 +28,7 @@ namespace winrt::CppDemoUwp::implementation
 		void CommandMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void HighlightingLanguageButton_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void HighlightingLanguageItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
+		Windows::Foundation::IAsyncAction TestAppWindowMenuItem_Click(Windows::Foundation::IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const &e);
 		void OnNavigatedTo(Windows::UI::Xaml::Navigation::NavigationEventArgs const &e);
 
 	private:
