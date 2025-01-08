@@ -100,6 +100,7 @@
     </ClCompile>
     <Link>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <ModuleDefinitionFile>CppIslandsUwpDemoApp.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -177,6 +178,7 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
+    <None Include="CppIslandsUwpDemoApp.def" />
     <None Include="packages.config" />
     <None Include="placeholder.exe">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
