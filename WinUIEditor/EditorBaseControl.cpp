@@ -541,6 +541,7 @@ namespace winrt::WinUIEditor::implementation
 	void EditorBaseControl::ImageTarget_PointerWheelChanged(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		auto properties{ e.GetCurrentPoint(sender.as<UIElement>()).Properties() };
+		if (!_verticalScrollBarScrollRevoker && !properties.IsHorizontalMouseWheel()) return;
 		_scintilla->PointerWheelChanged(properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), e.KeyModifiers());
 	}
 
