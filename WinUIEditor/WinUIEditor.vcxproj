@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\ChangeBuild.props" />
-  <Import Project="..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.props" Condition="$(WinUIEditorUseWinUI3) And Exists('..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.props')" />
-  <Import Project="..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.props')" />
-  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.props" Condition="$(WinUIEditorUseWinUI3) And Exists('..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.props')" />
+  <Import Project="..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.props')" />
+  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.props')" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
@@ -134,6 +134,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CallTipControl.h">
+      <DependentUpon>CallTipControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="CallTipWrapper.h" />
     <ClInclude Include="CodeEditorHandler.SciEdit.h" />
     <ClInclude Include="CodeEditorHandler.h" />
     <ClInclude Include="ControlIncludes.h" />
@@ -160,6 +165,7 @@
       <DependentUpon>EditorBaseControlAutomationPeer.cpp</DependentUpon>
       <SubType>Code</SubType>
     </ClInclude>
+    <ClInclude Include="MainWrapper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="..\scintilla\winui\PlatWin.h" />
     <ClInclude Include="..\scintilla\winui\ScintillaWin.h" />
@@ -169,6 +175,10 @@
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CallTipControl.cpp">
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="CallTipWrapper.cpp" />
     <ClCompile Include="CodeEditorHandler.SciEdit.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -195,6 +205,7 @@
     <ClCompile Include="EditorBaseControlAutomationPeer.cpp">
       <SubType>Code</SubType>
     </ClCompile>
+    <ClCompile Include="MainWrapper.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -213,6 +224,10 @@
     <None Include="Defines.idl" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="CallTipControl.idl">
+      <DependentUpon>CallTipControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="DummyPage.idl" Condition="'$(UseDummyPage)' == 'true'">
       <DependentUpon>DummyPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -243,22 +258,24 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.targets')" />
-    <Import Project="..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.targets" Condition="Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.targets')" />
-    <Import Project="..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.targets" Condition="$(WinUIEditorUseWinUI3) And Exists('..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.targets')" />
-    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
+    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.targets" Condition="Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.targets')" />
+    <Import Project="..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\native\Microsoft.Web.WebView2.targets" Condition="$(WinUIEditorUseWinUI3) And Exists('..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\native\Microsoft.Web.WebView2.targets')" />
+    <Import Project="..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.targets" Condition="$(WinUIEditorUseWinUI3) And Exists('..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.targets')" />
+    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240803.1\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240803.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.240111.5\build\native\Microsoft.Windows.CppWinRT.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.BuildTools.10.0.22621.3233\build\Microsoft.Windows.SDK.BuildTools.targets'))" />
-    <Error Condition="$(WinUIEditorUseWinUI3) And !Exists('..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.props'))" />
-    <Error Condition="$(WinUIEditorUseWinUI3) And !Exists('..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.WindowsAppSDK.1.5.240227000\build\native\Microsoft.WindowsAppSDK.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240122.1\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.BuildTools.10.0.26100.1742\build\Microsoft.Windows.SDK.BuildTools.targets'))" />
+    <Error Condition="$(WinUIEditorUseWinUI3) And !Exists('..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\native\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\native\Microsoft.Web.WebView2.targets'))" />
+    <Error Condition="$(WinUIEditorUseWinUI3) And !Exists('..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.props'))" />
+    <Error Condition="$(WinUIEditorUseWinUI3) And !Exists('..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.WindowsAppSDK.1.6.241114003\build\native\Microsoft.WindowsAppSDK.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240803.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.240803.1\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
   </Target>
   <ItemGroup>
     <!--<WildcardClInclude Include="..\scintilla\include\*.h">-->
@@ -328,7 +345,6 @@
     <ClInclude Include="..\lexilla\lexlib\LexAccessor.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerBase.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerModule.h" />
-    <ClInclude Include="..\lexilla\lexlib\LexerNoExceptions.h" />
     <ClInclude Include="..\lexilla\lexlib\LexerSimple.h" />
     <ClInclude Include="..\lexilla\lexlib\OptionSet.h" />
     <ClInclude Include="..\lexilla\lexlib\PropSetSimple.h" />
@@ -534,6 +550,9 @@
     <ClCompile Include="..\lexilla\lexers\LexD.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexDart.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexDataflex.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -666,6 +685,9 @@
     <ClCompile Include="..\lexilla\lexers\LexNimrod.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexNix.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexNsis.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -780,6 +802,12 @@
     <ClCompile Include="..\lexilla\lexers\LexTeX.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTOML.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTroff.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexTxt2tags.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -799,6 +827,9 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexYAML.cxx">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexZig.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <!--</WildcardClInclude>-->
@@ -825,9 +856,6 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexerModule.cxx">
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\lexilla\lexlib\LexerNoExceptions.cxx">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexerSimple.cxx">

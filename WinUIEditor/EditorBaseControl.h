@@ -5,6 +5,7 @@
 #include "ScintillaWin.h"
 #include "ScintillaCall.h"
 #include "Wrapper.h"
+#include "MainWrapper.h"
 
 namespace winrt::WinUIEditor::implementation
 {
@@ -34,6 +35,8 @@ namespace winrt::WinUIEditor::implementation
 		void StyleClearCustom();
 		void SetFoldMarginColorTransparent(bool useSetting, Scintilla::Internal::ColourRGBA back);
 		void SetFoldMarginHiColorTransparent(bool useSetting, Scintilla::Internal::ColourRGBA fore);
+		void SetCallTipBackgroundColorTransparent(Scintilla::Internal::ColourRGBA color);
+		void SetCallTipHoverColor(Scintilla::Internal::ColourRGBA color);
 
 		event_token DpiChanged(Windows::Foundation::EventHandler<double> const &handler);
 		void DpiChanged(event_token const &token) noexcept;
@@ -102,7 +105,7 @@ namespace winrt::WinUIEditor::implementation
 		bool ShowContextMenu(DUX::UIElement const &targetElement, Windows::Foundation::Point const &point);
 		bool ShowContextMenuAtCurrentPosition();
 		winrt::com_ptr<::IVirtualSurfaceImageSourceNative> _vsisNative;
-		std::shared_ptr<::WinUIEditor::Wrapper> _wrapper{ nullptr };
+		std::shared_ptr<::WinUIEditor::MainWrapper> _wrapper{ nullptr };
 		static LRESULT WndProc(Windows::Foundation::IInspectable const &, UINT msg, WPARAM wParam, LPARAM lParam);
 #ifndef WINUI3
 		Windows::Graphics::Display::DisplayInformation::DpiChanged_revoker _dpiChangedRevoker{};

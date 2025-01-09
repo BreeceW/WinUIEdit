@@ -221,6 +221,25 @@ class TestSimple(unittest.TestCase):
 		self.assertEqual(self.ed.CanRedo(), 0)
 		self.assertEqual(self.ed.CanUndo(), 1)
 
+	def testUndoSequence(self):
+		data = b"xy"
+		self.assertEqual(self.ed.UndoSequence, 0)
+		self.ed.InsertText(0, data)
+		self.assertEqual(self.ed.UndoSequence, 0)
+		# Check that actions between BeginUndoAction and EndUndoAction are undone together
+		self.ed.BeginUndoAction()
+		self.assertEqual(self.ed.UndoSequence, 1)
+		self.ed.InsertText(0, data)
+		self.ed.InsertText(1, data)
+		# xxyyxy
+		self.assertEqual(self.ed.Length, 6)
+		self.ed.EndUndoAction()
+		self.assertEqual(self.ed.UndoSequence, 0)
+		self.ed.Undo()
+		# xy as 2 inserts removed
+		self.assertEqual(self.ed.Length, 2)
+		self.assertEqual(self.ed.UndoSequence, 0)
+
 	def testUndoSavePoint(self):
 		data = b"xy"
 		self.assertEqual(self.ed.Modify, 0)
@@ -580,6 +599,19 @@ class TestSimple(unittest.TestCase):
 		self.ed.Paste()
 		self.ed.EOLMode = lineEndType
 		self.assertEqual(self.ed.Contents(), b"a1\na1\nb2")
+
+	def testCutAllowLine(self):
+		lineEndType = self.ed.EOLMode
+		self.ed.EOLMode = self.ed.SC_EOL_LF
+		self.ed.AddText(5, b"a1\nb2")
+		self.ed.SetSel(1,1)
+		self.ed.CutAllowLine()
+		# Clipboard = "a1\n"
+		self.assertEqual(self.ed.CanPaste(), 1)
+		self.ed.SetSel(0, 0)
+		self.ed.Paste()
+		self.ed.EOLMode = lineEndType
+		self.assertEqual(self.ed.Contents(), b"a1\nb2")
 
 	def testDuplicate(self):
 		self.ed.AddText(3, b"1b2")
@@ -1868,6 +1900,7 @@ class TestMultiSelection(unittest.TestCase):
 		self.ed.ClearAll()
 		self.ed.EmptyUndoBuffer()
 		# 3 lines of 3 characters
+		self.ed.EOLMode = self.ed.SC_EOL_CRLF
 		t = b"xxx\nxxx\nxxx"
 		self.ed.AddText(len(t), t)
 
@@ -1945,6 +1978,65 @@ class TestMultiSelection(unittest.TestCase):
 		self.assertEqual(self.ed.GetSelectionNCaret(1), 6)
 		self.assertEqual(self.ed.GetSelectionNAnchor(2), 9)
 		self.assertEqual(self.ed.GetSelectionNCaret(2), 10)
+
+	def testRectangularCopy(self):
+		self.ed.RectangularSelectionAnchor = 1
+		self.assertEqual(self.ed.RectangularSelectionAnchor, 1)
+		self.ed.RectangularSelectionCaret = 10
+		self.assertEqual(self.ed.RectangularSelectionCaret, 10)
+		self.assertEqual(self.ed.Selections, 3)
+		self.ed.Copy()
+		self.ed.ClearAll()
+		self.ed.Paste()
+		# Single character slice with current line ends
+		result = b"x\r\nx\r\nx"
+		self.assertEqual(self.ed.Contents(), result)
+
+	def testMultipleCopy(self):
+		self.ed.SetContents(b"abc\n123\nxyz")
+		self.ed.SetSelection(4, 5)	# 1
+		self.ed.AddSelection(1, 3) 	# bc
+		self.ed.AddSelection(10, 11)	# z
+		self.ed.Copy()
+		# 1,bc,z
+		self.ed.ClearAll()
+		self.ed.Paste()
+		self.assertEqual(self.ed.Contents(), b"1bcz")
+
+	def testCopySeparator(self):
+		self.assertEqual(self.ed.GetCopySeparator(), b"")
+		self.ed.CopySeparator = b"_"
+		self.assertEqual(self.ed.GetCopySeparator(), b"_")
+		self.ed.SetContents(b"abc\n123\nxyz")
+		self.ed.SetSelection(4, 5)	# 1
+		self.ed.AddSelection(1, 3) 	# bc
+		self.ed.AddSelection(10, 11)	# z
+		self.ed.Copy()
+		self.ed.ClearAll()
+		self.ed.Paste()
+		# 1,bc,z separated by _
+		self.assertEqual(self.ed.Contents(), b"1_bc_z")
+		self.ed.CopySeparator = b""
+
+	def testPasteConversion(self):
+		# Test that line ends are converted to current mode
+		self.ed.SetSelection(0, 11)
+		self.ed.Copy()
+
+		self.ed.ClearAll()
+		self.ed.EOLMode = self.ed.SC_EOL_CRLF
+		self.ed.Paste()
+		self.assertEqual(self.ed.Contents(), b"xxx\r\nxxx\r\nxxx")
+
+		self.ed.ClearAll()
+		self.ed.EOLMode = self.ed.SC_EOL_CR
+		self.ed.Paste()
+		self.assertEqual(self.ed.Contents(), b"xxx\rxxx\rxxx")
+
+		self.ed.ClearAll()
+		self.ed.EOLMode = self.ed.SC_EOL_LF
+		self.ed.Paste()
+		self.assertEqual(self.ed.Contents(), b"xxx\nxxx\nxxx")
 
 	def testVirtualSpace(self):
 		self.ed.SetSelection(3, 7)
@@ -3093,6 +3185,10 @@ class TestAutoComplete(unittest.TestCase):
 		self.assertEqual(self.ed.AutoCGetDropRestOfWord(), 1)
 		self.ed.AutoCSetDropRestOfWord(0)
 
+		self.ed.AutoCSetStyle(13)
+		self.assertEqual(self.ed.AutoCGetStyle(), 13)
+		self.ed.AutoCSetStyle(self.ed.STYLE_DEFAULT)
+
 	def testAutoShow(self):
 		self.assertEqual(self.ed.AutoCActive(), 0)
 		self.ed.SetSel(0, 0)
@@ -3126,6 +3222,28 @@ class TestAutoComplete(unittest.TestCase):
 		self.ed.AutoCSelect(0, b"d")
 		self.ed.AutoCComplete()
 		self.assertEqual(self.ed.Contents(), b"defnxxx\n")
+
+		self.assertEqual(self.ed.AutoCActive(), 0)
+
+	def testAutoSelectFirstItem(self):
+		self.assertEqual(self.ed.AutoCActive(), 0)
+
+		self.ed.AutoCSetOrder(self.ed.SC_ORDER_CUSTOM)
+
+		# without SC_AUTOCOMPLETE_SELECT_FIRST_ITEM option
+		self.ed.SetSel(3, 3)
+		self.ed.AutoCShow(3, b"aaa1 bbb1 xxx1")
+		# automatically selects the item with the entered prefix xxx
+		self.ed.AutoCComplete()
+		self.assertEqual(self.ed.Contents(), b"xxx1\n")
+
+		# with SC_AUTOCOMPLETE_SELECT_FIRST_ITEM option
+		self.ed.AutoCSetOptions(2, 0)
+		self.ed.SetSel(3, 3)
+		self.ed.AutoCShow(3, b"aaa1 bbb1 xxx1")
+		# selects the first item regardless of the entered prefix and replaces the entered xxx
+		self.ed.AutoCComplete()
+		self.assertEqual(self.ed.Contents(), b"aaa11\n")
 
 		self.assertEqual(self.ed.AutoCActive(), 0)
 

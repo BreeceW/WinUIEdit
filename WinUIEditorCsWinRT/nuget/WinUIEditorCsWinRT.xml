@@ -622,8 +622,15 @@ where possible.</summary>
             <summary>If selection is empty or all on one line replace the selection with a tab character.
 If more than one line selected, indent the lines.</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.LineIndent">
+            <summary>Indent the current and selected lines.</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.BackTab">
-            <summary>Dedent the selected lines.</summary>
+            <summary>If selection is empty or all on one line dedent the line if caret is at start, else move caret.
+If more than one line selected, dedent the lines.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.LineDedent">
+            <summary>Dedent the current and selected lines.</summary>
         </member>
         <member name="M:WinUIEditor.Editor.NewLine">
             <summary>Insert a new line, may use a CRLF, CR or LF depending on EOL mode.</summary>
@@ -993,6 +1000,9 @@ multi-byte characters. If beyond end of line, return line end position.</summary
         <member name="M:WinUIEditor.Editor.CopyAllowLine">
             <summary>Copy the selection, if selection empty copy the line with the caret</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.CutAllowLine">
+            <summary>Cut the selection, if selection empty cut the line with the caret</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.MarkerSymbolDefined(System.Int32)">
             <summary>Which symbol was defined for markerNumber with MarkerDefine</summary>
         </member>
@@ -1293,6 +1303,9 @@ Experimental feature, currently buggy.</summary>
         <member name="M:WinUIEditor.Editor.StyleGetCheckMonospaced(System.Int32)">
             <summary>Get whether a style may be monospaced.</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.StyleGetStretch(System.Int32)">
+            <summary>Get the stretch of characters of a style.</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.StyleGetInvisibleRepresentationWriteBuffer(System.Int32,Windows.Storage.Streams.IBuffer)">
             <summary>Get the invisible representation for a style.</summary>
         </member>
@@ -1427,6 +1440,12 @@ Result is NUL-terminated.</summary>
             <summary>Get currently selected item text in the auto-completion list
 Returns the length of the item text
 Result is NUL-terminated.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.GetCopySeparatorWriteBuffer(Windows.Storage.Streams.IBuffer)">
+            <summary>Get the string to separate parts when copying a multiple selection.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.GetCopySeparator">
+            <summary>Get the string to separate parts when copying a multiple selection.</summary>
         </member>
         <member name="M:WinUIEditor.Editor.GetRangePointer(System.Int64,System.Int64)">
             <summary>Return a read-only pointer to a range of characters in the document.
@@ -1680,6 +1699,9 @@ Result is NUL-terminated.</summary>
         <member name="M:WinUIEditor.Editor.StyleSetCheckMonospaced(System.Int32,System.Boolean)">
             <summary>Indicate that a style may be monospaced over ASCII graphics characters which enables optimizations.</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.StyleSetStretch(System.Int32,WinUIEditor.FontStretch)">
+            <summary>Set the stretch of characters of a style.</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.StyleSetInvisibleRepresentationFromBuffer(System.Int32,Windows.Storage.Streams.IBuffer)">
             <summary>Set the invisible representation for a style.</summary>
         </member>
@@ -1793,6 +1815,12 @@ Should be called after SetWordChars.</summary>
         <member name="M:WinUIEditor.Editor.SetPunctuationChars(System.String)">
             <summary>Set the set of characters making up punctuation characters
 Should be called after SetWordChars.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.SetCopySeparatorFromBuffer(Windows.Storage.Streams.IBuffer)">
+            <summary>Set the string to separate parts when copying a multiple selection.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.SetCopySeparator(System.String)">
+            <summary>Set the string to separate parts when copying a multiple selection.</summary>
         </member>
         <member name="M:WinUIEditor.Editor.IndicSetAlpha(System.Int32,WinUIEditor.Alpha)">
             <summary>Set the alpha fill colour of the given indicator.</summary>
@@ -1996,6 +2024,9 @@ Get the time in milliseconds that the caret is on and off. 0 = steady on.</summa
             <summary>Get the number of characters to have directly indexed categories
 Set the number of characters to have directly indexed categories</summary>
         </member>
+        <member name="P:WinUIEditor.Editor.UndoSequence">
+            <summary>Is an undo sequence active?</summary>
+        </member>
         <member name="P:WinUIEditor.Editor.UndoActions">
             <summary>How many undo actions are in the history?</summary>
         </member>
@@ -2082,6 +2113,10 @@ Set to 0 to autosize to fit longest item, which is the default.</summary>
             <summary>Set the maximum height, in rows, of auto-completion and user lists.
 Set the maximum height, in rows, of auto-completion and user lists.
 The default is 5 rows.</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.AutoCStyle">
+            <summary>Get the style number used for auto-completion and user lists fonts.
+Set the style number used for auto-completion and user lists fonts.</summary>
         </member>
         <member name="P:WinUIEditor.Editor.Indent">
             <summary>Retrieve indentation size.

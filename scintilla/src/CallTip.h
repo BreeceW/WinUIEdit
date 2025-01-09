@@ -49,8 +49,10 @@ public:
 	ColourRGBA colourSel;
 	ColourRGBA colourShade;
 	ColourRGBA colourLight;
+	ColourRGBA colourHovered; // WinUI
 	int codePage;
 	int clickPlace;
+	int hoverPlace; // WinUI
 
 	int insetX; // text inset in x from calltip border
 	int widthArrow;
@@ -68,6 +70,7 @@ public:
 	void PaintCT(Surface *surfaceWindow);
 
 	void MouseClick(Point pt) noexcept;
+	void MouseMove(Point pt) noexcept; // WinUI
 
 	/// Setup the calltip and return a rectangle of the area required.
 	PRectangle CallTipStart(Sci::Position pos, Point pt, int textHeight, const char *defn,

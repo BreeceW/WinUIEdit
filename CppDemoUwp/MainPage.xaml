@@ -546,6 +546,12 @@
                                 GroupName="HighlightingLanguage"
                                 Tag="xml"
                                 Text="XML" />
+                            <muxc:RadioMenuFlyoutItem
+                                AccessKey="Y"
+                                Click="HighlightingLanguageItem_Click"
+                                GroupName="HighlightingLanguage"
+                                Tag="yaml"
+                                Text="YAML" />
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </HyperlinkButton>

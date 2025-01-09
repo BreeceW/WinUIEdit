@@ -31,7 +31,7 @@ namespace winrt::WinUIEditor::implementation
 	{
 		DefaultStyleKey(winrt::box_value(L"WinUIEditor.EditorBaseControl"));
 
-		_wrapper = std::make_shared<Wrapper>();
+		_wrapper = std::make_shared<MainWrapper>(*this);
 
 		Loaded({ this, &EditorBaseControl::OnLoaded });
 		Unloaded({ this, &EditorBaseControl::OnUnloaded });
@@ -302,6 +302,16 @@ namespace winrt::WinUIEditor::implementation
 	void EditorBaseControl::SetFoldMarginHiColorTransparent(bool useSetting, Scintilla::Internal::ColourRGBA fore)
 	{
 		_scintilla->SetFoldMarginHiColorTransparent(useSetting, fore);
+	}
+
+	void EditorBaseControl::SetCallTipBackgroundColorTransparent(Scintilla::Internal::ColourRGBA color)
+	{
+		_scintilla->SetCallTipBackgroundColorTransparent(color);
+	}
+
+	void EditorBaseControl::SetCallTipHoverColor(Scintilla::Internal::ColourRGBA color)
+	{
+		_scintilla->SetCallTipHoverColor(color);
 	}
 
 	void EditorBaseControl::OnApplyTemplate()

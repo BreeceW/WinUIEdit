@@ -52,6 +52,7 @@
 #include <winrt/Windows.UI.Xaml.Markup.h>
 #include <winrt/Windows.UI.Xaml.Navigation.h>
 #include <winrt/Windows.UI.Xaml.Media.Imaging.h>
+
 #include <windows.ui.xaml.media.dxinterop.h>
 
 #define DUX Windows::UI::Xaml

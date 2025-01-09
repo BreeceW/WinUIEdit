@@ -477,10 +477,14 @@ namespace Scintilla::Internal {
 			text, ln->back);
 	}
 
-	ScintillaWinUI::ScintillaWinUI(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper)
+	ScintillaWinUI::ScintillaWinUI(std::shared_ptr<WinUIEditor::MainWrapper> const &wrapper)
 	{
 		_mainWrapper = wrapper;
-		wMain = _mainWrapper.get();
+		wMain = static_cast<WinUIEditor::Wrapper *>(_mainWrapper.get());
+
+		ct.verticalOffset = 0;
+		ct.colourLight = ColourRGBA(0, 0, 0, 0);
+		ct.colourShade = ColourRGBA(0, 0, 0, 0);
 
 		// This is a legacy Scintilla feature that is recommended to be disabled (though not deprecated)
 		// It is not currently supported in EditorBaseControl because it is a performance hit and is redundant
@@ -850,6 +854,17 @@ namespace Scintilla::Internal {
 	bool ScintillaWinUI::ShouldShowContextMenu(winrt::Windows::Foundation::Point const &point)
 	{
 		return ShouldDisplayPopup(Point{ point.X, point.Y });
+	}
+
+	void ScintillaWinUI::HandleCallTipClick(winrt::Windows::Foundation::Point const &point)
+	{
+		ct.MouseClick(Point{ point.X, point.Y });
+		CallTipClick();
+	}
+
+	void ScintillaWinUI::HandleCallTipPointerMove(winrt::Windows::Foundation::Point const &point)
+	{
+		ct.MouseMove(Point{ point.X, point.Y });
 	}
 
 	void ScintillaWinUI::StopTimers()
@@ -2270,8 +2285,23 @@ namespace Scintilla::Internal {
 		return 0;
 	}
 
+	void ScintillaWinUI::SetCallTipHoverColor(ColourRGBA color)
+	{
+		ct.colourHovered = color;
+	}
+
+	void ScintillaWinUI::SetCallTipBackgroundColorTransparent(ColourRGBA color)
+	{
+		ct.colourBG = color;
+	}
+
 	void ScintillaWinUI::CreateCallTipWindow(PRectangle rc)
 	{
+		if (!ct.wCallTip.Created())
+		{
+			ct.wCallTip = static_cast<WinUIEditor::Wrapper *>(_mainWrapper->CreateCallTipWindow(rc, get_strong()).get());
+			//ct.wDraw = ...; // Todo: decide if wDraw is needed and/or harmful
+		}
 	}
 
 	void ScintillaWinUI::AddToPopUp(const char *label, int cmd, bool enabled)
@@ -2280,6 +2310,8 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::DpiChanged()
 	{
+		_mainWrapper->AdjustCallTipPadding(ct);
+
 		InvalidateStyleRedraw();
 	}
 
@@ -3055,5 +3087,116 @@ namespace Scintilla::Internal {
 		default:
 			return __super::WndProc(iMessage, wParam, lParam);
 		}
+	}
+
+	CallTipCallback::CallTipCallback(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper, winrt::com_ptr<Scintilla::Internal::ScintillaWinUI> const &scintilla)
+	{
+		_wrapper = wrapper;
+		_scintilla = scintilla;
+	}
+
+	IFACEMETHODIMP CallTipCallback::UpdatesNeeded()
+	{
+		ULONG drawingBoundsCount = 0;
+		HRESULT hr = _wrapper->VsisNative()->GetUpdateRectCount(&drawingBoundsCount);
+		if (FAILED(hr))
+			return hr;
+
+		std::unique_ptr<RECT[]> drawingBounds{ std::make_unique<RECT[]>(drawingBoundsCount) };
+		hr = _wrapper->VsisNative()->GetUpdateRects(drawingBounds.get(), drawingBoundsCount);
+		if (FAILED(hr))
+			return hr;
+
+		// This code doesn't try to coalesce multiple drawing bounds into one. Although that
+		// extra process will reduce the number of draw calls, it requires the virtual surface
+		// image source to manage non-uniform tile size, which requires it to make extra copy
+		// operations to the compositor. By using the drawing bounds it directly returns, which are
+		// of non-overlapping uniform tile size, the compositor is able to use these tiles directly,
+		// which can greatly reduce the amount of memory needed by the virtual surface image source.
+		// It will result in more draw calls though, but Direct2D will be able to accommodate that
+		// without significant impact on presentation frame rate.
+		for (ULONG i = 0; i < drawingBoundsCount; i++)
+		{
+			DrawBit(drawingBounds[i]);
+		}
+
+		return hr;
+	}
+
+	void CallTipCallback::DrawBit(RECT const &drawingBounds)
+	{
+		const auto &sisNativeWithD2D{ _wrapper->SisNativeWithD2D() };
+
+		winrt::com_ptr<IDXGISurface> surface;
+		POINT surfaceOffset = { 0 };
+
+		//Provide a pointer to IDXGISurface object to ISurfaceImageSourceNative::BeginDraw, and
+		//draw into that surface using DirectX. Only the area specified for update in the
+		//updateRect parameter is drawn.
+		//
+		//This method returns the point (x,y) offset of the updated target rectangle in the offset
+		//parameter. You use this offset to determine where to draw into inside the IDXGISurface.
+		HRESULT beginDrawHR = sisNativeWithD2D->BeginDraw(drawingBounds, __uuidof(::IDXGISurface), surface.put_void(), &surfaceOffset);
+		if (beginDrawHR == DXGI_ERROR_DEVICE_REMOVED || beginDrawHR == DXGI_ERROR_DEVICE_RESET || beginDrawHR == E_SURFACE_CONTENTS_LOST)
+		{
+			// For surface lost:
+			// Handles what seems to be a XAML-specific issue https://github.com/Microsoft/Win2D/blob/master/winrt/lib/xaml/CanvasControl.cpp#L199
+			// Always reproducible by disabling GPU in Device Manager
+			// Sometimes reproducible by launching with debugger attached and switching virtual desktops (wait a few seconds before switching)
+			// Sometimes reproducible by minimize and restoring repeatedly
+			// See https://github.com/Microsoft/Win2D/issues/584
+			// https://learn.microsoft.com/en-us/windows/uwp/gaming/directx-and-xaml-interop
+			// That says you do not need to re-create the devices when E_SURFACE_CONTENTS_LOST but in testing it seems necessary
+			// https://learn.microsoft.com/en-us/windows/uwp/gaming/handling-device-lost-scenarios
+
+			_wrapper->CreateGraphicsDevices();
+			//InvalidateStyleRedraw(); // just Redraw() does not work
+		}
+		else
+		{
+			const auto &d2dDeviceContext{ _wrapper->D2dDeviceContext() };
+
+			winrt::com_ptr<ID2D1Bitmap1> bitmap;
+			// surface can be null if E_FAIL (got while debugging)
+			// Todo: handle general fail case for above
+			HRESULT hrBitMap = d2dDeviceContext->CreateBitmapFromDxgiSurface(
+				surface.get(), nullptr, bitmap.put());
+			if (FAILED(hrBitMap))
+			{
+				winrt::throw_hresult(hrBitMap);
+			}
+			d2dDeviceContext->BeginDraw();
+			d2dDeviceContext->SetTarget(bitmap.get());
+
+			surfaceOffset.x -= drawingBounds.left;
+			surfaceOffset.y -= drawingBounds.top;
+			float offsetX = surfaceOffset.x;
+			float offsetY = surfaceOffset.y;
+
+			d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Translation(offsetX, offsetY));
+
+			// Constrain the drawing only to the designated portion of the surface
+			d2dDeviceContext->PushAxisAlignedClip(
+				D2D1::RectF(
+					drawingBounds.left, drawingBounds.top, drawingBounds.right, drawingBounds.bottom
+				),
+				D2D1_ANTIALIAS_MODE_ALIASED
+			);
+
+			auto surf{ Scintilla::Internal::Surface::Allocate(Technology::DirectWrite) };
+			surf->Init(d2dDeviceContext.get(), _wrapper.get());
+			//surf->SetUnicodeMode(true); // Todo: Figure out what to make this
+			//surf->SetDBCSMode(0);  // Todo: Figure out what to make this
+			surf->SetMode(SurfaceMode{ 65001, false }); // Todo: Ensure these values are good
+			//rcPaint = Scintilla::Internal::PRectangle(drawingBounds.left, drawingBounds.top, drawingBounds.right, drawingBounds.bottom);
+			//Paint(surf.get(), rcPaint);
+			_scintilla->ct.PaintCT(surf.get());
+
+			surf->Release();
+
+			d2dDeviceContext->EndDraw();
+		}
+
+		sisNativeWithD2D->EndDraw();
 	}
 }
