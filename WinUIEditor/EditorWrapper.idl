@@ -123,6 +123,8 @@ namespace WinUIEditor
 		StyleSetHotSpot = 2409,
 		StyleSetCheckMonospaced = 2254,
 		StyleGetCheckMonospaced = 2255,
+		StyleSetStretch = 2258,
+		StyleGetStretch = 2259,
 		StyleSetInvisibleRepresentation = 2256,
 		StyleGetInvisibleRepresentation = 2257,
 		SetElementColour = 2753,
@@ -157,6 +159,7 @@ namespace WinUIEditor
 		GetCharacterCategoryOptimization = 2721,
 		BeginUndoAction = 2078,
 		EndUndoAction = 2079,
+		GetUndoSequence = 2799,
 		GetUndoActions = 2790,
 		SetUndoSavePoint = 2791,
 		GetUndoSavePoint = 2792,
@@ -230,6 +233,8 @@ namespace WinUIEditor
 		AutoCGetMaxWidth = 2209,
 		AutoCSetMaxHeight = 2210,
 		AutoCGetMaxHeight = 2211,
+		AutoCSetStyle = 2109,
+		AutoCGetStyle = 2120,
 		SetIndent = 2122,
 		GetIndent = 2123,
 		SetUseTabs = 2124,
@@ -442,7 +447,9 @@ namespace WinUIEditor
 		Cancel = 2325,
 		DeleteBack = 2326,
 		Tab = 2327,
+		LineIndent = 2813,
 		BackTab = 2328,
+		LineDedent = 2814,
 		NewLine = 2329,
 		FormFeed = 2330,
 		VCHome = 2331,
@@ -623,6 +630,9 @@ namespace WinUIEditor
 		SetLayoutThreads = 2775,
 		GetLayoutThreads = 2776,
 		CopyAllowLine = 2519,
+		CutAllowLine = 2810,
+		SetCopySeparator = 2811,
+		GetCopySeparator = 2812,
 		GetCharacterPointer = 2520,
 		GetRangePointer = 2643,
 		GetGapPosition = 2644,
@@ -964,6 +974,19 @@ namespace WinUIEditor
 		Bold = 700,
 	};
 
+	enum FontStretch
+	{
+		UltraCondensed = 1,
+		ExtraCondensed = 2,
+		Condensed = 3,
+		SemiCondensed = 4,
+		Normal = 5,
+		SemiExpanded = 6,
+		Expanded = 7,
+		ExtraExpanded = 8,
+		UltraExpanded = 9,
+	};
+
 	enum Element
 	{
 		List = 0,
@@ -978,6 +1001,8 @@ namespace WinUIEditor
 		SelectionSecondaryBack = 15,
 		SelectionInactiveText = 16,
 		SelectionInactiveBack = 17,
+		SelectionInactiveAdditionalText = 18,
+		SelectionInactiveAdditionalBack = 19,
 		Caret = 40,
 		CaretAdditional = 41,
 		CaretLineBack = 50,
@@ -1059,6 +1084,7 @@ namespace WinUIEditor
 	{
 		Normal = 0,
 		FixedSize = 1,
+		SelectFirstItem = 2,
 	};
 
 	enum IndentView
@@ -1645,6 +1671,11 @@ namespace WinUIEditor
 		Julia = 133,
 		Asciidoc = 134,
 		Gdscript = 135,
+		Toml = 136,
+		Troff = 137,
+		Dart = 138,
+		Zig = 139,
+		Nix = 140,
 		Automatic = 1000,
 	};
 
@@ -1653,6 +1684,7 @@ namespace WinUIEditor
 		InvalidPosition = -1,
 		ScCpUtf8 = 65001,
 		MarkerMax = 31,
+		ScMaskHistory = 31457280,
 		ScMaskFolders = -33554432,
 		ScMaxMargin = 4,
 		ScFontSizeMultiplier = 100,
@@ -1774,38 +1806,6 @@ namespace WinUIEditor
 		CEscapesequence = 27,
 	};
 
-	enum COBOL
-	{
-		CDefault = 0,
-		CComment = 1,
-		CCommentline = 2,
-		CCommentdoc = 3,
-		CNumber = 4,
-		CWord = 5,
-		CString = 6,
-		CCharacter = 7,
-		CUuid = 8,
-		CPreprocessor = 9,
-		COperator = 10,
-		CIdentifier = 11,
-		CStringeol = 12,
-		CVerbatim = 13,
-		CRegex = 14,
-		CCommentlinedoc = 15,
-		CWord2 = 16,
-		CCommentdockeyword = 17,
-		CCommentdockeyworderror = 18,
-		CGlobalclass = 19,
-		CStringraw = 20,
-		CTripleverbatim = 21,
-		CHashquotedstring = 22,
-		CPreprocessorcomment = 23,
-		CPreprocessorcommentdoc = 24,
-		CUserliteral = 25,
-		CTaskmarker = 26,
-		CEscapesequence = 27,
-	};
-
 	enum TACL
 	{
 		CDefault = 0,
@@ -1868,6 +1868,23 @@ namespace WinUIEditor
 		CUserliteral = 25,
 		CTaskmarker = 26,
 		CEscapesequence = 27,
+	};
+
+	enum COBOL
+	{
+		CobolDefault = 0,
+		CobolComment = 1,
+		CobolCommentline = 2,
+		CobolCommentdoc = 3,
+		CobolNumber = 4,
+		CobolWord = 5,
+		CobolString = 6,
+		CobolCharacter = 7,
+		CobolWord3 = 8,
+		CobolPreprocessor = 9,
+		CobolOperator = 10,
+		CobolIdentifier = 11,
+		CobolWord2 = 16,
 	};
 
 	enum D
@@ -1970,6 +1987,7 @@ namespace WinUIEditor
 		HjSymbols = 50,
 		HjStringeol = 51,
 		HjRegex = 52,
+		HjTemplateliteral = 53,
 		HjaStart = 55,
 		HjaDefault = 56,
 		HjaComment = 57,
@@ -1983,6 +2001,7 @@ namespace WinUIEditor
 		HjaSymbols = 65,
 		HjaStringeol = 66,
 		HjaRegex = 67,
+		HjaTemplateliteral = 68,
 		HbStart = 70,
 		HbDefault = 71,
 		HbCommentline = 72,
@@ -2085,6 +2104,7 @@ namespace WinUIEditor
 		HjSymbols = 50,
 		HjStringeol = 51,
 		HjRegex = 52,
+		HjTemplateliteral = 53,
 		HjaStart = 55,
 		HjaDefault = 56,
 		HjaComment = 57,
@@ -2098,6 +2118,7 @@ namespace WinUIEditor
 		HjaSymbols = 65,
 		HjaStringeol = 66,
 		HjaRegex = 67,
+		HjaTemplateliteral = 68,
 		HbStart = 70,
 		HbDefault = 71,
 		HbCommentline = 72,
@@ -4131,6 +4152,8 @@ namespace WinUIEditor
 		RustBytestring = 21,
 		RustBytestringr = 22,
 		RustBytecharacter = 23,
+		RustCstring = 24,
+		RustCstringr = 25,
 	};
 
 	enum DMAP
@@ -4517,6 +4540,130 @@ namespace WinUIEditor
 		GdWord2 = 14,
 		GdAnnotation = 15,
 		GdNodepath = 16,
+	};
+
+	enum TOML
+	{
+		TomlDefault = 0,
+		TomlComment = 1,
+		TomlIdentifier = 2,
+		TomlKeyword = 3,
+		TomlNumber = 4,
+		TomlTable = 5,
+		TomlKey = 6,
+		TomlError = 7,
+		TomlOperator = 8,
+		TomlStringSq = 9,
+		TomlStringDq = 10,
+		TomlTripleStringSq = 11,
+		TomlTripleStringDq = 12,
+		TomlEscapechar = 13,
+		TomlDatetime = 14,
+	};
+
+	enum troff
+	{
+		TroffDefault = 0,
+		TroffRequest = 1,
+		TroffCommand = 2,
+		TroffNumber = 3,
+		TroffOperator = 4,
+		TroffString = 5,
+		TroffComment = 6,
+		TroffIgnore = 7,
+		TroffEscapeString = 8,
+		TroffEscapeMacro = 9,
+		TroffEscapeFont = 10,
+		TroffEscapeNumber = 11,
+		TroffEscapeColour = 12,
+		TroffEscapeGlyph = 13,
+		TroffEscapeEnv = 14,
+		TroffEscapeSuppression = 15,
+		TroffEscapeSize = 16,
+		TroffEscapeTransparent = 17,
+		TroffEscapeIsvalid = 18,
+		TroffEscapeDraw = 19,
+		TroffEscapeMove = 20,
+		TroffEscapeHeight = 21,
+		TroffEscapeOverstrike = 22,
+		TroffEscapeSlant = 23,
+		TroffEscapeWidth = 24,
+		TroffEscapeVspacing = 25,
+		TroffEscapeDevice = 26,
+		TroffEscapeNomove = 27,
+	};
+
+	enum Dart
+	{
+		DartDefault = 0,
+		DartCommentline = 1,
+		DartCommentlinedoc = 2,
+		DartCommentblock = 3,
+		DartCommentblockdoc = 4,
+		DartStringSq = 5,
+		DartStringDq = 6,
+		DartTripleStringSq = 7,
+		DartTripleStringDq = 8,
+		DartRawstringSq = 9,
+		DartRawstringDq = 10,
+		DartTripleRawstringSq = 11,
+		DartTripleRawstringDq = 12,
+		DartEscapechar = 13,
+		DartIdentifier = 14,
+		DartIdentifierString = 15,
+		DartOperator = 16,
+		DartOperatorString = 17,
+		DartSymbolIdentifier = 18,
+		DartSymbolOperator = 19,
+		DartNumber = 20,
+		DartKey = 21,
+		DartMetadata = 22,
+		DartKwPrimary = 23,
+		DartKwSecondary = 24,
+		DartKwTertiary = 25,
+		DartKwType = 26,
+	};
+
+	enum Zig
+	{
+		ZigDefault = 0,
+		ZigCommentline = 1,
+		ZigCommentlinedoc = 2,
+		ZigCommentlinetop = 3,
+		ZigNumber = 4,
+		ZigOperator = 5,
+		ZigCharacter = 6,
+		ZigString = 7,
+		ZigMultistring = 8,
+		ZigEscapechar = 9,
+		ZigIdentifier = 10,
+		ZigFunction = 11,
+		ZigBuiltinFunction = 12,
+		ZigKwPrimary = 13,
+		ZigKwSecondary = 14,
+		ZigKwTertiary = 15,
+		ZigKwType = 16,
+		ZigIdentifierString = 17,
+	};
+
+	enum Nix
+	{
+		NixDefault = 0,
+		NixCommentline = 1,
+		NixCommentblock = 2,
+		NixString = 3,
+		NixStringMultiline = 4,
+		NixEscapechar = 5,
+		NixIdentifier = 6,
+		NixOperator = 7,
+		NixOperatorString = 8,
+		NixNumber = 9,
+		NixKey = 10,
+		NixPath = 11,
+		NixKeyword1 = 12,
+		NixKeyword2 = 13,
+		NixKeyword3 = 14,
+		NixKeyword4 = 15,
 	};
 
 	[default_interface]
@@ -4942,6 +5089,11 @@ namespace WinUIEditor
 		Int32 CharacterCategoryOptimization { get; set; };
 
 		/**
+		 * Is an undo sequence active?
+		 */
+		Int32 UndoSequence { get; };
+
+		/**
 		 * How many undo actions are in the history?
 		 */
 		Int32 UndoActions { get; };
@@ -5067,6 +5219,12 @@ namespace WinUIEditor
 		 * The default is 5 rows.
 		 */
 		Int32 AutoCMaxHeight { get; set; };
+
+		/**
+		 * Get the style number used for auto-completion and user lists fonts.
+		 * Set the style number used for auto-completion and user lists fonts.
+		 */
+		Int32 AutoCStyle { get; set; };
 
 		/**
 		 * Retrieve indentation size.
@@ -6665,9 +6823,20 @@ namespace WinUIEditor
 		void Tab();
 
 		/**
-		 * Dedent the selected lines.
+		 * Indent the current and selected lines.
+		 */
+		void LineIndent();
+
+		/**
+		 * If selection is empty or all on one line dedent the line if caret is at start, else move caret.
+		 * If more than one line selected, dedent the lines.
 		 */
 		void BackTab();
+
+		/**
+		 * Dedent the current and selected lines.
+		 */
+		void LineDedent();
 
 		/**
 		 * Insert a new line, may use a CRLF, CR or LF depending on EOL mode.
@@ -7229,6 +7398,11 @@ namespace WinUIEditor
 		void CopyAllowLine();
 
 		/**
+		 * Cut the selection, if selection empty cut the line with the caret
+		 */
+		void CutAllowLine();
+
+		/**
 		 * Which symbol was defined for markerNumber with MarkerDefine
 		 */
 		Int32 MarkerSymbolDefined(Int32 markerNumber);
@@ -7653,6 +7827,11 @@ namespace WinUIEditor
 		Boolean StyleGetCheckMonospaced(Int32 style);
 
 		/**
+		 * Get the stretch of characters of a style.
+		 */
+		FontStretch StyleGetStretch(Int32 style);
+
+		/**
 		 * Get the invisible representation for a style.
 		 */
 		Int32 StyleGetInvisibleRepresentationWriteBuffer(Int32 style, Windows.Storage.Streams.IBuffer representation);
@@ -7834,6 +8013,12 @@ namespace WinUIEditor
 		 */
 		Int32 AutoCGetCurrentTextWriteBuffer(Windows.Storage.Streams.IBuffer text);
 		String AutoCGetCurrentText();
+
+		/**
+		 * Get the string to separate parts when copying a multiple selection.
+		 */
+		Int32 GetCopySeparatorWriteBuffer(Windows.Storage.Streams.IBuffer separator);
+		String GetCopySeparator();
 
 		/**
 		 * Return a read-only pointer to a range of characters in the document.
@@ -8176,6 +8361,11 @@ namespace WinUIEditor
 		void StyleSetCheckMonospaced(Int32 style, Boolean checkMonospaced);
 
 		/**
+		 * Set the stretch of characters of a style.
+		 */
+		void StyleSetStretch(Int32 style, FontStretch stretch);
+
+		/**
 		 * Set the invisible representation for a style.
 		 */
 		void StyleSetInvisibleRepresentationFromBuffer(Int32 style, Windows.Storage.Streams.IBuffer representation);
@@ -8332,6 +8522,12 @@ namespace WinUIEditor
 		 */
 		void SetPunctuationCharsFromBuffer(Windows.Storage.Streams.IBuffer characters);
 		void SetPunctuationChars(String characters);
+
+		/**
+		 * Set the string to separate parts when copying a multiple selection.
+		 */
+		void SetCopySeparatorFromBuffer(Windows.Storage.Streams.IBuffer separator);
+		void SetCopySeparator(String separator);
 
 		/**
 		 * Set the alpha fill colour of the given indicator.

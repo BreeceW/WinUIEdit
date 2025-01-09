@@ -8,6 +8,8 @@
 #pragma once
 
 #include "Wrapper.h"
+#include "MainWrapper.h"
+#include "CallTipWrapper.h"
 
 namespace Scintilla::Internal {
 	enum class ScrollEventType : int32_t
@@ -51,12 +53,16 @@ namespace Scintilla::Internal {
 		virtual uint8_t Type() const = 0;
 	};
 
+	class CallTipCallback;
+
 	class ScintillaWinUI :
 		public ScintillaBase,
 		public ::winrt::implements<ScintillaWinUI, ::IVirtualSurfaceUpdatesCallbackNative, ITextStoreACP2, ITfContextOwnerCompositionSink>
 	{
+		friend class CallTipCallback;
+
 	public:
-		ScintillaWinUI(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper);
+		ScintillaWinUI(std::shared_ptr<WinUIEditor::MainWrapper> const &wrapper);
 		void DpiChanged();
 		void SizeChanged();
 		void FocusChanged(bool focused);
@@ -73,6 +79,8 @@ namespace Scintilla::Internal {
 		void Finalize();
 		void CharacterReceived(char16_t character);
 		bool ShouldShowContextMenu(winrt::Windows::Foundation::Point const &point);
+		void HandleCallTipClick(winrt::Windows::Foundation::Point const &point);
+		void HandleCallTipPointerMove(winrt::Windows::Foundation::Point const &point);
 
 		sptr_t GetTextLength();
 		sptr_t GetText(uptr_t bufferSize, sptr_t buffer);
@@ -80,6 +88,8 @@ namespace Scintilla::Internal {
 
 		void StyleSetForeTransparent(int style, ColourRGBA color);
 		void StyleSetBackTransparent(int style, ColourRGBA color);
+		void SetCallTipHoverColor(ColourRGBA color);
+		void SetCallTipBackgroundColorTransparent(ColourRGBA color);
 		void PublicInvalidateStyleRedraw();
 		void StyleClearCustom();
 		void SetFoldMarginColorTransparent(bool useSetting, ColourRGBA back);
@@ -215,7 +225,7 @@ namespace Scintilla::Internal {
 		IFACEMETHOD(OnStartComposition)(ITfCompositionView *pComposition, BOOL *pfOk);
 		IFACEMETHOD(OnUpdateComposition)(ITfCompositionView *pComposition, ITfRange *pRangeNew);
 
-		std::shared_ptr<::WinUIEditor::Wrapper> _mainWrapper{ nullptr };
+		std::shared_ptr<::WinUIEditor::MainWrapper> _mainWrapper{ nullptr };
 
 		// Timer implementation
 		// Todo: Planning to not use XAML APIs on the Scintilla side, so replace DispatcherTimer with something that works outside of XAML
@@ -234,6 +244,8 @@ namespace Scintilla::Internal {
 		winrt::DUX::DispatcherTimer::Tick_revoker _widenTickRevoker{};
 		winrt::DUX::DispatcherTimer::Tick_revoker _dwellTickRevoker{};
 		winrt::DUX::DispatcherTimer GetTimerForReason(TickReason reason);
+
+		void UpdateCallTipOffset();
 
 		virtual bool FineTickerRunning(TickReason reason) override;
 		virtual void FineTickerStart(TickReason reason, int millis, int tolerance) override;
@@ -269,5 +281,16 @@ namespace Scintilla::Internal {
 		winrt::fire_and_forget DoDragAsync();
 		int CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength);
 		sptr_t OnSetDocPointer(uptr_t wParam, sptr_t lParam);
+	};
+
+	class CallTipCallback : public ::winrt::implements<CallTipCallback, ::IVirtualSurfaceUpdatesCallbackNative>
+	{
+	public:
+		CallTipCallback(std::shared_ptr<WinUIEditor::Wrapper> const &wrapper, winrt::com_ptr<Scintilla::Internal::ScintillaWinUI> const &scintilla);
+	private:
+		winrt::com_ptr<Scintilla::Internal::ScintillaWinUI> _scintilla;
+		IFACEMETHOD(UpdatesNeeded)() override;
+		void DrawBit(RECT const &drawingBounds);
+		std::shared_ptr<::WinUIEditor::Wrapper> _wrapper{ nullptr };
 	};
 }

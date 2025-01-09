@@ -22,6 +22,8 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="CallTipControl.cpp" />
+    <ClCompile Include="CallTipWrapper.cpp" />
     <ClCompile Include="CodeEditorControl.cpp" />
     <ClCompile Include="CodeEditorHandler.cpp" />
     <ClCompile Include="CodeEditorHandler.SciEdit.cpp" />
@@ -31,6 +33,7 @@
     <ClCompile Include="EditorBaseControlAutomationPeer.cpp" />
     <ClCompile Include="EditorWrapper.cpp" />
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="MainWrapper.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TextRangeProvider.cpp" />
     <ClCompile Include="Wrapper.cpp" />
@@ -225,6 +228,9 @@
     <ClCompile Include="..\lexilla\lexers\LexD.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexDart.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexDataflex.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
@@ -357,6 +363,9 @@
     <ClCompile Include="..\lexilla\lexers\LexNimrod.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexNix.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexNsis.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
@@ -471,6 +480,12 @@
     <ClCompile Include="..\lexilla\lexers\LexTeX.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTOML.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexTroff.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexTxt2tags.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
@@ -490,6 +505,9 @@
       <Filter>Lexers</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexYAML.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexZig.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\Accessor.cxx">
@@ -516,9 +534,6 @@
     <ClCompile Include="..\lexilla\lexlib\LexerModule.cxx">
       <Filter>Lexilla</Filter>
     </ClCompile>
-    <ClCompile Include="..\lexilla\lexlib\LexerNoExceptions.cxx">
-      <Filter>Lexilla</Filter>
-    </ClCompile>
     <ClCompile Include="..\lexilla\lexlib\LexerSimple.cxx">
       <Filter>Lexilla</Filter>
     </ClCompile>
@@ -536,6 +551,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CallTipControl.h" />
+    <ClInclude Include="CallTipWrapper.h" />
     <ClInclude Include="CodeEditorControl.h" />
     <ClInclude Include="CodeEditorHandler.h" />
     <ClInclude Include="CodeEditorHandler.SciEdit.h" />
@@ -547,6 +564,7 @@
     <ClInclude Include="EditorWrapper.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="LightPlus.h" />
+    <ClInclude Include="MainWrapper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TextMateScope.h" />
     <ClInclude Include="TextRangeProvider.h" />
@@ -728,9 +746,6 @@
     <ClInclude Include="..\lexilla\lexlib\LexerModule.h">
       <Filter>Lexilla</Filter>
     </ClInclude>
-    <ClInclude Include="..\lexilla\lexlib\LexerNoExceptions.h">
-      <Filter>Lexilla</Filter>
-    </ClInclude>
     <ClInclude Include="..\lexilla\lexlib\LexerSimple.h">
       <Filter>Lexilla</Filter>
     </ClInclude>
@@ -775,6 +790,7 @@
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="CallTipControl.idl" />
     <Midl Include="CodeEditorControl.idl" />
     <Midl Include="DummyPage.idl" />
     <Midl Include="EditorBaseControl.idl" />

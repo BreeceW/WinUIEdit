@@ -9,6 +9,7 @@
 
 #include <cstddef>
 #include <cstdlib>
+#include <cstdint>
 #include <cstring>
 #include <cstdio>
 #include <cstdarg>
@@ -61,6 +62,7 @@
 #include "PlatWin.h"
 
 #include "Wrapper.h"
+#include "MainWrapper.h"
 
 // __uuidof is a Microsoft extension but makes COM code neater, so disable warning
 #if defined(__clang__)
@@ -127,10 +129,58 @@ void LoadD2DOnce() noexcept {
 	}
 }
 
-bool LoadD2D() {
+bool LoadD2D() noexcept {
 	static std::once_flag once;
-	std::call_once(once, LoadD2DOnce);
+	try {
+		std::call_once(once, LoadD2DOnce);
+	}
+	catch (...) {
+		// ignore
+	}
 	return pIDWriteFactory && pD2DFactory;
+}
+
+constexpr D2D_COLOR_F ColorFromColourAlpha(ColourRGBA colour) noexcept {
+	return D2D_COLOR_F{
+		colour.GetRedComponent(),
+		colour.GetGreenComponent(),
+		colour.GetBlueComponent(),
+		colour.GetAlphaComponent()
+	};
+}
+
+using BrushSolid = std::unique_ptr<ID2D1SolidColorBrush, UnknownReleaser>;
+
+BrushSolid BrushSolidCreate(ID2D1RenderTarget *pTarget, COLORREF colour) noexcept {
+	ID2D1SolidColorBrush *pBrush = nullptr;
+	const D2D_COLOR_F col = ColorFromColourAlpha(ColourRGBA::FromRGB(colour));
+	const HRESULT hr = pTarget->CreateSolidColorBrush(col, &pBrush);
+	if (FAILED(hr) || !pBrush) {
+		return {};
+	}
+	return BrushSolid(pBrush);
+}
+
+using Geometry = std::unique_ptr<ID2D1PathGeometry, UnknownReleaser>;
+
+Geometry GeometryCreate() noexcept {
+	ID2D1PathGeometry *geometry = nullptr;
+	const HRESULT hr = pD2DFactory->CreatePathGeometry(&geometry);
+	if (FAILED(hr) || !geometry) {
+		return {};
+	}
+	return Geometry(geometry);
+}
+
+using GeometrySink = std::unique_ptr<ID2D1GeometrySink, UnknownReleaser>;
+
+GeometrySink GeometrySinkCreate(ID2D1PathGeometry *geometry) noexcept {
+	ID2D1GeometrySink *sink = nullptr;
+	const HRESULT hr = geometry->Open(&sink);
+	if (FAILED(hr) || !sink) {
+		return {};
+	}
+	return GeometrySink(sink);
 }
 
 #endif
@@ -198,13 +248,15 @@ struct FontDirectWrite : public Font {
 		HRESULT hr = pIDWriteFactory->CreateTextFormat(wsFace.c_str(), nullptr,
 			static_cast<DWRITE_FONT_WEIGHT>(fp.weight),
 			style,
-			DWRITE_FONT_STRETCH_NORMAL, fHeight, wsLocale.c_str(), &pTextFormat);
+			static_cast<DWRITE_FONT_STRETCH>(fp.stretch),
+			fHeight, wsLocale.c_str(), &pTextFormat);
 		if (hr == E_INVALIDARG) {
 			// Possibly a bad locale name like "/" so try "en-us".
 			hr = pIDWriteFactory->CreateTextFormat(wsFace.c_str(), nullptr,
 				static_cast<DWRITE_FONT_WEIGHT>(fp.weight),
 				style,
-				DWRITE_FONT_STRETCH_NORMAL, fHeight, L"en-us", &pTextFormat);
+				static_cast<DWRITE_FONT_STRETCH>(fp.stretch),
+				fHeight, L"en-us", &pTextFormat);
 		}
 		if (SUCCEEDED(hr)) {
 			pTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
@@ -356,15 +408,6 @@ constexpr Supports SupportsD2D[] = {
 	Supports::ThreadSafeMeasureWidths,
 };
 
-constexpr D2D_COLOR_F ColorFromColourAlpha(ColourRGBA colour) noexcept {
-	return D2D_COLOR_F{
-		colour.GetRedComponent(),
-		colour.GetGreenComponent(),
-		colour.GetBlueComponent(),
-		colour.GetAlphaComponent()
-	};
-}
-
 constexpr D2D1_RECT_F RectangleInset(D2D1_RECT_F rect, FLOAT inset) noexcept {
 	return D2D1_RECT_F{
 		rect.left + inset,
@@ -425,7 +468,7 @@ public:
 	int PixelDivisions() override;
 	int DeviceHeightFont(int points) override;
 	void LineDraw(Point start, Point end, Stroke stroke) override;
-	ID2D1PathGeometry *Geometry(const Point *pts, size_t npts, D2D1_FIGURE_BEGIN figureBegin) noexcept;
+	static Geometry GeometricFigure(const Point *pts, size_t npts, D2D1_FIGURE_BEGIN figureBegin) noexcept;
 	void PolyLine(const Point *pts, size_t npts, Stroke stroke) override;
 	void Polygon(const Point *pts, size_t npts, FillStroke fillStroke) override;
 	void RectangleDraw(PRectangle rc, FillStroke fillStroke) override;
@@ -640,13 +683,10 @@ void SurfaceD2D::LineDraw(Point start, Point end, Stroke stroke) {
 	ReleaseUnknown(pStrokeStyle);
 }
 
-ID2D1PathGeometry *SurfaceD2D::Geometry(const Point *pts, size_t npts, D2D1_FIGURE_BEGIN figureBegin) noexcept {
-	ID2D1PathGeometry *geometry = nullptr;
-	HRESULT hr = pD2DFactory->CreatePathGeometry(&geometry);
-	if (SUCCEEDED(hr) && geometry) {
-		ID2D1GeometrySink *sink = nullptr;
-		hr = geometry->Open(&sink);
-		if (SUCCEEDED(hr) && sink) {
+Geometry SurfaceD2D::GeometricFigure(const Point *pts, size_t npts, D2D1_FIGURE_BEGIN figureBegin) noexcept {
+	Geometry geometry = GeometryCreate();
+	if (geometry) {
+		if (const GeometrySink sink = GeometrySinkCreate(geometry.get())) {
 			sink->BeginFigure(DPointFromPoint(pts[0]), figureBegin);
 			for (size_t i = 1; i < npts; i++) {
 				sink->AddLine(DPointFromPoint(pts[i]));
@@ -654,7 +694,6 @@ ID2D1PathGeometry *SurfaceD2D::Geometry(const Point *pts, size_t npts, D2D1_FIGU
 			sink->EndFigure((figureBegin == D2D1_FIGURE_BEGIN_FILLED) ?
 				D2D1_FIGURE_END_CLOSED : D2D1_FIGURE_END_OPEN);
 			sink->Close();
-			ReleaseUnknown(sink);
 		}
 	}
 	return geometry;
@@ -666,14 +705,14 @@ void SurfaceD2D::PolyLine(const Point *pts, size_t npts, Stroke stroke) {
 		return;
 	}
 
-	ID2D1PathGeometry *geometry = Geometry(pts, npts, D2D1_FIGURE_BEGIN_HOLLOW);
+	const Geometry geometry = GeometricFigure(pts, npts, D2D1_FIGURE_BEGIN_HOLLOW);
 	PLATFORM_ASSERT(geometry);
 	if (!geometry) {
 		return;
 	}
 
 	D2DPenColourAlpha(stroke.colour);
-	D2D1_STROKE_STYLE_PROPERTIES strokeProps {};
+	D2D1_STROKE_STYLE_PROPERTIES strokeProps{};
 	strokeProps.startCap = D2D1_CAP_STYLE_ROUND;
 	strokeProps.endCap = D2D1_CAP_STYLE_ROUND;
 	strokeProps.dashCap = D2D1_CAP_STYLE_FLAT;
@@ -687,23 +726,21 @@ void SurfaceD2D::PolyLine(const Point *pts, size_t npts, Stroke stroke) {
 	const HRESULT hr = pD2DFactory->CreateStrokeStyle(
 		strokeProps, nullptr, 0, &pStrokeStyle);
 	if (SUCCEEDED(hr)) {
-		pRenderTarget->DrawGeometry(geometry, pBrush, stroke.WidthF(), pStrokeStyle);
+		pRenderTarget->DrawGeometry(geometry.get(), pBrush, stroke.WidthF(), pStrokeStyle);
 	}
 	ReleaseUnknown(pStrokeStyle);
-	ReleaseUnknown(geometry);
 }
 
 void SurfaceD2D::Polygon(const Point *pts, size_t npts, FillStroke fillStroke) {
 	PLATFORM_ASSERT(pRenderTarget && (npts > 2));
 	if (pRenderTarget) {
-		ID2D1PathGeometry *geometry = Geometry(pts, npts, D2D1_FIGURE_BEGIN_FILLED);
+		const Geometry geometry = GeometricFigure(pts, npts, D2D1_FIGURE_BEGIN_FILLED);
 		PLATFORM_ASSERT(geometry);
 		if (geometry) {
 			D2DPenColourAlpha(fillStroke.fill.colour);
-			pRenderTarget->FillGeometry(geometry, pBrush);
+			pRenderTarget->FillGeometry(geometry.get(), pBrush);
 			D2DPenColourAlpha(fillStroke.stroke.colour);
-			pRenderTarget->DrawGeometry(geometry, pBrush, fillStroke.stroke.WidthF());
-			ReleaseUnknown(geometry);
+			pRenderTarget->DrawGeometry(geometry.get(), pBrush, fillStroke.stroke.WidthF());
 		}
 	}
 }
@@ -951,13 +988,10 @@ void SurfaceD2D::Stadium(PRectangle rc, FillStroke fillStroke, Ends ends) {
 		PRectangle rcInner = rc;
 		rcInner.left += radius;
 		rcInner.right -= radius;
-		ID2D1PathGeometry *pathGeometry = nullptr;
-		const HRESULT hrGeometry = pD2DFactory->CreatePathGeometry(&pathGeometry);
-		if (FAILED(hrGeometry) || !pathGeometry)
+		const Geometry pathGeometry = GeometryCreate();
+		if (!pathGeometry)
 			return;
-		ID2D1GeometrySink *pSink = nullptr;
-		const HRESULT hrSink = pathGeometry->Open(&pSink);
-		if (SUCCEEDED(hrSink) && pSink) {
+		if (const GeometrySink pSink = GeometrySinkCreate(pathGeometry.get())) {
 			switch (leftSide) {
 				case Ends::leftFlat:
 					pSink->BeginFigure(DPointFromPoint(Point(rc.left + halfStroke, rc.top + halfStroke)), D2D1_FIGURE_BEGIN_FILLED);
@@ -1010,12 +1044,10 @@ void SurfaceD2D::Stadium(PRectangle rc, FillStroke fillStroke, Ends ends) {
 
 			pSink->Close();
 		}
-		ReleaseUnknown(pSink);
 		D2DPenColourAlpha(fillStroke.fill.colour);
-		pRenderTarget->FillGeometry(pathGeometry, pBrush);
+		pRenderTarget->FillGeometry(pathGeometry.get(), pBrush);
 		D2DPenColourAlpha(fillStroke.stroke.colour);
-		pRenderTarget->DrawGeometry(pathGeometry, pBrush, fillStroke.stroke.WidthF());
-		ReleaseUnknown(pathGeometry);
+		pRenderTarget->DrawGeometry(pathGeometry.get(), pBrush, fillStroke.stroke.WidthF());
 	}
 }
 
@@ -1760,7 +1792,7 @@ WindowID SurfaceD2D::GetWindowId() const
 
 #endif
 
-std::unique_ptr<Surface> Surface::Allocate(Technology technology) {
+std::unique_ptr<Surface> Surface::Allocate([[maybe_unused]] Technology technology) {
 #if defined(USE_D2D)
 	return std::make_unique<SurfaceD2D>();
 #endif
@@ -1795,6 +1827,11 @@ Window::~Window() noexcept {
 }
 
 void Window::Destroy() noexcept {
+	const auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
+	if (wrapper)
+	{
+		wrapper->Destroy();
+	}
 	wid = nullptr;
 }
 
@@ -1828,6 +1865,11 @@ RECT RectFromMonitor(HMONITOR hMonitor) noexcept {
 }
 
 void Window::SetPositionRelative(PRectangle rc, const Window *relativeTo) {
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
+	if (wrapper)
+	{
+		return wrapper->SetPositionRelative(rc, *reinterpret_cast<WinUIEditor::Wrapper *>(relativeTo->GetID()));
+	}
 }
 
 PRectangle Window::GetClientPosition() const {
@@ -1839,6 +1881,11 @@ PRectangle Window::GetClientPosition() const {
 }
 
 void Window::Show(bool show) {
+	auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) };
+	if (wrapper)
+	{
+		wrapper->Show(show);
+	}
 }
 
 void Window::InvalidateAll() {
@@ -1857,107 +1904,8 @@ void Window::InvalidateRectangle(PRectangle rc) {
 	}
 }
 
-/*HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept {
-	class CursorHelper {
-	public:
-		ICONINFO info{};
-		BITMAP bmp{};
-		bool HasBitmap() const noexcept {
-			return bmp.bmWidth > 0;
-		}
-
-		CursorHelper(const HCURSOR cursor) noexcept {
-			Init(cursor);
-		}
-		~CursorHelper() {
-			CleanUp();
-		}
-
-		CursorHelper &operator=(const HCURSOR cursor) noexcept {
-			CleanUp();
-			Init(cursor);
-			return *this;
-		}
-
-		bool MatchesSize(const int width, const int height) noexcept {
-			return bmp.bmWidth == width && bmp.bmHeight == height;
-		}
-
-		HCURSOR CreateFlippedCursor() noexcept {
-			if (info.hbmMask)
-				FlipBitmap(info.hbmMask, bmp.bmWidth, bmp.bmHeight);
-			if (info.hbmColor)
-				FlipBitmap(info.hbmColor, bmp.bmWidth, bmp.bmHeight);
-			info.xHotspot = bmp.bmWidth - 1 - info.xHotspot;
-
-			return ::CreateIconIndirect(&info);
-		}
-
-	private:
-		void Init(const HCURSOR &cursor) noexcept {
-			if (::GetIconInfo(cursor, &info)) {
-				::GetObject(info.hbmMask, sizeof(bmp), &bmp);
-				PLATFORM_ASSERT(HasBitmap());
-			}
-		}
-
-		void CleanUp() noexcept {
-			if (info.hbmMask)
-				::DeleteObject(info.hbmMask);
-			if (info.hbmColor)
-				::DeleteObject(info.hbmColor);
-			info = {};
-			bmp = {};
-		}
-
-		static void FlipBitmap(const HBITMAP bitmap, const int width, const int height) noexcept {
-			HDC hdc = ::CreateCompatibleDC({});
-			if (hdc) {
-				HBITMAP prevBmp = SelectBitmap(hdc, bitmap);
-				::StretchBlt(hdc, width - 1, 0, -width, height, hdc, 0, 0, width, height, SRCCOPY);
-				SelectBitmap(hdc, prevBmp);
-				::DeleteDC(hdc);
-			}
-		}
-	};
-
-	HCURSOR reverseArrowCursor {};
-
-	const int width = SystemMetricsForDpi(SM_CXCURSOR, dpi);
-	const int height = SystemMetricsForDpi(SM_CYCURSOR, dpi);
-
-	DPI_AWARENESS_CONTEXT oldContext = nullptr;
-	if (fnAreDpiAwarenessContextsEqual && fnAreDpiAwarenessContextsEqual(fnGetThreadDpiAwarenessContext(), DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED)) {
-		oldContext = fnSetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-		PLATFORM_ASSERT(oldContext != nullptr);
-	}
-
-	const HCURSOR cursor = static_cast<HCURSOR>(::LoadImage({}, IDC_ARROW, IMAGE_CURSOR, width, height, LR_SHARED));
-	if (cursor) {
-		CursorHelper cursorHelper(cursor);
-
-		if (cursorHelper.HasBitmap() && !cursorHelper.MatchesSize(width, height)) {
-			const HCURSOR copy = static_cast<HCURSOR>(::CopyImage(cursor, IMAGE_CURSOR, width, height, LR_COPYFROMRESOURCE | LR_COPYRETURNORG));
-			if (copy) {
-				cursorHelper = copy;
-				::DestroyCursor(copy);
-			}
-		}
-
-		if (cursorHelper.HasBitmap()) {
-			reverseArrowCursor = cursorHelper.CreateFlippedCursor();
-		}
-	}
-
-	if (oldContext) {
-		fnSetThreadDpiAwarenessContext(oldContext);
-	}
-
-	return reverseArrowCursor;
-}*/
-
 void Window::SetCursor(Cursor curs) {
-	if (auto wrapper{ reinterpret_cast<WinUIEditor::Wrapper *>(GetID()) })
+	if (auto wrapper{ static_cast<WinUIEditor::MainWrapper *>(static_cast<WinUIEditor::Wrapper *>(GetID())) }) // Todo: Consider moving SetCursor or checking the type of window (this should only be called on main)
 	{
 		winrt::DCUR type{ winrt::DCUR::Arrow };
 		switch (curs) {
