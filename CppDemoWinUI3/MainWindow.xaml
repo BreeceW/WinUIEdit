@@ -9,4 +9,5 @@
     mc:Ignorable="d">
 
     <editor:CodeEditorControl x:Name="Editor" Loaded="CodeEditorControl_Loaded" />
+                                      IsVerticalResizingEnabled="True" MinHeight="29"/>
 </Window>

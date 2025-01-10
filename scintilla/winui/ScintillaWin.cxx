@@ -2086,6 +2086,12 @@ namespace Scintilla::Internal {
 		{
 			if (static_cast<int>(_mainWrapper->VerticalScrollBarMinimum()) != nMin || static_cast<int>(_mainWrapper->VerticalScrollBarMaximum()) != max || static_cast<UINT>(_mainWrapper->VerticalScrollBarViewportSize()) != nPage)
 			{
+				if (_mainWrapper->GetUseVerticalScrollBar() == false)
+				{
+					_mainWrapper->ResizeContainersVertical(pdoc->LinesTotal() * vs.lineHeight);
+					ScrollTo(0);
+				}
+
 				_mainWrapper->VerticalScrollBarViewportSize(nPage);
 				_mainWrapper->VerticalScrollBarMinimum(nMin);
 				_mainWrapper->VerticalScrollBarMaximum(max);
@@ -2114,7 +2120,7 @@ namespace Scintilla::Internal {
 			}
 			else
 			{
-				// _mainWrapper->
+				ScrollTo(0);
 			}
 		}
 	}

@@ -169,6 +169,27 @@ namespace WinUIEditor
 	{
 	}
 
+	void MainWrapper::SetContainer(winrt::DUX::FrameworkElement const& container)
+	{
+		_container = container;
+	}
+
+	/* ResizeContainersVertical
+	   return true when resized
+	*/
+
+	bool MainWrapper::ResizeContainersVertical(double value)
+	{
+		if (_useVerticalScrollBar || _container == NULL) return false;
+		
+		auto height = _container.ActualHeight();
+		if (std::isnan(height)) return true;
+
+		if (value != floorf(height)) _container.Height(value  / LogicalDpi() * 96.0f);
+		
+		return true;
+	}
+
 	bool MainWrapper::GetUseVerticalScrollBar()
 	{
 		return _useVerticalScrollBar;

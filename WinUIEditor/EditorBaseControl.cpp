@@ -110,6 +110,7 @@ namespace winrt::WinUIEditor::implementation
 
 	void EditorBaseControl::OnUnloaded(IInspectable const &sender, DUX::RoutedEventArgs const &args)
 	{
+		_wrapper->SetContainer(NULL);
 #ifndef WINUI3
 		_isLoaded = false;
 #endif
@@ -377,6 +378,8 @@ namespace winrt::WinUIEditor::implementation
 			const ImageBrush brush{};
 			brush.ImageSource(virtualSurfaceImageSource);
 			imageTarget.Background(brush);
+
+			_wrapper->SetContainer(imageTarget);
 		}
 
 #ifndef WINUI3
