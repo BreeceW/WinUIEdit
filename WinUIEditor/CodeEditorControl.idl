@@ -15,5 +15,6 @@ namespace WinUIEditor
         event Windows.Foundation.EventHandler<DUX.ElementTheme> SyntaxHighlightingApplied;
         void ApplyDefaultsToDocument();
         void ResetLexer();
+        Boolean IsVerticalResizingEnabled { get; set; };
     }
 }

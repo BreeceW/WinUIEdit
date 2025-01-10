@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>WinUIEdit</id>
-		<version>0.0.3-prerelease</version>
+		<version>0.3.1</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for WinUI 3 based on Scintilla</description>
 		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>

@@ -36,6 +36,11 @@ namespace WinUIEditor
 		double HorizontalScrollBarViewportSize();
 		double VerticalScrollBarViewportSize();
 
+		void SetContainer(winrt::DUX::FrameworkElement const& container);
+		bool ResizeContainersVertical(double value);
+		bool GetUseVerticalScrollBar();
+		void SetUseVerticalScrollBar(bool value);
+
 		winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation> StartDragAsync(winrt::DUI::PointerPoint const &pointerPoint);
 
 		void Show(bool visible) override;
@@ -48,5 +53,7 @@ namespace WinUIEditor
 		winrt::DUX::Controls::Primitives::ScrollBar _horizontalScrollBar{ nullptr };
 		winrt::DUX::Controls::Primitives::ScrollBar _verticalScrollBar{ nullptr };
 		bool _captured{ false };
+		bool _useVerticalScrollBar{ true };
+		winrt::DUX::FrameworkElement _container{ nullptr };
 	};
 }
