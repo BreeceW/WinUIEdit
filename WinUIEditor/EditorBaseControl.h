@@ -47,6 +47,9 @@ namespace winrt::WinUIEditor::implementation
 
 		event<Windows::Foundation::EventHandler<int64_t>> InternalNotifyMessageReceived;
 
+		bool GetVerticalResizing();
+		void SetVerticalResizing(bool value);
+
 	private:
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static

@@ -2108,9 +2108,13 @@ namespace Scintilla::Internal {
 			{
 				_mainWrapper->HorizontalScrollBarValue(pos);
 			}
-			else
+			else if (_mainWrapper->GetUseVerticalScrollBar())
 			{
 				_mainWrapper->VerticalScrollBarValue(pos);
+			}
+			else
+			{
+				// _mainWrapper->
 			}
 		}
 	}

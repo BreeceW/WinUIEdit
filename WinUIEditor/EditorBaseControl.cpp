@@ -551,7 +551,7 @@ namespace winrt::WinUIEditor::implementation
 	void EditorBaseControl::ImageTarget_PointerWheelChanged(IInspectable const &sender, PointerRoutedEventArgs const &e)
 	{
 		auto properties{ e.GetCurrentPoint(sender.as<UIElement>()).Properties() };
-		if (!_verticalScrollBarScrollRevoker && !properties.IsHorizontalMouseWheel()) return;
+		if (!_wrapper->GetUseVerticalScrollBar() && !properties.IsHorizontalMouseWheel()) return; // vertical scroll but disabled
 		_scintilla->PointerWheelChanged(properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), e.KeyModifiers());
 	}
 
@@ -673,4 +673,13 @@ namespace winrt::WinUIEditor::implementation
 		_wrapper->TrimDxgiDevice();
 	}
 #endif
+	bool EditorBaseControl::GetVerticalResizing()
+	{
+		return !_wrapper->GetUseVerticalScrollBar();
+	}
+
+	void EditorBaseControl::SetVerticalResizing(bool value)
+	{
+		_wrapper->SetUseVerticalScrollBar(!value);
+	}
 }

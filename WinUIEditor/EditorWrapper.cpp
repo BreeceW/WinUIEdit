@@ -2502,6 +2502,7 @@ namespace winrt::WinUIEditor::implementation
 	 */
 	void Editor::VScrollBar(bool value)
 	{
+		if (_editor.get()->GetVerticalResizing()) value = 0; // always hide the vertical scroll if we resize
 		_editor.get()->PublicWndProc(Scintilla::Message::SetVScrollBar, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
 	}
 
