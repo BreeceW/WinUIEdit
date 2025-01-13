@@ -33,6 +33,9 @@ namespace winrt::WinUIEditor::implementation
 		bool IsVerticalResizingEnabled();
 		void IsVerticalResizingEnabled(bool value);
 
+		bool WrapMode();
+		void WrapMode(bool value);
+
 	private:
 		com_ptr<EditorBaseControl> _editor{ nullptr };
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };

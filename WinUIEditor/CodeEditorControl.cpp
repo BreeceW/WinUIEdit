@@ -353,4 +353,15 @@ namespace winrt::WinUIEditor::implementation
 	{
 		_editor->SetVerticalResizing(value);
 	}
+
+	bool CodeEditorControl::WrapMode()
+	{
+		
+		return _editor->Editor().WrapMode() == Wrap::Word;
+	}
+
+	void CodeEditorControl::WrapMode(bool value)
+	{
+		_editor->Editor().WrapMode(value ? Wrap::Word : Wrap::None);
+	}
 }

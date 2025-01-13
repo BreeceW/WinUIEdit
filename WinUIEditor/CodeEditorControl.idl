@@ -16,5 +16,6 @@ namespace WinUIEditor
         void ApplyDefaultsToDocument();
         void ResetLexer();
         Boolean IsVerticalResizingEnabled { get; set; };
+        Boolean WrapMode{ get; set; };
     }
 }
