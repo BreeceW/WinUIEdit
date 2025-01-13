@@ -23,7 +23,7 @@
         <!-- Warning: using VerticalAlignment="Stretch" does not work correctly -->
         <editor:CodeEditorControl x:Name="Editor1" Grid.Row="1"  
                                   Loaded="CodeEditorControl_Loaded" 
-                                  WrapMode="true" />
+                                  WrapMode="Word" />
 
         <ScrollView x:Name="ScrollView" Grid.Row="1"
                     Visibility="Collapsed">

@@ -33,8 +33,8 @@ namespace winrt::WinUIEditor::implementation
 		bool IsVerticalResizingEnabled();
 		void IsVerticalResizingEnabled(bool value);
 
-		bool WrapMode();
-		void WrapMode(bool value);
+		Wrap WrapMode();
+		void WrapMode(Wrap value);
 
 	private:
 		com_ptr<EditorBaseControl> _editor{ nullptr };
