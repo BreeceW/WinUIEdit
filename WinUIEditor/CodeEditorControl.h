@@ -30,6 +30,12 @@ namespace winrt::WinUIEditor::implementation
 		void ApplyDefaultsToDocument();
 		void ResetLexer();
 
+		bool IsVerticalResizingEnabled();
+		void IsVerticalResizingEnabled(bool value);
+
+		Wrap WrapMode();
+		void WrapMode(Wrap value);
+
 	private:
 		com_ptr<EditorBaseControl> _editor{ nullptr };
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };

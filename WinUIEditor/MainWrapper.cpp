@@ -64,6 +64,7 @@ namespace WinUIEditor
 	{
 		_horizontalScrollBar = horizontalScrollBar;
 		_verticalScrollBar = verticalScrollBar;
+		SetUseVerticalScrollBar(_useVerticalScrollBar); // hides the vertical scrollbar if needed
 	}
 
 	bool MainWrapper::HasScrollBars()
@@ -166,5 +167,37 @@ namespace WinUIEditor
 
 	void MainWrapper::SetPositionRelative(Scintilla::Internal::PRectangle rc, Wrapper const &wrapper)
 	{
+	}
+
+	void MainWrapper::SetContainer(winrt::DUX::FrameworkElement const& container)
+	{
+		_container = container;
+	}
+
+	/* ResizeContainersVertical
+	   return true when resized
+	*/
+
+	bool MainWrapper::ResizeContainersVertical(double value)
+	{
+		if (_useVerticalScrollBar || _container == NULL) return false;
+		
+		auto height = _container.ActualHeight();
+		if (std::isnan(height)) return true;
+
+		if (value != floorf(height)) _container.Height(value  / LogicalDpi() * 96.0f);
+		
+		return true;
+	}
+
+	bool MainWrapper::GetUseVerticalScrollBar()
+	{
+		return _useVerticalScrollBar;
+	}
+
+	void MainWrapper::SetUseVerticalScrollBar(bool value)
+	{
+		_useVerticalScrollBar = value;
+		if (_verticalScrollBar != NULL) _verticalScrollBar.Visibility((value) ? winrt::DUX::Visibility::Visible : winrt::DUX::Visibility::Collapsed);
 	}
 }

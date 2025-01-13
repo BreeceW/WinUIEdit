@@ -343,4 +343,24 @@ namespace winrt::WinUIEditor::implementation
 	{
 		_editor->NotifyMessageReceived(token);
 	}
+
+	bool CodeEditorControl::IsVerticalResizingEnabled()
+	{
+		return _editor->GetVerticalResizing();
+	}
+
+	void CodeEditorControl::IsVerticalResizingEnabled(bool value)
+	{
+		_editor->SetVerticalResizing(value);
+	}
+
+	Wrap CodeEditorControl::WrapMode()
+	{	
+		return _editor->Editor().WrapMode();
+	}
+
+	void CodeEditorControl::WrapMode(Wrap value)
+	{
+		_editor->Editor().WrapMode(value);
+	}
 }

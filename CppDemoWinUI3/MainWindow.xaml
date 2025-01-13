@@ -7,6 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:editor="using:WinUIEditor"
     mc:Ignorable="d">
-
+    
     <editor:CodeEditorControl x:Name="Editor" Loaded="CodeEditorControl_Loaded" />
+    
+    <!--
+    <editor:CodeEditorControl x:Name="Editor" Loaded="CodeEditorControl_Loaded"
+                                      IsVerticalResizingEnabled="False" MinHeight="29" />
+    -->
 </Window>

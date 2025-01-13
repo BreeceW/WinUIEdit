@@ -8,5 +8,47 @@
     xmlns:editor="using:WinUIEditor"
     mc:Ignorable="d">
 
-    <editor:CodeEditorControl x:Name="Editor" Loaded="CodeEditorControl_Loaded" />
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <ToggleSwitch Grid.Row="0" 
+                          Header="Version" OffContent="Normal" OnContent="Plus" IsOn="False" Toggled="VersionSwitch_Toggled" />
+            <TextBlock>Try srolling on a Text taller then the Window</TextBlock>
+        </StackPanel>
+
+        <!-- Warning: using VerticalAlignment="Stretch" does not work correctly -->
+        <editor:CodeEditorControl x:Name="Editor1" Grid.Row="1"  
+                                  Loaded="CodeEditorControl_Loaded" 
+                                  WrapMode="Word" />
+
+        <ScrollView x:Name="ScrollView" Grid.Row="1"
+                    Visibility="Collapsed">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="VerticalResizingCheckBox" Grid.Row="0" 
+                          Content="IsVerticalResizingEnabled" 
+                          Click="VerticalResizingCheckBox_Clicked"/>
+
+                <!--  new: IsVerticalResizingEnabled 
+                      VerticalAlignment="Stretch" does work here... because the Row is set to Auto instead of * ?
+                -->
+                <editor:CodeEditorControl Grid.Row="1" x:Name="Editor2" 
+                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                          IsVerticalResizingEnabled="False" />
+                
+                <TextBlock Grid.Row="2">Beyond Editor</TextBlock>
+            </Grid>
+        </ScrollView>
+
+    </Grid>
 </Window>
