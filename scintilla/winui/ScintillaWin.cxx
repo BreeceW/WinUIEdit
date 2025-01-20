@@ -1921,7 +1921,7 @@ namespace Scintilla::Internal {
 #ifdef EnableTsfDebugMessages
 		DebugOut(L"OnEndComposition\n");
 #endif
-		ImeEndComposition(); // Todo: Maybe
+		//ImeEndComposition(); // Todo: Maybe
 		return S_OK;
 	}
 
@@ -1930,8 +1930,11 @@ namespace Scintilla::Internal {
 #ifdef EnableTsfDebugMessages
 		DebugOut(L"OnStartComposition\n");
 #endif
-		*pfOk = true;
-		view.imeCaretBlockOverride = true;
+		if (pfOk)
+		{
+			*pfOk = TRUE;
+		}
+		//view.imeCaretBlockOverride = true;
 		return S_OK;
 	}
 
