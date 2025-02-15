@@ -23,7 +23,10 @@
     <UseWinUI Condition="$(WinUIEditorUseWinUI3)">true</UseWinUI>
     <_NoWinAPIFamilyApp Condition="$(WinUIEditorUseWinUI3)">true</_NoWinAPIFamilyApp>
     <_VC_Target_Library_Platform Condition="$(WinUIEditorUseWinUI3)">Desktop</_VC_Target_Library_Platform>
-    <UseCrtSDKReference Condition="$(WinUIEditorUseWinUI3)">false</UseCrtSDKReference>
+    <UseCrtSDKReference>false</UseCrtSDKReference>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UseCrtSDKReferenceStaticWarning Condition="!$(WinUIEditorUseWinUI3)">false</UseCrtSDKReferenceStaticWarning>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <Import Project="..\DualBuild.props" />
@@ -108,29 +111,33 @@
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
       <ModuleDefinitionFile>WinUIEditor.def</ModuleDefinitionFile>
       <AdditionalDependencies Condition="$(WinUIEditorUseWinUI3)">user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="!$(WinUIEditorUseWinUI3) And '$(Platform)' == 'x64'">%(AdditionalLibraryDirectories);$(VC_LibraryPath_VC_x64_Desktop)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="!$(WinUIEditorUseWinUI3) And '$(Platform)' == 'Win32'">%(AdditionalLibraryDirectories);$(VC_LibraryPath_VC_x86_Desktop)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="!$(WinUIEditorUseWinUI3) And '$(Platform)' == 'ARM'">%(AdditionalLibraryDirectories);$(VC_LibraryPath_VC_arm_Desktop)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="!$(WinUIEditorUseWinUI3) And '$(Platform)' == 'arm64'">%(AdditionalLibraryDirectories);$(VC_LibraryPath_VC_arm64_Desktop)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)' == 'Debug'">
     <ClCompile>
       <PreprocessorDefinitions>USE_DUMMY_PAGE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary Condition="$(WinUIEditorUseWinUI3)">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <IgnoreSpecificDefaultLibraries Condition="$(WinUIEditorUseWinUI3)">%(IgnoreSpecificDefaultLibraries);libucrtd.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalOptions Condition="$(WinUIEditorUseWinUI3)">%(AdditionalOptions) /defaultlib:ucrtd.lib</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries);libucrtd.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>%(AdditionalOptions) /defaultlib:ucrtd.lib</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <RuntimeLibrary Condition="$(WinUIEditorUseWinUI3)">MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <IgnoreSpecificDefaultLibraries Condition="$(WinUIEditorUseWinUI3)">%(IgnoreSpecificDefaultLibraries);libucrt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalOptions Condition="$(WinUIEditorUseWinUI3)">%(AdditionalOptions) /defaultlib:ucrt.lib</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries);libucrt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>%(AdditionalOptions) /defaultlib:ucrt.lib</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
