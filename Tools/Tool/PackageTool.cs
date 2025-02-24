@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Web.Http;
@@ -9,6 +9,13 @@ namespace Tool
 {
     public class PackageTool : ITool
     {
+        private readonly static string s_msBuildExe = RuntimeInformation.OSArchitecture switch
+        {
+            Architecture.Arm64 => "arm64\\MSBuild.exe",
+            Architecture.X64 => "amd64\\MSBuild.exe",
+            _ => "MSBuild.exe",
+        };
+
         public async Task RunAsync(string path, string[] args)
         {
             var root = await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync();
@@ -63,7 +70,7 @@ namespace Tool
         {
             Console.WriteLine($"Building {label ?? $"{(useWinUI3 ? "WinUI 3" : "UWP")} {architecture}"}");
             var process = new Process();
-            process.StartInfo.FileName = "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe";
+            process.StartInfo.FileName = $"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\{s_msBuildExe}";
             process.StartInfo.Arguments = $"\"{solution}\" -r -t:\"{project}\" -p:WinUIEditorUseWinUI3={useWinUI3};Configuration=Release;Platform=\"{architecture}\"";
             process.Start();
             await process.WaitForExitAsync();
