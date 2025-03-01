@@ -90,7 +90,7 @@ namespace WinUIEditor
 		// Create the Direct3D device
 		winrt::com_ptr<ID3D11Device> d3dDevice;
 		D3D_FEATURE_LEVEL supportedFeatureLevel;
-		winrt::check_hresult(D3D11CreateDevice(
+		if (FAILED(D3D11CreateDevice(
 			nullptr,
 			D3D_DRIVER_TYPE_HARDWARE,
 			0,
@@ -100,7 +100,20 @@ namespace WinUIEditor
 			D3D11_SDK_VERSION,
 			d3dDevice.put(),
 			&supportedFeatureLevel,
-			nullptr));
+			nullptr)))
+		{
+			winrt::check_hresult(D3D11CreateDevice(
+				nullptr,
+				D3D_DRIVER_TYPE_WARP,
+				0,
+				creationFlags,
+				featureLevels,
+				ARRAYSIZE(featureLevels),
+				D3D11_SDK_VERSION,
+				d3dDevice.put(),
+				&supportedFeatureLevel,
+				nullptr));
+		}
 
 		// Get the Direct3D device.
 		_dxgiDevice = d3dDevice.as<IDXGIDevice3>();
