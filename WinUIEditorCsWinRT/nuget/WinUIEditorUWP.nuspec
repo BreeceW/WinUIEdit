@@ -12,7 +12,7 @@
 		<tags>winui code editor text edit scintilla uwp winrt winuiedit winuieditor</tags>
 		<repository type="git" url="https://github.com/BreeceW/WinUIEdit.git" />
 		<dependencies>
-			<group targetFramework="net8.0-windows10.0.22621.0" />
+			<group targetFramework="net8.0-windows10.0.22621" />
 			<group targetFramework=".NETCoreApp3.0" />
 			<group targetFramework="UAP10.0" />
 			<group targetFramework=".NETFramework4.6" />
