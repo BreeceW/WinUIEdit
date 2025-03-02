@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>WinUIEdit.Uwp</id>
-		<version>0.0.3-prerelease</version>
+		<version>0.0.4-prerelease</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for UWP based on Scintilla</description>
 		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>
@@ -12,12 +12,15 @@
 		<tags>winui code editor text edit scintilla uwp winrt winuiedit winuieditor</tags>
 		<repository type="git" url="https://github.com/BreeceW/WinUIEdit.git" />
 		<dependencies>
+			<group targetFramework="net8.0-windows10.0.22621.0" />
 			<group targetFramework=".NETCoreApp3.0" />
 			<group targetFramework="UAP10.0" />
 			<group targetFramework=".NETFramework4.6" />
 		</dependencies>
 	</metadata>
 	<files>
+		<file src="..\..\_buildUwp\AnyCPU\Release\net8.0-windows10.0.22621.0\WinUIEditorCsWinRT\bin\WinUIEditorCsWinRT.dll" target="lib\net8.0-windows10.0.22621.0" />
+
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\netcoreapp3.0" />
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\uap10.0" />
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\net46" />
@@ -28,23 +31,34 @@
 		<file src="..\..\_buildUwp\ARM\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-arm\native" />
 		<file src="..\..\_buildUwp\ARM\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-arm\native" />
 
+		<file src="..\..\_buildUwp\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win-arm64\native" />
+		<file src="..\..\_buildUwp\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win-arm64\native" />
+		<file src="..\..\_buildUwp\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win-arm64\native" />
 		<file src="..\..\_buildUwp\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-arm64\native" />
 		<file src="..\..\_buildUwp\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-arm64\native" />
 		<file src="..\..\_buildUwp\ARM64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-arm64\native" />
 
+		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win-x64\native" />
+		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win-x64\native" />
+		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win-x64\native" />
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-x64\native" />
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-x64\native" />
 		<file src="..\..\_buildUwp\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-x64\native" />
 
+		<file src="..\..\_buildUwp\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win-x86\native" />
+		<file src="..\..\_buildUwp\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win-x86\native" />
+		<file src="..\..\_buildUwp\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win-x86\native" />
 		<file src="..\..\_buildUwp\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.dll" target="runtimes\win10-x86\native" />
 		<file src="..\..\_buildUwp\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pri" target="runtimes\win10-x86\native" />
 		<file src="..\..\_buildUwp\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-x86\native" />
 
+		<file src="WinUIEditorCsWinRT.xml" target="lib\net8.0-windows10.0.22621.0" />
 		<file src="WinUIEditor.xml" target="lib\netcoreapp3.0" />
 		<file src="WinUIEditor.xml" target="lib\uap10.0" />
 		<file src="WinUIEditor.xml" target="lib\net46" />
 
 		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\uap10.0\WinUIEditor\Themes" />
+		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\net8.0-windows10.0.22621.0\WinUIEditor\Themes" />
 
 		<file src="..\..\README.md" />
 		<file src="..\..\LICENSE" />

@@ -3,12 +3,31 @@
 	<Import Project="..\DualBuild.props" />
 
 	<PropertyGroup>
-		<TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
+		<TargetFrameworks Condition="$(WinUIEditorUseWinUI3)">net6.0-windows10.0.17763.0;net8.0-windows10.0.17763.0;net8.0-windows10.0.22621.0</TargetFrameworks>
+		<TargetFrameworks Condition="!$(WinUIEditorUseWinUI3)">net8.0-windows10.0.22621.0</TargetFrameworks>
 		<Platform>AnyCPU</Platform>
+		<UseUwp Condition="!$(WinUIEditorUseWinUI3)">true</UseUwp>
+
+		<!-- .NET 7 and up -->
+		<IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+
+		<!-- .NET 6 -->
+		<EnableTrimAnalyzer Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</EnableTrimAnalyzer>
+		<IsTrimmable Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsTrimmable>
+		
+		<DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+		<UseUwpTools Condition="!$(WinUIEditorUseWinUI3)">false</UseUwpTools>
+		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<CsWinRTIncludes Condition="$(WinUIEditorUseWinUI3)">WinUIEditor</CsWinRTIncludes>
+		<OutDir>$([MSBuild]::NormalizeDirectory('$(BuildOutDir)', '$(TargetFramework)', '$(MSBuildProjectName)', 'bin'))</OutDir>
+		<IntDir>$([MSBuild]::NormalizeDirectory('$(BuildOutDir)', '$(TargetFramework)', '$(MSBuildProjectName)', 'obj'))</IntDir>
+		<GeneratedFilesDir>$(IntDir)Generated Files\</GeneratedFilesDir>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<CsWinRTIncludes>WinUIEditor</CsWinRTIncludes>
 		<CsWinRTGeneratedFilesDir>$(OutDir)</CsWinRTGeneratedFilesDir>
 	</PropertyGroup>
 
@@ -37,7 +56,7 @@
 		-->
 		<!-- The CsWinRT version should match the version of WinRT.Runtime in Microsoft.Windows.SDK.NET.Ref -->
 		<!-- Otherwise, users of this library would have to update WindowsSdkPackageVersion themselves -->
-		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.6" />
+		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
 		<PackageReference Condition="$(WinUIEditorUseWinUI3)" Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
 	</ItemGroup>
 

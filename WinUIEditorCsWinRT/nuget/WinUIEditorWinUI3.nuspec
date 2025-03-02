@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>WinUIEdit</id>
-		<version>0.0.3-prerelease</version>
+		<version>0.0.4-prerelease</version>
 		<authors>Breece Walker</authors>
 		<description>Code editor control for WinUI 3 based on Scintilla</description>
 		<projectUrl>https://github.com/BreeceW/WinUIEdit</projectUrl>
@@ -16,13 +16,17 @@
 				<dependency id="Microsoft.WindowsAppSDK" version="*" />
 			</group>
 			<group targetFramework="net6.0-windows10.0.17763" />
+			<group targetFramework="net8.0-windows10.0.17763" />
+			<group targetFramework="net8.0-windows10.0.22621" />
 			<group targetFramework=".NETCoreApp3.0" />
 			<group targetFramework="UAP10.0" />
 			<group targetFramework=".NETFramework4.6" />
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\_buildWinUI3\AnyCPU\Release\WinUIEditorCsWinRT\bin\WinUIEditorCsWinRT.dll" target="lib\net6.0-windows10.0.17763.0" />
+		<file src="..\..\_buildWinUI3\AnyCPU\Release\net6.0-windows10.0.17763.0\WinUIEditorCsWinRT\bin\WinUIEditorCsWinRT.dll" target="lib\net6.0-windows10.0.17763.0" />
+		<file src="..\..\_buildWinUI3\AnyCPU\Release\net8.0-windows10.0.17763.0\WinUIEditorCsWinRT\bin\WinUIEditorCsWinRT.dll" target="lib\net8.0-windows10.0.17763.0" />
+		<file src="..\..\_buildWinUI3\AnyCPU\Release\net8.0-windows10.0.22621.0\WinUIEditorCsWinRT\bin\WinUIEditorCsWinRT.dll" target="lib\net8.0-windows10.0.22621.0" />
 
 		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\netcoreapp3.0" />
 		<file src="..\..\_buildWinUI3\x64\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.winmd" target="lib\uap10.0" />
@@ -52,12 +56,16 @@
 		<file src="..\..\_buildWinUI3\Win32\Release\WinUIEditor\bin\WinUIEditor\WinUIEditor.pdb" target="runtimes\win10-x86\native" />
 
 		<file src="WinUIEditorCsWinRT.xml" target="lib\net6.0-windows10.0.17763.0" />
+		<file src="WinUIEditorCsWinRT.xml" target="lib\net8.0-windows10.0.17763.0" />
+		<file src="WinUIEditorCsWinRT.xml" target="lib\net8.0-windows10.0.22621.0" />
 		<file src="WinUIEditor.xml" target="lib\netcoreapp3.0" />
 		<file src="WinUIEditor.xml" target="lib\uap10.0" />
 		<file src="WinUIEditor.xml" target="lib\net46" />
 
 		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\uap10.0\WinUIEditor\Themes" />
 		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\net6.0-windows10.0.17763.0\WinUIEditor\Themes" />
+		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\net8.0-windows10.0.17763.0\WinUIEditor\Themes" />
+		<file src="..\..\WinUIEditor\Themes\Generic.xaml" target="lib\net8.0-windows10.0.22621.0\WinUIEditor\Themes" />
 
 		<file src="..\..\README.md" />
 		<file src="..\..\LICENSE" />
