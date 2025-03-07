@@ -14,7 +14,7 @@
 		<!-- .NET 6 -->
 		<EnableTrimAnalyzer Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</EnableTrimAnalyzer>
 		<IsTrimmable Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsTrimmable>
-		
+
 		<DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
 		<UseUwpTools Condition="!$(WinUIEditorUseWinUI3)">false</UseUwpTools>
 		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
@@ -57,7 +57,7 @@
 		<!-- The CsWinRT version should match the version of WinRT.Runtime in Microsoft.Windows.SDK.NET.Ref -->
 		<!-- Otherwise, users of this library would have to update WindowsSdkPackageVersion themselves -->
 		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
-		<PackageReference Condition="$(WinUIEditorUseWinUI3)" Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
+		<PackageReference Condition="$(WinUIEditorUseWinUI3)" Include="Microsoft.WindowsAppSDK" Version="1.6.250205002" />
 	</ItemGroup>
 
 	<ItemGroup>
