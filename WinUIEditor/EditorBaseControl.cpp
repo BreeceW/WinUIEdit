@@ -377,6 +377,9 @@ namespace winrt::WinUIEditor::implementation
 			const ImageBrush brush{};
 			brush.ImageSource(virtualSurfaceImageSource);
 			imageTarget.Background(brush);
+
+			_wrapper->SetContainer(imageTarget);
+			UpdateVisibleArea();
 		}
 
 #ifndef WINUI3
@@ -539,6 +542,8 @@ namespace winrt::WinUIEditor::implementation
 	{
 		if (_vsisNative)
 		{
+			UpdateVisibleArea();
+
 			auto width{ ConvertFromDipToPixelUnit(args.NewSize().Width, _dpiScale) };
 			auto height{ ConvertFromDipToPixelUnit(args.NewSize().Height, _dpiScale) };
 			_wrapper->Width(width);
@@ -552,6 +557,7 @@ namespace winrt::WinUIEditor::implementation
 	{
 		auto properties{ e.GetCurrentPoint(sender.as<UIElement>()).Properties() };
 		_scintilla->PointerWheelChanged(properties.MouseWheelDelta(), properties.IsHorizontalMouseWheel(), e.KeyModifiers());
+		UpdateVisibleArea();
 	}
 
 	void EditorBaseControl::ImageTarget_DragEnter(IInspectable const &sender, DragEventArgs const &e)
@@ -672,4 +678,35 @@ namespace winrt::WinUIEditor::implementation
 		_wrapper->TrimDxgiDevice();
 	}
 #endif
+
+	void EditorBaseControl::UpdateVisibleArea()
+	{
+		auto container = _wrapper->GetContainer();
+
+		// Get the XamlRoot associated with the UIElement
+		auto xamlRoot = XamlRoot();
+		if (!xamlRoot)
+		{
+			throw std::runtime_error("XamlRoot is null. Ensure the element is attached to the visual tree.");
+		}
+
+		// Get the bounds of the UIElement relative to the XamlRoot
+		auto elementTransform = TransformToVisual(xamlRoot.Content());
+		Rect elementBounds = elementTransform.TransformBounds(
+			Rect{ 0, 0, (float)ActualWidth(), (float)ActualHeight() });
+
+		// Get the bounds of the XamlRoot
+		auto xamlRootSize = xamlRoot.Content().ActualSize();
+		Rect xamlRootBounds{ 0, 0, xamlRootSize.x,  xamlRootSize.y };
+
+		// Calculate the intersection of the two rectangles
+		auto intersection = RectHelper::Intersect(elementBounds, xamlRootBounds);
+
+		_scintilla->SetVisibleArea(
+			ConvertFromDipToPixelUnit(intersection.X, _dpiScale),
+			ConvertFromDipToPixelUnit(intersection.Y, _dpiScale),
+			ConvertFromDipToPixelUnit(intersection.Width, _dpiScale),
+			ConvertFromDipToPixelUnit(intersection.Height, _dpiScale)
+		);
+	}
 }
