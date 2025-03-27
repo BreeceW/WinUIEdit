@@ -108,6 +108,7 @@ namespace Scintilla::Internal {
 		static sptr_t DirectStatusFunction(sptr_t ptr, UINT iMessage, uptr_t wParam, sptr_t lParam, int *pStatus);
 		sptr_t WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) override;
 
+		void SetVisibleArea(LONG x, LONG y, LONG width, LONG height);
 	private:
 		bool _tsfCore;
 
@@ -281,6 +282,8 @@ namespace Scintilla::Internal {
 		winrt::fire_and_forget DoDragAsync();
 		int CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength);
 		sptr_t OnSetDocPointer(uptr_t wParam, sptr_t lParam);
+
+		RECT visibleArea;
 	};
 
 	class CallTipCallback : public ::winrt::implements<CallTipCallback, ::IVirtualSurfaceUpdatesCallbackNative>
