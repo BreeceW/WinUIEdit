@@ -271,6 +271,10 @@ namespace WinUIEditor
 		FormatRangeFull = 2777,
 		SetChangeHistory = 2780,
 		GetChangeHistory = 2781,
+		SetUndoSelectionHistory = 2782,
+		GetUndoSelectionHistory = 2783,
+		SetSelectionSerialized = 2784,
+		GetSelectionSerialized = 2785,
 		GetFirstVisibleLine = 2152,
 		GetLine = 2153,
 		GetLineCount = 2154,
@@ -1125,6 +1129,12 @@ namespace WinUIEditor
 		Indicators = 4,
 	};
 
+	enum UndoSelectionHistoryOption
+	{
+		Disabled = 0,
+		Enabled = 1,
+	};
+
 	enum FoldLevel
 	{
 		None = 0,
@@ -1372,6 +1382,7 @@ namespace WinUIEditor
 		DirectWrite = 1,
 		DirectWriteRetain = 2,
 		DirectWriteDC = 3,
+		DirectWrite1 = 4,
 	};
 
 	enum LineEndType
@@ -5308,6 +5319,12 @@ namespace WinUIEditor
 		ChangeHistoryOption ChangeHistory { get; set; };
 
 		/**
+		 * Report undo selection history status.
+		 * Enable or disable undo selection history.
+		 */
+		UndoSelectionHistoryOption UndoSelectionHistory { get; set; };
+
+		/**
 		 * Retrieve the display line at the top of the display.
 		 * Scroll so that a display line is at the top of the display.
 		 */
@@ -7942,6 +7959,12 @@ namespace WinUIEditor
 		Int64 GetLineEndPosition(Int64 line);
 
 		/**
+		 * Retrieve serialized form of selection.
+		 */
+		Int64 GetSelectionSerializedWriteBuffer(Windows.Storage.Streams.IBuffer selectionString);
+		String GetSelectionSerialized();
+
+		/**
 		 * Retrieve the text in the target.
 		 */
 		Int64 GetTargetTextWriteBuffer(Windows.Storage.Streams.IBuffer text);
@@ -8446,6 +8469,12 @@ namespace WinUIEditor
 		 * Change the indentation of a line to a number of columns.
 		 */
 		void SetLineIndentation(Int64 line, Int32 indentation);
+
+		/**
+		 * Set selection from serialized form.
+		 */
+		void SetSelectionSerializedFromBuffer(Windows.Storage.Streams.IBuffer selectionString);
+		void SetSelectionSerialized(String selectionString);
 
 		/**
 		 * Enlarge the number of lines allocated.

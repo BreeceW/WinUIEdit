@@ -1046,6 +1046,16 @@ namespace winrt::WinUIEditor::implementation
 		void ChangeHistory(WinUIEditor::ChangeHistoryOption const &value);
 
 		/**
+		 * Report undo selection history status.
+		 */
+		WinUIEditor::UndoSelectionHistoryOption UndoSelectionHistory();
+
+		/**
+		 * Enable or disable undo selection history.
+		 */
+		void UndoSelectionHistory(WinUIEditor::UndoSelectionHistoryOption const &value);
+
+		/**
 		 * Retrieve the display line at the top of the display.
 		 */
 		int64_t FirstVisibleLine();
@@ -4030,6 +4040,12 @@ namespace winrt::WinUIEditor::implementation
 		int64_t GetLineEndPosition(int64_t line);
 
 		/**
+		 * Retrieve serialized form of selection.
+		 */
+		int64_t GetSelectionSerializedWriteBuffer(Windows::Storage::Streams::IBuffer const &selectionString);
+		hstring GetSelectionSerialized();
+
+		/**
 		 * Retrieve the text in the target.
 		 */
 		int64_t GetTargetTextWriteBuffer(Windows::Storage::Streams::IBuffer const &text);
@@ -4534,6 +4550,12 @@ namespace winrt::WinUIEditor::implementation
 		 * Change the indentation of a line to a number of columns.
 		 */
 		void SetLineIndentation(int64_t line, int32_t indentation);
+
+		/**
+		 * Set selection from serialized form.
+		 */
+		void SetSelectionSerializedFromBuffer(Windows::Storage::Streams::IBuffer const &selectionString);
+		void SetSelectionSerialized(hstring const &selectionString);
 
 		/**
 		 * Enlarge the number of lines allocated.

@@ -1381,6 +1381,12 @@ Returns the number of characters</summary>
         <member name="M:WinUIEditor.Editor.GetLineEndPosition(System.Int64)">
             <summary>Get the position after the last visible characters on a line.</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.GetSelectionSerializedWriteBuffer(Windows.Storage.Streams.IBuffer)">
+            <summary>Retrieve serialized form of selection.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.GetSelectionSerialized">
+            <summary>Retrieve serialized form of selection.</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.GetTargetTextWriteBuffer(Windows.Storage.Streams.IBuffer)">
             <summary>Retrieve the text in the target.</summary>
         </member>
@@ -1761,6 +1767,12 @@ choose the selected item.</summary>
         </member>
         <member name="M:WinUIEditor.Editor.SetLineIndentation(System.Int64,System.Int32)">
             <summary>Change the indentation of a line to a number of columns.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.SetSelectionSerializedFromBuffer(Windows.Storage.Streams.IBuffer)">
+            <summary>Set selection from serialized form.</summary>
+        </member>
+        <member name="M:WinUIEditor.Editor.SetSelectionSerialized(System.String)">
+            <summary>Set selection from serialized form.</summary>
         </member>
         <member name="M:WinUIEditor.Editor.AllocateLines(System.Int64)">
             <summary>Enlarge the number of lines allocated.</summary>
@@ -2172,6 +2184,10 @@ Modify colours when printing for clearer printed text.</summary>
         <member name="P:WinUIEditor.Editor.ChangeHistory">
             <summary>Report change history status.
 Enable or disable change history.</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.UndoSelectionHistory">
+            <summary>Report undo selection history status.
+Enable or disable undo selection history.</summary>
         </member>
         <member name="P:WinUIEditor.Editor.FirstVisibleLine">
             <summary>Retrieve the display line at the top of the display.
