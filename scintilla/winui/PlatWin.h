@@ -47,12 +47,14 @@ HCURSOR LoadReverseArrowCursor(UINT dpi) noexcept;
 
 #if defined(USE_D2D)
 extern bool LoadD2D() noexcept;
-extern ID2D1Factory *pD2DFactory;
-extern IDWriteFactory *pIDWriteFactory;
+extern ID2D1Factory1 *pD2DFactory;
+extern IDWriteFactory1 *pIDWriteFactory;
+
+using WriteRenderingParams = winrt::com_ptr<IDWriteRenderingParams1>;
 
 struct RenderingParams {
-	std::unique_ptr<IDWriteRenderingParams, UnknownReleaser> defaultRenderingParams;
-	std::unique_ptr<IDWriteRenderingParams, UnknownReleaser> customRenderingParams;
+	WriteRenderingParams defaultRenderingParams;
+	WriteRenderingParams customRenderingParams;
 };
 
 struct ISetRenderingParams {

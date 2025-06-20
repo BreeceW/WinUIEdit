@@ -51,8 +51,9 @@
 #endif
 
 #if defined(USE_D2D)
-#include <d2d1.h>
-#include <dwrite.h>
+#include <d2d1_1.h>
+#include <d3d11_1.h>
+#include <dwrite_1.h>
 #endif
 
 #include "ScintillaTypes.h"
