@@ -4570,6 +4570,7 @@ namespace WinUIEditor
 		TomlTripleStringDq = 12,
 		TomlEscapechar = 13,
 		TomlDatetime = 14,
+		TomlStringeol = 15,
 	};
 
 	enum troff
@@ -4633,6 +4634,7 @@ namespace WinUIEditor
 		DartKwSecondary = 24,
 		DartKwTertiary = 25,
 		DartKwType = 26,
+		DartStringeol = 27,
 	};
 
 	enum Zig
@@ -4655,6 +4657,7 @@ namespace WinUIEditor
 		ZigKwTertiary = 15,
 		ZigKwType = 16,
 		ZigIdentifierString = 17,
+		ZigStringeol = 18,
 	};
 
 	enum Nix
@@ -4675,6 +4678,7 @@ namespace WinUIEditor
 		NixKeyword2 = 13,
 		NixKeyword3 = 14,
 		NixKeyword4 = 15,
+		NixStringeol = 16,
 	};
 
 	[default_interface]
