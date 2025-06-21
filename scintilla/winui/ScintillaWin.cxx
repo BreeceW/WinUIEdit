@@ -99,6 +99,9 @@
 
 #include "WinTypes.h"
 #include "PlatWin.h"
+#if defined(USE_D2D)
+#include "SurfaceD2D.h"
+#endif
 #include "ScintillaWin.h"
 
 //#define EnableTsfDebugMessages

@@ -61,6 +61,9 @@
 
 #include "WinTypes.h"
 #include "PlatWin.h"
+#if defined(USE_D2D)
+#include "SurfaceD2D.h"
+#endif
 
 #include "Wrapper.h"
 #include "MainWrapper.h"

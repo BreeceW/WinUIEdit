@@ -39,6 +39,7 @@
     <ClCompile Include="Wrapper.cpp" />
     <ClCompile Include="..\scintilla\winui\PlatWin.cxx" />
     <ClCompile Include="..\scintilla\winui\ScintillaWin.cxx" />
+    <ClCompile Include="..\scintilla\winui\SurfaceD2D.cxx" />
     <ClCompile Include="..\scintilla\src\AutoComplete.cxx">
       <Filter>Scintilla</Filter>
     </ClCompile>
@@ -571,6 +572,7 @@
     <ClInclude Include="Wrapper.h" />
     <ClInclude Include="..\scintilla\winui\PlatWin.h" />
     <ClInclude Include="..\scintilla\winui\ScintillaWin.h" />
+    <ClInclude Include="..\scintilla\winui\SurfaceD2D.h" />
     <ClInclude Include="..\scintilla\winui\WinTypes.h" />
     <ClInclude Include="..\scintilla\include\ILexer.h">
       <Filter>Scintilla</Filter>
