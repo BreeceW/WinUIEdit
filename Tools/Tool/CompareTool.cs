@@ -28,6 +28,8 @@ namespace Tool
                 "ScintillaDLL.cxx",
                 "ScintillaWin.cxx",
                 "ScintillaWin.h",
+                "SurfaceD2D.cxx",
+                "SurfaceD2D.h",
                 "WinTypes.h",
             };
 
@@ -35,7 +37,7 @@ namespace Tool
 
             if (await folder.TryGetItemAsync("Diff\\monaco") is null)
             {
-                var monacoZipDownload = await _client.GetAsync(new Uri("https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.32.1.tgz"));
+                var monacoZipDownload = await _client.GetAsync(new Uri("https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.52.2.tgz"));
                 var monacoZipFile = await folder.CreateFileAsync("Monaco.tar.gz", CreationCollisionOption.ReplaceExisting);
                 await monacoZipDownload.Content.WriteToStreamAsync(await monacoZipFile.OpenAsync(FileAccessMode.ReadWrite));
                 await Process.Start("tar", new[] { "-xf", monacoZipFile.Path, "-C", Path.Combine(folder.Path, "Diff"), }).WaitForExitAsync();

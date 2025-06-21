@@ -26,6 +26,7 @@
         require(['vs/editor/editor.main'], function () {
             const diffEditor = monaco.editor.createDiffEditor(document.getElementById('container'), {
                 readOnly: true,
+                ignoreTrimWhitespace: false,
             });
 
             diffEditor.setModel({
