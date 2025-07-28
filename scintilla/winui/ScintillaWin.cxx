@@ -2618,7 +2618,7 @@ namespace Scintilla::Internal {
 			paintState = PaintState::painting;
 			paintingAllText = true;
 			// Todo: This is in contradiction with the above paragraph about drawing size. But invalidation results in flickering
-			DrawBit(RECT{ 0, 0, _mainWrapper->Width(), _mainWrapper->Height() });
+			DrawBit(visibleArea); // draw ony visible area, _mainWrapper->Width() & Height() can be too big
 		}
 
 		paintState = PaintState::notPainting;
@@ -2655,7 +2655,7 @@ namespace Scintilla::Internal {
 			_mainWrapper->CreateGraphicsDevices();
 			InvalidateStyleRedraw(); // just Redraw() does not work
 		}
-		else
+		else if (beginDrawHR == S_OK)
 		{
 			const auto &d2dDeviceContext{ _mainWrapper->D2dDeviceContext() };
 
@@ -3205,5 +3205,10 @@ namespace Scintilla::Internal {
 		}
 
 		sisNativeWithD2D->EndDraw();
+	}
+
+	void ScintillaWinUI::SetVisibleArea(LONG x, LONG y, LONG width, LONG height)
+	{
+		visibleArea = RECT{ x, y, width, height };
 	}
 }
