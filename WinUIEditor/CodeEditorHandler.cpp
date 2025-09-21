@@ -177,12 +177,12 @@ namespace WinUIEditor
 
 	void CodeEditorHandler::SetFoldMarginColor(bool useSetting, ColourAlpha back)
 	{
-		// Implement for transparent folding margin. Not implemented so default is preserved
+		_call->SetFoldMarginColour(useSetting, back);
 	}
 
 	void CodeEditorHandler::SetFoldMarginHiColor(bool useSetting, ColourAlpha fore)
 	{
-		// Implement for transparent folding margin. Not implemented so default is preserved
+		_call->SetFoldMarginHiColour(useSetting, fore);
 	}
 
 	void CodeEditorHandler::SetCallTipBackgroundColor(Scintilla::ColourAlpha color)
@@ -233,6 +233,9 @@ namespace WinUIEditor
 
 			StyleSetFore(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0xB8, 0xC2, 0xCC));
 			StyleSetBack(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0x26, 0x33, 0x3F));
+
+			SetFoldMarginColor(true, bgDark);
+			SetFoldMarginHiColor(true, bgDark);
 			break;
 
 		case CodeEditorTheme::Light:
@@ -255,6 +258,9 @@ namespace WinUIEditor
 
 			StyleSetFore(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0x73, 0x79, 0x80));
 			StyleSetBack(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0xDC, 0xEA, 0xF5));
+
+			SetFoldMarginColor(true, bgLight);
+			SetFoldMarginHiColor(true, bgLight);
 			break;
 		}
 
@@ -386,8 +392,6 @@ namespace WinUIEditor
 		_call->SetIndentationGuides(IndentView::LookBoth);
 		_call->SetMarginMaskN(2, Scintilla::MaskFolders);
 		_call->SetMarginSensitiveN(2, true);
-		SetFoldMarginColor(true, IntRGBA(0, 0, 0, 0));
-		SetFoldMarginHiColor(true, IntRGBA(0, 0, 0, 0));
 
 		constexpr auto useCustomChevron{ true }; // Todo: make overridable
 		constexpr auto chevronMinus{ static_cast<MarkerSymbol>(1989) };
