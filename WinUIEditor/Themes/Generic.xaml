@@ -64,4 +64,33 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:AutocompletionControl">
+        <!-- winui todo: maybe <Setter Property="IsTabStop" Value="False" />-->
+        <Setter Property="Background" Value="{ThemeResource FlyoutPresenterBackground}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource FlyoutBorderThemeBrush}" />
+        <Setter Property="BorderThickness" Value="{ThemeResource FlyoutBorderThemeThickness}" />
+        <!--  todo: won't work on old versions or without winui resources  -->
+        <Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:AutocompletionControl">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <Border.Resources>
+                            <ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+                        </Border.Resources>
+                        <ListView
+                            x:Name="Suggestions"
+                            Padding="0,2"
+                            ItemContainerTransitions="{x:Null}"
+                            ItemsSource="{TemplateBinding ItemsSource}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

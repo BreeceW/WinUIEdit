@@ -205,7 +205,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 			rcWork.bottom - rcPosition.top);
 		return rcMonitor;
 	} else {*/
-		return PRectangle(0,0,400,400);
+		return PRectangle(0,0,0,0);
 	/*}*/
 	// WinUI Todo
 }

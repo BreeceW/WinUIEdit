@@ -26,6 +26,7 @@ namespace WinUIEditor
 		void CreateGraphicsDevices();
 
 		std::shared_ptr<Wrapper> CreateCallTipWindow(Scintilla::Internal::PRectangle rc, winrt::com_ptr<Scintilla::Internal::ScintillaWinUI> const &scintilla);
+		std::shared_ptr<Wrapper> CreateAutocompletionWindow();
 		virtual void SetPositionRelative(Scintilla::Internal::PRectangle rc, Wrapper const &wrapper) = 0;
 
 		virtual void Show(bool visible) = 0;

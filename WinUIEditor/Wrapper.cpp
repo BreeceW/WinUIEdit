@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "Wrapper.h"
 #include "EditorBaseControl.h"
-#include "CallTipControl.h"
+#include "CallTipWrapper.h"
+#include "AutocompletionWrapper.h"
 #include "Helpers.h"
 
 namespace WinUIEditor
@@ -178,5 +179,34 @@ namespace WinUIEditor
 		}
 
 		return false;
+	}
+
+	std::shared_ptr<Wrapper> Wrapper::CreateAutocompletionWindow()
+	{
+		auto theme{ winrt::DUX::ElementTheme::Default };
+		winrt::DUX::XamlRoot xamlRoot{ nullptr };
+
+		if (const auto control{ _control.get() })
+		{
+#ifndef WINUI3
+			if (_hasUac8)
+			{
+#endif
+				// Needed for AppWindow
+				// It should be fine if XamlRoot is not set on older versions pre-AppWindow and islands
+				xamlRoot = control.XamlRoot();
+#ifndef WINUI3
+			}
+			if (_hasFcu)
+			{
+#endif
+				// Todo: Live theme changes
+				theme = control.ActualTheme(); // Todo: path without ActualTheme
+#ifndef WINUI3
+			}
+#endif
+		}
+
+		return AutocompletionWrapper::Create(xamlRoot, _logicalDpi, theme);
 	}
 }

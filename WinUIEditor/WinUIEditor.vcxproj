@@ -141,6 +141,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AutocompletionControl.h">
+      <DependentUpon>AutocompletionControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </ClInclude>
+    <ClInclude Include="AutocompletionWrapper.h" />
     <ClInclude Include="CallTipControl.h">
       <DependentUpon>CallTipControl.cpp</DependentUpon>
       <SubType>Code</SubType>
@@ -184,6 +189,10 @@
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AutocompletionControl.cpp">
+      <SubType>Code</SubType>
+    </ClCompile>
+    <ClCompile Include="AutocompletionWrapper.cpp" />
     <ClCompile Include="CallTipControl.cpp">
       <SubType>Code</SubType>
     </ClCompile>
@@ -235,6 +244,10 @@
     <None Include="Defines.idl" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="AutocompletionControl.idl">
+      <DependentUpon>AutocompletionControl.cpp</DependentUpon>
+      <SubType>Code</SubType>
+    </Midl>
     <Midl Include="CallTipControl.idl">
       <DependentUpon>CallTipControl.cpp</DependentUpon>
       <SubType>Code</SubType>

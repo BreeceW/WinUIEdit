@@ -67,6 +67,9 @@
 #include "SurfaceD2D.h"
 #endif
 
+#include "Helpers.h"
+#include "AutocompletionWrapper.h"
+
 using namespace Scintilla;
 using namespace Scintilla::Internal;
 
@@ -113,9 +116,10 @@ public:
 }
 
 class ListBoxWinUI : public ListBox {
-	public:
+public:
 	ListBoxWinUI() noexcept;
 	virtual ~ListBoxWinUI() noexcept override;
+	// winui todo constructor/destructor
 
 	virtual void SetFont(const Font *font);
 	virtual void Create(Window &parent, int ctrlID, Point location, int lineHeight_, bool unicodeMode_, Scintilla::Technology technology_);
@@ -137,44 +141,75 @@ class ListBoxWinUI : public ListBox {
 	virtual void SetDelegate(IListBoxDelegate *lbDelegate);
 	virtual void SetList(const char* list, char separator, char typesep);
 	virtual void SetOptions(ListOptions options_);
+
+	void AppendListItem(const char *text, const char *numword);
+
+private:
+	unsigned int _avgCharWidth = 8;
+	int _desiredVisibleRows = 8;
+	LineToItem _lti;
+	IListBoxDelegate *_delegate = nullptr;
+
+	WinUIEditor::AutocompletionWrapper *Wrapper();
 };
 
 ListBoxWinUI::ListBoxWinUI() noexcept
 {
+	// winui todo constructor/destructor
 }
 
 ListBoxWinUI::~ListBoxWinUI() noexcept
 {
+	// winui todo constructor/destructor
 }
 
 void ListBoxWinUI::SetFont(const Font *font)
 {
-
+	// winui todo
 }
 
 void ListBoxWinUI::Create(Window &parent, int ctrlID, Point location, int lineHeight_, bool unicodeMode_, Scintilla::Technology technology_)
 {
-
+	const auto wrapper{ static_cast<WinUIEditor::Wrapper *>(parent.GetID()) };
+	wid = static_cast<WinUIEditor::Wrapper *>(wrapper->CreateAutocompletionWindow().get());
 }
 
 void ListBoxWinUI::SetAverageCharWidth(int width)
 {
-
+	_avgCharWidth = width;
 }
 
 void ListBoxWinUI::SetVisibleRows(int rows)
 {
-
+	_desiredVisibleRows = rows;
 }
 
 int ListBoxWinUI::GetVisibleRows() const
 {
-	return 0;
+	return _desiredVisibleRows;
 }
 
 PRectangle ListBoxWinUI::GetDesiredRect()
 {
-	return PRectangle{ 0, 0, 10, 10 };
+	PRectangle rcDesired = GetPosition();
+	const auto dpiScale{ Wrapper()->LogicalDpi() / 96.f };
+	rcDesired.right += WinUIEditor::ConvertFromDipToPixelUnit(432, dpiScale);
+	rcDesired.bottom += WinUIEditor::ConvertFromDipToPixelUnit(32 * std::min(_desiredVisibleRows, _lti.Count()) + 6, dpiScale); // winui todo
+
+	XYPOSITION adjustmentForScaling = 0;
+	float discard;
+	const auto scalingFix{ std::modff(dpiScale, &discard) };
+	if (scalingFix == 0.25f)
+	{
+		adjustmentForScaling = -1;
+	}
+	else if (scalingFix == 0.5f)
+	{
+		adjustmentForScaling = 1;
+	}
+	rcDesired.bottom += adjustmentForScaling;
+
+	return rcDesired;
 }
 
 int ListBoxWinUI::CaretFromEdge()
@@ -184,62 +219,123 @@ int ListBoxWinUI::CaretFromEdge()
 
 void ListBoxWinUI::Clear() noexcept
 {
-
+	Wrapper()->Clear();
+	_lti.Clear();
 }
 
 void ListBoxWinUI::Append(char *s, int type)
 {
-
+	// This method is no longer called in Scintilla
+	PLATFORM_ASSERT(false);
 }
 
 int ListBoxWinUI::Length()
 {
-	return 0;
+	return _lti.Count();
 }
 
 void ListBoxWinUI::Select(int n)
 {
-
+	Wrapper()->SelectedIndex(n);
 }
 
 int ListBoxWinUI::GetSelection()
 {
-	return 0;
+	return Wrapper()->SelectedIndex();
 }
 
 int ListBoxWinUI::Find(const char *prefix)
 {
+	// This is not actually called at present
 	return -1;
 }
 
 std::string ListBoxWinUI::GetValue(int n)
 {
-	return {};
+	const ListItemData item = _lti.Get(n);
+	return item.text;
 }
 
 void ListBoxWinUI::RegisterImage(int type, const char *xpm_data)
 {
-
+	// winui todo
 }
 
 void ListBoxWinUI::RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage)
 {
-
+	// winui todo
 }
 
 void ListBoxWinUI::ClearRegisteredImages()
 {
-
+	// winui todo
 }
 
 void ListBoxWinUI::SetDelegate(IListBoxDelegate *lbDelegate)
 {
+	_delegate = lbDelegate;
+}
 
+void ListBoxWinUI::AppendListItem(const char *text, const char *numword)
+{
+	int pixId = -1;
+	if (numword)
+	{
+		pixId = 0;
+		char ch;
+		while ((ch = *++numword) != '\0')
+		{
+			pixId = 10 * pixId + (ch - '0');
+		}
+	}
+
+	_lti.AllocItem(text, pixId);
+	// winui todo maxItemCharacters = std::max(maxItemCharacters, static_cast<int>(strlen(text)));
+}
+
+WinUIEditor::AutocompletionWrapper *ListBoxWinUI::Wrapper()
+{
+	return static_cast<WinUIEditor::AutocompletionWrapper *>(static_cast<WinUIEditor::Wrapper *>(GetID()));
 }
 
 void ListBoxWinUI::SetList(const char *list, char separator, char typesep)
 {
+	// Turn off redraw while populating the list - this has a significant effect, even if
+	// the listbox is not visible.
+	//SetRedraw(false);
+	Clear();
+	const size_t size = strlen(list);
+	char *words = _lti.SetWords(list);
+	const char *startword = words;
+	char *numword = nullptr;
+	for (size_t i = 0; i < size; i++) {
+		if (words[i] == separator) {
+			words[i] = '\0';
+			if (numword)
+				*numword = '\0';
+			AppendListItem(startword, numword);
+			startword = words + i + 1;
+			numword = nullptr;
+		}
+		else if (words[i] == typesep) {
+			numword = words + i;
+		}
+	}
+	if (startword) {
+		if (numword)
+			*numword = '\0';
+		AppendListItem(startword, numword);
+	}
 
+	// Finally populate the listbox itself with the correct number of items
+	const int count = _lti.Count();
+	const auto wrapper{ Wrapper() };
+	//::SendMessage(lb, LB_INITSTORAGE, count, 0);
+	for (intptr_t j = 0; j < count; j++) {
+		//ListBox_AddItemData(lb, j + 1);
+		wrapper->Append(winrt::to_hstring(_lti.Get(j).text));
+	}
+	//SetRedraw(true);
 }
 
 void ListBoxWinUI::SetOptions(ListOptions options_)
