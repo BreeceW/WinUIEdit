@@ -167,4 +167,14 @@ namespace WinUIEditor
 	void MainWrapper::SetPositionRelative(Scintilla::Internal::PRectangle rc, Wrapper const &wrapper)
 	{
 	}
+
+	void MainWrapper::SetContainer(winrt::DUX::FrameworkElement const& container)
+	{
+		_container = container;
+	}
+
+	winrt::DUX::FrameworkElement MainWrapper::GetContainer()
+	{
+		return _container;
+	}
 }

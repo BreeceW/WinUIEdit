@@ -42,11 +42,16 @@ namespace WinUIEditor
 		void Destroy() override;
 		void SetPositionRelative(Scintilla::Internal::PRectangle rc, Wrapper const &wrapper) override;
 
+		void SetContainer(winrt::DUX::FrameworkElement const& container);
+		winrt::DUX::FrameworkElement MainWrapper::GetContainer();
+
 	private:
 		winrt::DUX::Input::Pointer _lastPointer{ nullptr };
 		winrt::DUX::UIElement _mouseCaptureElement{ nullptr };
 		winrt::DUX::Controls::Primitives::ScrollBar _horizontalScrollBar{ nullptr };
 		winrt::DUX::Controls::Primitives::ScrollBar _verticalScrollBar{ nullptr };
 		bool _captured{ false };
+
+		winrt::DUX::FrameworkElement _container{ nullptr };
 	};
 }
