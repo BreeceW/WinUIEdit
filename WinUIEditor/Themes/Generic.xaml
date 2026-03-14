@@ -81,7 +81,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Resources>
-                            <ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+                            <x:Double x:Key="ListViewItemMinHeight">32</x:Double>
                         </Border.Resources>
                         <ListView
                             x:Name="Suggestions"
