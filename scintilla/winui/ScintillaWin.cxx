@@ -251,15 +251,19 @@ namespace Scintilla::Internal {
 		uptr_t _wParam;
 		NotificationData _notificationData;
 		bool _notifyTsf;
-		int _utf16Length;
+		std::string _text;
 
 	public:
-		NotifyMessage(uptr_t wParam, NotificationData notificationData, bool notifyTsf, int utf16Length)
+		NotifyMessage(uptr_t wParam, NotificationData notificationData, bool notifyTsf)
 		{
 			_wParam = wParam;
 			_notificationData = notificationData;
 			_notifyTsf = notifyTsf;
-			_utf16Length = utf16Length;
+			if (_notificationData.text)
+			{
+				_text = { _notificationData.text, static_cast<size_t>(_notificationData.length) };
+				_notificationData.text = _text.c_str();
+			}
 		}
 
 		uint8_t Type() const override
@@ -275,11 +279,6 @@ namespace Scintilla::Internal {
 		bool NotifyTsf() const
 		{
 			return _notifyTsf;
-		}
-
-		int Utf16Length() const
-		{
-			return _utf16Length;
 		}
 
 		NotificationData const &NotificationData() const
@@ -619,7 +618,7 @@ namespace Scintilla::Internal {
 	}
 
 	// Todo: wParam might not make sense here
-	void ScintillaWinUI::ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf, int utf16Length)
+	void ScintillaWinUI::ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf)
 	{
 		// Todo: Be more specific
 		// Todo: Should we make sure we are not sending a redundant message? When TSF sends SetSelection, is this getting called?
@@ -643,6 +642,14 @@ namespace Scintilla::Internal {
 			// Lots of notifications get routed here.  We're only interested in insert/delete
 
 			// insert operations have before/after notifications, so we save up info
+			auto utf16Length{ 0 };
+			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::InsertText) ||
+				FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::DeleteText) ||
+				(fNotify && _tsfCore))
+			{
+				utf16Length = WideCharLenFromMultiByte(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage, std::string_view{ notificationData.text, static_cast<size_t>(notificationData.length) });
+			}
+
 			if (FlagSet(notificationData.modificationType, Scintilla::ModificationFlags::BeforeInsert))
 			{
 				chg.acpStart = DocPositionToAcp(notificationData.position);
@@ -698,7 +705,7 @@ namespace Scintilla::Internal {
 		case NotifyMessageId:
 		{
 			const auto notifyMessage{ static_cast<NotifyMessage *>(message.get()) };
-			ProcessNotifyMessage(notifyMessage->WParam(), notifyMessage->NotificationData(), notifyMessage->NotifyTsf(), notifyMessage->Utf16Length());
+			ProcessNotifyMessage(notifyMessage->WParam(), notifyMessage->NotificationData(), notifyMessage->NotifyTsf());
 		}
 		break;
 
@@ -1218,11 +1225,6 @@ namespace Scintilla::Internal {
 			notifyq.pop();
 		}
 		_fromNotifyQueue = false;
-		while (!freeq.empty())
-		{
-			delete[] freeq.front();
-			freeq.pop();
-		}
 	}
 
 	IFACEMETHODIMP ScintillaWinUI::GetStatus(TS_STATUS *pdcs)
@@ -1595,28 +1597,20 @@ namespace Scintilla::Internal {
 		else
 		{
 			auto cchText{ -1 };
-			char *szText{ nullptr };
+			std::unique_ptr<char[]> szText;
 
 			if (IsUnicodeMode())
 			{
 				cchText = UTF8Length({ pchText, cch });
-				szText = new char[cchText + 1];
-				if (!szText)
-				{
-					return E_OUTOFMEMORY;
-				}
-				UTF8FromUTF16({ pchText, cch }, szText, cchText);
+				szText = std::unique_ptr<char[]>(new char[cchText + 1]); // todo: replace with make_unique_for_overwrite in C++20
+				UTF8FromUTF16({ pchText, cch }, szText.get(), cchText);
 			}
 			else
 			{
 				const auto cpDest{ CodePageFromCharSet(vs.styles[STYLE_DEFAULT].characterSet, pdoc->dbcsCodePage) };
 				cchText = WideCharToMultiByte(cpDest, 0, pchText, cch, nullptr, 0, nullptr, nullptr);
-				szText = new char[cchText + 1];
-				if (!szText)
-				{
-					return E_OUTOFMEMORY;
-				}
-				WideCharToMultiByte(cpDest, 0, pchText, cch, szText, cchText, nullptr, nullptr);
+				szText = std::unique_ptr<char[]>(new char[cchText + 1]); // todo: replace with make_unique_for_overwrite in C++20
+				WideCharToMultiByte(cpDest, 0, pchText, cch, szText.get(), cchText, nullptr, nullptr);
 			}
 			szText[cchText] = '\0';
 
@@ -1634,14 +1628,13 @@ namespace Scintilla::Internal {
 			__super::SetSelection(startPos, endPos); // Todo: Fix multi-caret support
 			try
 			{
-				InsertCharacter(szText, Scintilla::CharacterSource::DirectInput);
+				InsertCharacter(szText.get(), Scintilla::CharacterSource::DirectInput);
 			}
 			catch (std::runtime_error const &)
 			{
 				// Todo: this catches in error in trying to convert some longer strings into UTF-32
 				// This is not ideal and InsertCharacter should probably be replaced with a custom method based off it
 			}
-			freeq.push(szText);
 		}
 
 		if (pChange)
@@ -2357,11 +2350,11 @@ namespace Scintilla::Internal {
 		if (_lock != NONE)
 		{
 			// Todo: notification queue might defeat the point of "before" notifications
-			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, _fromNotifyQueue, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text, scn.length)));
+			notifyq.push(std::make_unique<NotifyMessage>(static_cast<uptr_t>(GetCtrlID()), scn, _fromNotifyQueue));
 		}
 		else
 		{
-			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn, _shouldNotifyTsf, CalculateNotifyMessageUtf16Length(scn.nmhdr.code, scn.modificationType, _shouldNotifyTsf, scn.text, scn.length));
+			ProcessNotifyMessage(static_cast<uptr_t>(GetCtrlID()), scn, _shouldNotifyTsf);
 		}
 		// Todo: Probably do not need GetCtrlID
 	}
@@ -3110,17 +3103,6 @@ namespace Scintilla::Internal {
 		inDragDrop = DragDrop::none;
 		_dragPointer = nullptr;
 		SetDragPosition(SelectionPosition(Sci::invalidPosition));
-	}
-
-	int ScintillaWinUI::CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength)
-	{
-		// Todo: This method fails somehow with large files
-		return (_tsfCore || _tfTextStoreACPSink)
-			&& notifyTsf
-			&& code == Scintilla::Notification::Modified
-			&& FlagSet(modFlags, Scintilla::ModificationFlags::InsertText | Scintilla::ModificationFlags::DeleteText)
-			? WideCharLenFromMultiByte(IsUnicodeMode() ? CP_UTF8 : pdoc->dbcsCodePage, std::string_view{ text, static_cast<size_t>(mbLength) })
-			: 0;
 	}
 
 	std::string_view ScintillaWinUI::GetDragData()

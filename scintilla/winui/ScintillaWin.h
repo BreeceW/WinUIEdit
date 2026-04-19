@@ -131,7 +131,7 @@ namespace Scintilla::Internal {
 		void ProcessRightPointerPressedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
 		void ProcessPointerMovedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers, winrt::DUI::PointerPoint const &pointerPoint);
 		void ProcessPointerReleasedMessage(winrt::Windows::Foundation::Point const &point, uint64_t timestamp, winrt::Windows::System::VirtualKeyModifiers modifiers);
-		void ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf, int utf16Length);
+		void ProcessNotifyMessage(uptr_t wParam, NotificationData const &notificationData, bool notifyTsf);
 		void ProcessCharacterReceivedMessage(char16_t character);
 		winrt::DUI::PointerPoint _dragPointer{ nullptr };
 
@@ -143,7 +143,6 @@ namespace Scintilla::Internal {
 		void ImeEndComposition();
 		std::queue<std::unique_ptr<IMessage>> msgq{}; //31
 		std::queue<std::unique_ptr<IMessage>> notifyq{}; //3000
-		std::queue<char *> freeq{}; //3000
 		void ProcessQueues();
 		bool _shouldNotifyTsf{ true };
 		bool _fromNotifyQueue{ false };
@@ -279,7 +278,6 @@ namespace Scintilla::Internal {
 		winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation EffectFromState(winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const &allowedOperations, winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers const &grfKeyState) const noexcept;
 		void StartDrag() override;
 		winrt::fire_and_forget DoDragAsync();
-		int CalculateNotifyMessageUtf16Length(Scintilla::Notification const &code, Scintilla::ModificationFlags const &modFlags, bool notifyTsf, const char *text, Scintilla::Position mbLength);
 		sptr_t OnSetDocPointer(uptr_t wParam, sptr_t lParam);
 	};
 
