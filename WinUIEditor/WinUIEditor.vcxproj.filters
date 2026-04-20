@@ -22,6 +22,8 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="AutocompletionControl.cpp" />
+    <ClCompile Include="AutocompletionWrapper.cpp" />
     <ClCompile Include="CallTipControl.cpp" />
     <ClCompile Include="CallTipWrapper.cpp" />
     <ClCompile Include="CodeEditorControl.cpp" />
@@ -553,6 +555,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AutocompletionControl.h" />
+    <ClInclude Include="AutocompletionWrapper.h" />
     <ClInclude Include="CallTipControl.h" />
     <ClInclude Include="CallTipWrapper.h" />
     <ClInclude Include="CodeEditorControl.h" />
@@ -794,6 +798,7 @@
     <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="AutocompletionControl.idl" />
     <Midl Include="CallTipControl.idl" />
     <Midl Include="CodeEditorControl.idl" />
     <Midl Include="DummyPage.idl" />
