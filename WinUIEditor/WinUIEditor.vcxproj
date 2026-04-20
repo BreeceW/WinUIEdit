@@ -110,7 +110,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
       <ModuleDefinitionFile>WinUIEditor.def</ModuleDefinitionFile>
-      <AdditionalDependencies Condition="$(WinUIEditorUseWinUI3)">user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories Condition="!$(WinUIEditorUseWinUI3) And '$(Platform)' == 'x64'">%(AdditionalLibraryDirectories);$(VC_LibraryPath_VC_x64_Desktop)</AdditionalLibraryDirectories>
       <AdditionalLibraryDirectories Condition="!$(WinUIEditorUseWinUI3) And '$(Platform)' == 'Win32'">%(AdditionalLibraryDirectories);$(VC_LibraryPath_VC_x86_Desktop)</AdditionalLibraryDirectories>
       <AdditionalLibraryDirectories Condition="!$(WinUIEditorUseWinUI3) And '$(Platform)' == 'ARM'">%(AdditionalLibraryDirectories);$(VC_LibraryPath_VC_arm_Desktop)</AdditionalLibraryDirectories>
@@ -178,6 +178,7 @@
       <SubType>Code</SubType>
     </ClInclude>
     <ClInclude Include="MainWrapper.h" />
+    <ClInclude Include="MuiResourceLoader.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="..\scintilla\winui\ListBox.h" />
     <ClInclude Include="..\scintilla\winui\PlatWin.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="TextMateScope.h" />
     <ClInclude Include="TextRangeProvider.h" />
     <ClInclude Include="Wrapper.h" />
+    <ClInclude Include="XamlStringIds.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AutocompletionControl.cpp">
@@ -224,6 +226,7 @@
       <SubType>Code</SubType>
     </ClCompile>
     <ClCompile Include="MainWrapper.cpp" />
+    <ClCompile Include="MuiResourceLoader.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

@@ -6,6 +6,8 @@
 #include "EditorWrapper.h"
 #include "Helpers.h"
 #include "EditorBaseControlAutomationPeer.h"
+#include "MuiResourceLoader.h"
+#include "XamlStringIds.h"
 
 using namespace ::WinUIEditor;
 using namespace winrt;
@@ -68,6 +70,8 @@ namespace winrt::WinUIEditor::implementation
 #ifndef WINUI3
 		}
 #endif
+
+		LoadLocalizedResources();
 	}
 
 	EditorBaseControl::~EditorBaseControl()
@@ -197,13 +201,30 @@ namespace winrt::WinUIEditor::implementation
 		}
 	}
 
+	void EditorBaseControl::LoadLocalizedResources()
+	{
+		// Find Windows.UI.Xaml.dll or Microsoft.ui.xaml.dll by pointer address of vtable
+		// Not using name because Microsoft.ui.xaml.dll could be ambiguous for a process
+		// that loads both WinUI 2 and WinUI 3
+
+		const MuiResourceLoader xamlMuiResourceLoader{ this->try_as<IInspectable>() };
+
+		_textCommandLabelUndo = xamlMuiResourceLoader.GetString(XamlTextCommand::LabelUndo, L"Undo");
+		_textCommandLabelRedo = xamlMuiResourceLoader.GetString(XamlTextCommand::LabelRedo, L"Redo");
+		_textCommandLabelCut = xamlMuiResourceLoader.GetString(XamlTextCommand::LabelCut, L"Cut");
+		_textCommandLabelCopy = xamlMuiResourceLoader.GetString(XamlTextCommand::LabelCopy, L"Copy");
+		_textCommandLabelPaste = xamlMuiResourceLoader.GetString(XamlTextCommand::LabelPaste, L"Paste");
+		_textCommandLabelSelectAll = xamlMuiResourceLoader.GetString(XamlTextCommand::LabelSelectAll, L"Select All");
+		_textCommandLabelDelete = xamlMuiResourceLoader.GetString(XamlTextCommand::LabelDelete, L"Delete");
+	}
+
 	void EditorBaseControl::AddContextMenuItems(MenuFlyout const &menu)
 	{
 		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };
 		const auto selection{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetSelectionEmpty, 0, 0)) };
 
 		const MenuFlyoutItem undoItem{};
-		undoItem.Text(L"Undo"); // Todo: Localize
+		undoItem.Text(_textCommandLabelUndo);
 		undoItem.Icon(SymbolIcon{ Symbol::Undo });
 		undoItem.Tag(box_value(ScintillaMessage::Undo));
 		undoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanUndo, 0, 0));
@@ -211,7 +232,7 @@ namespace winrt::WinUIEditor::implementation
 		menu.Items().Append(undoItem);
 
 		const MenuFlyoutItem redoItem{};
-		redoItem.Text(L"Redo");
+		redoItem.Text(_textCommandLabelRedo);
 		redoItem.Icon(SymbolIcon{ Symbol::Redo });
 		redoItem.Tag(box_value(ScintillaMessage::Redo));
 		redoItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanRedo, 0, 0));
@@ -221,7 +242,7 @@ namespace winrt::WinUIEditor::implementation
 		menu.Items().Append(MenuFlyoutSeparator{});
 
 		const MenuFlyoutItem cutItem{};
-		cutItem.Text(L"Cut");
+		cutItem.Text(_textCommandLabelCut);
 		cutItem.Icon(SymbolIcon{ Symbol::Cut });
 		cutItem.Tag(box_value(ScintillaMessage::Cut));
 		cutItem.IsEnabled(writable && selection);
@@ -229,7 +250,7 @@ namespace winrt::WinUIEditor::implementation
 		menu.Items().Append(cutItem);
 
 		const MenuFlyoutItem copyItem{};
-		copyItem.Text(L"Copy");
+		copyItem.Text(_textCommandLabelCopy);
 		copyItem.Icon(SymbolIcon{ Symbol::Copy });
 		copyItem.Tag(box_value(ScintillaMessage::Copy));
 		copyItem.IsEnabled(selection);
@@ -237,7 +258,7 @@ namespace winrt::WinUIEditor::implementation
 		menu.Items().Append(copyItem);
 
 		const MenuFlyoutItem pasteItem{};
-		pasteItem.Text(L"Paste");
+		pasteItem.Text(_textCommandLabelPaste);
 		pasteItem.Icon(SymbolIcon{ Symbol::Paste });
 		pasteItem.Tag(box_value(ScintillaMessage::Paste));
 		pasteItem.IsEnabled(_scintilla->WndProc(Scintilla::Message::CanPaste, 0, 0));
@@ -245,7 +266,7 @@ namespace winrt::WinUIEditor::implementation
 		menu.Items().Append(pasteItem);
 
 		const MenuFlyoutItem deleteItem{};
-		deleteItem.Text(L"Delete");
+		deleteItem.Text(_textCommandLabelDelete);
 		deleteItem.Icon(SymbolIcon{ Symbol::Delete });
 		deleteItem.Tag(box_value(ScintillaMessage::Clear));
 		deleteItem.IsEnabled(writable && selection);
@@ -255,7 +276,7 @@ namespace winrt::WinUIEditor::implementation
 		menu.Items().Append(MenuFlyoutSeparator{});
 
 		const MenuFlyoutItem selectAllItem{};
-		selectAllItem.Text(L"Select all");
+		selectAllItem.Text(_textCommandLabelSelectAll);
 		selectAllItem.Icon(SymbolIcon{ Symbol::SelectAll });
 		selectAllItem.Tag(box_value(ScintillaMessage::SelectAll));
 		selectAllItem.Click({ this, &EditorBaseControl::ContextMenuItem_Click });

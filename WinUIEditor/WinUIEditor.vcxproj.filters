@@ -36,6 +36,7 @@
     <ClCompile Include="EditorWrapper.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="MainWrapper.cpp" />
+    <ClCompile Include="MuiResourceLoader.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TextRangeProvider.cpp" />
     <ClCompile Include="Wrapper.cpp" />
@@ -571,10 +572,12 @@
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="LightPlus.h" />
     <ClInclude Include="MainWrapper.h" />
+    <ClInclude Include="MuiResourceLoader.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TextMateScope.h" />
     <ClInclude Include="TextRangeProvider.h" />
     <ClInclude Include="Wrapper.h" />
+    <ClInclude Include="XamlStringIds.h" />
     <ClInclude Include="..\scintilla\winui\ListBox.h" />
     <ClInclude Include="..\scintilla\winui\PlatWin.h" />
     <ClInclude Include="..\scintilla\winui\ScintillaWin.h" />
