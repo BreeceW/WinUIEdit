@@ -35,13 +35,16 @@ namespace WinUIEditor
 
 		bool TransformToRoot(float &x, float &y) const;
 
+		void ReleaseAutocompletePopup();
+
 		// Font used for arrows in folding column markers. Stored here to allow retrieval from SurfaceD2D
 		// Do not access outside of GetChevronFontFromSurface
 		std::shared_ptr<Scintilla::Internal::Font> chevronFont{ nullptr };
 		Scintilla::Internal::XYPOSITION chevronFontSize{ -1.0 };
 
 	protected:
-		Wrapper(winrt::DUXC::Control const& control);
+		Wrapper(winrt::DUXC::Control const &control);
+		~Wrapper();
 		winrt::weak_ref<winrt::DUXC::Control> _control{ nullptr };
 
 	private:
@@ -56,5 +59,6 @@ namespace WinUIEditor
 		bool _hasUac8{ winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 8) }; // Todo: Make static
 		bool _hasFcu{ winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 #endif
+		winrt::DUXC::Primitives::Popup _autocompletionPopup{ nullptr };
 	};
 }

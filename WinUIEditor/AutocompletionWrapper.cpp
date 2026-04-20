@@ -19,10 +19,9 @@ namespace WinUIEditor
 
 	void AutocompletionWrapper::Destroy()
 	{
-		if (const auto popup{ _popup.get() })
-		{
-			popup.IsOpen(false);
-		}
+		Show(false);
+		Clear();
+		SelectedIndex(-1);
 	}
 
 	void AutocompletionWrapper::SetPositionRelative(Scintilla::Internal::PRectangle rc, Wrapper const &wrapper)
@@ -51,41 +50,21 @@ namespace WinUIEditor
 		}
 	}
 
-	std::shared_ptr<Wrapper> AutocompletionWrapper::Create(winrt::DUX::XamlRoot const &xamlRoot, float logicalDpi, winrt::DUX::ElementTheme theme)
+	std::shared_ptr<Wrapper> AutocompletionWrapper::Create(winrt::DUXC::Primitives::Popup const &popup, float logicalDpi)
 	{
-#ifndef WINUI3
-		static bool hasUac8{ winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 8) }; // Todo: Make static
-#endif
-
-		const auto autocompletion{ winrt::make_self<winrt::WinUIEditor::implementation::AutocompletionControl>() };
-		autocompletion->MaxWidth(std::numeric_limits<double>::infinity());
-		autocompletion->Padding(winrt::DUX::Thickness{ 0, 0, 0, 0 });
-		autocompletion->Wrapper()->LogicalDpi(logicalDpi);
-		autocompletion->IsTabStop(false);
-		autocompletion->HorizontalAlignment(winrt::DUX::HorizontalAlignment::Center);
-		autocompletion->VerticalAlignment(winrt::DUX::VerticalAlignment::Center);
-		winrt::DUXC::Primitives::Popup popup{};
-		autocompletion->Wrapper()->_popup = popup;
-#ifndef WINUI3
-		if (hasUac8)
+		auto autocompletion{ popup.Child().try_as<winrt::WinUIEditor::implementation::AutocompletionControl>() };
+		if (!autocompletion)
 		{
-#endif
-			// Per WinUI 3 source code, the shadow is added to the tooltip ContentPresenter for animation reasons
-			// We add it to the popup level instead because it is easier and we are not animating tooltips
-			// Setting translation on the tooltip level causes rendering to break when the popup is in some positions
-			popup.Shadow(winrt::DUX::Media::ThemeShadow{});
-			popup.Translation(winrt::Windows::Foundation::Numerics::float3{ 0, 0, 16 });
-			// Needed for AppWindow
-			popup.ShouldConstrainToRootBounds(false);
-			popup.XamlRoot(xamlRoot);
-#ifndef WINUI3
+			autocompletion = winrt::make_self<winrt::WinUIEditor::implementation::AutocompletionControl>();
+			autocompletion->MaxWidth(std::numeric_limits<double>::infinity());
+			autocompletion->Padding(winrt::DUX::Thickness{ 0, 0, 0, 0 });
+			autocompletion->Wrapper()->LogicalDpi(logicalDpi);
+			autocompletion->IsTabStop(false);
+			autocompletion->HorizontalAlignment(winrt::DUX::HorizontalAlignment::Center);
+			autocompletion->VerticalAlignment(winrt::DUX::VerticalAlignment::Center);
+			autocompletion->Wrapper()->_popup = popup;
+			popup.Child(*autocompletion);
 		}
-#endif
-		// Todo: Live theme changes
-		popup.RequestedTheme(theme);
-		popup.IsOpen(true);
-		popup.Visibility(winrt::DUX::Visibility::Collapsed);
-		popup.Child(*autocompletion);
 		return autocompletion->Wrapper();
 	}
 
@@ -118,6 +97,28 @@ namespace WinUIEditor
 		if (const auto control{ _control.get().try_as<winrt::WinUIEditor::implementation::AutocompletionControl>() })
 		{
 			control->SelectedIndex(value);
+		}
+	}
+
+	void AutocompletionWrapper::SetListBoxDelegate(Scintilla::Internal::IListBoxDelegate *delegate)
+	{
+		_delegate = delegate;
+	}
+
+	void AutocompletionWrapper::NotifyDoubleClick()
+	{
+		if (_delegate)
+		{
+			Scintilla::Internal::ListBoxEvent event{ Scintilla::Internal::ListBoxEvent::EventType::doubleClick };
+			_delegate->ListNotify(&event);
+		}
+	}
+	void AutocompletionWrapper::NotifySelectionChange()
+	{
+		if (_delegate)
+		{
+			Scintilla::Internal::ListBoxEvent event{ Scintilla::Internal::ListBoxEvent::EventType::selectionChange };
+			_delegate->ListNotify(&event);
 		}
 	}
 }

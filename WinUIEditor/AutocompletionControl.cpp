@@ -24,6 +24,30 @@ namespace winrt::WinUIEditor::implementation
 	void AutocompletionControl::OnApplyTemplate()
 	{
 		SelectedIndex(_selectedIndex);
+
+		_selectionChangedRevoker.revoke();
+
+		const auto suggestions{ GetTemplateChild(L"Suggestions") };
+		if (const auto list{ suggestions.try_as<Selector>() })
+		{
+			_selectionChangedRevoker = list.SelectionChanged(auto_revoke, { this, &AutocompletionControl::OnSelectionChanged });
+		}
+	}
+
+	void AutocompletionControl::OnDoubleTapped(DUX::Input::DoubleTappedRoutedEventArgs const &args)
+	{
+		if (args.OriginalSource().try_as<ListViewItemPresenter>() || args.OriginalSource().try_as<TextBlock>())
+		{
+			_wrapper->NotifyDoubleClick();
+		}
+	}
+
+	void AutocompletionControl::OnSelectionChanged(IInspectable const &sender, DUXC::SelectionChangedEventArgs const &e)
+	{
+		if (e.AddedItems().Size() > 0)
+		{
+			_wrapper->NotifySelectionChange();
+		}
 	}
 
 	DependencyProperty AutocompletionControl::ItemsSourceProperty()
@@ -60,6 +84,10 @@ namespace winrt::WinUIEditor::implementation
 		if (const auto list{ suggestions.try_as<Selector>() })
 		{
 			list.SelectedIndex(value);
+		}
+		else
+		{
+			_wrapper->NotifySelectionChange();
 		}
 		if (const auto list{ suggestions.try_as<ListViewBase>() })
 		{

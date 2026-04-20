@@ -148,7 +148,6 @@ private:
 	unsigned int _avgCharWidth = 8;
 	int _desiredVisibleRows = 8;
 	LineToItem _lti;
-	IListBoxDelegate *_delegate = nullptr;
 
 	WinUIEditor::AutocompletionWrapper *Wrapper();
 };
@@ -273,7 +272,7 @@ void ListBoxWinUI::ClearRegisteredImages()
 
 void ListBoxWinUI::SetDelegate(IListBoxDelegate *lbDelegate)
 {
-	_delegate = lbDelegate;
+	Wrapper()->SetListBoxDelegate(lbDelegate);
 }
 
 void ListBoxWinUI::AppendListItem(const char *text, const char *numword)

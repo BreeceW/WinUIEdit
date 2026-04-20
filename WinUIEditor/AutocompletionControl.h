@@ -6,30 +6,34 @@
 
 namespace winrt::WinUIEditor::implementation
 {
-    struct AutocompletionControl : AutocompletionControlT<AutocompletionControl>
-    {
-        AutocompletionControl();
+	struct AutocompletionControl : AutocompletionControlT<AutocompletionControl>
+	{
+		AutocompletionControl();
 
-        void OnApplyTemplate();
+		void OnApplyTemplate();
+		void OnDoubleTapped(DUX::Input::DoubleTappedRoutedEventArgs const &args);
 
-        static DUX::DependencyProperty ItemsSourceProperty();
-        IInspectable ItemsSource();
+		void OnSelectionChanged(IInspectable const &sender, DUXC::SelectionChangedEventArgs const &e);
 
-        std::shared_ptr<::WinUIEditor::AutocompletionWrapper> Wrapper();
+		static DUX::DependencyProperty ItemsSourceProperty();
+		IInspectable ItemsSource();
 
-        int SelectedIndex();
-        void SelectedIndex(int value);
+		std::shared_ptr<::WinUIEditor::AutocompletionWrapper> Wrapper();
 
-    private:
-        std::shared_ptr<::WinUIEditor::AutocompletionWrapper> _wrapper{ nullptr };
-        static DUX::DependencyProperty s_itemsSourceProperty;
-        int _selectedIndex{ -1 };
-    };
+		int SelectedIndex();
+		void SelectedIndex(int value);
+
+	private:
+		std::shared_ptr<::WinUIEditor::AutocompletionWrapper> _wrapper{ nullptr };
+		static DUX::DependencyProperty s_itemsSourceProperty;
+		int _selectedIndex{ -1 };
+		DUXC::Primitives::Selector::SelectionChanged_revoker _selectionChangedRevoker{};
+	};
 }
 
 namespace winrt::WinUIEditor::factory_implementation
 {
-    struct AutocompletionControl : AutocompletionControlT<AutocompletionControl, implementation::AutocompletionControl>
-    {
-    };
+	struct AutocompletionControl : AutocompletionControlT<AutocompletionControl, implementation::AutocompletionControl>
+	{
+	};
 }

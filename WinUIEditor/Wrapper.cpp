@@ -12,6 +12,11 @@ namespace WinUIEditor
 		_control = control;
 	}
 
+	Wrapper::~Wrapper()
+	{
+		ReleaseAutocompletePopup();
+	}
+
 	winrt::com_ptr<::IVirtualSurfaceImageSourceNative> Wrapper::VsisNative()
 	{
 		return _vsisNative;
@@ -181,6 +186,15 @@ namespace WinUIEditor
 		return false;
 	}
 
+	void Wrapper::ReleaseAutocompletePopup()
+	{
+		if (_autocompletionPopup)
+		{
+			_autocompletionPopup.IsOpen(false);
+			_autocompletionPopup = nullptr;
+		}
+	}
+
 	std::shared_ptr<Wrapper> Wrapper::CreateAutocompletionWindow()
 	{
 		auto theme{ winrt::DUX::ElementTheme::Default };
@@ -207,6 +221,31 @@ namespace WinUIEditor
 #endif
 		}
 
-		return AutocompletionWrapper::Create(xamlRoot, _logicalDpi, theme);
+		if (!_autocompletionPopup)
+		{
+			_autocompletionPopup = {};
+
+#ifndef WINUI3
+			if (_hasUac8)
+			{
+#endif
+				// Per WinUI 3 source code, the shadow is added to the tooltip ContentPresenter for animation reasons
+				// We add it to the popup level instead because it is easier and we are not animating tooltips
+				// Setting translation on the tooltip level causes rendering to break when the popup is in some positions
+				_autocompletionPopup.Shadow(winrt::DUX::Media::ThemeShadow{});
+				_autocompletionPopup.Translation(winrt::Windows::Foundation::Numerics::float3{ 0, 0, 16 });
+				// Needed for AppWindow
+				_autocompletionPopup.ShouldConstrainToRootBounds(false);
+				_autocompletionPopup.XamlRoot(xamlRoot);
+#ifndef WINUI3
+			}
+#endif
+		}
+
+		_autocompletionPopup.RequestedTheme(theme);
+		_autocompletionPopup.IsOpen(true);
+		_autocompletionPopup.Visibility(winrt::DUX::Visibility::Collapsed);
+
+		return AutocompletionWrapper::Create(_autocompletionPopup, _logicalDpi);
 	}
 }

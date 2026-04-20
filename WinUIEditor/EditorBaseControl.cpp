@@ -35,6 +35,7 @@ namespace winrt::WinUIEditor::implementation
 
 		Loaded({ this, &EditorBaseControl::OnLoaded });
 		Unloaded({ this, &EditorBaseControl::OnUnloaded });
+		LosingFocus({ this, &EditorBaseControl::OnLosingFocus });
 
 #ifndef WINUI3
 		if (!_hasXamlRoot)
@@ -133,6 +134,28 @@ namespace winrt::WinUIEditor::implementation
 #endif
 
 		_scintilla->StopTimers();
+
+		_wrapper->ReleaseAutocompletePopup();
+	}
+
+	void EditorBaseControl::OnLosingFocus(Windows::Foundation::IInspectable const &sender, DUX::Input::LosingFocusEventArgs const &args)
+	{
+		const auto newFocusedElement{ args.NewFocusedElement() };
+		if (!newFocusedElement || !_call->AutoCActive())
+		{
+			return;
+		}
+
+		DependencyObject object{ newFocusedElement };
+		do
+		{
+			if (object.try_as<AutocompletionControl>())
+			{
+				args.Cancel(true);
+				return;
+			}
+			object = VisualTreeHelper::GetParent(object);
+		} while (object);
 	}
 
 	bool EditorBaseControl::IsLoadedCompat()
@@ -403,6 +426,11 @@ namespace winrt::WinUIEditor::implementation
 		_isFocused = false;
 
 		_scintilla->FocusChanged(false);
+
+		if (!_call->AutoCActive())
+		{
+			_wrapper->ReleaseAutocompletePopup();
+		}
 	}
 
 	void EditorBaseControl::OnPointerPressed(DUX::Input::PointerRoutedEventArgs const &e)
