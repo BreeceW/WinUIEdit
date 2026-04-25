@@ -266,6 +266,9 @@
     <ClCompile Include="..\lexilla\lexers\LexEScript.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexEscSeq.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexFlagship.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
@@ -441,6 +444,9 @@
       <Filter>Lexers</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexScriptol.cxx">
+      <Filter>Lexers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lexilla\lexers\LexSINEX.cxx">
       <Filter>Lexers</Filter>
     </ClCompile>
     <ClCompile Include="..\lexilla\lexers\LexSmalltalk.cxx">
