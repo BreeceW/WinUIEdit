@@ -18,8 +18,11 @@ namespace Tool
         {
             var parent = await (await StorageFolder.GetFolderFromPathAsync(path)).GetParentAsync();
 
-            var ifaceFile = await parent.GetFileAsync("scintilla\\include\\Scintilla.iface");
-            var ifaceLines = await FileIO.ReadLinesAsync(ifaceFile);
+            var ifaceWinUIEditor = await parent.GetFileAsync("WinUIEditor\\WinUIEditor.iface");
+            var ifaceWinUIEditorLines = await FileIO.ReadLinesAsync(ifaceWinUIEditor);
+
+            var ifaceScintillaFile = await parent.GetFileAsync("scintilla\\include\\Scintilla.iface");
+            var ifaceScintillaLines = await FileIO.ReadLinesAsync(ifaceScintillaFile);
 
             var ifaceFileLexilla = await parent.GetFileAsync("lexilla\\include\\LexicalStyles.iface");
             var ifaceLinesLexilla = await FileIO.ReadLinesAsync(ifaceFileLexilla);
@@ -45,14 +48,15 @@ namespace Tool
             var vals = new Dictionary<string, int>(500);
             var alis = new Dictionary<string, string>(200);
             var evts = new List<Event>(100);
+            var uses = new List<Use>(10);
 
             var messageEnu = new Enum("ScintillaMessage", new List<string>(0), false);
 
             List<string> currentComment = new List<string>();
             string currentCat = null;
-            foreach (var line in ifaceLines.Concat(ifaceLinesLexilla))
+            foreach (var line in ifaceWinUIEditorLines.Concat(ifaceScintillaLines).Concat(ifaceLinesLexilla))
             {
-                if (Keyword(line, "cat", out var cat))
+                if (Keyword(line, "cat", uses, out var cat))
                 {
                     currentCat = cat;
                 }
@@ -62,45 +66,49 @@ namespace Tool
                     continue;
                 }
 
-                if (Keyword(line, "fun", out var fun))
+                if (Keyword(line, "fun", uses, out var fun))
                 {
                     var addFun = DecodeFunDef(fun, currentComment);
                     funs.Add(addFun);
                     messageEnu.Values.Add(addFun.Name, addFun.MsgValue);
                 }
-                if (Keyword(line, "get", out var get))
+                else if (Keyword(line, "get", uses, out var get))
                 {
                     var addGet = DecodeFunDef(get, currentComment);
                     allGets.Add(addGet);
                     messageEnu.Values.Add(addGet.Name, addGet.MsgValue);
                 }
-                if (Keyword(line, "set", out var set))
+                else if (Keyword(line, "set", uses, out var set))
                 {
                     var addSet = DecodeFunDef(set, currentComment);
                     allSets.Add(addSet);
                     messageEnu.Values.Add(addSet.Name, addSet.MsgValue);
                 }
-                else if (Keyword(line, "enu", out var enu))
+                else if (Keyword(line, "enu", uses, out var enu))
                 {
                     enus.Add(DecodeEnuDef(enu, flagsEnums));
                 }
-                else if (Keyword(line, "lex", out var lex))
+                else if (Keyword(line, "lex", uses, out var lex))
                 {
                     lexes.Add(DecodeLexDef(lex));
                 }
-                else if (Keyword(line, "val", out var val))
+                else if (Keyword(line, "val", uses, out var val))
                 {
                     var valSplit = val.Split('=');
                     vals.Add(valSplit[0], (int)new Int32Converter().ConvertFromString(valSplit[1]));
                 }
-                else if (Keyword(line, "ali", out var ali))
+                else if (Keyword(line, "ali", uses, out var ali))
                 {
                     var aliSplit = ali.Split('=');
                     alis.Add(aliSplit[0], aliSplit[1]);
                 }
-                else if (Keyword(line, "evt", out var evt))
+                else if (Keyword(line, "evt", uses, out var evt))
                 {
                     evts.Add(DecodeEvtDef(evt, currentComment));
+                }
+                else if (Keyword(line, "use", uses, out var use))
+                {
+                    uses.Add(DecodeUseDef(use));
                 }
 
                 if (line.StartsWith("# "))
@@ -371,8 +379,13 @@ namespace Tool
         [GeneratedRegex("operator\\|\\((\\w+)")]
         private static partial Regex FindFlagsEnumsRegex();
 
-        private static bool Keyword(string line, string keyword, out string def)
+        private static bool Keyword(string line, string keyword, List<Use> uses, out string def)
         {
+            if (uses.LastOrDefault(u => u.Find == line) is { } use)
+            {
+                line = use.Replace;
+            }
+
             if (line.StartsWith(keyword))
             {
                 def = line[(keyword.Length + 1)..];
@@ -410,6 +423,8 @@ namespace Tool
         {
             public IDictionary<string, int> Values { get; } = new Dictionary<string, int>(2);
         }
+
+        private record Use(string Find, string Replace);
 
         private enum ParamType
         {
@@ -482,12 +497,21 @@ namespace Tool
 
         private static Lexer DecodeLexDef(string lex)
         {
-            var groups = EnuLexRegex().Match(lex).Groups;
+            var groups = LexDefRegex().Match(lex).Groups;
             return new Lexer(groups[1].Value, groups[2].Value, groups[3].Value.Split(' '));
         }
 
         [GeneratedRegex("(\\w+)=(\\w+) (.*)")]
-        private static partial Regex EnuLexRegex();
+        private static partial Regex LexDefRegex();
+
+        private static Use DecodeUseDef(string use)
+        {
+            var groups = UseDefRegex().Match(use).Groups;
+            return new Use(groups[1].Value, groups[2].Value);
+        }
+
+        [GeneratedRegex("(.*) -> (.*)")]
+        private static partial Regex UseDefRegex();
 
         private static void WriteIdlEnu(StringBuilder sb, Enum fun)
         {
