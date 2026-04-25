@@ -87,7 +87,7 @@ namespace {
 #define SUB_HAS_PROTO	1	// only 'prototype' attribute allows prototypes
 #define SUB_HAS_ATTRIB	2	// other attributes can exist leftward
 #define SUB_HAS_MODULE	3	// sub name can have a ::identifier part
-#define SUB_HAS_SUB		4	// 'sub' keyword
+#define SUB_HAS_SUB		4	// 'sub' (or 'method') keyword
 
 // all interpolated styles are different from their parent styles by a constant difference
 // we also assume SCE_PL_STRING_VAR is the interpolated style with the smallest value
@@ -131,8 +131,9 @@ int disambiguateBareword(LexAccessor &styler, Sci_PositionU bk, Sci_PositionU fw
 	        // ->bareword: part of variable spec
 	        || styler.Match(bk - 1, "::")
 	        // ::bareword: part of module spec
-	        || styler.Match(bk - 2, "sub")) {
-	        // sub bareword: subroutine declaration
+	        || styler.Match(bk - 2, "sub")
+	        || styler.Match(bk - 5, "method")) {
+	        // 'sub' or 'method' bareword: subroutine declaration
 	        // (implied BACK_KEYWORD, no keywords end in 'sub'!)
 		result |= 1;
 	}
@@ -299,9 +300,10 @@ bool styleCheckSubPrototype(LexAccessor &styler, Sci_PositionU bk) {
 				state = SUB_HAS_MODULE;
 			} else
 				break;
-		} else if (style1 == SCE_PL_WORD && len1 == 3 &&
-		           styler.Match(pos1, "sub")) {	// 'sub'
-			if (style2 == SCE_PL_IDENTIFIER) {	// 'sub' <identifier>
+		} else if ((style1 == SCE_PL_WORD || style1 == SCE_PL_IDENTIFIER) &&
+		           ((len1 == 3 && styler.Match(pos1, "sub")) || 	// 'sub'
+		            (len1 == 6 && styler.Match(pos1, "method")))) {	// or 'method
+			if (style2 == SCE_PL_IDENTIFIER) {	// ('sub' | 'method') <identifier>
 				state = SUB_HAS_SUB;
 			} else
 				break;
@@ -452,16 +454,38 @@ const LexicalClass lexicalClasses[] = {
 	29, "SCE_PL_STRING_QR", "literal regex", "qr = regex",
 	30, "SCE_PL_STRING_QW", "literal string interpolated", "qw = array",
 	31, "SCE_PL_POD_VERB", "data", "pod: verbatim paragraphs",
+	32, "", "predefined", "",
+	33, "", "predefined", "",
+	34, "", "predefined", "",
+	35, "", "predefined", "",
+	36, "", "predefined", "",
+	37, "", "predefined", "",
+	38, "", "predefined", "",
+	39, "", "predefined", "",
 	40, "SCE_PL_SUB_PROTOTYPE", "identifier", "subroutine prototype",
 	41, "SCE_PL_FORMAT_IDENT", "identifier", "format identifier",
 	42, "SCE_PL_FORMAT", "literal string", "format body",
 	43, "SCE_PL_STRING_VAR", "identifier interpolated", "double quoted string (interpolated variable)",
 	44, "SCE_PL_XLAT", "literal string", "translation: tr{}{} y{}{}",
+	45, "", "unused", "",
+	46, "", "unused", "",
+	47, "", "unused", "",
+	48, "", "unused", "",
+	49, "", "unused", "",
+	50, "", "unused", "",
+	51, "", "unused", "",
+	52, "", "unused", "",
+	53, "", "unused", "",
 	54, "SCE_PL_REGEX_VAR", "identifier interpolated", "regex: /re/ or m{re} (interpolated variable)",
 	55, "SCE_PL_REGSUBST_VAR", "identifier interpolated", "substitution: s/re/ore/ (interpolated variable)",
+	56, "", "unused", "",
 	57, "SCE_PL_BACKTICKS_VAR", "identifier interpolated", "back ticks (interpolated variable)",
+	58, "", "unused", "",
+	59, "", "unused", "",
+	60, "", "unused", "",
 	61, "SCE_PL_HERE_QQ_VAR", "identifier interpolated", "here-doc (double quoted, qq) (interpolated variable)",
 	62, "SCE_PL_HERE_QX_VAR", "identifier interpolated", "here-doc (back ticks, qx) (interpolated variable)",
+	63, "", "unused", "",
 	64, "SCE_PL_STRING_QQ_VAR", "identifier interpolated", "qq = double quoted string (interpolated variable)",
 	65, "SCE_PL_STRING_QX_VAR", "identifier interpolated", "qx = back ticks (interpolated variable)",
 	66, "SCE_PL_STRING_QR_VAR", "identifier interpolated", "qr = regex (interpolated variable)",

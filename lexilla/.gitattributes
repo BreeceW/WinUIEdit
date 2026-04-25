@@ -31,6 +31,7 @@
 **.php text
 **.vb text
 **.vbs text
+**.ans text
 **.asm text
 **.cob text
 **.cmake text
@@ -39,6 +40,7 @@
 **.diff text
 **.erl text
 **.f text
+**.forth text
 **.gd text
 **.gui text
 **.iss text
@@ -60,6 +62,7 @@
 **.rb text
 **.roff text
 **.rs text
+**.snx text
 **.sql text
 **.st text
 **.tcl text

@@ -32,6 +32,7 @@ $(DIR_O)/DefaultLexer.o: \
 	../lexlib/LexAccessor.h \
 	../lexlib/Accessor.h \
 	../lexlib/LexerModule.h \
+	../lexlib/OptionSet.h \
 	../lexlib/DefaultLexer.h
 $(DIR_O)/InList.o: \
 	../lexlib/InList.cxx \
@@ -284,7 +285,9 @@ $(DIR_O)/LexBatch.o: \
 	../lexlib/Accessor.h \
 	../lexlib/StyleContext.h \
 	../lexlib/CharacterSet.h \
-	../lexlib/LexerModule.h
+	../lexlib/LexerModule.h \
+	../lexlib/OptionSet.h \
+	../lexlib/DefaultLexer.h
 $(DIR_O)/LexBibTeX.o: \
 	../lexers/LexBibTeX.cxx \
 	../../scintilla/include/ILexer.h \
@@ -583,7 +586,9 @@ $(DIR_O)/LexErrorList.o: \
 	../lexlib/Accessor.h \
 	../lexlib/StyleContext.h \
 	../lexlib/CharacterSet.h \
-	../lexlib/LexerModule.h
+	../lexlib/LexerModule.h \
+	../lexlib/OptionSet.h \
+	../lexlib/DefaultLexer.h
 $(DIR_O)/LexEScript.o: \
 	../lexers/LexEScript.cxx \
 	../../scintilla/include/ILexer.h \
@@ -596,6 +601,21 @@ $(DIR_O)/LexEScript.o: \
 	../lexlib/StyleContext.h \
 	../lexlib/CharacterSet.h \
 	../lexlib/LexerModule.h
+$(DIR_O)/LexEscSeq.o: \
+	../lexers/LexEscSeq.cxx \
+	../../scintilla/include/ILexer.h \
+	../../scintilla/include/Sci_Position.h \
+	../../scintilla/include/Scintilla.h \
+	../include/SciLexer.h \
+	../lexlib/InList.h \
+	../lexlib/WordList.h \
+	../lexlib/LexAccessor.h \
+	../lexlib/Accessor.h \
+	../lexlib/StyleContext.h \
+	../lexlib/CharacterSet.h \
+	../lexlib/LexerModule.h \
+	../lexlib/OptionSet.h \
+	../lexlib/DefaultLexer.h
 $(DIR_O)/LexFlagship.o: \
 	../lexers/LexFlagship.cxx \
 	../../scintilla/include/ILexer.h \
@@ -1110,7 +1130,9 @@ $(DIR_O)/LexPascal.o: \
 	../lexlib/Accessor.h \
 	../lexlib/StyleContext.h \
 	../lexlib/CharacterSet.h \
-	../lexlib/LexerModule.h
+	../lexlib/LexerModule.h \
+	../lexlib/OptionSet.h \
+	../lexlib/DefaultLexer.h
 $(DIR_O)/LexPB.o: \
 	../lexers/LexPB.cxx \
 	../../scintilla/include/ILexer.h \
@@ -1354,6 +1376,16 @@ $(DIR_O)/LexScriptol.o: \
 	../lexlib/LexAccessor.h \
 	../lexlib/Accessor.h \
 	../lexlib/StyleContext.h \
+	../lexlib/CharacterSet.h \
+	../lexlib/LexerModule.h
+$(DIR_O)/LexSINEX.o: \
+	../lexers/LexSINEX.cxx \
+	../../scintilla/include/ILexer.h \
+	../../scintilla/include/Sci_Position.h \
+	../../scintilla/include/Scintilla.h \
+	../include/SciLexer.h \
+	../lexlib/LexAccessor.h \
+	../lexlib/Accessor.h \
 	../lexlib/CharacterSet.h \
 	../lexlib/LexerModule.h
 $(DIR_O)/LexSmalltalk.o: \

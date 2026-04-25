@@ -60,7 +60,6 @@ unreadVariable:lexilla/lexers/LexBaan.cxx
 variableScope:lexilla/lexers/LexBaan.cxx
 constParameterPointer:lexilla/lexers/LexBaan.cxx
 constParameterReference:lexilla/lexers/LexBash.cxx
-knownConditionTrueFalse:lexilla/lexers/LexBash.cxx
 variableScope:lexilla/lexers/LexBash.cxx
 constVariable:lexilla/lexers/LexBasic.cxx
 constParameterReference:lexilla/lexers/LexBullant.cxx
@@ -76,6 +75,7 @@ constParameterPointer:lexilla/lexers/LexCoffeeScript.cxx
 knownConditionTrueFalse:lexilla/lexers/LexCoffeeScript.cxx
 constVariableReference:lexilla/lexers/LexConf.cxx
 constParameterReference:lexilla/lexers/LexCPP.cxx
+knownConditionTrueFalse:lexilla/lexers/LexCPP.cxx
 variableScope:lexilla/lexers/LexCSS.cxx
 constVariablePointer:lexilla/lexers/LexCSS.cxx
 knownConditionTrueFalse:lexilla/lexers/LexDataflex.cxx
@@ -102,7 +102,6 @@ knownConditionTrueFalse:lexilla/lexers/LexHex.cxx
 constVariable:lexilla/lexers/LexHollywood.cxx
 variableScope:lexilla/lexers/LexInno.cxx
 constVariableReference:lexilla/lexers/LexInno.cxx
-constParameterReference:lexilla/lexers/LexJSON.cxx
 constParameterPointer:lexilla/lexers/LexJulia.cxx
 constParameterReference:lexilla/lexers/LexJulia.cxx
 knownConditionTrueFalse:lexilla/lexers/LexJulia.cxx
@@ -113,7 +112,6 @@ constParameterReference:lexilla/lexers/LexLaTeX.cxx
 constParameterReference:lexilla/lexers/LexLisp.cxx
 constParameterPointer:lexilla/lexers/LexMagik.cxx
 constParameterReference:lexilla/lexers/LexMagik.cxx
-constParameterReference:lexilla/lexers/LexMarkdown.cxx
 constParameterPointer:lexilla/lexers/LexMatlab.cxx
 constParameterReference:lexilla/lexers/LexMatlab.cxx
 unreadVariable:lexilla/lexers/LexMatlab.cxx
@@ -156,6 +154,7 @@ constParameterReference:lexilla/lexers/LexRuby.cxx
 constParameterReference:lexilla/lexers/LexRust.cxx
 knownConditionTrueFalse:lexilla/lexers/LexScriptol.cxx
 constParameterReference:lexilla/lexers/LexScriptol.cxx
+constParameterReference:lexilla/lexers/LexSINEX.cxx
 constParameterPointer:lexilla/lexers/LexSmalltalk.cxx
 variableScope:lexilla/lexers/LexSpecman.cxx
 unreadVariable:lexilla/lexers/LexSpice.cxx
@@ -239,7 +238,6 @@ constVariableReference:lexilla/lexers/LexMSSQL.cxx
 constVariableReference:lexilla/lexers/LexNsis.cxx
 constVariableReference:lexilla/lexers/LexOpal.cxx
 constVariableReference:lexilla/lexers/LexPOV.cxx
-constVariableReference:lexilla/lexers/LexPascal.cxx
 constVariableReference:lexilla/lexers/LexPB.cxx
 constVariableReference:lexilla/lexers/LexPowerPro.cxx
 constVariableReference:lexilla/lexers/LexPS.cxx
