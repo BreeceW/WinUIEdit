@@ -235,6 +235,8 @@ namespace WinUIEditor
 		AutoCGetMaxHeight = 2211,
 		AutoCSetStyle = 2109,
 		AutoCGetStyle = 2120,
+		AutoCSetImageScale = 2815,
+		AutoCGetImageScale = 2816,
 		SetIndent = 2122,
 		GetIndent = 2123,
 		SetUseTabs = 2124,
@@ -295,6 +297,7 @@ namespace WinUIEditor
 		LineFromPosition = 2166,
 		PositionFromLine = 2167,
 		LineScroll = 2168,
+		ScrollVertical = 2817,
 		ScrollCaret = 2169,
 		ScrollRange = 2569,
 		ReplaceSel = 2170,
@@ -1133,6 +1136,7 @@ namespace WinUIEditor
 	{
 		Disabled = 0,
 		Enabled = 1,
+		Scroll = 2,
 	};
 
 	enum FoldLevel
@@ -5242,6 +5246,12 @@ namespace WinUIEditor
 		Int32 AutoCStyle { get; set; };
 
 		/**
+		 * Get the scale factor in percent for auto-completion list images.
+		 * Set the scale factor in percent for auto-completion list images.
+		 */
+		Int32 AutoCImageScale { get; set; };
+
+		/**
 		 * Retrieve indentation size.
 		 * Set the number of spaces used for one level of indentation.
 		 */
@@ -6417,6 +6427,11 @@ namespace WinUIEditor
 		void LineScroll(Int64 columns, Int64 lines);
 
 		/**
+		 * Scroll vertically with allowance for wrapping.
+		 */
+		void ScrollVertical(Int64 docLine, Int64 subLine);
+
+		/**
 		 * Ensure the caret is visible.
 		 */
 		void ScrollCaret();
@@ -7426,7 +7441,7 @@ namespace WinUIEditor
 		/**
 		 * Which symbol was defined for markerNumber with MarkerDefine
 		 */
-		Int32 MarkerSymbolDefined(Int32 markerNumber);
+		MarkerSymbol MarkerSymbolDefined(Int32 markerNumber);
 
 		/**
 		 * Clear the margin text on all lines

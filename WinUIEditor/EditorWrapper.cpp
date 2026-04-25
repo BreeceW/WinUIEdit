@@ -1812,6 +1812,22 @@ namespace winrt::WinUIEditor::implementation
 	}
 
 	/**
+	 * Get the scale factor in percent for auto-completion list images.
+	 */
+	int32_t Editor::AutoCImageScale()
+	{
+		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::AutoCGetImageScale, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * Set the scale factor in percent for auto-completion list images.
+	 */
+	void Editor::AutoCImageScale(int32_t value)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::AutoCSetImageScale, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
 	 * Retrieve indentation size.
 	 */
 	int32_t Editor::Indent()
@@ -4402,6 +4418,14 @@ namespace winrt::WinUIEditor::implementation
 	}
 
 	/**
+	 * Scroll vertically with allowance for wrapping.
+	 */
+	void Editor::ScrollVertical(int64_t docLine, int64_t subLine)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::ScrollVertical, static_cast<Scintilla::uptr_t>(docLine), static_cast<Scintilla::sptr_t>(subLine));
+	}
+
+	/**
 	 * Ensure the caret is visible.
 	 */
 	void Editor::ScrollCaret()
@@ -6090,9 +6114,9 @@ namespace winrt::WinUIEditor::implementation
 	/**
 	 * Which symbol was defined for markerNumber with MarkerDefine
 	 */
-	int32_t Editor::MarkerSymbolDefined(int32_t markerNumber)
+	WinUIEditor::MarkerSymbol Editor::MarkerSymbolDefined(int32_t markerNumber)
 	{
-		return static_cast<int32_t>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerSymbolDefined, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
+		return static_cast<WinUIEditor::MarkerSymbol>(_editor.get()->PublicWndProc(Scintilla::Message::MarkerSymbolDefined, static_cast<Scintilla::uptr_t>(markerNumber), static_cast<Scintilla::sptr_t>(0)));
 	}
 
 	/**

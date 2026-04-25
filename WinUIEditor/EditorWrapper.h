@@ -913,6 +913,16 @@ namespace winrt::WinUIEditor::implementation
 		void AutoCStyle(int32_t value);
 
 		/**
+		 * Get the scale factor in percent for auto-completion list images.
+		 */
+		int32_t AutoCImageScale();
+
+		/**
+		 * Set the scale factor in percent for auto-completion list images.
+		 */
+		void AutoCImageScale(int32_t value);
+
+		/**
 		 * Retrieve indentation size.
 		 */
 		int32_t Indent();
@@ -2494,6 +2504,11 @@ namespace winrt::WinUIEditor::implementation
 		void LineScroll(int64_t columns, int64_t lines);
 
 		/**
+		 * Scroll vertically with allowance for wrapping.
+		 */
+		void ScrollVertical(int64_t docLine, int64_t subLine);
+
+		/**
 		 * Ensure the caret is visible.
 		 */
 		void ScrollCaret();
@@ -3503,7 +3518,7 @@ namespace winrt::WinUIEditor::implementation
 		/**
 		 * Which symbol was defined for markerNumber with MarkerDefine
 		 */
-		int32_t MarkerSymbolDefined(int32_t markerNumber);
+		WinUIEditor::MarkerSymbol MarkerSymbolDefined(int32_t markerNumber);
 
 		/**
 		 * Clear the margin text on all lines

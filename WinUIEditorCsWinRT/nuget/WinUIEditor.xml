@@ -313,6 +313,9 @@ Return the length of the text.</summary>
         <member name="M:WinUIEditor.Editor.LineScroll(System.Int64,System.Int64)">
             <summary>Scroll horizontally and vertically.</summary>
         </member>
+        <member name="M:WinUIEditor.Editor.ScrollVertical(System.Int64,System.Int64)">
+            <summary>Scroll vertically with allowance for wrapping.</summary>
+        </member>
         <member name="M:WinUIEditor.Editor.ScrollCaret">
             <summary>Ensure the caret is visible.</summary>
         </member>
@@ -2129,6 +2132,10 @@ The default is 5 rows.</summary>
         <member name="P:WinUIEditor.Editor.AutoCStyle">
             <summary>Get the style number used for auto-completion and user lists fonts.
 Set the style number used for auto-completion and user lists fonts.</summary>
+        </member>
+        <member name="P:WinUIEditor.Editor.AutoCImageScale">
+            <summary>Get the scale factor in percent for auto-completion list images.
+Set the scale factor in percent for auto-completion list images.</summary>
         </member>
         <member name="P:WinUIEditor.Editor.Indent">
             <summary>Retrieve indentation size.
