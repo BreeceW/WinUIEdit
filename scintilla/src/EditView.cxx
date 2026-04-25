@@ -945,7 +945,7 @@ void FillLineRemainder(Surface *surface, const EditModel &model, const ViewStyle
 			base = vsDraw.styles[ll->LastStyle()].back;
 		}
 	}
-	surface->FillRectangleAligned(rcArea, Fill(base.Opaque()));
+	surface->FillRectangleAligned(rcArea, Fill(base)); // WinUI
 	if (drawEOLSelection && (vsDraw.selection.layer != Layer::Base)) {
 		// This may be translucent
 		surface->FillRectangleAligned(rcArea, selectionBack);
@@ -1090,7 +1090,7 @@ void EditView::DrawEOL(Surface *surface, const EditModel &model, const ViewStyle
 				blobText = textBack.MixedWith(selectionBack, selectionBack.GetAlphaComponent());
 			}
 			if (FlagSet(appearance, RepresentationAppearance::Blob)) {
-				DrawTextBlob(surface, vsDraw, rcBlob, ctrlChar, blobText, textFore, phasesDraw == PhasesDraw::One);
+				DrawTextBlob(surface, vsDraw, rcBlob, ctrlChar, blobText.Opaque(), textFore, phasesDraw == PhasesDraw::One); // WinUI
 			} else {
 				surface->DrawTextTransparentUTF8(rcBlob, vsDraw.styles[StyleControlChar].font.get(),
 					rcBlob.top + vsDraw.maxAscent, ctrlChar, textFore);
@@ -1113,7 +1113,7 @@ void EditView::DrawEOL(Surface *surface, const EditModel &model, const ViewStyle
 	} else if (const Style &styleLast = vsDraw.styles[ll->LastStyle()]; styleLast.eolFilled) {
 		base = styleLast.back;
 	}
-	surface->FillRectangleAligned(rcEOLIsSelected, Fill(base.Opaque()));
+	surface->FillRectangleAligned(rcEOLIsSelected, Fill(base)); // WinUI
 	if (drawEOLSelection && (vsDraw.selection.layer != Layer::Base)) {
 		surface->FillRectangleAligned(rcEOLIsSelected, selectionBack);
 	}
@@ -2232,7 +2232,7 @@ void EditView::DrawForeground(Surface *surface, const EditModel &model, const Vi
 						}
 						if (FlagSet(ts.representation->appearance, RepresentationAppearance::Blob)) {
 							DrawTextBlob(surface, vsDraw, rcSegment, ts.representation->stringRep,
-								textBack, textFore, phasesDraw == PhasesDraw::One);
+								textBack.Opaque(), textFore, phasesDraw == PhasesDraw::One); // WinUI
 						} else {
 							surface->DrawTextTransparentUTF8(rcSegment, vsDraw.styles[StyleControlChar].font.get(),
 								ybase, ts.representation->stringRep, textFore);

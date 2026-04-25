@@ -1,2 +1,3 @@
 src\CallTip.cxx
 src\CallTip.h
+src\EditView.cxx
