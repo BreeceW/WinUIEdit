@@ -3601,6 +3601,22 @@ namespace winrt::WinUIEditor::implementation
 	}
 
 	/**
+	 * Get whether drag-and-drop is enabled or disabled
+	 */
+	bool Editor::DragDropEnabled()
+	{
+		return static_cast<bool>(_editor.get()->PublicWndProc(Scintilla::Message::GetDragDropEnabled, static_cast<Scintilla::uptr_t>(0), static_cast<Scintilla::sptr_t>(0)));
+	}
+
+	/**
+	 * Enable or disable drag-and-drop
+	 */
+	void Editor::DragDropEnabled(bool value)
+	{
+		_editor.get()->PublicWndProc(Scintilla::Message::SetDragDropEnabled, static_cast<Scintilla::uptr_t>(value), static_cast<Scintilla::sptr_t>(0));
+	}
+
+	/**
 	 * Retrieve the lexing language of the document.
 	 */
 	int32_t Editor::Lexer()

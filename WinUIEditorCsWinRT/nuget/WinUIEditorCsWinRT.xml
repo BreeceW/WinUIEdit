@@ -2611,6 +2611,10 @@ Get the start of the range of style numbers used for end of line annotations</su
         <member name="P:WinUIEditor.Editor.LineCharacterIndex">
             <summary>Retrieve line character index state.</summary>
         </member>
+        <member name="P:WinUIEditor.Editor.DragDropEnabled">
+            <summary>Get whether drag-and-drop is enabled or disabled
+Enable or disable drag-and-drop</summary>
+        </member>
         <member name="P:WinUIEditor.Editor.Lexer">
             <summary>Retrieve the lexing language of the document.</summary>
         </member>

@@ -234,6 +234,15 @@ void Menu::Show(Point pt, const Window &w) {
 	Destroy();
 }
 
+namespace {
+
+bool assertionPopUps = true;
+
+constexpr int defaultFontSize = 8;
+constexpr size_t lengthDiagnostic = 2000;
+
+}
+
 ColourRGBA Platform::Chrome() {
 	//return ColourRGBA::FromRGB(static_cast<int>(::GetSysColor(COLOR_3DFACE)));
 	return ColourRGBA{ 255, 255, 255 };
@@ -251,7 +260,7 @@ const char *Platform::DefaultFont() {
 }
 
 int Platform::DefaultFontSize() {
-	return 8;
+	return defaultFontSize;
 }
 
 unsigned int Platform::DoubleClickTime() {
@@ -268,7 +277,7 @@ void Platform::DebugDisplay(const char *s) noexcept {
 
 #ifdef TRACE
 void Platform::DebugPrintf(const char *format, ...) noexcept {
-	char buffer[2000];
+	char buffer[lengthDiagnostic];
 	va_list pArguments;
 	va_start(pArguments, format);
 	vsnprintf(buffer, std::size(buffer), format, pArguments);
@@ -280,12 +289,6 @@ void Platform::DebugPrintf(const char *, ...) noexcept {
 }
 #endif
 
-namespace {
-
-	bool assertionPopUps = true;
-
-}
-
 bool Platform::ShowAssertionPopUps(bool assertionPopUps_) noexcept {
 	const bool ret = assertionPopUps;
 	assertionPopUps = assertionPopUps_;
@@ -293,7 +296,7 @@ bool Platform::ShowAssertionPopUps(bool assertionPopUps_) noexcept {
 }
 
 void Platform::Assert(const char *c, const char *file, int line) noexcept {
-	char buffer[2000] {};
+	char buffer[lengthDiagnostic] {};
 	snprintf(buffer, std::size(buffer), "Assertion [%s] failed at %s %d%s", c, file, line, assertionPopUps ? "" : "\r\n");
 	// WinUI Todo
 	/*if (assertionPopUps) {

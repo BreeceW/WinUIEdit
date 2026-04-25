@@ -214,8 +214,8 @@ namespace Scintilla::Internal {
 			return CpUtf8;
 		}
 		switch (characterSet) {
-		case CharacterSet::Ansi: return 1252;
-		case CharacterSet::Default: return documentCodePage ? documentCodePage : 1252;
+		case CharacterSet::Ansi: return codePageWindowsLatin;
+		case CharacterSet::Default: return documentCodePage ? documentCodePage : codePageWindowsLatin;
 		case CharacterSet::Baltic: return 1257;
 		case CharacterSet::ChineseBig5: return 950;
 		case CharacterSet::EastEurope: return 1250;
@@ -2101,10 +2101,10 @@ namespace Scintilla::Internal {
 				if (DBCSIsLeadByte(codePage, ch1)) {
 					for (unsigned char byte2 = highByteLast; byte2 >= minTrailByte; byte2--) {
 						const char ch2 = byte2;
+						const DBCSPair pair{ ch1, ch2 };
+						const uint16_t index = DBCSIndex(ch1, ch2);
+						(*foldingMap)[index] = pair;
 						if (DBCSIsTrailByte(codePage, ch2)) {
-							const DBCSPair pair{ ch1, ch2 };
-							const uint16_t index = DBCSIndex(ch1, ch2);
-							(*foldingMap)[index] = pair;
 							const std::string_view svBytes(pair.chars, 2);
 							const int lenUni = WideCharLenFromMultiByte(codePage, svBytes);
 							if (lenUni == 1) {
@@ -2136,36 +2136,41 @@ namespace Scintilla::Internal {
 		class CaseFolderDBCS : public CaseFolderTable {
 			// Allocate the expandable storage here so that it does not need to be reallocated
 			// for each call to Fold.
-			const FoldMap *foldingMap;
-			UINT cp;
+			const FoldMap *foldingMap = nullptr;
+			UINT cp = 0;
 		public:
 			explicit CaseFolderDBCS(UINT cp_) : cp(cp_) {
-				if (!DBCSHasFoldMap(cp)) {
-					CreateFoldMap(cp, DBCSGetMutableFoldMap(cp));
-				}
 				foldingMap = DBCSGetFoldMap(cp);
+				if (!foldingMap) {
+					FoldMap *pfm = DBCSCreateFoldMap(cp);
+					CreateFoldMap(cp, pfm);
+					foldingMap = pfm;
+				}
 			}
 			size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) override;
 		};
 
-		size_t CaseFolderDBCS::Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) {
+		size_t CaseFolderDBCS::Fold(char *folded, [[maybe_unused]] size_t sizeFolded, const char *mixed, size_t lenMixed) {
 			// This loop outputs the same length as input as for each char 1-byte -> 1-byte; 2-byte -> 2-byte
+			assert(lenMixed <= sizeFolded);
 			size_t lenOut = 0;
 			for (size_t i = 0; i < lenMixed; i++) {
-				const ptrdiff_t lenLeft = lenMixed - i;
 				const char ch = mixed[i];
-				if ((lenLeft >= 2) && DBCSIsLeadByte(cp, ch) && ((lenOut + 2) <= sizeFolded)) {
+				if (((i + 1) < lenMixed) && DBCSIsLeadByte(cp, ch)) {
 					i++;
 					const char ch2 = mixed[i];
 					const uint16_t ind = DBCSIndex(ch, ch2);
 					const char *pair = foldingMap->at(ind).chars;
+					assert(pair[0]);
+					assert(pair[1]);
 					folded[lenOut++] = pair[0];
 					folded[lenOut++] = pair[1];
-				} else if ((lenOut + 1) <= sizeFolded) {
+				} else {
 					const unsigned char uch = ch;
 					folded[lenOut++] = mapping[uch];
 				}
 			}
+			assert(lenOut == lenMixed);
 			return lenOut;
 		}
 
@@ -2991,6 +2996,12 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::DragEnter(winrt::Windows::ApplicationModel::DataTransfer::DataPackageView const &dataView, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const &allowedOperations, winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers const &modifiers, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation &operation)
 	{
+		if (!dragDropEnabled)
+		{
+			operation = winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::None;
+			return;
+		}
+
 		hasOKText = dataView.Contains(winrt::Windows::ApplicationModel::DataTransfer::StandardDataFormats::Text());
 		if (hasOKText)
 		{
@@ -3002,7 +3013,7 @@ namespace Scintilla::Internal {
 	{
 		try
 		{
-			if (!hasOKText || pdoc->IsReadOnly())
+			if (!dragDropEnabled || !hasOKText || pdoc->IsReadOnly())
 			{
 				operation = winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::None;
 				return;
@@ -3033,6 +3044,12 @@ namespace Scintilla::Internal {
 
 	void ScintillaWinUI::Drop(winrt::Windows::Foundation::Point const &point, winrt::Windows::ApplicationModel::DataTransfer::DataPackageView const &dataView, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation const &allowedOperations, winrt::Windows::ApplicationModel::DataTransfer::DragDrop::DragDropModifiers const &modifiers, winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation &operation)
 	{
+		if (!dragDropEnabled)
+		{
+			operation = winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::None;
+			return;
+		}
+
 		try
 		{
 			operation = EffectFromState(allowedOperations, modifiers);

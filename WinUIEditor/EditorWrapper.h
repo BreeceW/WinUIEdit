@@ -2036,6 +2036,16 @@ namespace winrt::WinUIEditor::implementation
 		WinUIEditor::LineCharacterIndexType LineCharacterIndex();
 
 		/**
+		 * Get whether drag-and-drop is enabled or disabled
+		 */
+		bool DragDropEnabled();
+
+		/**
+		 * Enable or disable drag-and-drop
+		 */
+		void DragDropEnabled(bool value);
+
+		/**
 		 * Retrieve the lexing language of the document.
 		 */
 		int32_t Lexer();

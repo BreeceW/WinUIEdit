@@ -785,6 +785,8 @@ namespace WinUIEditor
 		ReleaseLineCharacterIndex = 2712,
 		LineFromIndexPosition = 2713,
 		IndexPositionFromLine = 2714,
+		GetDragDropEnabled = 2818,
+		SetDragDropEnabled = 2819,
 		StartRecord = 3001,
 		StopRecord = 3002,
 		GetLexer = 4002,
@@ -831,6 +833,7 @@ namespace WinUIEditor
 	{
 		LongArrow = 0,
 		StrikeOut = 1,
+		ControlChar = 2,
 	};
 
 	enum EndOfLine
@@ -6143,6 +6146,12 @@ namespace WinUIEditor
 		 * Retrieve line character index state.
 		 */
 		LineCharacterIndexType LineCharacterIndex { get; };
+
+		/**
+		 * Get whether drag-and-drop is enabled or disabled
+		 * Enable or disable drag-and-drop
+		 */
+		Boolean DragDropEnabled { get; set; };
 
 		/**
 		 * Retrieve the lexing language of the document.

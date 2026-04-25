@@ -75,6 +75,10 @@ using namespace Scintilla::Internal;
 
 namespace {
 
+// These are reasonable initial guesses that may be refined by measurement or calls.
+constexpr unsigned int commonCharacterWidth = 8;
+constexpr int defaultVisibleRows = 8;
+
 struct ListItemData {
 	const char *text;
 	int pixId;
@@ -145,8 +149,8 @@ public:
 	void AppendListItem(const char *text, const char *numword);
 
 private:
-	unsigned int _avgCharWidth = 8;
-	int _desiredVisibleRows = 8;
+	int _desiredVisibleRows = defaultVisibleRows;
+	unsigned int _aveCharWidth = commonCharacterWidth;
 	LineToItem _lti;
 
 	WinUIEditor::AutocompletionWrapper *Wrapper();
@@ -175,7 +179,7 @@ void ListBoxWinUI::Create(Window &parent, int ctrlID, Point location, int lineHe
 
 void ListBoxWinUI::SetAverageCharWidth(int width)
 {
-	_avgCharWidth = width;
+	_aveCharWidth = width;
 }
 
 void ListBoxWinUI::SetVisibleRows(int rows)
