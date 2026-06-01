@@ -109,11 +109,12 @@ constexpr bool IsArrowCharacter(char ch) noexcept {
 
 void DrawArrow(Surface *surface, const PRectangle &rc, bool upArrow, ColourRGBA colourBG, ColourRGBA colourUnSel) {
 	// WinUI
-	const auto height{ rc.Height() * 0.45 };
+	const auto height{ rc.Height() * 0.5 };
 	const auto font{ Scintilla::Internal::GetChevronFontFromSurface(*surface, height) };
 	const auto text{ upArrow ? u8"\uEDDB" : u8"\uEDDC" };
 	const XYPOSITION textWidth = surface->WidthTextUTF8(font.get(), text);
-	const PRectangle rcText{ rc.left + textWidth / 2, rc.top, rc.right - textWidth / 2, rc.bottom };
+	const auto padding{ (rc.Width() - textWidth) / 2 };
+	const PRectangle rcText{ rc.left + padding, rc.top, rc.right - padding, rc.bottom };
 	surface->DrawTextTransparentUTF8(rcText, font.get(), rcText.Height() / 2 + height / 2, text, colourUnSel);
 	return;
 
