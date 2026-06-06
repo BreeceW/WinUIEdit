@@ -70,8 +70,6 @@ namespace winrt::WinUIEditor::implementation
 #ifndef WINUI3
 		}
 #endif
-
-		LoadLocalizedResources();
 	}
 
 	EditorBaseControl::~EditorBaseControl()
@@ -201,7 +199,7 @@ namespace winrt::WinUIEditor::implementation
 		}
 	}
 
-	void EditorBaseControl::LoadLocalizedResources()
+	void EditorBaseControl::LoadLocalizedContextMenuResources()
 	{
 		// Find Windows.UI.Xaml.dll or Microsoft.ui.xaml.dll by pointer address of vtable
 		// Not using name because Microsoft.ui.xaml.dll could be ambiguous for a process
@@ -220,6 +218,12 @@ namespace winrt::WinUIEditor::implementation
 
 	void EditorBaseControl::AddContextMenuItems(MenuFlyout const &menu)
 	{
+		if (!_localizedcontextMenuResourcesLoaded)
+		{
+			LoadLocalizedContextMenuResources();
+			_localizedcontextMenuResourcesLoaded = true;
+		}
+
 		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };
 		const auto selection{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetSelectionEmpty, 0, 0)) };
 

@@ -114,7 +114,8 @@ namespace winrt::WinUIEditor::implementation
 		Windows::UI::Xaml::Application::Suspending_revoker _suspendingRevoker{};
 		void Application_Suspending(Windows::Foundation::IInspectable const &sender, Windows::ApplicationModel::SuspendingEventArgs const &args);
 #endif
-		void LoadLocalizedResources();
+		void LoadLocalizedContextMenuResources();
+		bool _localizedcontextMenuResourcesLoaded{ false };
 		winrt::hstring _textCommandLabelUndo;
 		winrt::hstring _textCommandLabelRedo;
 		winrt::hstring _textCommandLabelCut;
