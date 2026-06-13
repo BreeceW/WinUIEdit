@@ -2815,6 +2815,7 @@ namespace WinUIEditor
 		AsmStringeol = 13,
 		AsmExtinstruction = 14,
 		AsmCommentdirective = 15,
+		AsmStringbackquote = 16,
 	};
 
 	enum As
@@ -2835,6 +2836,7 @@ namespace WinUIEditor
 		AsmStringeol = 13,
 		AsmExtinstruction = 14,
 		AsmCommentdirective = 15,
+		AsmStringbackquote = 16,
 	};
 
 	enum Fortran
@@ -3818,6 +3820,7 @@ namespace WinUIEditor
 		PasCharacter = 12,
 		PasOperator = 13,
 		PasAsm = 14,
+		PasMultilinestring = 15,
 	};
 
 	enum SORCUS
