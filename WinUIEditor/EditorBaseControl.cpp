@@ -218,10 +218,10 @@ namespace winrt::WinUIEditor::implementation
 
 	void EditorBaseControl::AddContextMenuItems(MenuFlyout const &menu)
 	{
-		if (!_localizedcontextMenuResourcesLoaded)
+		if (!_localizedContextMenuResourcesLoaded)
 		{
 			LoadLocalizedContextMenuResources();
-			_localizedcontextMenuResourcesLoaded = true;
+			_localizedContextMenuResourcesLoaded = true;
 		}
 
 		const auto writable{ !static_cast<bool>(_scintilla->WndProc(Scintilla::Message::GetReadOnly, 0, 0)) };

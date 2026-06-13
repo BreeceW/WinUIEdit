@@ -115,7 +115,7 @@ namespace winrt::WinUIEditor::implementation
 		void Application_Suspending(Windows::Foundation::IInspectable const &sender, Windows::ApplicationModel::SuspendingEventArgs const &args);
 #endif
 		void LoadLocalizedContextMenuResources();
-		bool _localizedcontextMenuResourcesLoaded{ false };
+		bool _localizedContextMenuResourcesLoaded{ false };
 		winrt::hstring _textCommandLabelUndo;
 		winrt::hstring _textCommandLabelRedo;
 		winrt::hstring _textCommandLabelCut;
