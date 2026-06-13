@@ -18,6 +18,7 @@
 
 #include <stdexcept>
 #include <new>
+#include <utility>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -2278,7 +2279,7 @@ namespace Scintilla::Internal {
 		const auto initialSel{ sel.RangeMain() }; // Intentional copy
 
 		auto str{ EncodeWString(paste) };
-		InsertPasteShape(str.data(), str.length(), PasteShape::stream);
+		InsertPasteShape(str, PasteShape::stream);
 
 		if (multiPasteMode == MultiPaste::Each && !(initialSel == sel.RangeMain())) // No != override
 		{
@@ -3079,7 +3080,7 @@ namespace Scintilla::Internal {
 
 			const SelectionPosition movePos = SPositionFromLocation(Point{ point.X, point.Y }, false, false, UserVirtualSpace());
 
-			DropAt(movePos, putf.c_str(), putf.size(), operation == winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move, isRectangular);
+			DropAt(movePos, putf, operation == winrt::Windows::ApplicationModel::DataTransfer::DataPackageOperation::Move, isRectangular);
 		}
 		catch (...)
 		{
