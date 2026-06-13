@@ -53,6 +53,8 @@ namespace WinUIEditor
 		virtual void DefaultColorsChanged(CodeEditorTheme theme);
 		virtual void SyntaxHighlightingApplied(CodeEditorTheme theme);
 
+		virtual std::string_view DefaultFont(Scintilla::StylesCommon style);
+
 	private:
 		std::shared_ptr<Scintilla::ScintillaCall> _call{ nullptr };
 		Lexilla::CreateLexerFn _createLexer{ nullptr };

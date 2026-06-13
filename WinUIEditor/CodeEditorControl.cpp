@@ -334,6 +334,14 @@ namespace winrt::WinUIEditor::implementation
 		_syntaxHighlightingAppliedEvent(*this, CodeEditorToXamlTheme(theme));
 	}
 
+	std::string_view CodeEditorControl::DefaultFont(Scintilla::StylesCommon style)
+	{
+		// Use presence of UniversalApiContract v14 as a rough proxy of whether Windows 11 fonts are installed
+		return _useNewFonts
+			? style == Scintilla::StylesCommon::CallTip ? "Segoe UI Variable Text" : "Cascadia Code"
+			: style == Scintilla::StylesCommon::CallTip ? "Segoe UI" : "Consolas";
+	}
+
 	event_token CodeEditorControl::NotifyMessageReceived(EventHandler<int64_t> const &handler)
 	{
 		return _editor->NotifyMessageReceived(handler);

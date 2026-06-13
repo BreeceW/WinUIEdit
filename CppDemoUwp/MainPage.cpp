@@ -40,11 +40,6 @@ namespace winrt::CppDemoUwp::implementation
 		_savePointLeftRevoker = Editor().Editor().SavePointLeft(auto_revoke, { this, &MainPage::Editor_SavePointLeft });
 
 		_activatedRevoker = CoreWindow::GetForCurrentThread().Activated(auto_revoke, { this, &MainPage::OnActivated });
-
-		if (!ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14, 0))
-		{
-			Editor().Editor().StyleSetFont(static_cast<int32_t>(StylesCommon::Default), L"Consolas");
-		}
 	}
 
 	fire_and_forget MainPage::OnCloseRequested(IInspectable sender, SystemNavigationCloseRequestedPreviewEventArgs e)

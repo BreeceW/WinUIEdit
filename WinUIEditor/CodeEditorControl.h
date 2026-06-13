@@ -38,6 +38,7 @@ namespace winrt::WinUIEditor::implementation
 		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _defaultColorsChangedEvent;
 		event<Windows::Foundation::EventHandler<DUX::ElementTheme>> _syntaxHighlightingAppliedEvent;
 		DUD::DispatcherQueue _dispatcherQueue{ nullptr };
+		bool _useNewFonts{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14) }; // Todo: Make static
 #ifndef WINUI3
 		bool _hasFcu{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
 		bool _has1803{ Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 6) }; // Todo: Make static
@@ -66,6 +67,8 @@ namespace winrt::WinUIEditor::implementation
 
 		void DefaultColorsChanged(::WinUIEditor::CodeEditorTheme theme) override;
 		void SyntaxHighlightingApplied(::WinUIEditor::CodeEditorTheme theme) override;
+
+		std::string_view DefaultFont(Scintilla::StylesCommon style) override;
 	};
 }
 

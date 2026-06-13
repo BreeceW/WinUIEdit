@@ -1672,6 +1672,18 @@ TextLayout LayoutCreate(std::wstring_view wsv, IDWriteTextFormat *pTextFormat, F
 	TextLayout layout;
 	const HRESULT hr = pIDWriteFactory->CreateTextLayout(wsv.data(), static_cast<UINT32>(wsv.length()),
 		pTextFormat, maxWidth, maxHeight, layout.put());
+	// Set text to use tabular number spacing and use other defaults from WinUI
+	winrt::com_ptr<IDWriteTypography> typography;
+	if (SUCCEEDED(hr)
+		&& SUCCEEDED(pIDWriteFactory->CreateTypography(typography.put()))
+		&& SUCCEEDED(typography->AddFontFeature({ DWRITE_FONT_FEATURE_TAG_STANDARD_LIGATURES, 1 }))
+		&& SUCCEEDED(typography->AddFontFeature({ DWRITE_FONT_FEATURE_TAG_CONTEXTUAL_LIGATURES, 1 }))
+		&& SUCCEEDED(typography->AddFontFeature({ DWRITE_FONT_FEATURE_TAG_CONTEXTUAL_ALTERNATES, 1 }))
+		&& SUCCEEDED(typography->AddFontFeature({ DWRITE_FONT_FEATURE_TAG_KERNING, 1 }))
+		&& SUCCEEDED(typography->AddFontFeature({ DWRITE_FONT_FEATURE_TAG_TABULAR_FIGURES, 1 })))
+	{
+		layout->SetTypography(typography.get(), { 0, static_cast<UINT32>(wsv.length()) }); // Ignore result
+	}
 	if (FAILED(hr)) {
 		return {};
 	}
@@ -1683,7 +1695,7 @@ TextLayout LayoutCreate(std::wstring_view wsv, IDWriteTextFormat *pTextFormat, F
 std::shared_ptr<Font> GetChevronFontFromSurface(Surface const &surface, XYPOSITION size)
 {
 	// Use presence of UniversalApiContract v14 as a rough proxy of whether Fluent icons are installed
-	static const auto useNewIcons = winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14, 0);
+	static const auto useNewIcons = winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 14);
 
 	const auto &surfaceD2D{ static_cast<SurfaceD2D const &>(surface) };
 	const auto wid{ surfaceD2D.GetWindowId() };

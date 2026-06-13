@@ -73,7 +73,7 @@ namespace WinUIEditor
 
 				SetCallTipBackgroundColor(IntRGBA(0x00, 0x00, 0x00, 0x00));
 				_call->CallTipSetFore(IntRGBA(0xFF, 0xFF, 0xFF));
-				_call->CallTipSetForeHlt(IntRGBA(0x56, 0x9C, 0xD6));
+				_call->CallTipSetForeHlt(IntRGBA(0x2A, 0xAA, 0xFF));
 				SetCallTipHoverColor(IntRGBA(0xFF, 0xFF, 0xFF, 0xA6));
 				break;
 
@@ -103,7 +103,7 @@ namespace WinUIEditor
 
 				SetCallTipBackgroundColor(IntRGBA(0xFF, 0xFF, 0xFF, 0x00));
 				_call->CallTipSetFore(IntRGBA(0x00, 0x00, 0x00));
-				_call->CallTipSetForeHlt(IntRGBA(0x00, 0x00, 0xFF));
+				_call->CallTipSetForeHlt(IntRGBA(0x00, 0x66, 0xBF));
 				SetCallTipHoverColor(IntRGBA(0x00, 0x00, 0x00, 0x88));
 				break;
 			}
@@ -151,6 +151,7 @@ namespace WinUIEditor
 	{
 		// Less performant way to copy styles
 		// Overridable when there is access to Scintilla internals
+		// Needs to be overriden to use transparent colors for StyleGetFore/Back
 		for (size_t i = 0; i < 256; i++)
 		{
 			if (i < static_cast<int>(StylesCommon::Default) || i > static_cast<int>(StylesCommon::LastPredefined))
@@ -206,6 +207,11 @@ namespace WinUIEditor
 		// Default event handler
 	}
 
+	std::string_view CodeEditorHandler::DefaultFont(StylesCommon style)
+	{
+		return "Courier New";
+	}
+
 	void CodeEditorHandler::UpdateStyles()
 	{
 		constexpr auto bgDark{ IntRGBA(0x27, 0x27, 0x27, 0x00) };
@@ -234,6 +240,9 @@ namespace WinUIEditor
 			StyleSetFore(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0xB8, 0xC2, 0xCC));
 			StyleSetBack(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0x26, 0x33, 0x3F));
 
+			StyleSetFore(static_cast<int>(StylesCommon::CallTip), IntRGBA(0xFF, 0xFF, 0xFF));
+			StyleSetBack(static_cast<int>(StylesCommon::CallTip), bgDark);
+
 			SetFoldMarginColor(true, bgDark);
 			SetFoldMarginHiColor(true, bgDark);
 			break;
@@ -258,6 +267,9 @@ namespace WinUIEditor
 
 			StyleSetFore(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0x73, 0x79, 0x80));
 			StyleSetBack(static_cast<int>(StylesCommon::FoldDisplayText), IntRGBA(0xDC, 0xEA, 0xF5));
+
+			StyleSetFore(static_cast<int>(StylesCommon::CallTip), IntRGBA(0x00, 0x00, 0x00));
+			StyleSetBack(static_cast<int>(StylesCommon::CallTip), bgLight);
 
 			SetFoldMarginColor(true, bgLight);
 			SetFoldMarginHiColor(true, bgLight);
@@ -381,8 +393,12 @@ namespace WinUIEditor
 		_call->SetVisiblePolicy(VisiblePolicy::Slop, 0);
 		_call->SetHScrollBar(true);
 		_call->SetEndAtLastLine(false);
-		_call->StyleSetFont(static_cast<int>(StylesCommon::Default), "Cascadia Code"); // Todo: Use font available on Windows 10
-		_call->StyleSetSizeFractional(static_cast<int>(StylesCommon::Default), 11 * FontSizeMultiplier);
+		_call->CallTipUseStyle(0);
+		for (int i{ static_cast<int>(StylesCommon::Default) }; i <= static_cast<int>(StylesCommon::LastPredefined); i++)
+		{
+			_call->StyleSetSizeFractional(i, (static_cast<int>(StylesCommon::CallTip) != i ? 11 : 9) * FontSizeMultiplier);
+			_call->StyleSetFont(i, DefaultFont(static_cast<StylesCommon>(i)).data());
+		}
 		_call->SetAdditionalSelectionTyping(true);
 		_call->SetMultiPaste(MultiPaste::Each);
 		_call->SetLayoutThreads(16); // Todo: Determine performance impact
