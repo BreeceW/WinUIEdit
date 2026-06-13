@@ -13,7 +13,32 @@ namespace WinUIEditor
 	{
 		if (const auto popup{ _popup.get() })
 		{
-			popup.Visibility(visible ? winrt::DUX::Visibility::Visible : winrt::DUX::Visibility::Collapsed);
+			popup.Tag(winrt::box_value(visible));
+#ifndef WINUI3
+			if (_hasFcu)
+			{
+#endif
+				const auto dispatcherQueue{
+#ifndef WINUI3
+					winrt::DUD::DispatcherQueue::GetForCurrentThread()
+#else
+					popup.DispatcherQueue()
+#endif
+				};
+				dispatcherQueue.TryEnqueue([=]()
+					{
+						popup.IsOpen(winrt::unbox_value<bool>(popup.Tag()));
+					});
+#ifndef WINUI3
+			}
+			else
+			{
+				popup.Dispatcher().TryRunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, [=]()
+					{
+						popup.IsOpen(winrt::unbox_value<bool>(popup.Tag()));
+					});
+			}
+#endif
 		}
 	}
 

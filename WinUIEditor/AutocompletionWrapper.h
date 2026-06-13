@@ -26,5 +26,8 @@ namespace WinUIEditor
 	private:
 		winrt::weak_ref<winrt::DUXC::Primitives::Popup> _popup{ nullptr };
 		Scintilla::Internal::IListBoxDelegate *_delegate{ nullptr };
+#ifndef WINUI3
+		bool _hasFcu{ winrt::Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(L"Windows.Foundation.UniversalApiContract", 5) }; // Todo: Make static
+#endif
 	};
 }

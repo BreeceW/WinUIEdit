@@ -190,6 +190,7 @@ namespace WinUIEditor
 	{
 		if (_autocompletionPopup)
 		{
+			_autocompletionPopup.Tag(winrt::box_value(false));
 			_autocompletionPopup.IsOpen(false);
 			_autocompletionPopup = nullptr;
 		}
@@ -243,9 +244,11 @@ namespace WinUIEditor
 		}
 
 		_autocompletionPopup.RequestedTheme(theme);
-		_autocompletionPopup.IsOpen(true);
-		_autocompletionPopup.Visibility(winrt::DUX::Visibility::Collapsed);
 
-		return AutocompletionWrapper::Create(_autocompletionPopup, _logicalDpi);
+		const auto wrapper{ AutocompletionWrapper::Create(_autocompletionPopup, _logicalDpi) };
+
+		wrapper->Show(false);
+
+		return wrapper;
 	}
 }
